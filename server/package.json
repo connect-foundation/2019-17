@@ -1,0 +1,28 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon --exec ts-node src/init.ts"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.6",
+    "@types/helmet": "^0.0.45",
+    "@types/morgan": "^1.7.37",
+    "nodemon": "^1.19.4",
+    "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "graphql-tools": "^4.0.6",
+    "graphql-yoga": "^1.18.3",
+    "helmet": "^3.21.2",
+    "merge-graphql-schemas": "^1.7.4-44ab475.0",
+    "morgan": "^1.9.1",
+    "ts-node": "^8.5.0",
+    "typescript": "^3.7.2"
+  }
+}
