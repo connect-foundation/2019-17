@@ -5,7 +5,7 @@ import logger from 'morgan';
 import schema from './schema';
 
 class App {
-  public app: any;
+  public app: GraphQLServer;
   constructor() {
     this.app = new GraphQLServer({ schema });
     this.middlewares();
