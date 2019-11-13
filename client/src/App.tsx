@@ -1,23 +1,16 @@
-import React from 'react';
-import { ApolloProvider } from '@apollo/react-hooks';
-import styled, { ThemeProvider } from 'styled-components';
+import React from "react";
+import { ThemeProvider } from "styled-components";
 
-import client from './apollo/ApolloClient';
-import theme from './style/theme';
-import GlobalStyles from './style/globalStyles';
-
-const Text = styled.span`
-  color: ${props => props.theme.facebookBlue};
-`;
+import theme from "./style/theme";
+import GlobalStyles from "./style/globalStyles";
+import Book from "./components/Book";
 
 const App: React.FC = () => {
   return (
-    <ApolloProvider client={client}>
-      <ThemeProvider theme={theme}>
-        <GlobalStyles />
-        <Text>hello boostbook!</Text>
-      </ThemeProvider>
-    </ApolloProvider>
+    <ThemeProvider theme={theme}>
+      <GlobalStyles />
+      <Book />
+    </ThemeProvider>
   );
 };
 

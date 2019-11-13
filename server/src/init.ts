@@ -4,6 +4,7 @@ dotenv.config();
 import { Options } from "graphql-yoga";
 
 import app from "./app";
+import "./db";
 
 const PORT: string | number = process.env.PORT || 4000;
 const ENDPOINT: string = "/graphql";
