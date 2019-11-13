@@ -1,18 +1,15 @@
 import React from "react";
-import styled, { ThemeProvider } from "styled-components";
+import { ThemeProvider } from "styled-components";
 
 import theme from "./style/theme";
 import GlobalStyles from "./style/globalStyles";
-
-const Text = styled.span`
-  color: ${props => props.theme.facebookBlue};
-`;
+import Book from "./component/Book";
 
 const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-      <Text>hello boostbook!</Text>
+      <Book />
     </ThemeProvider>
   );
 };
