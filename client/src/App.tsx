@@ -3,7 +3,7 @@ import { ThemeProvider } from "styled-components";
 
 import theme from "./style/theme";
 import GlobalStyles from "./style/globalStyles";
-import Book from "./component/Book";
+import Book from "./components/Book";
 
 const App: React.FC = () => {
   return (
