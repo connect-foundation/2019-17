@@ -4,10 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/init.ts",
+    "dev": "nodemon --exec ts-node src/init.ts delay 2",
     "pretypes": "gql-merge -o ./src/schema.graphql ./src/api/**/*.graphql ",
     "types": "graphql-to-typescript ./src/schema.graphql ./src/types/graph.d.ts",
-    "test": "jest"
+    "test": "jest",
+    "prd": "ENV=PRODUCTION ts-node src/init.ts"
   },
   "devDependencies": {
     "@types/cors": "^2.8.6",
