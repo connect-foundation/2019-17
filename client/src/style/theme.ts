@@ -6,8 +6,9 @@ const theme: DefaultTheme = {
     bgColor: '#EAEBEE',
     white: '#FFFFFF',
     facebookTextColor: '#4B4F56',
-    borderColor: '#bdc7d8'
+    borderColor: '#bdc7d8',
   },
+  
   borders: {
     radius: '5px'
   }
