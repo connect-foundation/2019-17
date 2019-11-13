@@ -34,6 +34,7 @@
     "helmet": "^3.21.2",
     "merge-graphql-schemas": "^1.7.4-44ab475.0",
     "morgan": "^1.9.1",
+    "neo4j-driver": "^1.7.6",
     "ts-jest": "^24.1.0",
     "ts-node": "^8.5.0",
     "typescript": "^3.7.2"
