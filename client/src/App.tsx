@@ -3,13 +3,13 @@ import { ThemeProvider } from "styled-components";
 
 import theme from "./style/theme";
 import GlobalStyles from "./style/globalStyles";
-import Book from "./components/Book";
+import SignUpContainer from "./pages/SignUp";
 
 const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-      <Book />
+      <SignUpContainer />
     </ThemeProvider>
   );
 };

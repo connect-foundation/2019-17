@@ -4,7 +4,9 @@
   "private": true,
   "devDependencies": {
     "@types/graphql": "^14.5.0",
+    "@types/prop-types": "^15.7.3",
     "@types/styled-components": "^4.4.0",
+    "prettier": "^1.19.1",
     "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.18.0"
   },
@@ -16,6 +18,8 @@
     "@types/react-dom": "16.9.4",
     "apollo-boost": "^0.4.4",
     "graphql": "^14.5.8",
+    "polished": "^3.4.2",
+    "prop-types": "^15.7.2",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-scripts": "3.2.0",
