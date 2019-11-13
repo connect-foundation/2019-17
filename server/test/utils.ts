@@ -1,40 +1,27 @@
 import dotenv from "dotenv";
-import request from "request-promise-native";
+// import request from "request-promise-native";
+import request from "supertest";
 dotenv.config();
 
-import { Options } from "graphql-yoga";
 import app from "../src/app";
 
-const PORT: string | number = process.env.PORT || 6000;
-const ENDPOINT: string = "/graphql";
-const PLAYGROUND: string = "/playground";
+const PORT: string | number = process.env.PORT || 5000;
 
-const startServer = () => {
-  const appOptions: Options = {
-    port: PORT,
-    endpoint: ENDPOINT,
-    playground: PLAYGROUND
-  };
+interface IRequestResponse {
+  errors: any[];
+  data: any;
+}
 
-  const handleStart = () => {
-    console.log(`✅ server on PORT : ${PORT}`);
-  };
+async function requestQuery(query?: string): Promise<IRequestResponse> {
+  const server = (await app).createHttpServer({ port: PORT });
+  const res = await request(server)
+    .post("/")
+    .set("Accept", "application/json")
+    .send({ query })
+    .expect(200)
+    .expect("Content-Type", /json/);
 
-  app.start(appOptions, handleStart);
+  return res.body;
+}
 
-  return app;
-};
-
-const requestQuery = query => {
-  return request({
-    uri: `http://localhost:${PORT}/graphql`,
-    method: "POST",
-    json: true,
-    body: { query },
-    headers: {
-      "X-GraphQL-Deduplicate": true
-    }
-  }).promise();
-};
-
-export { startServer, requestQuery };
+export { requestQuery };
