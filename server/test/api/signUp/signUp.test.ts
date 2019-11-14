@@ -1,7 +1,7 @@
 import { requestQuery } from "../../utils";
-import { CREATE_USER } from "./signup.query";
+import { CREATE_USER } from "./signUp.query";
 import db from "../../../src/db";
-import { userScheme } from "./signup.schema";
+import { userScheme } from "./signUp.schema";
 
 let userNum = 0;
 
@@ -17,7 +17,7 @@ describe("회원가입 성공 확인", () => {
   test("서버 응답 결과가 적절한지 확인", async done => {
     const body = await requestQuery(CREATE_USER(userNum++));
 
-    const { error } = userScheme.validate(body.data.signup);
+    const { error } = userScheme.validate(body.data.signUp);
     if (error) throw error;
     done();
   });
@@ -27,7 +27,7 @@ describe("회원가입 성공 확인", () => {
 
     const session = db.session();
     const res = await session.run(
-      `MATCH (n: Person) WHERE n.nickname= '${body.data.signup.nickname}' return n`
+      `MATCH (n: Person) WHERE n.nickname= '${body.data.signUp.nickname}' return n`
     );
     session.close();
 

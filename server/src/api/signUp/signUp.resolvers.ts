@@ -1,11 +1,11 @@
-import { User, SignupQueryArgs } from "src/types/graph";
+import { User, SignUpQueryArgs } from "src/types/graph";
 import db from "../../db";
 
 const session = db.session();
 
 export default {
   Query: {
-    signup: async (_, args: SignupQueryArgs): Promise<User> => {
+    signUp: async (_, args: SignUpQueryArgs): Promise<User> => {
       const result = await session.run(
         `CREATE (a:Person {nickname: $nickname, hometown: $hometown, residence: $residence, googleId: $googleId ${
           args.thumbnail ? ", thumbnail:$thumbnail" : ""
