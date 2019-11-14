@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { FaPlus } from 'react-icons/fa';
 import { darken } from 'polished';
+import { IUseInput } from './SignUpContainer';
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -126,12 +127,18 @@ const FileText = styled.span`
   color: ${props => props.theme.colors.facebookBlue};
 `;
 
-function SignUpPresenter() {
+interface IProps {
+  nickname: IUseInput;
+  location: IUseInput;
+  hometown: IUseInput;
+}
+
+function SignUpPresenter({ nickname, location, hometown }: IProps) {
   return (
     <Wrapper>
       <Form>
         <Title>프로필 입력</Title>
-        <InputFile id="profileFile" type="file" />
+        <InputFile id="profileFile" type="file"/>
         <Label htmlFor="profileFile">
           <Row>
             <CircleButton>
@@ -143,9 +150,9 @@ function SignUpPresenter() {
           </Row>
         </Label>
         <InputContainer>
-          <Input placeholder="닉네임" />
-          <Input placeholder="거주지" />
-          <Input placeholder="출신" />
+          <Input placeholder="닉네임" {...nickname} />
+          <Input placeholder="거주지" {...location} />
+          <Input placeholder="출신" {...hometown}/>
         </InputContainer>
         <Button> 등록하기 </Button>
       </Form>
