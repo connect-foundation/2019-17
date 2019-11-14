@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from 'react';
 
 const SignUp: React.FC = () => {
@@ -7,3 +8,7 @@ const SignUp: React.FC = () => {
 }
 
 export default SignUp;
+=======
+import SignUpContainer from "./SignUpContainer";
+export default SignUpContainer;
+>>>>>>> feature-78/profile_page_publishing
