@@ -1,13 +1,14 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
-import { Options } from 'graphql-yoga';
+import { Options } from "graphql-yoga";
 
-import app from './app';
+import app from "./app";
+import "./db";
 
 const PORT: string | number = process.env.PORT || 4000;
-const ENDPOINT: string = '/graphql';
-const PLAYGROUND: string = '/playground';
+const ENDPOINT: string = "/graphql";
+const PLAYGROUND: string = "/playground";
 
 const appOptions: Options = {
   port: PORT,

@@ -1,7 +1,6 @@
 import React from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { ThemeProvider } from 'styled-components';
-
 import client from './apollo/ApolloClient';
 import theme from './style/theme';
 import GlobalStyles from './style/globalStyles';
