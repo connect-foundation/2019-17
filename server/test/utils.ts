@@ -1,5 +1,4 @@
 import dotenv from "dotenv";
-// import request from "request-promise-native";
 import request from "supertest";
 dotenv.config();
 
@@ -13,7 +12,7 @@ interface IRequestResponse {
 }
 
 async function requestQuery(query?: string): Promise<IRequestResponse> {
-  const server = (await app).createHttpServer({ port: PORT });
+  const server = app.createHttpServer({ port: PORT });
   const res = await request(server)
     .post("/")
     .set("Accept", "application/json")
