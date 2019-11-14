@@ -11,6 +11,7 @@ declare module 'styled-components' {
     };
 
     borders: {
+      borderStyle: string;
       radius: string;
     };
   }

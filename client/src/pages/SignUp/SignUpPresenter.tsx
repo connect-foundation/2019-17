@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { FaPlus } from 'react-icons/fa';
 import { darken } from 'polished';
 
 const Wrapper = styled.div`
@@ -26,7 +27,6 @@ const Form = styled.form`
 const Title = styled.span`
   font-size: 2rem;
   color: ${props => props.theme.colors.facebookTextColor};
-  margin-bottom: 1.5rem;
   font-weight: 500;
 `;
 
@@ -35,7 +35,7 @@ const Input = styled.input`
   box-sizing: border-box;
   width: 80%;
   height: 40px;
-  border: 1px solid ${props => props.theme.colors.borderColor};
+  border: ${props => props.theme.borders.borderStyle};
   border-radius: ${props => props.theme.borders.radius};
   padding: 1rem;
   transition: border-color 0.5s ease-in-out;
@@ -75,11 +75,73 @@ const Button = styled.button`
   }
 `;
 
+const InputFile = styled.input`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  opacity: 0;
+`;
+
+const Label = styled.label`
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+  height: 200px;
+  background-color: ${props => props.theme.colors.bgColor};
+  border: ${props => props.theme.borders.borderStyle};
+  border-radius: ${props => props.theme.borders.radius};
+  cursor: pointer;
+`;
+
+const Row = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:first-child {
+    height: 80%;
+  }
+  &:last-child {
+    height: 20%;
+    background-color: ${props => props.theme.colors.white};
+    border-bottom-right-radius: ${props => props.theme.borders.radius};
+    border-bottom-left-radius: ${props => props.theme.borders.radius};
+  }
+`;
+
+const CircleButton = styled.div`
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-color: ${props => props.theme.colors.facebookBlue};
+  color: ${props => props.theme.colors.white};
+  font-weight: 900;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const FileText = styled.span`
+  color: ${props => props.theme.colors.facebookBlue};
+`;
+
 function SignUpPresenter() {
   return (
     <Wrapper>
       <Form>
         <Title>프로필 입력</Title>
+        <InputFile id="profileFile" type="file" />
+        <Label htmlFor="profileFile">
+          <Row>
+            <CircleButton>
+              <FaPlus />
+            </CircleButton>
+          </Row>
+          <Row>
+            <FileText>사진 추가</FileText>
+          </Row>
+        </Label>
         <InputContainer>
           <Input placeholder="닉네임" />
           <Input placeholder="거주지" />
