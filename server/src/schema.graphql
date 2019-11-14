@@ -4,4 +4,10 @@ type Hello {
 
 type Query {
   sayHello(name: String!): Hello!
+  signup(nickname: String!, residence: String!, hometown: String!, thumbnail: String): Token!
+}
+
+type Token {
+  token: String!
+  expireDate: String!
 }

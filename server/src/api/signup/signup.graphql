@@ -1,0 +1,13 @@
+type Token {
+  token: String!
+  expireDate: String!
+}
+
+type Query {
+  signup(
+    nickname: String!
+    residence: String!
+    hometown: String!
+    thumbnail: String
+  ): Token!
+}
