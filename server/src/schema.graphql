@@ -4,7 +4,7 @@ type Hello {
 
 type Query {
   sayHello(name: String!): Hello!
-  signup(nickname: String!, residence: String!, hometown: String!, googleId: String!, thumbnail: String): User!
+  signUp(nickname: String!, residence: String!, hometown: String!, googleId: String!, thumbnail: String): User!
 }
 
 type User {
