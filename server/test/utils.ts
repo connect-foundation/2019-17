@@ -3,6 +3,7 @@ import request from "supertest";
 dotenv.config();
 
 import app from "../src/app";
+import db from "../src/db";
 
 const PORT: string | number = process.env.PORT || 5000;
 
@@ -23,4 +24,12 @@ async function requestQuery(query?: string): Promise<IRequestResponse> {
   return res.body;
 }
 
-export { requestQuery };
+async function requestDB(query: string) {
+  const session = db.session();
+  const res = await session.run(query);
+  session.close();
+
+  return res.records;
+}
+
+export { requestQuery, requestDB };

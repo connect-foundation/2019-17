@@ -15,8 +15,7 @@ export default {
 
       session.close();
 
-      const singleRecord = result.records[0];
-      const node = singleRecord.get(0);
+      const node = result.records[0].get(0);
 
       return node.properties;
     }
