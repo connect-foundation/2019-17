@@ -12,7 +12,7 @@ interface IRequestResponse {
 }
 
 async function requestQuery(query?: string): Promise<IRequestResponse> {
-  const server = (await app).createHttpServer({ port: PORT });
+  const server = app.createHttpServer({ port: PORT });
   const res = await request(server)
     .post("/")
     .set("Accept", "application/json")
