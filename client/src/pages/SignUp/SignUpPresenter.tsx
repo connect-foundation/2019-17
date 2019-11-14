@@ -45,7 +45,7 @@ const Input = styled.input`
     border-color: ${props => darken(0.4, props.theme.colors.borderColor)};
   }
   & + & {
-    margin-top: 0.5rem;
+    margin-top: 1.25rem;
   }
 `;
 
@@ -132,8 +132,17 @@ const Image = styled.img`
   height: 100%;
 `;
 
+const WarnSpan = styled.span`
+  color: red;
+  font-size: 0.75rem;
+  float: left;
+  width: 80%;
+  height: 1.25rem;
+  padding-top: 0.1rem;
+`;
+
 const NICKNAME_VALIDATION_FAIL =
-  '올바른 닉네임이 아닙니다. 닉네임은 공백업이 한글,영어,숫자의 조합으로만 가능합니다.';
+  '닉네임은 공백업이 한글,영어,숫자의 조합으로만 가능합니다.';
 
 interface IProps {
   nickname: IUseInput;
@@ -180,7 +189,7 @@ function SignUpPresenter({
         </Label>
         <InputContainer>
           <Input placeholder="닉네임" {...nickname} />
-          <span> {nameValid ? '' : NICKNAME_VALIDATION_FAIL} </span>
+          <WarnSpan> {nameValid ? '' : NICKNAME_VALIDATION_FAIL} </WarnSpan>
           <Input placeholder="거주지" {...location} />
           <Input placeholder="출신" {...hometown} />
         </InputContainer>
