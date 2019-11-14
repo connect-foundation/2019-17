@@ -1,6 +1,8 @@
 import Joi from "joi";
 
-export const testsScheme = Joi.object().keys({
-  token: Joi.string().required(),
-  expireDate: Joi.string().required()
+export const userScheme = Joi.object().keys({
+  nickname: Joi.string().required(),
+  residence: Joi.string().required(),
+  hometown: Joi.string().required(),
+  thumbnail: Joi.string().allow(null)
 });
