@@ -1,5 +1,4 @@
 import dotenv from "dotenv";
-// import request from "request-promise-native";
 import request from "supertest";
 dotenv.config();
 
