@@ -132,12 +132,16 @@ const Image = styled.img`
   height: 100%;
 `;
 
+const NICKNAME_VALIDATION_FAIL =
+  '올바른 닉네임이 아닙니다. 닉네임은 공백업이 한글,영어,숫자의 조합으로만 가능합니다.';
+
 interface IProps {
   nickname: IUseInput;
   location: IUseInput;
   hometown: IUseInput;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   src: string;
+  nameValid: boolean;
 }
 
 function SignUpPresenter({
@@ -145,7 +149,8 @@ function SignUpPresenter({
   location,
   hometown,
   onFileChange,
-  src
+  src,
+  nameValid
 }: IProps) {
   return (
     <Wrapper>
@@ -175,6 +180,7 @@ function SignUpPresenter({
         </Label>
         <InputContainer>
           <Input placeholder="닉네임" {...nickname} />
+          <span> {nameValid ? '' : NICKNAME_VALIDATION_FAIL} </span>
           <Input placeholder="거주지" {...location} />
           <Input placeholder="출신" {...hometown} />
         </InputContainer>

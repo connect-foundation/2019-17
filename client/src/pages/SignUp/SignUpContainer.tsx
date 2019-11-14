@@ -7,8 +7,21 @@ export interface IUseInput {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+const validateName = (inputName: string): boolean => {
+  // 숫자로 시작안됨, 영어한글숫자가능 공백불가능, 닉네임 최소 길이 4자
+  const validateKey = /^[^0-9][가-힣a-zA-Z0-9_]{3,16}$/;
+  const result = validateKey.test(inputName);
+  return result;
+};
+
 function SignUpContainer() {
-  const nickname: IUseInput = useInput('');
+  const validateChanedName = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const result = validateName(e.target.value);
+    setNameValid(result);
+  };
+
+  const nickname: IUseInput = useInput('', validateChanedName);
+  const [nameValid, setNameValid] = useState(true);
   const location: IUseInput = useInput('');
   const hometown: IUseInput = useInput('');
   const [src, setSrc] = useState('');
@@ -26,6 +39,7 @@ function SignUpContainer() {
       hometown={hometown}
       onFileChange={onFileChange}
       src={src}
+      nameValid={nameValid}
     />
   );
 }
