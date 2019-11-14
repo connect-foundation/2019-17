@@ -142,7 +142,7 @@ const WarnSpan = styled.span`
 `;
 
 const NICKNAME_VALIDATION_FAIL =
-  '닉네임은 공백업이 한글,영어,숫자의 조합으로만 가능합니다.';
+  '닉네임은 공백없이 한글,영어,숫자의 조합으로만 가능합니다.';
 
 interface IProps {
   nickname: IUseInput;
