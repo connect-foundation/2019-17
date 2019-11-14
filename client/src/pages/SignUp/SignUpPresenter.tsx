@@ -127,32 +127,56 @@ const FileText = styled.span`
   color: ${props => props.theme.colors.facebookBlue};
 `;
 
+const Image = styled.img`
+  width: 100%;
+  height: 100%;
+`;
+
 interface IProps {
   nickname: IUseInput;
   location: IUseInput;
   hometown: IUseInput;
+  onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  src: string;
 }
 
-function SignUpPresenter({ nickname, location, hometown }: IProps) {
+function SignUpPresenter({
+  nickname,
+  location,
+  hometown,
+  onFileChange,
+  src
+}: IProps) {
   return (
     <Wrapper>
       <Form>
         <Title>프로필 입력</Title>
-        <InputFile id="profileFile" type="file"/>
+        <InputFile
+          id="profileFile"
+          type="file"
+          accept="image/*"
+          onChange={onFileChange}
+        />
         <Label htmlFor="profileFile">
-          <Row>
-            <CircleButton>
-              <FaPlus />
-            </CircleButton>
-          </Row>
-          <Row>
-            <FileText>사진 추가</FileText>
-          </Row>
+          {src ? (
+            <Image src={src} />
+          ) : (
+            <>
+              <Row>
+                <CircleButton>
+                  <FaPlus />
+                </CircleButton>
+              </Row>
+              <Row>
+                <FileText>사진 추가</FileText>
+              </Row>
+            </>
+          )}
         </Label>
         <InputContainer>
           <Input placeholder="닉네임" {...nickname} />
           <Input placeholder="거주지" {...location} />
-          <Input placeholder="출신" {...hometown}/>
+          <Input placeholder="출신" {...hometown} />
         </InputContainer>
         <Button> 등록하기 </Button>
       </Form>
