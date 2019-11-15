@@ -8,7 +8,11 @@ const LoginBtnImg = styled.img`
 `;
 
 const LoginBtn = () => {
-  return <a href="http://localhost:4000/auth/google"><LoginBtnImg alt="LOGIN" src={loginIcon} /></a>;
+  return (
+    <a href="http://localhost:4000/auth/google">
+      <LoginBtnImg alt="LOGIN" src={loginIcon} />
+    </a>
+  );
 };
 
 export default LoginBtn;
