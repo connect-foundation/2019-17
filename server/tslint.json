@@ -5,7 +5,7 @@
     "no-console": false,
     "member-access": false,
     "object-literal-sort-keys": false,
-    "ordered-imports": true,
+    "ordered-imports": false,
     "interface-name": false,
     "strict-null-checks": false
   },
