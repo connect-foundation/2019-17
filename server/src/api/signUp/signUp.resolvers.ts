@@ -1,4 +1,4 @@
-import { User, SignUpQueryArgs } from "src/types/graph";
+import { User, SignUpQueryArgs } from "../../types/graph";
 import db from "../../db";
 
 const session = db.session();

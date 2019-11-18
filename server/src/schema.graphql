@@ -7,6 +7,18 @@ type Query {
   signUp(nickname: String!, residence: String!, hometown: String!, googleId: String!, thumbnail: String): User!
 }
 
+scalar Upload
+
+type File {
+  filename: String!
+  mimetype: String!
+  encoding: String!
+}
+
+type Mutation {
+  uploadImage(file: Upload!): File!
+}
+
 type User {
   nickname: String!
   residence: String!

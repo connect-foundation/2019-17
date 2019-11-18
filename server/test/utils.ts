@@ -32,4 +32,17 @@ async function requestDB(query: string) {
   return res.records;
 }
 
-export { requestQuery, requestDB };
+const requestQueryWithFile = (
+  query: string,
+  variables: { [x: string]: any } = {}
+) => {
+  const server = app.createHttpServer({ port: 5000 });
+
+  return request(server)
+    .post("/")
+    .field(`operations`, JSON.stringify({ query }))
+    .field(`map`, JSON.stringify({ 0: [`variables.file`] }))
+    .attach(`0`, variables.file);
+};
+
+export { requestQuery, requestDB, requestQueryWithFile };
