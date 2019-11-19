@@ -2,7 +2,7 @@ import { Hello, SayHelloQueryArgs } from "../../types/graph";
 
 export default {
   Query: {
-    sayHello: async (_, args: SayHelloQueryArgs): Promise<Hello> => {
+    sayHello: (_, args: SayHelloQueryArgs): Hello => {
       return { text: "waa" };
     }
   }

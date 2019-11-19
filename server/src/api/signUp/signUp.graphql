@@ -1,3 +1,5 @@
+scalar Upload
+
 type User {
   nickname: String!
   residence: String!
@@ -5,12 +7,12 @@ type User {
   thumbnail: String
 }
 
-type Query {
+type Mutation {
   signUp(
     nickname: String!
     residence: String!
     hometown: String!
     googleId: String!
-    thumbnail: String
+    file: Upload
   ): User!
 }
