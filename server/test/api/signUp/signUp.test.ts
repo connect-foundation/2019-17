@@ -25,8 +25,6 @@ describe("회원가입 성공 확인", () => {
   test("유저 1명이 db에 입력되는지 확인", async done => {
     const body = await requestQuery(CREATE_USER_WITH_THUMBNAIL(userNum++));
 
-    console.log(body);
-
     const res = await requestDB(
       `MATCH (n: Person) WHERE n.nickname= '${body.data.signUp.nickname}' return n`
     );
