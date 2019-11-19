@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import styled, { css } from "styled-components";
-import { ThemedStyledFunction } from "styled-components";
 import buttons from "../../image/buttons.png";
 import ThumbLikeIcon from "../../components/Icon/ThumbLikeIcon";
 import CommentIcon from "../../components/Icon/CommentIcon";
@@ -12,7 +11,7 @@ const Border = css`
 `;
 
 const FeedDiv = styled.div`
-  ${Border}
+  ${props => props.theme.borders.feedBorder};
   background-color: #fff;
   margin-bottom: 10px;
   width: 32rem;
@@ -157,8 +156,6 @@ const CommentText = styled.p`
 `;
 
 const FeedPresenter: React.FC = () => {
-  const [count, setCount] = useState(0); // The useState hook
-  // tslint:disable-next-line: no-angle-bracket-type-assertion
   return (
     <FeedDiv>
       <FeedContentDiv className="mainbox">
