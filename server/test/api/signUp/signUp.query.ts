@@ -7,7 +7,7 @@ const CREATE_USER = num => `mutation($file: Upload!) {
     }
   }`;
 
-const CREATE_USER_WITH_THUMBNAIL = num => `mutation {
+const CREATE_USER_WITHOUT_THUMBNAIL = num => `mutation {
     signUp(nickname: "testUser${num}", residence: "Seoul", hometown: "Seoul", email: "1q2w3e@naver.com"){
       nickname
       residence
@@ -16,4 +16,4 @@ const CREATE_USER_WITH_THUMBNAIL = num => `mutation {
     }
   }`;
 
-export { CREATE_USER, CREATE_USER_WITH_THUMBNAIL };
+export { CREATE_USER, CREATE_USER_WITHOUT_THUMBNAIL };
