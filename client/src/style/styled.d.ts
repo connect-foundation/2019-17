@@ -5,6 +5,7 @@ declare module "styled-components" {
     colors: {
       facebookBlue: string;
       fontMainBlue: string;
+      fontButtonGray: string;
     };
   }
 }

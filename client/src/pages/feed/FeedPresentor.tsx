@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import { ThemedStyledFunction } from "styled-components";
 import buttons from "../../image/buttons.png";
+import ThumbLikeIcon from "../../components/Icon/ThumbLikeIcon";
+import CommentIcon from "../../components/Icon/CommentIcon";
+import ShareIcon from "../../components/Icon/ShareIcon";
+import RoundThumbIcon from "../../components/Icon/RoundThumbIcon";
 const Border = css`
   border: 1px solid #dddfe2;
   border-radius: 3px;
@@ -66,8 +70,6 @@ const ProfileDateDiv = styled.span`
   font-size: 0.75rem;
 `;
 
-//
-
 const FeedContents = styled.div`
   margin-top: 6px;
   padding-bottom: 14px;
@@ -121,11 +123,13 @@ const FeedActionBtn = styled.span`
   display: flex;
   flex: 1 0;
   justify-content: center;
-  color: #606770;
+  color: ${props => props.theme.colors.fontButtonGray};
   font-weight: 600;
   height: 32px;
   line-height: 14px;
+  cursor: pointer;
 `;
+
 // comment
 const CommentDiv = styled.div`
   border-top: 1px solid #dadde1;
@@ -178,7 +182,7 @@ const FeedPresenter: React.FC = () => {
         <div>
           <FeedActionDiv>
             <LikeShowDiv>
-              <span>좋아요</span> <span> n개</span>
+              <RoundThumbIcon /> <span> 12</span>
             </LikeShowDiv>
 
             <ActionStateDiv>
@@ -187,9 +191,18 @@ const FeedPresenter: React.FC = () => {
           </FeedActionDiv>
           <ActionbtnDiv>
             <FullBtnBox>
-              <FeedActionBtn>좋아요</FeedActionBtn>
-              <FeedActionBtn>댓글</FeedActionBtn>
-              <FeedActionBtn>공유하기</FeedActionBtn>
+              <FeedActionBtn>
+                <ThumbLikeIcon />
+                좋아요
+              </FeedActionBtn>
+              <FeedActionBtn>
+                <CommentIcon />
+                댓글
+              </FeedActionBtn>
+              <FeedActionBtn>
+                <ShareIcon />
+                공유하기
+              </FeedActionBtn>
             </FullBtnBox>
           </ActionbtnDiv>
         </div>
