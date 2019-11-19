@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { MdPhotoSizeSelectActual } from 'react-icons/md';
 import TextareaAutosize from 'react-textarea-autosize';
-import Button from './Button';
+
+import Button from '../Button';
+import Profile from '../Profile';
 
 const Form = styled.form`
   width: 500px;
@@ -40,8 +42,8 @@ const ContentContainer = styled.div`
 `;
 
 const ContentWrapper = styled.div`
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 `;
 
 const Content = styled(TextareaAutosize)`
@@ -49,7 +51,7 @@ const Content = styled(TextareaAutosize)`
   width: 100%;
   box-sizing: border-box;
   padding: 0.5rem;
-  padding-top: 30px;
+  padding-top: 20px;
   font-size: 1.1rem;
   color: #1d2028;
   min-height: 70px;
@@ -60,7 +62,10 @@ const Content = styled(TextareaAutosize)`
 
 const ProfileColumn = styled.div`
   width: 65px;
-  height: 100%;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const UploadInput = styled.input`
@@ -98,17 +103,20 @@ const PhotoIcon = styled(MdPhotoSizeSelectActual)`
   margin-right: 0.3rem;
 `;
 
-function WritingFeed() {
-  const [content, setContent] = useState('');
-  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    setContent(e.target.value);
-  };
+interface IProps {
+  content: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}
+
+function WritingFeedPresenter({ content, onChange }: IProps) {
   return (
     <Form encType="multipart/form-data">
       <Header>게시물 만들기</Header>
       <ContentWrapper>
         <ContentContainer>
-          <ProfileColumn></ProfileColumn>
+          <ProfileColumn>
+            <Profile imageUrl={process.env.PUBLIC_URL + '/image/profile.jpg'} />
+          </ProfileColumn>
           <Content
             onChange={onChange}
             placeholder={'게시물 작성'}
@@ -122,10 +130,10 @@ function WritingFeed() {
           <PhotoIcon />
           <PhotoText>사진 업로드</PhotoText>
         </UploadButton>
-        <Button text={'게시'} />
+        <Button size={'small'} text={'게시'} />
       </Footer>
     </Form>
   );
 }
 
-export default WritingFeed;
+export default WritingFeedPresenter;
