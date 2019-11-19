@@ -12,11 +12,11 @@ const getFileUrl = async file => {
 };
 
 const getUrlWhenFileExists = args => {
-  if (!args.file) {
-    return undefined;
-  } else {
+  if (args.file) {
     return getFileUrl(args.file);
   }
+
+  return null;
 };
 
 export default {
