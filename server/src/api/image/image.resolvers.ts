@@ -1,4 +1,3 @@
-// import sharp from "sharp";
 import uploadToObjStorage from "../../middleware/uploadToObjStorage";
 
 export default {

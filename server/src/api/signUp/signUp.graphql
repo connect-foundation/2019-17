@@ -12,7 +12,7 @@ type Mutation {
     nickname: String!
     residence: String!
     hometown: String!
-    googleId: String!
+    email: String!
     file: Upload
   ): User!
 }

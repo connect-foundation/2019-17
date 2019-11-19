@@ -1,5 +1,5 @@
 const CREATE_USER = num => `mutation($file: Upload!) {
-    signUp(nickname: "testUser${num}", residence: "Seoul", hometown: "Seoul", googleId: "${num}", file: $file){
+    signUp(nickname: "testUser${num}", residence: "Seoul", hometown: "Seoul", email: "1q2w3e@naver.com", file: $file){
       nickname
       residence
       thumbnail
@@ -8,7 +8,7 @@ const CREATE_USER = num => `mutation($file: Upload!) {
   }`;
 
 const CREATE_USER_WITH_THUMBNAIL = num => `mutation {
-    signUp(nickname: "testUser${num}", residence: "Seoul", hometown: "Seoul", googleId: "${num}"){
+    signUp(nickname: "testUser${num}", residence: "Seoul", hometown: "Seoul", email: "1q2w3e@naver.com"){
       nickname
       residence
       thumbnail
