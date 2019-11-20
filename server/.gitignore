@@ -98,3 +98,5 @@ public/
 # End of https://www.gitignore.io/api/node
 
 yarn.lock
+src/types
+src/schema.graphql
