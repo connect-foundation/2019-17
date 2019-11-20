@@ -115,10 +115,7 @@ function WritingFeedPresenter({ content, onChange }: IProps) {
       <ContentWrapper>
         <ContentContainer>
           <ProfileColumn>
-            <Profile
-              imageUrl={process.env.PUBLIC_URL + '/images/profile.jpg'}
-              alt={'profile image'}
-            />
+            <Profile imageUrl={process.env.PUBLIC_URL + '/images/profile.jpg'} alt={"profile image"}/>
           </ProfileColumn>
           <Content
             onChange={onChange}
