@@ -4,14 +4,25 @@ type Hello {
 
 type Query {
   sayHello(name: String!): Hello!
-  findUserWithEmail(email: String!): User
-  addUser(email: String!, nickname: String, hometown: String, residence: String, thumbnail: String): User
+}
+
+scalar Upload
+
+type File {
+  filename: String!
+  mimetype: String!
+  encoding: String!
+}
+
+type Mutation {
+  uploadImage(file: Upload!): File!
+  signUp(nickname: String!, residence: String!, hometown: String!, email: String!, file: Upload): User!
 }
 
 type User {
   email: String!
-  nickname: String
-  hometown: String
-  residence: String
+  nickname: String!
+  residence: String!
+  hometown: String!
   thumbnail: String
 }

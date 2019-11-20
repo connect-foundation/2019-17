@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@types/jest": "^24.0.22",
+    "aws-sdk": "2.348.0",
     "babel-runtime": "^6.26.0",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
