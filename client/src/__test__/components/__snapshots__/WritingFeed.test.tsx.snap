@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<WritingFeed /> 1`] = `
+<div>
+  <form
+    class="sc-htpNat jZJbFl"
+    enctype="multipart/form-data"
+  >
+    <div
+      class="sc-bxivhb kIAkFU"
+    >
+      게시물 만들기
+    </div>
+    <div
+      class="sc-bZQynM hizQum"
+    >
+      <div
+        class="sc-EHOje grdAbW"
+      >
+        <div
+          class="sc-htoDjs eWfGhK"
+        >
+          <img
+            alt="profile image"
+            class="sc-bwzfXH hNFusQ"
+            src="/images/profile.jpg"
+          />
+        </div>
+        <textarea
+          class="sc-gzVnrw fJIRnR"
+          placeholder="게시물 작성"
+          style="height: 2px;"
+        />
+      </div>
+    </div>
+    <input
+      class="sc-dnqmqq iMjAll"
+      id="upload"
+      type="file"
+    />
+    <div
+      class="sc-ifAKCX fMZNFb"
+    >
+      <label
+        class="sc-iwsKbI dIxLYJ"
+        for="upload"
+      >
+        <svg
+          class="sc-gqjmRU GanpC"
+          fill="currentColor"
+          height="1em"
+          stroke="currentColor"
+          stroke-width="0"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M21 3H3C2 3 1 4 1 5v14c0 1.1.9 2 2 2h18c1 0 2-1 2-2V5c0-1-1-2-2-2zM5 17l3.5-4.5 2.5 3.01L14.5 11l4.5 6H5z"
+          />
+        </svg>
+        <span
+          class="sc-gZMcBi bDkIiU"
+        >
+          사진 업로드
+        </span>
+      </label>
+      <button
+        class="sc-bdVaJa lnkbBL"
+      >
+        게시
+      </button>
+    </div>
+  </form>
+</div>
+`;

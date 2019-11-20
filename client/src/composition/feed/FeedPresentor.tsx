@@ -1,10 +1,9 @@
-import React from "react";
-import styled from "styled-components";
-import buttons from "../../image/buttons.png";
-import ThumbLikeIcon from "../../components/Icon/ThumbLikeIcon";
-import CommentIcon from "../../components/Icon/CommentIcon";
-import ShareIcon from "../../components/Icon/ShareIcon";
-import RoundThumbIcon from "../../components/Icon/RoundThumbIcon";
+import React from 'react';
+import styled from 'styled-components';
+import ThumbLikeIcon from '../../components/Icon/ThumbLikeIcon';
+import CommentIcon from '../../components/Icon/CommentIcon';
+import ShareIcon from '../../components/Icon/ShareIcon';
+import RoundThumbIcon from '../../components/Icon/RoundThumbIcon';
 
 const FeedDiv = styled.div`
   ${props => props.theme.borders.feedBorder};
@@ -20,7 +19,7 @@ const FeedContentDiv = styled.div`
 const FeedEditDiv = styled.span`
   float: right;
   cursor: pointer;
-  background-image: url(${buttons});
+  background-image: url(${process.env.PUBLIC_URL + '/images/buttons.png'});
   background-repeat: no-repeat;
   background-size: 64px 134px;
   background-position: 0 -66px;
