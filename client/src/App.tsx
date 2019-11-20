@@ -3,7 +3,7 @@ import { ThemeProvider } from 'styled-components';
 
 import theme from './style/theme';
 import GlobalStyles from './style/globalStyles';
-import WritingFeed from './components/WritingFeed';
+import WritingFeed from './container/WritingFeed';
 import Feed from './pages/feed';
 
 const App: React.FC = () => {

@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { MdPhotoSizeSelectActual } from 'react-icons/md';
 import TextareaAutosize from 'react-textarea-autosize';
 
-import Button from '../Button';
-import Profile from '../Profile';
+import Button from '../../components/Button';
+import Profile from '../../components/Profile';
 
 const Form = styled.form`
   width: 500px;
@@ -115,7 +115,7 @@ function WritingFeedPresenter({ content, onChange }: IProps) {
       <ContentWrapper>
         <ContentContainer>
           <ProfileColumn>
-            <Profile imageUrl={process.env.PUBLIC_URL + '/image/profile.jpg'} />
+            <Profile imageUrl={process.env.PUBLIC_URL + '/images/profile.jpg'} alt={"profile image"}/>
           </ProfileColumn>
           <Content
             onChange={onChange}
