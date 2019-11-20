@@ -37,7 +37,8 @@ const ProfileDateDiv = styled.span`
   margin-bottom: 0.25rem;
   font-size: 0.75rem;
 `;
-const FeedHeader: React.FC = () => {
+
+const FeedHeader = () => {
   return (
     <>
       <div>

@@ -29,20 +29,25 @@ const FeedEditDiv = styled.span`
   width: 20px;
 `;
 
-const Feed: React.FC = () => {
+interface Iprops {
+  content: string;
+}
+
+function Feed({ content }: Iprops) {
+  const cc = content;
   return (
     <>
       <FeedDiv>
         <FeedContentDiv className="mainbox">
           <FeedEditDiv></FeedEditDiv>
           <FeedHeader />
-          <FeedBody />
+          <FeedBody content={content} />
           <FeedFooter />
         </FeedContentDiv>
         <Comment />
       </FeedDiv>
     </>
   );
-};
+}
 
 export default Feed;
