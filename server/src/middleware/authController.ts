@@ -50,14 +50,14 @@ const checkToken = (req, res, next) => {
     cookies: { token }
   } = req;
   if (!token) {
-    next();
+    return next();
   }
   jwt.verify(token, SECRET, (err, decoded) => {
     if (err) {
-      next(err);
+      return next(err);
     } else {
       req.email = decoded.email;
-      next();
+      return next();
     }
   });
 };

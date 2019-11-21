@@ -1,9 +1,8 @@
 import React from 'react';
+import Feed from '../../composition/feed';
 
 const SignUp: React.FC = () => {
-    return (
-        <div>signUp</div>
-    )
-}
+  return <Feed />;
+};
 
 export default SignUp;

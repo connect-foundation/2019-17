@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Button /> 1`] = `
+<div>
+  <button
+    class="sc-bdVaJa cvhxcB"
+  >
+    게시
+  </button>
+</div>
+`;
