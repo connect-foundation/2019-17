@@ -1,6 +1,6 @@
-import db from "../../db";
-import uploadToObjStorage from "../../middleware/uploadToObjStorage";
-import { SignUpMutationArgs, User } from "../../types/graph";
+import db from '../../db';
+import uploadToObjStorage from '../../middleware/uploadToObjStorage';
+import { SignUpMutationArgs, User } from '../../types/graph';
 
 const session = db.session();
 
@@ -24,10 +24,10 @@ export default {
     signUp: async (_, args: SignUpMutationArgs): Promise<User> => {
       const thumbnail = await getUrlWhenFileExists(args);
       const result = await session.run(
-        `CREATE (a:Person {nickname: $nickname, hometown: $hometown, residence: $residence, email: $email ${
-          thumbnail ? ", thumbnail:$thumbnail" : ""
+        `CREATE (a:User {nickname: $nickname, hometown: $hometown, residence: $residence, email: $email ${
+          thumbnail ? ', thumbnail:$thumbnail' : ''
         }
-        }) RETURN a`,
+          }) RETURN a`,
         { ...args, thumbnail }
       );
 

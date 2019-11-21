@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import LoginBtn from './SignInBtn';
+import { withRouter } from 'react-router';
+
 const CenterBox = styled.div`
   width: 100%;
   height: 100%;
@@ -26,17 +28,17 @@ const Title = styled.div`
   color: ${props => props.theme.colors.facebookTextColor};
 `;
 
-const SignInContainer: React.FC = () => (
-  <CenterBox>
-    <Wrapper>
-      <HorizonCenterContainer>
-        <Title>BOOSTBOOK LOGIN</Title>
-        <LoginBtn />
-      </HorizonCenterContainer>
-    </Wrapper>
+const SignInContainer: React.FC = () => {
+  return (
+    <CenterBox>
+      <Wrapper>
+        <HorizonCenterContainer>
+          <Title>BOOSTBOOK LOGIN</Title>
+          <LoginBtn />
+        </HorizonCenterContainer>
+      </Wrapper>
+    </CenterBox>
+  );
+};
 
-    {/* <input type="button" value="signup" /> */}
-  </CenterBox>
-);
-
-export default SignInContainer;
+export default withRouter(SignInContainer);

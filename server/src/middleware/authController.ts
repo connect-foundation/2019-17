@@ -22,7 +22,7 @@ const signInWithEmail = async (req, res, next) => {
     } = req;
     const user = await findUserWithEmail({ email });
     if (!user) {
-      return res.redirect(CLIENT_HOST_ADDRESS + '/signUp');
+      return res.redirect(`${CLIENT_HOST_ADDRESS}/signUp?email=${email}`);
     }
     jwt.sign(
       { email: user.email },

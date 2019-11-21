@@ -2,6 +2,8 @@
   "name": "client",
   "version": "0.1.0",
   "devDependencies": {
+    "@graphql-codegen/cli": "^1.8.3",
+    "@graphql-codegen/typescript": "^1.8.3",
     "@types/graphql": "^14.5.0",
     "@types/prop-types": "^15.7.3",
     "@types/styled-components": "^4.4.0",
@@ -24,6 +26,7 @@
     "@types/react-textarea-autosize": "^4.3.5",
     "@types/testing-library__react": "^9.1.2",
     "apollo-boost": "^0.4.4",
+    "dotenv": "^8.2.0",
     "graphql": "^14.5.8",
     "polished": "^3.4.2",
     "prop-types": "^15.7.2",
@@ -41,7 +44,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "generate": "graphql-codegen"
   },
   "eslintConfig": {
     "extends": "react-app"

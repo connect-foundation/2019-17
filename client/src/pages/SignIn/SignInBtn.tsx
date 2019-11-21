@@ -7,8 +7,22 @@ const LoginBtnImg = styled.img`
   cursor: pointer;
 `;
 
+const Link = styled.a``;
+
+const PRODUCTION: string = 'production';
+const NODE_ENV: string = process.env.NODE_ENV || '';
+
 const LoginBtn = () => {
-  return <LoginBtnImg alt="LOGIN" src={loginIcon} />;
+  return (
+    <Link
+      href={`http://${
+        NODE_ENV === PRODUCTION
+          ? process.env.REACT_APP_SERVER_HOST
+          : 'localhost:4000'
+      }/auth/google`}>
+      <LoginBtnImg alt="LOGIN" src={loginIcon} />
+    </Link>
+  );
 };
 
 export default LoginBtn;
