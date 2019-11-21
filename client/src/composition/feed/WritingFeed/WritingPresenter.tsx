@@ -105,20 +105,23 @@ const PhotoIcon = styled(MdPhotoSizeSelectActual)`
 
 interface IProps {
   content: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onChangeTextArea: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-function WritingFeedPresenter({ content, onChange }: IProps) {
+function WritingFeedPresenter({ content, onChangeTextArea }: IProps) {
   return (
     <Form encType="multipart/form-data">
       <Header>게시물 만들기</Header>
       <ContentWrapper>
         <ContentContainer>
           <ProfileColumn>
-            <Profile imageUrl={process.env.PUBLIC_URL + '/images/profile.jpg'} alt={"profile image"}/>
+            <Profile
+              imageUrl={process.env.PUBLIC_URL + '/images/profile.jpg'}
+              alt={'profile image'}
+            />
           </ProfileColumn>
           <Content
-            onChange={onChange}
+            onChange={onChangeTextArea}
             placeholder={'게시물 작성'}
             value={content}
           />
