@@ -29,6 +29,7 @@ class App {
     this.app.express.use(logger('dev'));
     this.app.express.use(helmet());
     this.app.express.use(cookieParser());
+    this.app.express.use(checkToken);
     this.app.express.use(passport.initialize());
     this.app.express.get(
       '/auth/google',
@@ -41,7 +42,6 @@ class App {
       }),
       signInWithEmail
     );
-    this.app.express.get('/', checkToken);
   };
 }
 

@@ -20,10 +20,9 @@ const signInWithEmail = async (req, res, next) => {
         emails: [{ value: email }]
       }
     } = req;
-
     const user = await findUserWithEmail({ email });
     if (!user) {
-      res.redirect(CLIENT_HOST_ADDRESS + '/signUp');
+      return res.redirect(CLIENT_HOST_ADDRESS + '/signUp');
     }
     jwt.sign(
       { email: user.email },
@@ -47,21 +46,18 @@ const signInWithEmail = async (req, res, next) => {
 };
 
 const checkToken = (req, res, next) => {
-  const { cookies: token } = req;
+  const {
+    cookies: { token }
+  } = req;
   if (!token) {
-    return res.status(403).json({
-      success: false,
-      message: 'need login'
-    });
+    next();
   }
   jwt.verify(token, SECRET, (err, decoded) => {
     if (err) {
       next(err);
     } else {
-      res.json({
-        success: true,
-        decoded
-      });
+      req.email = decoded.email;
+      next();
     }
   });
 };
