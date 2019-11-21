@@ -1,0 +1,12 @@
+scalar Upload
+
+type UserInfo {
+  id: String!
+  nickname: String!
+  thumbnail: String!
+  relation: String!
+}
+
+type Query {
+  searchUser(nickname: String!): [User!]!
+}
