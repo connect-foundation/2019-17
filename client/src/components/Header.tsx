@@ -2,6 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import SearchBox from "./SearchBox";
 
+const HeaderWrapper = styled.div`
+  height: 43px;
+`;
+
 const Backgound = styled.div`
   background-color: #4267b2;
   width: 100%;
@@ -21,11 +25,13 @@ const ItemContainer = styled.div`
 
 function Header() {
   return (
-    <Backgound>
-      <ItemContainer>
-        <SearchBox></SearchBox>
-      </ItemContainer>
-    </Backgound>
+    <HeaderWrapper>
+      <Backgound>
+        <ItemContainer>
+          <SearchBox></SearchBox>
+        </ItemContainer>
+      </Backgound>
+    </HeaderWrapper>
   );
 }
 
