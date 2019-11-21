@@ -4,7 +4,6 @@ import FeedHeader from "./FeedHeader";
 import FeedBody from "./FeedBody";
 import FeedFooter from "./FeedFooter";
 import Comment from "./Comment";
-
 import buttons from "../../image/buttons.png";
 
 const FeedDiv = styled.div`

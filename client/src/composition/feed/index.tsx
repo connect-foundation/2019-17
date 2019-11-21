@@ -1,9 +1,8 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import Feed from "./Feed";
 import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
-import { async } from "q";
-
+import useScrollEnd from "../../hooks/useScrollEnd";
 interface IFeed {
   content: string;
 }
@@ -33,34 +32,10 @@ interface FeedVars {
   shareCnt: number;
 } */
 
-const useScroll = () => {
-  // state를 생성합니다.
-  const [state, setState] = useState(false);
-
-  const onScroll = () => {
-    console.log("a", window.scrollY);
-    if (
-      document.documentElement.scrollTop +
-        document.documentElement.clientHeight ===
-      document.documentElement.scrollHeight
-    ) {
-      console.log(true);
-      setState(true);
-    } else {
-      setState(false);
-    }
-  };
-  useEffect(() => {
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll); // <---- 집중 !!!
-  }, []);
-  return state;
-};
-
 const FeedContainer = () => {
   const [feeds, setFeeds] = useState<IFeed[]>([]);
   const [cursor, setCursor] = useState<string>();
-  const checkEnd = useScroll();
+  const checkEnd = useScrollEnd();
   // hooks 에서 useQuery 1 부터 시작
   const { loading, data, fetchMore } = useQuery<Feeds, FeedVars>(GET_FEEDS, {
     variables: { first: 2, after: 1 }
@@ -91,7 +66,7 @@ const FeedContainer = () => {
   };
 
   const checkEndFeed = () => {
-    // fetchMoreFeed();
+    fetchMoreFeed();
 
     return null;
   };
