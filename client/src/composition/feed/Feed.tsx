@@ -30,16 +30,17 @@ const FeedEditDiv = styled.span`
 
 interface Iprops {
   content: string;
+  createdAt: string;
 }
 
-function Feed({ content }: Iprops) {
+function Feed({ content, createdAt }: Iprops) {
   const cc = content;
   return (
     <>
       <FeedDiv>
         <FeedContentDiv className="mainbox">
           <FeedEditDiv></FeedEditDiv>
-          <FeedHeader />
+          <FeedHeader createdAt={createdAt} />
           <FeedBody content={content} />
           <FeedFooter />
         </FeedContentDiv>

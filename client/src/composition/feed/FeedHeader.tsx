@@ -38,7 +38,11 @@ const ProfileDateDiv = styled.span`
   font-size: 0.75rem;
 `;
 
-const FeedHeader = () => {
+interface Iprops {
+  createdAt: string;
+}
+
+const FeedHeader = ({ createdAt }: Iprops) => {
   return (
     <>
       <div>
@@ -47,7 +51,7 @@ const FeedHeader = () => {
         </ProfileImgBox>
         <ProfileDiv>
           <ProfileNameDiv>우연서</ProfileNameDiv>
-          <ProfileDateDiv>11월 12일 오후 6:04 </ProfileDateDiv>
+          <ProfileDateDiv>{createdAt} </ProfileDateDiv>
         </ProfileDiv>
       </div>
     </>

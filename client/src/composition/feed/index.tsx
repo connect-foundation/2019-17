@@ -5,6 +5,7 @@ import gql from "graphql-tag";
 import useScrollEnd from "../../hooks/useScrollEnd";
 interface IFeed {
   content: string;
+  createdAt: string;
 }
 
 interface Feeds {
@@ -12,9 +13,10 @@ interface Feeds {
 }
 
 const GET_FEEDS = gql`
-  query getfeeds($first: Int, $after: Int) {
-    feeds(first: $first, after: $after) {
+  query getfeeds($first: Int, $after: Int, $currentCursor: String) {
+    feeds(first: $first, after: $after, cursor: $currentCursor) {
       content
+      createdAt
     }
   }
 `;
@@ -22,41 +24,40 @@ const GET_FEEDS = gql`
 interface FeedVars {
   first: number;
   after: number;
+  currentCursor: string;
 }
-/* interface IFeed2 {
-  nickname: string;
-  profile: string;
-  createdAt: string;
-  content: string;
-  commentCnt: number;
-  shareCnt: number;
-} */
-
+const OFFSET = 2;
 const FeedContainer = () => {
   const [feeds, setFeeds] = useState<IFeed[]>([]);
-  const [cursor, setCursor] = useState<string>();
+  const [cursor, setCursor] = useState<string>("");
+  const [cursorIdx, setCursorIdx] = useState<number>(0);
+
   const checkEnd = useScrollEnd();
   // hooks 에서 useQuery 1 부터 시작
   const { loading, data, fetchMore } = useQuery<Feeds, FeedVars>(GET_FEEDS, {
-    variables: { first: 2, after: 1 }
+    variables: { first: cursorIdx, after: OFFSET, currentCursor: cursor }
   });
 
   useMemo(() => {
     if (data) {
-      setFeeds([...feeds, ...data.feeds]);
+      // setFeeds([...feeds, ...data.feeds]);
     }
   }, [data]);
 
   const fetchMoreFeed = async () => {
     const { data: value } = await fetchMore({
       variables: {
-        first: 2,
-        after: 3
+        first: OFFSET,
+        after: cursorIdx,
+        currentCursor: cursor
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) {
           return prev;
+        } else {
+          setCursorIdx(OFFSET + cursorIdx);
         }
+
         return Object.assign({}, prev, {
           feed: [...prev.feeds, ...fetchMoreResult.feeds]
         });
@@ -74,9 +75,9 @@ const FeedContainer = () => {
   return (
     <>
       {feeds.map(feed => (
-        <Feed content={feed.content} />
+        <Feed content={feed.content} createdAt={feed.createdAt} />
       ))}
-      feeds
+
       <span onClick={fetchMoreFeed}>click</span>
       {checkEnd ? checkEndFeed() : (() => {})()}
     </>
