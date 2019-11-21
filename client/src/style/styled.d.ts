@@ -1,4 +1,5 @@
-import 'styled-components';
+import "styled-components";
+import { FlattenInterpolation } from "styled-components";
 
 declare module 'styled-components' {
   export interface DefaultTheme {
@@ -8,11 +9,14 @@ declare module 'styled-components' {
       white: string;
       facebookTextColor: string;
       borderColor: string;
+      textColor: string;
+      fontMainBlue: string;
+      fontButtonGray: string;
     };
-
     borders: {
       borderStyle: string;
       radius: string;
+      feedBorder: FlattenInterpolation;
     };
   }
 }

@@ -1,15 +1,29 @@
-import React from "react";
-import { ThemeProvider } from "styled-components";
+import React from 'react';
+import { ThemeProvider } from 'styled-components';
 
-import theme from "./style/theme";
-import GlobalStyles from "./style/globalStyles";
-import SignUpContainer from "./pages/SignUp";
+import theme from './style/theme';
+import GlobalStyles from './style/globalStyles';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { PAGE_PATHS } from './constants';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+import Main from './pages/Main';
+import MyPage from './pages/MyPage';
+import NoMatch from './pages/NoMatch';
 
 const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-      <SignUpContainer />
+      <Router>
+        <Switch>
+          <Route exact path={PAGE_PATHS.MAIN} component={Main} />
+          <Route path={PAGE_PATHS.SIGNUP} component={SignUp} />
+          <Route path={PAGE_PATHS.SIGNIN} component={SignIn} />
+          <Route path={PAGE_PATHS.MY_PAGE} component={MyPage} />
+          <Route component={NoMatch} />
+        </Switch>
+      </Router>
     </ThemeProvider>
   );
 };
