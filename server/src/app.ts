@@ -3,8 +3,8 @@ import cors from 'cors';
 import { GraphQLServer } from 'graphql-yoga';
 import helmet from 'helmet';
 import logger from 'morgan';
-import { checkToken, signInWithEmail } from './config/auth/controller';
-import passport from './config/passport';
+import { checkToken, signInWithEmail } from './middleware/authController';
+import passport from './middleware/passport';
 import schema from './schema';
 
 const PRODUCTION: string = 'PRODUCTION';

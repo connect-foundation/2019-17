@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { findUserWithEmail } from '../../schema/user/user';
+import { findUserWithEmail } from '../schema/user/user';
 const SECRET: string = process.env.JWT_SECRET || '';
 
 const PRODUCTION: string = 'PRODUCTION';
