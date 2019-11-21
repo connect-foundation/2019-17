@@ -1,7 +1,6 @@
 {
   "name": "client",
   "version": "0.1.0",
-  "private": true,
   "devDependencies": {
     "@types/graphql": "^14.5.0",
     "@types/styled-components": "^4.4.0",
@@ -21,11 +20,13 @@
     "@types/react-dom": "16.9.4",
     "@types/react-textarea-autosize": "^4.3.5",
     "@types/testing-library__react": "^9.1.2",
+    "@types/react-router-dom": "^5.1.2",
     "apollo-boost": "^0.4.4",
     "graphql": "^14.5.8",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-icons": "^3.8.0",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
     "react-textarea-autosize": "^7.1.2",
     "styled-components": "^4.4.1",

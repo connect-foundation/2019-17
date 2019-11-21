@@ -1,11 +1,14 @@
-import React from "react";
-import FeedPresentor from "./FeedPresentor";
-const SignUpPresenter: React.FC = () => {
+import React from 'react';
+import FeedPresentor from './FeedPresentor';
+import WritingFeed from '../../composition/feed/WritingFeed';
+
+const FeedContainer: React.FC = () => {
   return (
     <>
+      <WritingFeed />
       <FeedPresentor />
     </>
   );
 };
 
-export default SignUpPresenter;
+export default FeedContainer;
