@@ -14,4 +14,9 @@ export default createGlobalStyle`
             text-decoration: none;
         }
     }
+    input,
+    textarea,
+    button {
+        outline: none;
+    }
 `;
