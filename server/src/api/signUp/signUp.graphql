@@ -1,6 +1,7 @@
 scalar Upload
 
 type User {
+  email: String!
   nickname: String!
   residence: String!
   hometown: String!
