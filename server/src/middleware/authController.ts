@@ -37,7 +37,7 @@ const signInWithEmail = async (req, res, next) => {
           throw err;
         }
         res.cookie('token', token);
-        res.redirect('/');
+        res.redirect(CLIENT_HOST_ADDRESS);
       }
     );
   } catch (err) {

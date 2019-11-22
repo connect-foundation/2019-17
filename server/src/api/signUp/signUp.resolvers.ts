@@ -1,3 +1,4 @@
+import { GraphQLUpload } from 'apollo-upload-server';
 import db from '../../db';
 import uploadToObjStorage from '../../middleware/uploadToObjStorage';
 import { SignUpMutationArgs, User } from '../../types/graph';
@@ -15,7 +16,6 @@ const getUrlWhenFileExists = args => {
   if (args.file) {
     return getFileUrl(args.file);
   }
-
   return null;
 };
 
@@ -37,5 +37,6 @@ export default {
 
       return node.properties;
     }
-  }
+  },
+  Upload: GraphQLUpload
 };

@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
 import queryString from 'querystring';
+import { useMutation } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
 
 import SignUpPresenter from './SignUpPresenter';
 import useInput, { IUseInput } from '../../hooks/useInput';
-import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
-import { MutationSignUpArgs, User, Scalars } from '../../types';
-import Maybe from 'graphql/tsutils/Maybe';
+import {
+  Scalars,
+  Maybe,
+  SignUpMutation,
+  SignUpMutationVariables
+} from '../../react-components.d';
 
 const validateName = (inputName: string): boolean => {
   // 숫자로 시작안됨, 영어한글숫자가능 공백불가능, 닉네임 최소 길이 4자
@@ -17,7 +21,7 @@ const validateName = (inputName: string): boolean => {
 };
 
 const SIGN_UP_MUTATION = gql`
-  mutation signUpMutation(
+  mutation signUp(
     $nickname: String!
     $hometown: String!
     $residence: String!
@@ -59,7 +63,7 @@ function SignUpContainer({ history, location }: RouteComponentProps) {
     }
   };
 
-  const [signUpMutation] = useMutation<User, MutationSignUpArgs>(
+  const [signUpMutation] = useMutation<SignUpMutation, SignUpMutationVariables>(
     SIGN_UP_MUTATION
   );
 
@@ -69,6 +73,7 @@ function SignUpContainer({ history, location }: RouteComponentProps) {
       .email as string;
     if (!email) history.push('/signin');
     if (nameValid) {
+      console.log(file);
       await signUpMutation({
         variables: {
           email,
