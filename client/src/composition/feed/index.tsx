@@ -1,9 +1,8 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import Feed from "./Feed";
 import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import useScrollEnd from "../../hooks/useScrollEnd";
-
 interface IFeed {
   content: string;
   createdAt: string;
@@ -14,8 +13,8 @@ interface Feeds {
 }
 
 const GET_FEEDS = gql`
-  query getfeeds($first: Int, $currentCursor: String) {
-    feeds(first: $first, cursor: $currentCursor) {
+  query getfeeds($first: Int, $after: Int, $currentCursor: String) {
+    feeds(first: $first, after: $after, cursor: $currentCursor) {
       content
       createdAt
     }
@@ -24,38 +23,39 @@ const GET_FEEDS = gql`
 
 interface FeedVars {
   first: number;
+  after: number;
   currentCursor: string;
 }
 const OFFSET = 2;
 const FeedContainer = () => {
   const [feeds, setFeeds] = useState<IFeed[]>([]);
-  const [cursor, setCursor] = useState<string>("9999-12-31T09:29:26.050Z");
+  const [cursor, setCursor] = useState<string>("");
+  const [cursorIdx, setCursorIdx] = useState<number>(0);
 
   const checkEnd = useScrollEnd();
   // hooks 에서 useQuery 1 부터 시작
   const { loading, data, fetchMore } = useQuery<Feeds, FeedVars>(GET_FEEDS, {
-    variables: { first: OFFSET, currentCursor: cursor }
+    variables: { first: cursorIdx, after: OFFSET, currentCursor: cursor }
   });
 
-  useEffect(() => {
+  useMemo(() => {
     if (data) {
-      setFeeds(data.feeds);
+      // setFeeds([...feeds, ...data.feeds]);
     }
-  }, []);
+  }, [data]);
 
   const fetchMoreFeed = async () => {
     const { data: value } = await fetchMore({
       variables: {
         first: OFFSET,
+        after: cursorIdx,
         currentCursor: cursor
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) {
           return prev;
         } else {
-          const { feeds: feedItems } = fetchMoreResult;
-          const lastFeedItem = feedItems[feedItems.length - 1];
-          setCursor(lastFeedItem.createdAt);
+          setCursorIdx(OFFSET + cursorIdx);
         }
 
         return Object.assign({}, prev, {
@@ -68,6 +68,7 @@ const FeedContainer = () => {
 
   const checkEndFeed = () => {
     fetchMoreFeed();
+
     return null;
   };
 
