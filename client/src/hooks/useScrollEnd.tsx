@@ -9,10 +9,8 @@ const useScrollEnd = () => {
         document.documentElement.clientHeight ===
       document.documentElement.scrollHeight
     ) {
-      console.log("scroll Y : ", window.scrollY);
       setState(true);
     } else {
-      console.log("scroll Y! : ", window.scrollY);
       setState(false);
     }
   };
