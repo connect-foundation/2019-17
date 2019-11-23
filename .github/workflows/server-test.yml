@@ -23,8 +23,8 @@ jobs:
         run: |
           cd ./server
           mkdir src/types
-          yarn types
           yarn install
+          yarn types
           yarn test
         env:
           PORT: ${{secrets.Port}}
