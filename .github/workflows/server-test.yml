@@ -20,7 +20,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: yarn install, test
-        with:
+        run: |
+          cd ./server
+          yarn install
+          yarn test
+        env:
           PORT: ${{secrets.Port}}
           DB_HOST: ${{secrets.DbHost}}
           NEO4J_ID: ${{secrets.Neo4jId}}
@@ -31,7 +35,3 @@ jobs:
           NC_BUCKET_NAME: ${{secrets.NcBucketName}}
           GOOGLE_CLIENT_ID: ${{secrets.GoogleClientId}}
           GOOGLE_CLIENT_SECRET: ${{secrets.GoogleClientSecret}}
-        run: |
-          cd ./server
-          yarn install
-          yarn test
