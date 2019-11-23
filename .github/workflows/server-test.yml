@@ -20,6 +20,17 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: yarn install, test
+        with:
+          PORT: ${{secrets.Port}}
+          DB_HOST: ${{secrets.DbHost}}
+          NEO4J_ID: ${{secrets.Neo4jId}}
+          NEO4J_PASSWORD: ${{secrets.Neo4jPassword}}
+          NODE_ENV: ${{secrets.NodeEnv}}
+          NC_ACCESS_KEY: ${{secrets.NcAccessKey}}
+          NC_SECRET_KEY: ${{secrets.NcSecretKey}}
+          NC_BUCKET_NAME: ${{secrets.NcBucketName}}
+          GOOGLE_CLIENT_ID: ${{secrets.GoogleClientId}}
+          GOOGLE_CLIENT_SECRET: ${{secrets.GoogleClientSecret}}
         run: |
           cd ./server
           yarn install
