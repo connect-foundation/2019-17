@@ -5,9 +5,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon --exec ts-node src/init.ts delay 2",
-    "pretypes": "gql-merge -o ./src/schema.graphql ./src/api/**/*.graphql ",
-    "types": "graphql-to-typescript ./src/schema.graphql ./src/types/graph.d.ts",
-    "test": "jest",
+    "pretypes": "../node_modules/.bin/gql-merge -o ./src/schema.graphql ./src/api/**/*.graphql ",
+    "types": "../node_modules/.bin/graphql-to-typescript ./src/schema.graphql ./src/types/graph.d.ts",
+    "test": "jest --forceExit",
     "prd": "ENV=PRODUCTION ts-node src/init.ts"
   },
   "devDependencies": {
