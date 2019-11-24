@@ -6,9 +6,10 @@
   "scripts": {
     "dev": "nodemon --exec ts-node src/init.ts delay 2",
     "pretypes": "gql-merge -o ./src/schema.graphql ./src/api/**/*.graphql ",
-    "types": "graphql-to-typescript ./src/schema.graphql ./src/types/graph.d.ts",
+    "types": "mkdir -p src/types && graphql-to-typescript ./src/schema.graphql ./src/types/graph.d.ts",
     "test": "jest --forceExit",
-    "prd": "ENV=PRODUCTION ts-node src/init.ts"
+    "preprd": "tsc && copyfiles --up 1 src/api/**/*.graphql dist/",
+    "prd": "NODE_ENV=PRODUCTION pm2 start dist/init.js"
   },
   "devDependencies": {
     "@types/cors": "^2.8.6",
@@ -17,6 +18,7 @@
     "@types/morgan": "^1.7.37",
     "@typescript-eslint/eslint-plugin": "^2.8.0",
     "@typescript-eslint/parser": "^2.8.0",
+    "copyfiles": "^2.1.1",
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
@@ -46,6 +48,7 @@
     "neo4j-driver": "^1.7.6",
     "passport": "^0.4.0",
     "passport-google-oauth": "^2.0.0",
+    "pm2": "^4.1.2",
     "prettier": "^1.19.1",
     "ts-jest": "^24.1.0",
     "ts-node": "^8.5.0",

@@ -1,9 +1,9 @@
 name: server api test
 
 on:
-  push:
+  pull_request:
     branches:
-      - 'feature-100/cicd'
+      - 'develop'
 
 jobs:
   build:
@@ -22,7 +22,6 @@ jobs:
       - name: yarn install, test
         run: |
           cd ./server
-          mkdir src/types
           yarn install
           yarn types
           yarn test

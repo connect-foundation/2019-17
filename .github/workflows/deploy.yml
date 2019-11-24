@@ -1,0 +1,23 @@
+name: server api deploy
+
+on:
+  push:
+    branches:
+      - 'feature-100/cicd'
+
+jobs:
+  build:
+    runs-on: ubuntu-16.04
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SshHost}}
+          username: ${{ secrets.SshUserName }}
+          password: ${{ secrets.SshPassword }}
+          port: ${{ secrets.SshPort }}
+          script: |
+            cd ~
+            ./scripts/deploy.sh
