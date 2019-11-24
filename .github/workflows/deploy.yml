@@ -17,6 +17,8 @@ jobs:
       - uses: actions/checkout@v1
       - name: deploy
         uses: appleboy/ssh-action@master
+        env:
+          BRANCH: $GITHUB_REF
         with:
           host: ${{ secrets.SshHost}}
           username: ${{ secrets.SshUserName }}
@@ -24,4 +26,4 @@ jobs:
           port: ${{ secrets.SshPort }}
           script: |
             cd ~
-            ./scripts/deploy.sh $GITHUB_REF
+            ./scripts/deploy.sh $BRANCH
