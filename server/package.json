@@ -8,8 +8,8 @@
     "pretypes": "gql-merge -o ./src/schema.graphql ./src/api/**/*.graphql ",
     "types": "mkdir -p src/types && graphql-to-typescript ./src/schema.graphql ./src/types/graph.d.ts",
     "test": "jest --forceExit",
-    "preprd": "tsc && copyfiles --up 1 src/api/**/*.graphql dist/",
-    "prd": "NODE_ENV=PRODUCTION pm2 start dist/init.js"
+    "build": "tsc && copyfiles --up 1 src/api/**/*.graphql dist/",
+    "prd": "NODE_ENV=PRODUCTION pm2 start --name boostbook:server dist/init.js"
   },
   "devDependencies": {
     "@types/cors": "^2.8.6",

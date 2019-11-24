@@ -1,9 +1,10 @@
-name: server api deploy
+name: server&client deploy
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
-      - 'feature-100/cicd'
+      - '/^release-[0-9]+\.[0-9]+\.[0-9]+$/'
 
 jobs:
   build:
@@ -11,7 +12,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
-      - name: deploy to server
+      - name: deploy
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SshHost}}
