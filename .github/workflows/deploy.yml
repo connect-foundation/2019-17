@@ -5,6 +5,9 @@ on:
     types: [closed]
     branches:
       - '/^release-[0-9]+\.[0-9]+\.[0-9]+$/'
+  push:
+    branches:
+      - 'feature-100/cicd'
 
 jobs:
   build:
@@ -21,4 +24,4 @@ jobs:
           port: ${{ secrets.SshPort }}
           script: |
             cd ~
-            ./scripts/deploy.sh
+            ./scripts/deploy.sh $GITHUB_REF
