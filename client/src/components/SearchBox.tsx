@@ -1,6 +1,7 @@
 import React from 'react';
 import SearchButtonIcon from './Icon/SearchButtonIcon';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const SearchBoxInput = styled.input`
   height: 23px;
@@ -27,9 +28,11 @@ function SearchBox() {
   return (
     <>
       <SearchBoxInput type="text" placeholder="검색" />
-      <SearchButton href="/search">
+      <Link to="/search">
+      <SearchButton>
         <SearchButtonIcon></SearchButtonIcon>
       </SearchButton>
+      </Link>
     </>
   );
 }
