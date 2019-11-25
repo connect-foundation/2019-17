@@ -1,10 +1,9 @@
-import React from "react";
-import styled from "styled-components";
-import FeedHeader from "./FeedHeader";
-import FeedBody from "./FeedBody";
-import FeedFooter from "./FeedFooter";
-import Comment from "./Comment";
-import buttons from "../../image/buttons.png";
+import React from 'react';
+import styled from 'styled-components';
+import FeedHeader from './FeedHeader';
+import FeedBody from './FeedBody';
+import FeedFooter from './FeedFooter';
+import Comment from './Comment';
 
 const FeedDiv = styled.div`
   ${props => props.theme.borders.feedBorder};
@@ -20,7 +19,7 @@ const FeedContentDiv = styled.div`
 const FeedEditDiv = styled.span`
   float: right;
   cursor: pointer;
-  background-image: url(${buttons});
+  background-image: url('/images/buttons.png');
   background-repeat: no-repeat;
   background-size: 64px 134px;
   background-position: 0 -66px;

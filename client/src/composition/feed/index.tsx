@@ -1,8 +1,9 @@
-import React, { useState, useMemo, useEffect } from "react";
-import Feed from "./Feed";
-import { useQuery } from "@apollo/react-hooks";
-import gql from "graphql-tag";
-import useScrollEnd from "../../hooks/useScrollEnd";
+import React, { useState, useMemo, useEffect } from 'react';
+import Feed from './Feed';
+import { useQuery } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+import useScrollEnd from '../../hooks/useScrollEnd';
+import WritingFeedContainer from './WritingFeed';
 
 interface IFeed {
   content: string;
@@ -29,7 +30,7 @@ interface FeedVars {
 const OFFSET = 2;
 const FeedContainer = () => {
   const [feeds, setFeeds] = useState<IFeed[]>([]);
-  const [cursor, setCursor] = useState<string>("9999-12-31T09:29:26.050Z");
+  const [cursor, setCursor] = useState<string>('9999-12-31T09:29:26.050Z');
 
   const checkEnd = useScrollEnd();
   // hooks 에서 useQuery 1 부터 시작
@@ -73,6 +74,7 @@ const FeedContainer = () => {
 
   return (
     <>
+      <WritingFeedContainer />
       {feeds.map(feed => (
         <Feed content={feed.content} createdAt={feed.createdAt} />
       ))}
