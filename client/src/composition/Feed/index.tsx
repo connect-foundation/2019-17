@@ -92,7 +92,11 @@ const FeedContainer = () => {
     <>
       <WritingFeedContainer />
       {feeds.map(feed => (
-        <Feed content={feed.content} createdAt={feed.createdAt} />
+        <Feed
+          key={feed.createdAt}
+          content={feed.content}
+          createdAt={feed.createdAt}
+        />
       ))}
       <Testdiv onClick={fetchMoreFeed} ref={setRef as any}>
         {isLoading ? 'LOADING' : ''}
