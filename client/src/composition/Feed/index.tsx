@@ -43,19 +43,6 @@ const FeedContainer = () => {
   }, [checkEnd]);
 
   const target = useRef<HTMLElement>(null);
-  const onIntersect = ([entry], observer) => {
-    if (entry.isIntersecting) {
-      observer.unobserve(entry.target);
-      // await fetchItems();
-      observer.observe(entry.target);
-    }
-  };
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
-    observer.observe(target);
-    return () => observer.disconnect();
-  }, []);
 
   const fetchMoreFeed = async () => {
     const { data: value } = await fetchMore({
@@ -66,11 +53,11 @@ const FeedContainer = () => {
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) {
           return prev;
-        } else {
-          const { feeds: feedItems } = fetchMoreResult;
-          const lastFeedItem = feedItems[feedItems.length - 1];
-          setCursor(lastFeedItem.createdAt);
         }
+
+        const { feeds: feedItems } = fetchMoreResult;
+        const lastFeedItem = feedItems[feedItems.length - 1];
+        setCursor(lastFeedItem.createdAt);
 
         return Object.assign({}, prev, {
           feed: [...prev.feeds, ...fetchMoreResult.feeds]
@@ -92,9 +79,6 @@ const FeedContainer = () => {
         <Feed content={feed.content} createdAt={feed.createdAt} />
       ))}
       <span onClick={fetchMoreFeed}>click</span>
-      <div ref={target} className="Loading">
-        {isLoading && 'Loading...'}
-      </div>
     </>
   );
 };
