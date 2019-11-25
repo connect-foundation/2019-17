@@ -4,6 +4,8 @@ import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import useScrollEnd from '../../hooks/useScrollEnd';
 import WritingFeedContainer from './WritingFeed';
+import useIntersect from '../../hooks/useIntersectObserver';
+import styled from 'styled-components';
 
 interface IFeed {
   content: string;
@@ -23,26 +25,30 @@ const GET_FEEDS = gql`
   }
 `;
 
+const Testdiv = styled.div`
+  height: 50px;
+`;
+
 interface FeedVars {
   first: number;
   currentCursor: string;
 }
-const OFFSET = 3;
+const OFFSET = 4;
 const FeedContainer = () => {
   const [feeds, setFeeds] = useState<IFeed[]>([]);
   const [cursor, setCursor] = useState<string>('9999-12-31T09:29:26.050Z');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isEnd, setIsEnd] = useState<boolean>(false);
 
-  const checkEnd = useScrollEnd();
+  const [ref, setRef] = useIntersect(checkIsEnd, {});
+
   // hooks 에서 useQuery 1 부터 시작
   const { loading, data, fetchMore } = useQuery<Feeds, FeedVars>(GET_FEEDS, {
     variables: { first: OFFSET, currentCursor: cursor }
   });
 
-  useEffect(() => {
-    checkEndFeed();
-  }, [checkEnd]);
-
-  const fetchMoreFeed = async () => {
+  async function fetchMoreFeed() {
+    setIsLoading(true);
     const { data: value } = await fetchMore({
       variables: {
         first: OFFSET,
@@ -52,22 +58,35 @@ const FeedContainer = () => {
         if (!fetchMoreResult) {
           return prev;
         }
+        if (!fetchMoreResult.feeds.length) {
+          setIsEnd(true);
+          return prev;
+        }
 
         const { feeds: feedItems } = fetchMoreResult;
         const lastFeedItem = feedItems[feedItems.length - 1];
+        // console.log('lastFeedItem ', fetchMoreResult);
         setCursor(lastFeedItem.createdAt);
 
         return Object.assign({}, prev, {
-          feed: [...prev.feeds, ...fetchMoreResult.feeds]
+          feeds: [...feedItems]
         });
       }
     });
-    setFeeds([...feeds, ...value.feeds]);
-  };
 
-  const checkEndFeed = (): void => {
-    fetchMoreFeed();
-  };
+    setFeeds([...feeds, ...value.feeds]);
+
+    // console.log('return FEEDS : ', feeds);
+    // console.log('final STATE : ', feeds);
+    // console.log('final STATE : ', cursor);
+    setIsLoading(false);
+  }
+
+  function checkIsEnd() {
+    if (!isEnd) {
+      fetchMoreFeed();
+    }
+  }
 
   return (
     <>
@@ -75,7 +94,10 @@ const FeedContainer = () => {
       {feeds.map(feed => (
         <Feed content={feed.content} createdAt={feed.createdAt} />
       ))}
-      <span onClick={fetchMoreFeed}>click</span>
+      <Testdiv onClick={fetchMoreFeed} ref={setRef as any}>
+        {isLoading ? 'LOADING' : ''}
+        {isEnd ? '마지막 글입니다' : ''}
+      </Testdiv>
     </>
   );
 };
