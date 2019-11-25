@@ -3,7 +3,7 @@ import cors from 'cors';
 import { GraphQLServer } from 'graphql-yoga';
 import helmet from 'helmet';
 import logger from 'morgan';
-import { checkToken, signInWithEmail } from './middleware/authController';
+import { signInWithEmail, checkToken } from './middleware/authController';
 import passport from './middleware/passport';
 import schema from './schema';
 
@@ -29,11 +29,11 @@ class App {
     this.app.express.use(logger('dev'));
     this.app.express.use(helmet());
     this.app.express.use(cookieParser());
-    this.app.express.use(checkToken);
     this.app.express.use(passport.initialize());
+    this.app.express.use(checkToken);
     this.app.express.get(
       '/auth/google',
-      passport.authenticate('google', { scope: ['profile', 'email'] })
+      passport.authenticate('google', { scope: ['email', 'profile'] })
     );
     this.app.express.get(
       '/auth/google/callback',
