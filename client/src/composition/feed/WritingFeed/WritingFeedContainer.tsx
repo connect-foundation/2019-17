@@ -8,6 +8,7 @@ function WritingFeedContainer() {
   ): void => {
     setContent(e.target.value);
   };
+
   return (
     <WritingFeedPresenter
       content={content}

@@ -5,6 +5,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 
 import Button from '../../../components/Button';
 import Profile from '../../../components/Profile';
+import UploadPlusButton from './UploadPlusButton';
 
 const Form = styled.form`
   width: 510px;
@@ -35,15 +36,17 @@ const Footer = styled.div`
   background-color: white;
 `;
 
-const ContentContainer = styled.div`
+const ContentRow = styled.div`
   display: flex;
   width: 100%;
   border-bottom: 1px solid ${props => props.theme.colors.borderColor};
+  padding: 5px 0px;
 `;
 
 const ContentWrapper = styled.div`
   padding-left: 0.5rem;
   padding-right: 0.5rem;
+  background-color: white;
 `;
 
 const Content = styled(TextareaAutosize)`
@@ -113,7 +116,7 @@ function WritingFeedPresenter({ content, onChangeTextArea }: IProps) {
     <Form encType="multipart/form-data">
       <Header>게시물 만들기</Header>
       <ContentWrapper>
-        <ContentContainer>
+        <ContentRow>
           <ProfileColumn>
             <Profile
               imageUrl={process.env.PUBLIC_URL + '/images/profile.jpg'}
@@ -125,7 +128,10 @@ function WritingFeedPresenter({ content, onChangeTextArea }: IProps) {
             placeholder={'게시물 작성'}
             value={content}
           />
-        </ContentContainer>
+        </ContentRow>
+        <ContentRow>
+          <UploadPlusButton />
+        </ContentRow>
       </ContentWrapper>
       <UploadInput id="upload" type="file" />
       <Footer>
