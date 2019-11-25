@@ -1,14 +1,14 @@
 import React from 'react';
-import Feed from '../../composition/feed';
+import Card from '../../components/Card';
 import Header from '../../components/Header';
 
-const Main: React.FC = () => {
+const Search: React.FC = () => {
   return (
     <>
       <Header />
-      <Feed />
+      <Card></Card>
     </>
   );
 };
 
-export default Main;
+export default Search;

@@ -101,3 +101,6 @@ yarn.lock
 
 # 빌드된 js파일
 dist/
+
+# vscode 에디터 설정 파일
+.vscode/
