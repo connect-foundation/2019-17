@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import Feed from './Feed';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
@@ -27,7 +27,7 @@ interface FeedVars {
   first: number;
   currentCursor: string;
 }
-const OFFSET = 2;
+const OFFSET = 4;
 const FeedContainer = () => {
   const [feeds, setFeeds] = useState<IFeed[]>([]);
   const [cursor, setCursor] = useState<string>('9999-12-31T09:29:26.050Z');
@@ -39,10 +39,8 @@ const FeedContainer = () => {
   });
 
   useEffect(() => {
-    if (data) {
-      setFeeds(data.feeds);
-    }
-  }, []);
+    checkEndFeed();
+  }, [checkEnd]);
 
   const fetchMoreFeed = async () => {
     const { data: value } = await fetchMore({
@@ -78,9 +76,7 @@ const FeedContainer = () => {
       {feeds.map(feed => (
         <Feed content={feed.content} createdAt={feed.createdAt} />
       ))}
-
       <span onClick={fetchMoreFeed}>click</span>
-      {checkEnd ? checkEndFeed() : (() => {})()}
     </>
   );
 };
