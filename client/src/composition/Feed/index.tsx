@@ -31,7 +31,7 @@ const OFFSET = 3;
 const FeedContainer = () => {
   const [feeds, setFeeds] = useState<IFeed[]>([]);
   const [cursor, setCursor] = useState<string>('9999-12-31T09:29:26.050Z');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const checkEnd = useScrollEnd();
   // hooks 에서 useQuery 1 부터 시작
   const { loading, data, fetchMore } = useQuery<Feeds, FeedVars>(GET_FEEDS, {
@@ -41,8 +41,6 @@ const FeedContainer = () => {
   useEffect(() => {
     checkEndFeed();
   }, [checkEnd]);
-
-  const target = useRef<HTMLElement>(null);
 
   const fetchMoreFeed = async () => {
     const { data: value } = await fetchMore({
@@ -67,9 +65,8 @@ const FeedContainer = () => {
     setFeeds([...feeds, ...value.feeds]);
   };
 
-  const checkEndFeed = () => {
+  const checkEndFeed = (): void => {
     fetchMoreFeed();
-    return null;
   };
 
   return (
