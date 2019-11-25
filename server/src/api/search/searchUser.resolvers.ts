@@ -1,17 +1,16 @@
 import { SearchUserQueryArgs } from '../../types/graph';
 import { requestDB } from '../../utils/requestDB';
 import { findUserWithNicknameQuery } from '../../schema/user/query';
+import { parseNodeResult } from '../../utils/parseDB';
 
 export default {
   Query: {
-    searchUser: async (_, { nickname }: SearchUserQueryArgs) => {
+    searchUser: async (_, { keyword }: SearchUserQueryArgs) => {
       const result = await requestDB(findUserWithNicknameQuery, {
-        nickname: `.*${nickname}.*`
+        nickname: `${keyword}.*`
       });
 
-      console.log(result);
-
-      return result;
+      return parseNodeResult(result);
     }
   }
 };

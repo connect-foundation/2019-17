@@ -8,5 +8,5 @@ type UserInfo {
 }
 
 type Query {
-  searchUser(nickname: String!): [User!]!
+  searchUser(keyword: String!): [User!]!
 }
