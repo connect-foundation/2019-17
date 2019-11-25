@@ -98,3 +98,6 @@ public/
 # End of https://www.gitignore.io/api/node
 
 yarn.lock
+
+# 빌드된 js파일
+dist/

@@ -1,0 +1,41 @@
+name: server&client test
+
+on:
+  pull_request:
+    branches:
+      - 'develop'
+
+jobs:
+  build:
+    runs-on: ubuntu-16.04
+
+    strategy:
+      matrix:
+        node-version: [10.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: yarn install, test
+        run: |
+          cd ./server
+          yarn install
+          yarn types
+          yarn test
+          cd ../client
+          yarn test --watchAll=false
+        env:
+          PORT: ${{secrets.Port}}
+          DB_HOST: ${{secrets.DbHost}}
+          NEO4J_ID: ${{secrets.Neo4jId}}
+          NEO4J_PASSWORD: ${{secrets.Neo4jPassword}}
+          NODE_ENV: ${{secrets.NodeEnv}}
+          NC_ACCESS_KEY: ${{secrets.NcAccessKey}}
+          NC_SECRET_KEY: ${{secrets.NcSecretKey}}
+          NC_BUCKET_NAME: ${{secrets.NcBucketName}}
+          GOOGLE_CLIENT_ID: ${{secrets.GoogleClientId}}
+          GOOGLE_CLIENT_SECRET: ${{secrets.GoogleClientSecret}}
+          REACT_APP_SERVER_HOST: ${{secrets.ReactAppServerHost}}
