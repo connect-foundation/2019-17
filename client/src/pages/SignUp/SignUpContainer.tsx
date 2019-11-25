@@ -73,7 +73,6 @@ function SignUpContainer({ history, location }: RouteComponentProps) {
       .email as string;
     if (!email) history.push('/signin');
     if (nameValid) {
-      console.log(file);
       await signUpMutation({
         variables: {
           email,

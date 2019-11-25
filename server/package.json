@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "@types/jest": "^24.0.22",
-    "apollo-upload-server": "^7.1.0",
     "aws-sdk": "2.348.0",
     "babel-runtime": "^6.26.0",
     "cookie-parser": "^1.4.4",
