@@ -33,7 +33,7 @@ class App {
     this.app.express.use(checkToken);
     this.app.express.get(
       '/auth/google',
-      passport.authenticate('google', { scope: ['profile', 'email'] })
+      passport.authenticate('google', { scope: ['email', 'profile'] })
     );
     this.app.express.get(
       '/auth/google/callback',

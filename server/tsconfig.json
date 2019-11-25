@@ -8,6 +8,7 @@
     "allowJs": true,
     "moduleResolution": "node",
     "rootDir": "src",
+    "outDir": "./dist",
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
@@ -28,6 +29,8 @@
     "webpack",
     "jest",
     "jest.config.js",
-    "src/setupTests.ts"
+    "src/setupTests.ts",
+    "test",
+    "dist"
   ]
 }

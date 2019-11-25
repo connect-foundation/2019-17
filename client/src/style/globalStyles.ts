@@ -3,6 +3,10 @@ import { reset } from 'styled-reset';
 
 export default createGlobalStyle`
     ${reset}
+    body {
+        background-color: ${props => props.theme.colors.bgColor};
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    }
     * {
         box-sizing: border-box;
     }
@@ -14,9 +18,11 @@ export default createGlobalStyle`
             text-decoration: none;
         }
     }
+    button,
     input,
-    textarea,
-    button {
-        outline: none;
+    textarea {
+        &:active, &:focus {
+            outline: none;
+        }
     }
 `;
