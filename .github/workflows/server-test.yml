@@ -1,4 +1,4 @@
-name: server api test
+name: server&client test
 
 on:
   pull_request:
@@ -25,6 +25,8 @@ jobs:
           yarn install
           yarn types
           yarn test
+          cd ../client
+          yarn test --watchAll=false
         env:
           PORT: ${{secrets.Port}}
           DB_HOST: ${{secrets.DbHost}}
@@ -36,3 +38,4 @@ jobs:
           NC_BUCKET_NAME: ${{secrets.NcBucketName}}
           GOOGLE_CLIENT_ID: ${{secrets.GoogleClientId}}
           GOOGLE_CLIENT_SECRET: ${{secrets.GoogleClientSecret}}
+          REACT_APP_SERVER_HOST: ${{secrets.ReactAppServerHost}}
