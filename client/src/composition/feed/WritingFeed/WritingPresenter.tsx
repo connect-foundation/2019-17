@@ -6,6 +6,8 @@ import TextareaAutosize from 'react-textarea-autosize';
 import Button from '../../../components/Button';
 import Profile from '../../../components/Profile';
 import UploadPlusButton from './UploadPlusButton';
+import { Scalars } from '../../../react-components.d';
+import Maybe from 'graphql/tsutils/Maybe';
 
 const Form = styled.form`
   width: 510px;
@@ -108,10 +110,19 @@ const PhotoIcon = styled(MdPhotoSizeSelectActual)`
 
 interface IProps {
   content: string;
+  files: Maybe<Scalars['Upload']>;
   onChangeTextArea: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onChangeFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  deleteFile: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-function WritingFeedPresenter({ content, onChangeTextArea }: IProps) {
+function WritingFeedPresenter({
+  content,
+  onChangeTextArea,
+  onChangeFile,
+  files
+}: IProps) {
+  const FILE_INPUT_ID = 'upload';
   return (
     <Form encType="multipart/form-data">
       <Header>게시물 만들기</Header>
@@ -130,12 +141,19 @@ function WritingFeedPresenter({ content, onChangeTextArea }: IProps) {
           />
         </ContentRow>
         <ContentRow>
-          <UploadPlusButton />
+          {files && files.length > 0 && (
+            <UploadPlusButton targetId={FILE_INPUT_ID} />
+          )}
         </ContentRow>
       </ContentWrapper>
-      <UploadInput id="upload" type="file" />
+      <UploadInput
+        id={FILE_INPUT_ID}
+        type="file"
+        onChange={onChangeFile}
+        accept="image/*"
+      />
       <Footer>
-        <UploadButton htmlFor="upload">
+        <UploadButton htmlFor={FILE_INPUT_ID}>
           <PhotoIcon />
           <PhotoText>사진 업로드</PhotoText>
         </UploadButton>

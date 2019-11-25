@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { lighten } from 'polished';
 import { FaPlus } from 'react-icons/fa';
 
-const ButtonContainer = styled.div`
+const ButtonContainer = styled.label`
   border: 3px dashed ${props => props.theme.colors.borderColor};
   border-radius: ${props => props.theme.borders.radius};
   width: 100px;
@@ -18,9 +18,13 @@ const ButtonContainer = styled.div`
   }
 `;
 
-function UploadPlusButton() {
+interface IProps {
+  targetId: string;
+}
+
+function UploadPlusButton({ targetId }: IProps) {
   return (
-    <ButtonContainer>
+    <ButtonContainer htmlFor={targetId}>
       <FaPlus />
     </ButtonContainer>
   );
