@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Feed from './Feed';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
@@ -27,11 +27,11 @@ interface FeedVars {
   first: number;
   currentCursor: string;
 }
-const OFFSET = 4;
+const OFFSET = 3;
 const FeedContainer = () => {
   const [feeds, setFeeds] = useState<IFeed[]>([]);
   const [cursor, setCursor] = useState<string>('9999-12-31T09:29:26.050Z');
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const checkEnd = useScrollEnd();
   // hooks 에서 useQuery 1 부터 시작
   const { loading, data, fetchMore } = useQuery<Feeds, FeedVars>(GET_FEEDS, {
@@ -41,6 +41,21 @@ const FeedContainer = () => {
   useEffect(() => {
     checkEndFeed();
   }, [checkEnd]);
+
+  const target = useRef<HTMLElement>(null);
+  const onIntersect = ([entry], observer) => {
+    if (entry.isIntersecting) {
+      observer.unobserve(entry.target);
+      // await fetchItems();
+      observer.observe(entry.target);
+    }
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
 
   const fetchMoreFeed = async () => {
     const { data: value } = await fetchMore({
@@ -77,6 +92,9 @@ const FeedContainer = () => {
         <Feed content={feed.content} createdAt={feed.createdAt} />
       ))}
       <span onClick={fetchMoreFeed}>click</span>
+      <div ref={target} className="Loading">
+        {isLoading && 'Loading...'}
+      </div>
     </>
   );
 };

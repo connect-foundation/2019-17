@@ -1,5 +1,5 @@
-import db from "../../db";
-import { MATCH_NEW_FEEDS } from "../../schema/feed/query";
+import db from '../../db';
+import { MATCH_NEW_FEEDS } from '../../schema/feed/query';
 const session = db.session();
 
 interface IPageParam {
@@ -30,10 +30,11 @@ export default {
   Query: {
     feeds: async (
       _,
-      { first, cursor = "9999-12-31T09:29:26.050Z" }: IPageParam
+      { first, cursor = '9999-12-31T09:29:26.050Z' }: IPageParam
     ) => {
       const result = await session.run(MATCH_NEW_FEEDS, { cursor, first });
 
+      console.log('result.records', result.records);
       const parsedResult = parseResult(result.records);
       return parsedResult;
     }
