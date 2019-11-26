@@ -33,9 +33,6 @@ export default {
   Query: {
     feeds: async (_, { first, cursor = DEFAUT_MAX_DATE }: IPageParam) => {
       const result = await session.run(MATCH_NEW_FEEDS, { cursor, first });
-      console.log('-------cursor!!', cursor);
-
-      console.log('result.records', result.records);
       const parsedResult = parseResult(result.records);
       return parsedResult;
     }
