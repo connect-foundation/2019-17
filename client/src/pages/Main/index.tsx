@@ -1,12 +1,8 @@
 import React from 'react';
-import Feed from '../../composition/feed';
+import FeedContainer from '../../composition/Feed/FeedContainer';
 
 const Main: React.FC = () => {
-  return (
-    <>
-      <Feed />
-    </>
-  );
+  return <FeedContainer />;
 };
 
 export default Main;

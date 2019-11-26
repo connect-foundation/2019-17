@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import LoginBtn from './SignInBtn';
-import { withRouter } from 'react-router';
 
 const CenterBox = styled.div`
   width: 100%;
@@ -41,4 +40,4 @@ const SignInContainer: React.FC = () => {
   );
 };
 
-export default withRouter(SignInContainer);
+export default SignInContainer;
