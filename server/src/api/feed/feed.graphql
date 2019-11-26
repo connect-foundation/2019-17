@@ -1,0 +1,16 @@
+scalar Upload
+
+type Feed {
+  content: String!
+  createdAt: String
+}
+
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean
+}
+type Query {
+  getFeeds: [Feed]!
+  feeds(first: Int, cursor: String): [Feed]!
+  pageInfo: PageInfo
+}
