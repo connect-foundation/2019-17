@@ -1,5 +1,7 @@
 import db from '../../db';
 import { MATCH_NEW_FEEDS } from '../../schema/feed/query';
+import { IKey } from '../../schema/commonTypes';
+
 const session = db.session();
 
 interface IPageParam {
@@ -7,11 +9,10 @@ interface IPageParam {
   after: number;
   cursor: string;
 }
-export interface IKey<T> {
-  [key: string]: T;
-}
 
-const parseResult = result => {
+const parseResult = (
+  result: Array<IKey<any>>
+): Array<IKey<string | number>> => {
   const returnArr: Array<IKey<string | number>> = [];
   for (const item of result) {
     let i = 0;
@@ -26,15 +27,12 @@ const parseResult = result => {
   return returnArr;
 };
 
+const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
+
 export default {
   Query: {
-    feeds: async (
-      _,
-      { first, cursor = '9999-12-31T09:29:26.050Z' }: IPageParam
-    ) => {
+    feeds: async (_, { first, cursor = DEFAUT_MAX_DATE }: IPageParam) => {
       const result = await session.run(MATCH_NEW_FEEDS, { cursor, first });
-
-      console.log('result.records', result.records);
       const parsedResult = parseResult(result.records);
       return parsedResult;
     }
