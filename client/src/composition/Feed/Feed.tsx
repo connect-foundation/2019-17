@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import FeedHeader from './FeedHeader';
 import FeedBody from './FeedBody';
@@ -33,7 +33,8 @@ interface Iprops {
 }
 
 function Feed({ content, createdAt }: Iprops) {
-  const cc = content;
+  const [likeCnt, setLikeCnt] = useState<number>(0);
+  const [hasLiked, setHasLiked] = useState<boolean>(false);
   return (
     <>
       <FeedDiv>
@@ -41,7 +42,12 @@ function Feed({ content, createdAt }: Iprops) {
           <FeedEditDiv></FeedEditDiv>
           <FeedHeader createdAt={createdAt} />
           <FeedBody content={content} />
-          <FeedFooter />
+          <FeedFooter
+            likeCnt={likeCnt}
+            setLikeCnt={setLikeCnt}
+            hasLiked={hasLiked}
+            setHasLiked={setHasLiked}
+          />
         </FeedContentDiv>
         <Comment />
       </FeedDiv>

@@ -1,9 +1,9 @@
-import React from "react";
-import styled from "styled-components";
-import ThumbLikeIcon from "../../components/Icon/ThumbLikeIcon";
-import RoundThumbIcon from "../../components/Icon/RoundThumbIcon";
-import CommentIcon from "../../components/Icon/CommentIcon";
-import ShareIcon from "../../components/Icon/ShareIcon";
+import React from 'react';
+import styled from 'styled-components';
+import ThumbLikeIcon from '../../components/Icon/ThumbLikeIcon';
+import RoundThumbIcon from '../../components/Icon/RoundThumbIcon';
+import CommentIcon from '../../components/Icon/CommentIcon';
+import ShareIcon from '../../components/Icon/ShareIcon';
 
 const FeedActionDiv = styled.div`
   border-radius: 0 0 3px 3px;
@@ -41,24 +41,46 @@ const FullBtnBox = styled.div`
   order: 1;
 `;
 
-const FeedActionBtn = styled.span`
+const FeedActionBtn = styled.span<IStyleprops>`
   align-items: center;
   display: flex;
   flex: 1 0;
   justify-content: center;
-  color: ${props => props.theme.colors.fontButtonGray};
+  color: ${props => {
+    return props.hasLiked
+      ? props.theme.colors.fontMainBlue
+      : props.theme.colors.fontButtonGray;
+  }};
   font-weight: 600;
   height: 32px;
   line-height: 14px;
   cursor: pointer;
 `;
-
-const FeedFooter: React.FC = () => {
+interface IStyleprops {
+  hasLiked?: boolean;
+}
+interface Iprops {
+  likeCnt: number;
+  setLikeCnt: any;
+  hasLiked: boolean;
+  setHasLiked: any;
+}
+const FeedFooter = ({ likeCnt, setLikeCnt, hasLiked, setHasLiked }: Iprops) => {
+  const ToggleLike = () => {
+    setLikeCnt((props: number) => {
+      setHasLiked((props: boolean) => !props);
+      if (!hasLiked) {
+        return props + 1;
+      } else {
+        return props - 1;
+      }
+    });
+  };
   return (
     <>
       <FeedActionDiv>
         <LikeShowDiv>
-          <RoundThumbIcon /> <span> 12</span>
+          <RoundThumbIcon /> <span> {likeCnt}</span>
         </LikeShowDiv>
 
         <ActionStateDiv>
@@ -67,8 +89,8 @@ const FeedFooter: React.FC = () => {
       </FeedActionDiv>
       <ActionbtnDiv>
         <FullBtnBox>
-          <FeedActionBtn>
-            <ThumbLikeIcon />
+          <FeedActionBtn hasLiked={hasLiked} onClick={ToggleLike}>
+            <ThumbLikeIcon hasLiked={hasLiked} />
             좋아요
           </FeedActionBtn>
           <FeedActionBtn>

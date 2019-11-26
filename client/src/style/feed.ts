@@ -1,8 +1,15 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-export const ButtonSVG = styled.svg`
+interface IStyleprops {
+  hasLiked?: boolean;
+}
+export const ButtonSVG = styled.svg<IStyleprops>`
   width: 14px;
   height: 14px;
   margin: 0 3px 3px 0;
-  fill: ${props => props.theme.colors.fontButtonGray};
+  fill: ${props => {
+    return props.hasLiked
+      ? props.theme.colors.fontMainBlue
+      : props.theme.colors.fontButtonGray;
+  }};
 `;
