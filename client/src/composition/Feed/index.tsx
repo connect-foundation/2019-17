@@ -30,8 +30,10 @@ const GET_FEEDS = gql`
   }
 `;
 
-const Testdiv = styled.div`
+const LoadCheckContainer = styled.div`
   height: 50px;
+  position: relative;
+  top: -50px;
 `;
 
 const OFFSET = 4;
@@ -95,10 +97,13 @@ const FeedContainer = () => {
           createdAt={feed.createdAt}
         />
       ))}
-      <Testdiv onClick={fetchMoreFeed} ref={setRef as any}>
+      <LoadCheckContainer
+        onClick={fetchMoreFeed}
+        ref={setRef as any}></LoadCheckContainer>
+      <div>
         {isLoading ? 'LOADING' : ''}
         {isEnd ? '마지막 글입니다' : ''}
-      </Testdiv>
+      </div>
     </>
   );
 };
