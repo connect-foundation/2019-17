@@ -55,7 +55,9 @@ function CardContainer(props: IProps) {
     <>
       {data.searchUser.map((user: { [key: string]: string }) => (
         <UserCard nickname={user.nickname} key={user.nickname}>
-          <ActionButton text="친구 추가"></ActionButton>
+          <ActionButton
+            text="친구 추가"
+            onClick={e => console.log('test')}></ActionButton>
         </UserCard>
       ))}
     </>
