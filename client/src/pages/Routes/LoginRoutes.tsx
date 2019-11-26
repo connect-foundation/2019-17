@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 import AuthRoutes from '../Routes/AuthRoutes';
 import NonAuthRoutes from '../Routes/NonAuthRoutes';
 
-const IsLoggedIn = () => {
+const LoginRoutes = () => {
   const { data } = useQuery(IS_LOGGED_IN);
   return data.isLoggedIn ? <AuthRoutes /> : <NonAuthRoutes />;
 };
@@ -15,4 +15,4 @@ const IS_LOGGED_IN = gql`
   }
 `;
 
-export default IsLoggedIn;
+export default LoginRoutes;
