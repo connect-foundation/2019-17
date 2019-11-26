@@ -16,6 +16,11 @@ interface Feeds {
   feeds: IFeed[];
 }
 
+interface FeedVars {
+  first: number;
+  currentCursor: string;
+}
+
 const GET_FEEDS = gql`
   query getfeeds($first: Int, $currentCursor: String) {
     feeds(first: $first, cursor: $currentCursor) {
@@ -29,10 +34,6 @@ const Testdiv = styled.div`
   height: 50px;
 `;
 
-interface FeedVars {
-  first: number;
-  currentCursor: string;
-}
 const OFFSET = 4;
 const FeedContainer = () => {
   const [feeds, setFeeds] = useState<IFeed[]>([]);
