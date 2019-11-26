@@ -1,17 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import Profile from '../../components/Profile';
-interface ITest {
-  size: string;
-}
-
-const ProfileImg = styled.img<ITest>`
-  border-radius: 50%;
-  border: 1px solid black;
-  width: ${props => props.size}px;
-  width: 2.5rem;
-  height: 2.5rem;
-`;
 
 // comment
 const CommentDiv = styled.div`
