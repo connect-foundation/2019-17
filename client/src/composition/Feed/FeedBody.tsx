@@ -17,11 +17,9 @@ interface Iprops {
 }
 const FeedBody = ({ content }: Iprops) => {
   return (
-    <>
-      <FeedContents>
-        <FeedText>{content}</FeedText>
-      </FeedContents>
-    </>
+    <FeedContents>
+      <FeedText>{content}</FeedText>
+    </FeedContents>
   );
 };
 
