@@ -1,17 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
-interface ITest {
-  size: string;
-}
-
-const ProfileImg = styled.img<ITest>`
-  border-radius: 50%;
-  border: 1px solid black;
-  width: ${props => props.size}px;
-  width: 2.5rem;
-  height: 2.5rem;
-`;
+import Profile from '../../components/Profile';
 
 // comment
 const CommentDiv = styled.div`
@@ -44,7 +33,11 @@ const Comment: React.FC = () => {
     <>
       <CommentDiv>
         <div>
-          <ProfileImg size="32"></ProfileImg>
+          <Profile
+            imageUrl={process.env.PUBLIC_URL + '/images/profile.jpg'}
+            alt={'profile image'}
+            size="32px"
+          />
           <CommentBubble>
             <CommentText>댓글댓글</CommentText>
           </CommentBubble>
