@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SearchButtonIcon from './Icon/SearchButtonIcon';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -14,24 +14,29 @@ const SearchBoxInput = styled.input`
   border-radius: 2px 0 0 2px;
 `;
 
-const SearchButton = styled.a`
+const SearchButton = styled.button`
   background-color: #f5f6f7;
   cursor: pointer;
   border-radius: 0 2px 2px 0;
   bottom: 0;
   border: 0;
   padding: 3px 16px;
-  float: left;
 `;
 
 function SearchBox() {
+  const [keyword, setKeyword] = useState('');
   return (
     <>
-      <SearchBoxInput type="text" placeholder="검색" />
-      <Link to="/search">
-      <SearchButton>
-        <SearchButtonIcon></SearchButtonIcon>
-      </SearchButton>
+      <SearchBoxInput
+        type="text"
+        placeholder="검색"
+        value={keyword}
+        onChange={e => setKeyword(e.target.value)}
+      />
+      <Link to={`/search?keyword=${keyword}`}>
+        <SearchButton>
+          <SearchButtonIcon></SearchButtonIcon>
+        </SearchButton>
       </Link>
     </>
   );

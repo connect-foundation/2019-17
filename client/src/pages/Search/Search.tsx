@@ -1,10 +1,14 @@
 import React from 'react';
-import Card from '../../components/Card';
+import CardContainer from '../../composition/Search/CardContainer';
 
-const Search: React.FC = () => {
+interface IProps {
+  location: any;
+}
+
+const Search = (props: IProps) => {
   return (
     <>
-      <Card />
+      <CardContainer location={props.location} />
     </>
   );
 };
