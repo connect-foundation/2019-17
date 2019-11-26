@@ -3,7 +3,7 @@ import Feed from './Feed';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import WritingFeedContainer from './WritingFeed';
-import useIntersect from '../../hooks/useIntersectObserver';
+import useIntersect from 'hooks/useIntersectObserver';
 import styled from 'styled-components';
 
 interface IFeed {
@@ -98,13 +98,13 @@ const FeedContainer = () => {
           createdAt={feed.createdAt}
         />
       ))}
-      <LoadCheckContainer
+      {/* <LoadCheckContainer
         onClick={fetchMoreFeed}
-        ref={setRef as any}></LoadCheckContainer>
-      <div>
+        ref={setRef as any}></LoadCheckContainer> */}
+      {/* <div>
         {isLoading ? 'LOADING' : ''}
         {isEnd ? '마지막 글입니다' : ''}
-      </div>
+      </div> */}
     </>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import WritingFeedPresenter from './WritingPresenter';
-import { Scalars } from '../../../react-components.d';
-import { Maybe } from '../../../react-components.d';
+import { Scalars } from 'react-components.d';
+import { Maybe } from 'react-components.d';
 
 function WritingFeedContainer() {
   const [content, setContent] = useState('');

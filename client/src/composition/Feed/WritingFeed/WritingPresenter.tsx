@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { MdPhotoSizeSelectActual } from 'react-icons/md';
 import TextareaAutosize from 'react-textarea-autosize';
 
-import Button from '../../../components/Button';
-import Profile from '../../../components/Profile';
+import Button from 'components/Button';
+import Profile from 'components/Profile';
 import UploadPlusButton from './UploadPlusButton';
-import { Scalars } from '../../../react-components.d';
-import Maybe from 'graphql/tsutils/Maybe';
+import { Scalars } from 'react-components.d';
+import { Maybe } from 'react-components.d';
 import UploadPreviewImg from './UploadPreviewImg';
 
 const Form = styled.form`
@@ -122,6 +122,8 @@ interface IProps {
   deleteFile: (e: React.MouseEvent<SVGElement, MouseEvent>) => void;
 }
 
+const FILE_INPUT_ID = 'upload';
+
 function WritingFeedPresenter({
   content,
   onChangeTextArea,
@@ -129,7 +131,6 @@ function WritingFeedPresenter({
   files,
   deleteFile
 }: IProps) {
-  const FILE_INPUT_ID = 'upload';
   return (
     <Form encType="multipart/form-data">
       <Header>게시물 만들기</Header>

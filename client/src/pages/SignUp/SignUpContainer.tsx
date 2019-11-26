@@ -5,13 +5,13 @@ import { useMutation } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 
 import SignUpPresenter from './SignUpPresenter';
-import useInput, { IUseInput } from '../../hooks/useInput';
+import useInput, { IUseInput } from 'hooks/useInput';
 import {
   Scalars,
   Maybe,
   SignUpMutation,
   SignUpMutationVariables
-} from '../../react-components.d';
+} from 'react-components.d';
 
 const validateName = (inputName: string): boolean => {
   // 숫자로 시작안됨, 영어한글숫자가능 공백불가능, 닉네임 최소 길이 4자

@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import ThumbLikeIcon from "../../components/Icon/ThumbLikeIcon";
-import RoundThumbIcon from "../../components/Icon/RoundThumbIcon";
-import CommentIcon from "../../components/Icon/CommentIcon";
-import ShareIcon from "../../components/Icon/ShareIcon";
+import ThumbLikeIcon from "components/Icon/ThumbLikeIcon";
+import RoundThumbIcon from "components/Icon/RoundThumbIcon";
+import CommentIcon from "components/Icon/CommentIcon";
+import ShareIcon from "components/Icon/ShareIcon";
 
 const FeedActionDiv = styled.div`
   border-radius: 0 0 3px 3px;
