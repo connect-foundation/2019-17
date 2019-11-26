@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import WritingFeedPresenter from './WritingPresenter';
 import { Scalars } from '../../../react-components.d';
-import Maybe from 'graphql/tsutils/Maybe';
+import { Maybe } from '../../../react-components.d';
 
 function WritingFeedContainer() {
   const [content, setContent] = useState('');
@@ -21,13 +21,18 @@ function WritingFeedContainer() {
       const fileUrl = URL.createObjectURL(file);
       setFiles(props => [...props, { ...file, fileId, fileUrl }]);
       setFileId(fileId + 1);
+      target.value = '';
     }
   };
 
-  const deleteFile = (e: React.MouseEvent<HTMLButtonElement>): void => {
+  const deleteFile = (e: React.MouseEvent<SVGElement, MouseEvent>): void => {
     const { currentTarget } = e;
-    const fileId = currentTarget.getAttribute('fileId');
-    setFiles(props => props.filter(file => file.fileId !== fileId));
+    let fileIdAttribute: string | null = currentTarget.getAttribute('fileid');
+    let fileId: number;
+    if (fileIdAttribute) {
+      fileId = parseInt(fileIdAttribute);
+      setFiles(props => props.filter(file => file.fileId !== fileId));
+    }
   };
 
   return (

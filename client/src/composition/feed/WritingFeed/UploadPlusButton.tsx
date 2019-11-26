@@ -16,6 +16,7 @@ const ButtonContainer = styled.label`
   &:hover {
     color: ${props => lighten(0.2, props.theme.colors.textColor)};
   }
+  cursor: pointer;
 `;
 
 interface IProps {

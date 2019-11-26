@@ -8,6 +8,7 @@ import Profile from '../../../components/Profile';
 import UploadPlusButton from './UploadPlusButton';
 import { Scalars } from '../../../react-components.d';
 import Maybe from 'graphql/tsutils/Maybe';
+import UploadPreviewImg from './UploadPreviewImg';
 
 const Form = styled.form`
   width: 510px;
@@ -43,6 +44,7 @@ const ContentRow = styled.div`
   width: 100%;
   border-bottom: 1px solid ${props => props.theme.colors.borderColor};
   padding: 5px 0px;
+  overflow-x: scroll;
 `;
 
 const ContentWrapper = styled.div`
@@ -108,19 +110,24 @@ const PhotoIcon = styled(MdPhotoSizeSelectActual)`
   margin-right: 0.3rem;
 `;
 
+const FilesContainer = styled.div`
+  display: flex;
+`;
+
 interface IProps {
   content: string;
   files: Maybe<Scalars['Upload']>;
   onChangeTextArea: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onChangeFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  deleteFile: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  deleteFile: (e: React.MouseEvent<SVGElement, MouseEvent>) => void;
 }
 
 function WritingFeedPresenter({
   content,
   onChangeTextArea,
   onChangeFile,
-  files
+  files,
+  deleteFile
 }: IProps) {
   const FILE_INPUT_ID = 'upload';
   return (
@@ -142,7 +149,19 @@ function WritingFeedPresenter({
         </ContentRow>
         <ContentRow>
           {files && files.length > 0 && (
-            <UploadPlusButton targetId={FILE_INPUT_ID} />
+            <>
+              <FilesContainer>
+                {files.map((file: { fileUrl: string; fileId: number }) => (
+                  <UploadPreviewImg
+                    key={file.fileId}
+                    fileUrl={file.fileUrl}
+                    fileId={file.fileId}
+                    deleteFile={deleteFile}
+                  />
+                ))}
+                <UploadPlusButton targetId={FILE_INPUT_ID} />
+              </FilesContainer>
+            </>
           )}
         </ContentRow>
       </ContentWrapper>
