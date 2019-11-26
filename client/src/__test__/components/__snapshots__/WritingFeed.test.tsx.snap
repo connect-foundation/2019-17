@@ -3,22 +3,22 @@
 exports[`<WritingFeed /> 1`] = `
 <div>
   <form
-    class="sc-htpNat iGYiTb"
+    class="sc-gzVnrw gLWUZz"
     enctype="multipart/form-data"
   >
     <div
-      class="sc-bxivhb kIAkFU"
+      class="sc-htoDjs eXXuCg"
     >
       게시물 만들기
     </div>
     <div
-      class="sc-bZQynM hizQum"
+      class="sc-gZMcBi eCVzxD"
     >
       <div
-        class="sc-EHOje grdAbW"
+        class="sc-iwsKbI bwGYRA"
       >
         <div
-          class="sc-htoDjs eWfGhK"
+          class="sc-VigVT jDRjwl"
         >
           <img
             alt="profile image"
@@ -27,26 +27,30 @@ exports[`<WritingFeed /> 1`] = `
           />
         </div>
         <textarea
-          class="sc-gzVnrw fJIRnR"
+          class="sc-gqjmRU ficjwu"
           placeholder="게시물 작성"
           style="height: 2px;"
         />
       </div>
+      <div
+        class="sc-iwsKbI bwGYRA"
+      />
     </div>
     <input
-      class="sc-dnqmqq iMjAll"
+      accept="image/*"
+      class="sc-jTzLTM kuOZbb"
       id="upload"
       type="file"
     />
     <div
-      class="sc-ifAKCX fMZNFb"
+      class="sc-dnqmqq hitCSE"
     >
       <label
-        class="sc-iwsKbI dIxLYJ"
+        class="sc-fjdhpX cvPITL"
         for="upload"
       >
         <svg
-          class="sc-gqjmRU GanpC"
+          class="sc-cSHVUG jgwGnI"
           fill="currentColor"
           height="1em"
           stroke="currentColor"
@@ -60,7 +64,7 @@ exports[`<WritingFeed /> 1`] = `
           />
         </svg>
         <span
-          class="sc-gZMcBi bDkIiU"
+          class="sc-jzJRlG iWvITD"
         >
           사진 업로드
         </span>

@@ -1,11 +1,11 @@
 import React from 'react';
 import FeedPresentor from './FeedPresentor';
-import WritingFeed from '../../composition/feed/WritingFeed';
+import WritingFeedContainer from './WritingFeed';
 
 const FeedContainer: React.FC = () => {
   return (
     <>
-      <WritingFeed />
+      <WritingFeedContainer />
       <FeedPresentor />
     </>
   );
