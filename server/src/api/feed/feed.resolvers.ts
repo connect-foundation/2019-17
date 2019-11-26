@@ -10,7 +10,9 @@ interface IPageParam {
   cursor: string;
 }
 
-const parseResult = result => {
+const parseResult = (
+  result: Array<IKey<any>>
+): Array<IKey<string | number>> => {
   const returnArr: Array<IKey<string | number>> = [];
   for (const item of result) {
     let i = 0;
