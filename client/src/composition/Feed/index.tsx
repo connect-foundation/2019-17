@@ -76,10 +76,6 @@ const FeedContainer = () => {
     });
 
     setFeeds([...feeds, ...value.feeds]);
-
-    // console.log('return FEEDS : ', feeds);
-    // console.log('final STATE : ', feeds);
-    // console.log('final STATE : ', cursor);
     setIsLoading(false);
   }
 
