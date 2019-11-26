@@ -1,14 +1,13 @@
 import db from '../../db';
 import { MATCH_NEW_FEEDS } from '../../schema/feed/query';
+import { IKey } from '../../schema/commonTypes';
+
 const session = db.session();
 
 interface IPageParam {
   first: number;
   after: number;
   cursor: string;
-}
-export interface IKey<T> {
-  [key: string]: T;
 }
 
 const parseResult = result => {
