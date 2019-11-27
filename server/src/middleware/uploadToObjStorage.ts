@@ -1,10 +1,11 @@
-import AWS from "aws-sdk";
+import AWS from 'aws-sdk';
+import config from '../utils/config';
 
-const endpoint: any = new AWS.Endpoint("https://kr.object.ncloudstorage.com");
-const region = "kr-standard";
-const accessKey = process.env.NC_ACCESS_KEY;
-const secretKey = process.env.NC_SECRET_KEY;
-const bucketName = process.env.NC_BUCKET_NAME;
+const endpoint: any = new AWS.Endpoint('https://kr.object.ncloudstorage.com');
+const region = 'kr-standard';
+const accessKey = config.nc.accessKey;
+const secretKey = config.nc.secretKey;
+const bucketName = config.nc.bucketName;
 
 function uploadToObjStorage(stream, filename) {
   AWS.config.update({
@@ -18,9 +19,9 @@ function uploadToObjStorage(stream, filename) {
   });
 
   return S3.upload({
-    Bucket: bucketName + "/attachments",
+    Bucket: bucketName + '/attachments',
     Key: new Date().getTime() + filename,
-    ACL: "public-read",
+    ACL: 'public-read',
     Body: stream
   }).promise();
 }
