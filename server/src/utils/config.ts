@@ -35,8 +35,8 @@ const prdConfigs = {
   clientHost: process.env.PRODUCTION_CLIENT_HOST_ADDRESS || '',
   db: {
     host: process.env.DB_HOST || '',
-    id: process.env.NEO4J_ID,
-    password: process.env.NEO4J_PASSWORD
+    id: process.env.NEO4J_ID || '',
+    password: process.env.NEO4J_PASSWORD || ''
   }
 };
 
