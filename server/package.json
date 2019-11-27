@@ -9,7 +9,8 @@
     "types": "mkdir -p src/types && graphql-to-typescript ./src/schema.graphql ./src/types/graph.d.ts",
     "test": "jest --forceExit",
     "build": "tsc && copyfiles --up 1 src/api/**/*.graphql dist/",
-    "prd": "NODE_ENV=PRODUCTION pm2 start --name boostbook:server dist/init.js"
+    "prd": "NODE_ENV=PRODUCTION pm2 start --name boostbook:server dist/init.js",
+    "generate": "graphql-codegen"
   },
   "devDependencies": {
     "@types/cors": "^2.8.6",
@@ -32,6 +33,9 @@
     "tslint-config-prettier": "^1.18.0"
   },
   "dependencies": {
+    "@graphql-codegen/cli": "^1.8.3",
+    "@graphql-codegen/typescript": "^1.8.3",
+    "@graphql-codegen/typescript-resolvers": "^1.8.3",
     "@types/jest": "^24.0.22",
     "apollo-upload-server": "^7.1.0",
     "aws-sdk": "2.348.0",

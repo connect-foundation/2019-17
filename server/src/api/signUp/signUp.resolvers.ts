@@ -1,7 +1,7 @@
 import { GraphQLUpload } from 'apollo-upload-server';
 import db from '../../db';
 import uploadToObjStorage from '../../middleware/uploadToObjStorage';
-import { SignUpMutationArgs, User } from '../../types/graph';
+import { MutationSignUpArgs, User } from 'src/types';
 
 const session = db.session();
 
@@ -21,7 +21,7 @@ const getUrlWhenFileExists = args => {
 
 export default {
   Mutation: {
-    signUp: async (_, args: SignUpMutationArgs): Promise<User> => {
+    signUp: async (_, args: MutationSignUpArgs): Promise<User> => {
       const thumbnail = await getUrlWhenFileExists(args);
       const result = await session.run(
         `CREATE (a:User {nickname: $nickname, hometown: $hometown, residence: $residence, email: $email ${

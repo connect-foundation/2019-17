@@ -1,14 +1,9 @@
 import db from '../../db';
 import { MATCH_NEW_FEEDS } from '../../schema/feed/query';
 import { IKey } from '../../schema/commonTypes';
+import { QueryFeedsArgs } from 'src/types';
 
 const session = db.session();
-
-interface IPageParam {
-  first: number;
-  after: number;
-  cursor: string;
-}
 
 const parseResult = (
   result: Array<IKey<any>>
@@ -31,7 +26,7 @@ const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
 
 export default {
   Query: {
-    feeds: async (_, { first, cursor = DEFAUT_MAX_DATE }: IPageParam) => {
+    feeds: async (_, { first, cursor = DEFAUT_MAX_DATE }: QueryFeedsArgs) => {
       const result = await session.run(MATCH_NEW_FEEDS, { cursor, first });
       const parsedResult = parseResult(result.records);
       return parsedResult;
