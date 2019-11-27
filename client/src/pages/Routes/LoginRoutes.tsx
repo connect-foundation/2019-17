@@ -5,13 +5,21 @@ import AuthRoutes from '../Routes/AuthRoutes';
 import NonAuthRoutes from '../Routes/NonAuthRoutes';
 
 const LoginRoutes = () => {
-  const { data } = useQuery(IS_LOGGED_IN);
-  return data.isLoggedIn ? <AuthRoutes /> : <NonAuthRoutes />;
+  useQuery(IS_LOGGED_IN);
+  const { data } = useQuery(
+    gql`
+      {
+        isLoggedIn @client
+      }
+    `,
+    { fetchPolicy: 'network-only' }
+  );
+  return data && data.isLoggedIn ? <AuthRoutes /> : <NonAuthRoutes />;
 };
 
 const IS_LOGGED_IN = gql`
   query IsUserLoggedIn {
-    isLoggedIn @client
+    login @client
   }
 `;
 
