@@ -5,12 +5,10 @@ import { requestDB } from '../../utils/requestDB';
 import { parseNodeResult } from '../../utils/parseDB';
 import { encodeJWT } from '../../utils/jwt';
 import SameEmailError from '../../errors/EmailAlreadyExistsError';
+import { findUserWithEmailQuery } from '../../schema/user/query';
 
 const checkIsEmailExist = async (email): Promise<void> => {
-  const sameUsers = await requestDB(
-    'Match (u: User { email: $email } ) return u',
-    { email }
-  );
+  const sameUsers = await requestDB(findUserWithEmailQuery, { email });
 
   if (parseNodeResult(sameUsers).length) throw new SameEmailError();
 };
