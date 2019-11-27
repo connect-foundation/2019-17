@@ -19,28 +19,48 @@ const getUpdateLikeQuery = count => {
     return DELETE_LIKE;
   }
 };
+
+const checkReqUserEmail = (req): boolean => {
+  if (!req.user) {
+    console.log('사용자 정보가 없습니다 다시 로그인해 주세요');
+    return true;
+  }
+  return false;
+};
 const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
 
 export default {
   Query: {
-    feedItems: async (_, { first, cursor = DEFAUT_MAX_DATE }: IPageParam) => {
+    feedItems: async (
+      _,
+      { first, cursor = DEFAUT_MAX_DATE }: IPageParam,
+      { req }
+    ) => {
       console.log('---cursor1 ', cursor);
-      const result = await session.run(MATCH_FEEDS, { cursor, first });
+      let useremail = '';
+      if (checkReqUserEmail(req)) {
+        useremail = req.user.email;
+      }
+      useremail = req.user.email;
+      const result = await session.run(MATCH_FEEDS, {
+        cursor,
+        first,
+        useremail
+      });
       return ParseResultRecords(result.records);
     }
   },
 
   Mutation: {
     updateLike: async (_, { feedId, count }, { req }) => {
-      let userEmail1 = '';
-      if (!req.user) {
-        console.log('사용자 정보가 없습니다 다시 로그인해 주세요');
-        return false;
+      let useremail = '';
+      if (checkReqUserEmail(req)) {
+        useremail = req.user.email;
       }
-      userEmail1 = req.user.email;
+
       const UPDATE_QUERY = getUpdateLikeQuery(count);
       const result = await session.run(UPDATE_QUERY, {
-        useremail: userEmail1,
+        useremail,
         feedId
       });
 

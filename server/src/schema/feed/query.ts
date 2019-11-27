@@ -4,7 +4,7 @@ OPTIONAL MATCH (feed)-[:HAS]->(com:Comment)
 WITH searchUser, feed, COLLECT(likeUser) AS cp , COLLECT(com) as comments
 where feed.createdAt <  datetime({cursor})
 RETURN searchUser , feed,  ID(feed) as feedId , length(cp) AS totallikes,
-length(filter(x IN cp WHERE x.email='vantovan7414@gmail.com')) AS hasLiked, comments
+length(filter(x IN cp WHERE x.email= {useremail} )) AS hasLiked, comments
 order by feed.createdAt desc
 LIMIT {first} 
 `;
