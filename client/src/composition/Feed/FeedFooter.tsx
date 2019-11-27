@@ -4,6 +4,8 @@ import ThumbLikeIcon from '../../components/Icon/ThumbLikeIcon';
 import RoundThumbIcon from '../../components/Icon/RoundThumbIcon';
 import CommentIcon from '../../components/Icon/CommentIcon';
 import ShareIcon from '../../components/Icon/ShareIcon';
+import { useMutation } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
 
 const FeedActionDiv = styled.div`
   border-radius: 0 0 3px 3px;
@@ -64,17 +66,41 @@ interface Iprops {
   setLikeCnt: any;
   hasLiked: boolean;
   setHasLiked: any;
+  feedId: number;
 }
-const FeedFooter = ({ likeCnt, setLikeCnt, hasLiked, setHasLiked }: Iprops) => {
+
+const SEND_LIKE = gql`
+  mutation updateLike($feedId: Int) {
+    updateLike(feedId: $feedId)
+  }
+`;
+
+const FeedFooter = ({
+  likeCnt,
+  setLikeCnt,
+  hasLiked,
+  setHasLiked,
+  feedId
+}: Iprops) => {
+  const [updateLike] = useMutation(SEND_LIKE);
+
   const ToggleLike = () => {
     setLikeCnt((props: number) => {
       setHasLiked((props: boolean) => !props);
       if (!hasLiked) {
+        sendLike(1);
         return props + 1;
       } else {
+        // cancleLike(-1);
         return props - 1;
       }
     });
+  };
+
+  const sendLike = (count: number) => {
+    // send count
+    updateLike({ variables: { feedId } });
+    console.log(count);
   };
   return (
     <>

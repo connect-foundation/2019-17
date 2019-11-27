@@ -6,7 +6,7 @@ import logger from 'morgan';
 import { signInWithEmail, checkToken } from './middleware/authController';
 import passport from './middleware/passport';
 import schema from './schema';
-
+import { decodeJWT } from './utils/jwt';
 const PRODUCTION: string = 'PRODUCTION';
 const NODE_ENV: string = process.env.NODE_ENV || '';
 const LOCAL_CLIENT_HOST_ADDRESS = process.env.LOCAL_CLIENT_HOST_ADDRESS || '';
@@ -20,12 +20,20 @@ const CLIENT_HOST_ADDRESS: string =
 class App {
   public app: GraphQLServer;
   constructor() {
-    this.app = new GraphQLServer({ schema });
+    this.app = new GraphQLServer({
+      schema,
+      context: ({ response, request }) => ({ res: response, req: request })
+    });
     this.middlewares();
   }
 
   private middlewares = (): void => {
-    this.app.express.use(cors());
+    this.app.express.use(
+      cors({
+        credentials: true,
+        origin: 'http://localhost:3000'
+      })
+    );
     this.app.express.use(logger('dev'));
     this.app.express.use(helmet());
     this.app.express.use(cookieParser());
@@ -42,6 +50,18 @@ class App {
       }),
       signInWithEmail
     );
+    // 쿠키에서 토큰 있는지 확인하고
+    // 이메일을 request객체에 넣는다
+    this.app.express.use((req, res, next) => {
+      console.log('token!!!', req.cookies);
+      if (req.cookies.token) {
+        const token = req.cookies.token;
+        const email = decodeJWT(token);
+        console.log('token!!!', email);
+        req['user'] = email;
+      }
+      return next();
+    });
   };
 }
 

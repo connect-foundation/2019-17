@@ -9,12 +9,32 @@ OPTIONAL MATCH (likeUser:User)-[:LIKE]->(feed)
 OPTIONAL MATCH (feed)-[:HAS]->(com:Comment)
 WITH searchUser, feed, COLLECT(likeUser) AS cp , COLLECT(com) as comments
 where feed.createdAt <  datetime({cursor})
-RETURN searchUser , feed , length(cp) AS totallikes,
-length(filter(x IN cp WHERE x.email='dasom@naver.com')) AS hasLiked, comments
-LIMIT {first} `;
+RETURN searchUser , feed,  ID(feed) as feedId , length(cp) AS totallikes,
+length(filter(x IN cp WHERE x.email='vantovan7414@gmail.com')) AS hasLiked, comments
+order by feed.createdAt desc
+LIMIT {first} 
+`;
 
 const MATCH_NEW_FEEDS2 = `MATCH (user:User { email: 'abc@naver.com' })-[:AUTHOR]->(feed:Feed)
 where feed.createdAt <  datetime('9999-12-31T09:29:26.050Z')
 RETURN feed`;
 
-export { MATCH_NEW_FEEDS, MATCH_NEW_FEEDS2, MATCH_FEEDS };
+const UPDATE_LIKE = `
+MATCH (u:User),(f:Feed)
+WHERE u.email = {useremail} AND ID(f) = {feedId}
+MERGE (u)-[r:LIKE]->(f)
+RETURN type(r)`;
+
+const DELETE_LIKE = `
+MATCH (u:User),(f:Feed)
+WHERE u.email = {useremail} AND ID(f) = {feedId}
+MERGE (u)-[r:LIKE]->(f)
+RETURN type(r)`;
+
+export {
+  MATCH_NEW_FEEDS,
+  MATCH_NEW_FEEDS2,
+  MATCH_FEEDS,
+  UPDATE_LIKE,
+  DELETE_LIKE
+};

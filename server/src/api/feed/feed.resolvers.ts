@@ -1,5 +1,9 @@
 import db from '../../db';
-import { MATCH_NEW_FEEDS, MATCH_FEEDS } from '../../schema/feed/query';
+import {
+  MATCH_NEW_FEEDS,
+  MATCH_FEEDS,
+  UPDATE_LIKE
+} from '../../schema/feed/query';
 import { IKey } from '../../schema/commonTypes';
 import neo4j from 'neo4j-driver';
 
@@ -35,7 +39,9 @@ const Datetransform = object => {
     if (object.hasOwnProperty(property)) {
       const propertyValue = object[property];
       if (neo4j.isInt(propertyValue)) {
-        returnobj[property] = Number(propertyValue);
+        // console.log(neo4j.integer.toNumber(propertyValue));
+        // console.log('tet', propertyValue);
+        returnobj[property] = String(propertyValue);
       } else if (toString.call(propertyValue) === '[object String]') {
         let temp = {};
         temp[property] = propertyValue;
@@ -65,7 +71,8 @@ const ParseResultRecords = records => {
           arr = { ...arr, ...temp };
         } else if (node instanceof neo4j.types.Integer) {
           const temp = {};
-          temp[nodeKey] = Number(node);
+
+          temp[nodeKey] = String(node);
           arr = { ...arr, ...temp };
         } else if (toString.call(node) === '[object Array]') {
           let temp: { [key: string]: any } = {};
@@ -97,11 +104,30 @@ export default {
       const parsedResult = parseResult(result.records);
       return parsedResult;
     },
-    feedItems: async (_, { first, cursor = DEFAUT_MAX_DATE }: IPageParam) => {
+    feedItems: async (_, { first, cursor }: IPageParam) => {
+      console.log('---cursor1 ', cursor);
       const result = await session.run(MATCH_FEEDS, { cursor, first });
-      // console.log(result.records);
-      // console.log('INPUT VAL : ', result.records);
       return ParseResultRecords(result.records);
+    }
+  },
+
+  Mutation: {
+    updateLike: async (_, { feedId }, { req }) => {
+      let userEmail1 = 'dasom@naver.com';
+      if (!req.user) {
+        console.log('사용자 정보가 없습니다 다시 로그인해 주세요');
+        return false;
+      }
+      userEmail1 = req.user.email;
+      console.log(req.user);
+
+      const result = await session.run(UPDATE_LIKE, {
+        useremail: userEmail1,
+        feedId
+      });
+
+      console.log('true', result);
+      return true;
     }
   }
 };
