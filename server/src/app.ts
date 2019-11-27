@@ -3,20 +3,11 @@ import cors from 'cors';
 import { GraphQLServer } from 'graphql-yoga';
 import helmet from 'helmet';
 import logger from 'morgan';
+import config from './utils/config';
 import { signInWithEmail, checkToken } from './middleware/authController';
 import passport from './middleware/passport';
 import schema from './schema';
 import { decodeJWT } from './utils/jwt';
-
-const PRODUCTION: string = 'PRODUCTION';
-const NODE_ENV: string = process.env.NODE_ENV || '';
-const LOCAL_CLIENT_HOST_ADDRESS = process.env.LOCAL_CLIENT_HOST_ADDRESS || '';
-const PRODUCTION_CLIENT_HOST_ADDRESS: string =
-  process.env.PRODUCTION_CLIENT_HOST_ADDRESS || '';
-const CLIENT_HOST_ADDRESS: string =
-  PRODUCTION === NODE_ENV
-    ? PRODUCTION_CLIENT_HOST_ADDRESS
-    : LOCAL_CLIENT_HOST_ADDRESS;
 
 class App {
   public app: GraphQLServer;
@@ -30,7 +21,7 @@ class App {
 
   private middlewares = (): void => {
     this.app.express.use(
-      cors({ credentials: true, origin: CLIENT_HOST_ADDRESS })
+      cors({ credentials: true, origin: config.clientHost })
     );
     this.app.express.use(logger('dev'));
     this.app.express.use(helmet());
@@ -44,7 +35,7 @@ class App {
     this.app.express.get(
       '/auth/google/callback',
       passport.authenticate('google', {
-        failureRedirect: CLIENT_HOST_ADDRESS
+        failureRedirect: config.clientHost
       }),
       signInWithEmail
     );
