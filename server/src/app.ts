@@ -6,6 +6,7 @@ import logger from 'morgan';
 import { signInWithEmail, checkToken } from './middleware/authController';
 import passport from './middleware/passport';
 import schema from './schema';
+import { decodeJWT } from './utils/jwt';
 
 const PRODUCTION: string = 'PRODUCTION';
 const NODE_ENV: string = process.env.NODE_ENV || '';
@@ -20,12 +21,17 @@ const CLIENT_HOST_ADDRESS: string =
 class App {
   public app: GraphQLServer;
   constructor() {
-    this.app = new GraphQLServer({ schema });
+    this.app = new GraphQLServer({
+      schema,
+      context: ({ response, request }) => ({ req: request, res: response })
+    });
     this.middlewares();
   }
 
   private middlewares = (): void => {
-    this.app.express.use(cors());
+    this.app.express.use(
+      cors({ credentials: true, origin: CLIENT_HOST_ADDRESS })
+    );
     this.app.express.use(logger('dev'));
     this.app.express.use(helmet());
     this.app.express.use(cookieParser());
@@ -42,6 +48,14 @@ class App {
       }),
       signInWithEmail
     );
+    this.app.express.use((req, res, next) => {
+      if (req.cookies.token) {
+        const token = req.cookies.token;
+        const email = decodeJWT(token);
+        req['user'] = email;
+      }
+      return next();
+    });
   };
 }
 

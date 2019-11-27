@@ -1,6 +1,5 @@
-import jwt from 'jsonwebtoken';
 import { findUserWithEmail } from '../schema/user/user';
-const SECRET: string = process.env.JWT_SECRET || '';
+import { decodeJWT, encodeJWT } from '../utils/jwt';
 
 const PRODUCTION: string = 'PRODUCTION';
 const NODE_ENV: string = process.env.NODE_ENV || '';
@@ -20,26 +19,16 @@ const signInWithEmail = async (req, res, next) => {
         emails: [{ value: email }]
       }
     } = req;
+
     const user = await findUserWithEmail({ email });
     if (!user) {
       return res.redirect(`${CLIENT_HOST_ADDRESS}/signUp?email=${email}`);
     }
-    jwt.sign(
-      { email: user.email },
-      SECRET,
-      {
-        expiresIn: '7d',
-        issuer: 'BoostBook',
-        subject: 'authentication'
-      },
-      (err, token) => {
-        if (err) {
-          throw err;
-        }
-        res.cookie('token', token);
-        res.redirect(CLIENT_HOST_ADDRESS);
-      }
-    );
+
+    const token = encodeJWT({ email: user.email });
+
+    res.cookie('token', token);
+    res.redirect(CLIENT_HOST_ADDRESS);
   } catch (err) {
     next(err);
   }
@@ -52,14 +41,13 @@ const checkToken = (req, res, next) => {
   if (!token) {
     return next();
   }
-  jwt.verify(token, SECRET, (err, decoded) => {
-    if (err) {
-      return next(err);
-    } else {
-      req.email = decoded.email;
-      return next();
-    }
-  });
+  try {
+    const decoded: any = decodeJWT(token);
+    req.email = decoded.email;
+  } catch (err) {
+    next(err);
+  }
+  return next();
 };
 
 export { signInWithEmail, checkToken };
