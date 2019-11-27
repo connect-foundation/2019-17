@@ -61,5 +61,5 @@ type Query {
 }
 
 type Mutation {
-  updateLike(feedId: Int): Boolean
+  updateLike(feedId: Int, count: Int): Boolean
 }

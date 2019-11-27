@@ -70,8 +70,8 @@ interface Iprops {
 }
 
 const SEND_LIKE = gql`
-  mutation updateLike($feedId: Int) {
-    updateLike(feedId: $feedId)
+  mutation updateLike($feedId: Int, $count: Int) {
+    updateLike(feedId: $feedId, count: $count)
   }
 `;
 
@@ -86,22 +86,18 @@ const FeedFooter = ({
 
   const ToggleLike = () => {
     setLikeCnt((props: number) => {
-      setHasLiked((props: boolean) => !props);
       if (!hasLiked) {
-        sendLike(1);
         return props + 1;
       } else {
-        // cancleLike(-1);
         return props - 1;
       }
     });
+    setHasLiked((props: boolean) => {
+      updateLike({ variables: { feedId, count: Number(!props) } });
+      return !props;
+    });
   };
 
-  const sendLike = (count: number) => {
-    // send count
-    updateLike({ variables: { feedId } });
-    console.log(count);
-  };
   return (
     <>
       <FeedActionDiv>

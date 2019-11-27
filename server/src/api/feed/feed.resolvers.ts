@@ -2,10 +2,12 @@ import db from '../../db';
 import {
   MATCH_NEW_FEEDS,
   MATCH_FEEDS,
-  UPDATE_LIKE
+  UPDATE_LIKE,
+  DELETE_LIKE
 } from '../../schema/feed/query';
 import { IKey } from '../../schema/commonTypes';
 import neo4j from 'neo4j-driver';
+import console = require('console');
 
 const session = db.session();
 
@@ -39,8 +41,6 @@ const Datetransform = object => {
     if (object.hasOwnProperty(property)) {
       const propertyValue = object[property];
       if (neo4j.isInt(propertyValue)) {
-        // console.log(neo4j.integer.toNumber(propertyValue));
-        // console.log('tet', propertyValue);
         returnobj[property] = String(propertyValue);
       } else if (toString.call(propertyValue) === '[object String]') {
         let temp = {};
@@ -71,7 +71,6 @@ const ParseResultRecords = records => {
           arr = { ...arr, ...temp };
         } else if (node instanceof neo4j.types.Integer) {
           const temp = {};
-
           temp[nodeKey] = String(node);
           arr = { ...arr, ...temp };
         } else if (toString.call(node) === '[object Array]') {
@@ -112,21 +111,27 @@ export default {
   },
 
   Mutation: {
-    updateLike: async (_, { feedId }, { req }) => {
-      let userEmail1 = 'dasom@naver.com';
+    updateLike: async (_, { feedId, count }, { req }) => {
+      let userEmail1 = '';
       if (!req.user) {
         console.log('사용자 정보가 없습니다 다시 로그인해 주세요');
         return false;
       }
       userEmail1 = req.user.email;
-      console.log(req.user);
+      let result;
+      if (count > 0) {
+        result = await session.run(UPDATE_LIKE, {
+          useremail: userEmail1,
+          feedId
+        });
+      } else {
+        result = await session.run(DELETE_LIKE, {
+          useremail: userEmail1,
+          feedId
+        });
+      }
 
-      const result = await session.run(UPDATE_LIKE, {
-        useremail: userEmail1,
-        feedId
-      });
-
-      console.log('true', result);
+      console.log('result: ', result);
       return true;
     }
   }

@@ -15,10 +15,6 @@ order by feed.createdAt desc
 LIMIT {first} 
 `;
 
-const MATCH_NEW_FEEDS2 = `MATCH (user:User { email: 'abc@naver.com' })-[:AUTHOR]->(feed:Feed)
-where feed.createdAt <  datetime('9999-12-31T09:29:26.050Z')
-RETURN feed`;
-
 const UPDATE_LIKE = `
 MATCH (u:User),(f:Feed)
 WHERE u.email = {useremail} AND ID(f) = {feedId}
@@ -26,15 +22,8 @@ MERGE (u)-[r:LIKE]->(f)
 RETURN type(r)`;
 
 const DELETE_LIKE = `
-MATCH (u:User),(f:Feed)
+MATCH (u:User)-[r:LIKE]->(f:Feed)
 WHERE u.email = {useremail} AND ID(f) = {feedId}
-MERGE (u)-[r:LIKE]->(f)
-RETURN type(r)`;
+delete r`;
 
-export {
-  MATCH_NEW_FEEDS,
-  MATCH_NEW_FEEDS2,
-  MATCH_FEEDS,
-  UPDATE_LIKE,
-  DELETE_LIKE
-};
+export { MATCH_NEW_FEEDS, MATCH_FEEDS, UPDATE_LIKE, DELETE_LIKE };
