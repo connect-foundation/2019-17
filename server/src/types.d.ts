@@ -31,8 +31,14 @@ export type Hello = {
 
 export type Mutation = {
    __typename?: 'Mutation',
+  enrollFeed: Scalars['Boolean'],
   uploadImage: File,
   signUp: User,
+};
+
+
+export type MutationEnrollFeedArgs = {
+  content?: Maybe<Scalars['String']>
 };
 
 
@@ -199,6 +205,7 @@ export type HelloResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  enrollFeed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, MutationEnrollFeedArgs>,
   uploadImage?: Resolver<ResolversTypes['File'], ParentType, ContextType, RequireFields<MutationUploadImageArgs, 'file'>>,
   signUp?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'nickname' | 'residence' | 'hometown' | 'email'>>,
 };

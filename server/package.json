@@ -36,6 +36,7 @@
     "@graphql-codegen/cli": "^1.8.3",
     "@graphql-codegen/typescript": "^1.8.3",
     "@graphql-codegen/typescript-resolvers": "^1.8.3",
+    "@types/cookie-parser": "^1.4.2",
     "@types/jest": "^24.0.22",
     "apollo-upload-server": "^7.1.0",
     "aws-sdk": "2.348.0",

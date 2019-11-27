@@ -1,7 +1,14 @@
 import db from '../../db';
 import { MATCH_NEW_FEEDS } from '../../schema/feed/query';
 import { IKey } from '../../schema/commonTypes';
-import { QueryFeedsArgs } from 'src/types';
+import {
+  QueryFeedsArgs,
+  MutationEnrollFeedArgs,
+  MutationResolvers
+} from 'src/types';
+import uploadToObjStorage from '../../middleware/uploadToObjStorage';
+
+const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
 
 const session = db.session();
 
@@ -22,7 +29,62 @@ const parseResult = (
   return returnArr;
 };
 
-const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
+const createImages = async (feedId, files) => {
+  const session = db.session();
+  try {
+    let filePromises: Promise<any>[] = [];
+    for (const file of files) {
+      const { filename, createReadStream } = file;
+      filePromises = [
+        ...filePromises,
+        uploadToObjStorage(createReadStream(), filename)
+      ];
+    }
+    const fileLocations = await Promise.all(filePromises);
+    const matchQuery = `MATCH (f:Feed) WHERE ID(f) = $feedId `;
+    const query = fileLocations.reduce((acc, { Location }, idx) => {
+      acc += `CREATE (i${idx}:Image {url: '${Location}'}) CREATE (i${idx})-[:HAS]->(f) `;
+      return acc;
+    }, matchQuery);
+    await session.run(query, { feedId });
+  } catch (error) {
+    console.log(error);
+    return;
+  } finally {
+    session.close();
+  }
+};
+
+const mutationResolvers: MutationResolvers = {
+  enrollFeed: async (
+    _,
+    { content }: MutationEnrollFeedArgs,
+    { req }
+  ): Promise<boolean> => {
+    const { email } = req;
+    if (!email) return false;
+    const session = db.session();
+    try {
+      const result = await session.run(
+        `MATCH (u:User)
+         WHERE u.email = $email
+        CREATE (f:Feed {content: $content, createdAt: datetime()}) 
+        CREATE (u)-[r:AUTHOR]->(f)
+        RETURN f`,
+        { content, email }
+      );
+      const feedId = Number(result.records[0].get(0).identity);
+      if (req.files && req.files.length) {
+        createImages(feedId, req.files);
+      }
+      return true;
+    } catch (error) {
+      return false;
+    } finally {
+      session.close();
+    }
+  }
+};
 
 export default {
   Query: {
@@ -31,5 +93,6 @@ export default {
       const parsedResult = parseResult(result.records);
       return parsedResult;
     }
-  }
+  },
+  Mutation: mutationResolvers
 };
