@@ -23,9 +23,9 @@ const getUpdateLikeQuery = count => {
 const checkReqUserEmail = (req): boolean => {
   if (!req.user) {
     console.log('사용자 정보가 없습니다 다시 로그인해 주세요');
-    return true;
+    return false;
   }
-  return false;
+  return true;
 };
 const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
 
@@ -57,7 +57,6 @@ export default {
       if (checkReqUserEmail(req)) {
         useremail = req.user.email;
       }
-
       const UPDATE_QUERY = getUpdateLikeQuery(count);
       const result = await session.run(UPDATE_QUERY, {
         useremail,
