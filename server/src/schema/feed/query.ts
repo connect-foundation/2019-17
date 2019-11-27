@@ -1,9 +1,3 @@
-const MATCH_NEW_FEEDS = `MATCH (user:User { email: 'abc@naver.com' })-[:AUTHOR]->(feed:Feed)
-where feed.createdAt <  datetime({cursor})
-RETURN user.nickname as nickname, user.thumbnail as thumbnail ,
-feed.content as content ,apoc.convert.toString(feed.createdAt)  as createdAt 
-LIMIT {first} `;
-
 const MATCH_FEEDS = `MATCH (searchUser:User)-[:AUTHOR]->(feed:Feed)
 OPTIONAL MATCH (likeUser:User)-[:LIKE]->(feed)
 OPTIONAL MATCH (feed)-[:HAS]->(com:Comment)
@@ -26,4 +20,4 @@ MATCH (u:User)-[r:LIKE]->(f:Feed)
 WHERE u.email = {useremail} AND ID(f) = {feedId}
 delete r`;
 
-export { MATCH_NEW_FEEDS, MATCH_FEEDS, UPDATE_LIKE, DELETE_LIKE };
+export { MATCH_FEEDS, UPDATE_LIKE, DELETE_LIKE };
