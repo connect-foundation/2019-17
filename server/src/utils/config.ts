@@ -6,7 +6,7 @@ const env = process.env.NODE_ENV || 'DEVELOPMENT';
 
 const configs = {
   base: {
-    port: process.env.PORT,
+    port: process.env.PORT || 4000,
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET

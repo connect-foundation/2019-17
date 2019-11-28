@@ -44,7 +44,7 @@ export default {
       await checkIsEmailExist(args.email);
       const thumbnail = await getUrlWhenFileExists(args);
       const user = await createUser({ ...args, thumbnail });
-      const token: string = await encodeJWT({ email: args.email });
+      const token: string = encodeJWT({ email: args.email });
       res.cookie('token', token);
 
       return user;
