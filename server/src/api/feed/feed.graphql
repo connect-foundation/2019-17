@@ -9,8 +9,13 @@ type PageInfo {
   endCursor: String
   hasNextPage: Boolean
 }
+
 type Query {
   getFeeds: [Feed]!
   feeds(first: Int, cursor: String): [Feed]!
   pageInfo: PageInfo
+}
+
+type Mutation {
+  enrollFeed(content: String!, files: [Upload]): Boolean!
 }

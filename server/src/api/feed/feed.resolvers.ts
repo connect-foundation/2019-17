@@ -1,14 +1,15 @@
-import db from '../../db';
 import { MATCH_NEW_FEEDS } from '../../schema/feed/query';
 import { IKey } from '../../schema/commonTypes';
+import {
+  QueryFeedsArgs,
+  MutationEnrollFeedArgs,
+  MutationResolvers
+} from '../../types';
+import uploadToObjStorage from '../../middleware/uploadToObjStorage';
+import { requestDB } from '../../utils/requestDB';
+import { WRITING_FEED_QUERY, createImageNodeAndRelation } from './feed.query';
 
-const session = db.session();
-
-interface IPageParam {
-  first: number;
-  after: number;
-  cursor: string;
-}
+const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
 
 const parseResult = (
   result: Array<IKey<any>>
@@ -27,14 +28,53 @@ const parseResult = (
   return returnArr;
 };
 
-const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
+const createImages = async (feedId, files) => {
+  try {
+    let filePromises: Promise<any>[] = [];
+    for await (const file of files) {
+      const { filename, createReadStream } = file;
+      filePromises = [
+        ...filePromises,
+        uploadToObjStorage(createReadStream(), filename)
+      ];
+    }
+    const fileLocations = await Promise.all(filePromises);
+    const matchQuery = `MATCH (f:Feed) WHERE ID(f) = $feedId `;
+    const query = fileLocations.reduce((acc, { Location }, idx) => {
+      acc += createImageNodeAndRelation(idx, Location);
+      return acc;
+    }, matchQuery);
+    await requestDB(query, { feedId });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const mutationResolvers: MutationResolvers = {
+  enrollFeed: async (
+    _,
+    { content, files }: MutationEnrollFeedArgs,
+    { req }
+  ): Promise<boolean> => {
+    const { email } = req;
+    if (!email) return false;
+    const params = { content, email };
+    const results = await requestDB(WRITING_FEED_QUERY, params);
+    const feedId = Number(results[0].get(0).identity);
+    if (files && files.length) {
+      createImages(feedId, files);
+    }
+    return true;
+  }
+};
 
 export default {
   Query: {
-    feeds: async (_, { first, cursor = DEFAUT_MAX_DATE }: IPageParam) => {
-      const result = await session.run(MATCH_NEW_FEEDS, { cursor, first });
-      const parsedResult = parseResult(result.records);
+    feeds: async (_, { first, cursor = DEFAUT_MAX_DATE }: QueryFeedsArgs) => {
+      const result = await requestDB(MATCH_NEW_FEEDS, { cursor, first });
+      const parsedResult = parseResult(result);
       return parsedResult;
     }
-  }
+  },
+  Mutation: mutationResolvers
 };
