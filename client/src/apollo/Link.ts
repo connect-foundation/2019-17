@@ -4,25 +4,20 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { createUploadLink } from 'apollo-upload-client';
 import { getMainDefinition } from 'apollo-utilities';
 import { DocumentNode } from 'graphql';
-
-const isProduction = process.env.NODE_ENV === 'production';
-const SERVER_HOST = isProduction
-  ? process.env.REACT_APP_SERVER_HOST
-  : 'localhost:4000';
-const SERVER_URL = `${SERVER_HOST}`;
+import config from 'utils/config';
 
 const httpLink = new HttpLink({
-  uri: `http://${SERVER_URL}/graphql`,
+  uri: `http://${config.serverHost}/graphql`,
   credentials: 'include'
 });
 
 const uploadLink = createUploadLink({
-  uri: `http://${SERVER_URL}/graphql`,
+  uri: `http://${config.serverHost}/graphql`,
   credentials: 'include'
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://${SERVER_URL}`,
+  uri: `ws://${config.serverHost}`,
   options: {
     reconnect: true
   }
