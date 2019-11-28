@@ -1,6 +1,6 @@
 import { GraphQLUpload } from 'apollo-upload-server';
 import uploadToObjStorage from '../../middleware/uploadToObjStorage';
-import { MutationSignUpArgs, User } from 'src/types';
+import { MutationSignUpArgs, User } from '../../types';
 import { requestDB } from '../../utils/requestDB';
 import { parseNodeResult } from '../../utils/parseDB';
 import { encodeJWT } from '../../utils/jwt';

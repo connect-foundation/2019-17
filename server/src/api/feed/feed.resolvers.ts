@@ -4,7 +4,7 @@ import {
   QueryFeedsArgs,
   MutationEnrollFeedArgs,
   MutationResolvers
-} from 'src/types';
+} from '../../types';
 import uploadToObjStorage from '../../middleware/uploadToObjStorage';
 import { requestDB } from '../../utils/requestDB';
 import { WRITING_FEED_QUERY, createImageNodeAndRelation } from './feed.query';
