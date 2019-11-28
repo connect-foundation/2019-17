@@ -70,6 +70,9 @@ function WritingFeedContainer() {
       variables: { content, files: parseFiles }
     })) as any;
     if (enrollFeed) alert('피드가 등록되었습니다.');
+    files.forEach(file => {
+      window.URL.revokeObjectURL(file.fileUrl);
+    });
     setFiles([]);
     setContent('');
   };
