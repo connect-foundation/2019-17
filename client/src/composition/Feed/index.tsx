@@ -68,10 +68,10 @@ const FeedList = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEnd, setIsEnd] = useState<boolean>(false);
 
-  const [ref, setRef] = useIntersect(checkIsEnd, {});
+  const [_, setRef] = useIntersect(checkIsEnd, {});
 
   // hooks 에서 useQuery 1 부터 시작
-  const { loading, data, fetchMore } = useQuery<Feeds, FeedVars>(GET_FEEDS, {
+  const { fetchMore } = useQuery<Feeds, FeedVars>(GET_FEEDS, {
     variables: { first: OFFSET, currentCursor: cursor }
   });
 
@@ -86,19 +86,12 @@ const FeedList = () => {
         if (!fetchMoreResult) {
           return prev;
         }
-        console.log('cursor ', cursor);
         if (!fetchMoreResult.feedItems.length) {
           setIsEnd(true);
           return prev;
         }
-
         const { feedItems } = fetchMoreResult;
         const lastFeedItem = feedItems[feedItems.length - 1];
-        console.log(
-          'lastFeedItem ',
-          getDate(lastFeedItem.feed.createdAt).toISOString()
-        );
-
         setCursor(getDate(lastFeedItem.feed.createdAt).toISOString());
 
         return Object.assign({}, prev, {
@@ -128,9 +121,7 @@ const FeedList = () => {
           createdAt={getDate(feed.feed.createdAt).toISOString()}
         />
       ))}
-      <LoadCheckContainer
-        onClick={fetchMoreFeed}
-        ref={setRef as any}></LoadCheckContainer>
+      <LoadCheckContainer onClick={fetchMoreFeed} ref={setRef as any} />
       <div onClick={fetchMoreFeed}>
         {isLoading ? 'LOADING' : ''}
         {isEnd ? '마지막 글입니다' : ''}
