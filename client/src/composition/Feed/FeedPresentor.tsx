@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import ThumbLikeIcon from '../../components/Icon/ThumbLikeIcon';
-import CommentIcon from '../../components/Icon/CommentIcon';
-import ShareIcon from '../../components/Icon/ShareIcon';
-import RoundThumbIcon from '../../components/Icon/RoundThumbIcon';
+import ThumbLikeIcon from 'components/Icon/ThumbLikeIcon';
+import CommentIcon from 'components/Icon/CommentIcon';
+import ShareIcon from 'components/Icon/ShareIcon';
+import RoundThumbIcon from 'components/Icon/RoundThumbIcon';
 
 const FeedDiv = styled.div`
   ${props => props.theme.borders.feedBorder};

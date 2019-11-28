@@ -5,13 +5,13 @@ import { useMutation } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 
 import SignUpPresenter from './SignUpPresenter';
-import useInput, { IUseInput } from '../../hooks/useInput';
+import useInput, { IUseInput } from 'hooks/useInput';
 import {
   Scalars,
   Maybe,
   SignUpMutation,
   SignUpMutationVariables
-} from '../../react-components.d';
+} from 'react-components.d';
 
 const validateName = (inputName: string): boolean => {
   // 숫자로 시작안됨, 영어한글숫자가능 공백불가능, 닉네임 최소 길이 4자
@@ -55,7 +55,7 @@ function SignUpContainer({ history, location }: RouteComponentProps) {
   const [file, setFile] = useState<Maybe<Scalars['Upload']>>(null);
   const [src, setSrc] = useState('');
 
-  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { target } = e;
     if (target.files && target.files[0]) {
       setSrc(URL.createObjectURL(target.files[0]));
@@ -67,13 +67,14 @@ function SignUpContainer({ history, location }: RouteComponentProps) {
     SIGN_UP_MUTATION
   );
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
     const email = queryString.parse(location.search.substring(1))
       .email as string;
     if (!email) history.push('/signin');
     if (nameValid) {
-      console.log(file);
       await signUpMutation({
         variables: {
           email,

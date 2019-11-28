@@ -3,8 +3,12 @@ import styled from 'styled-components';
 import { MdPhotoSizeSelectActual } from 'react-icons/md';
 import TextareaAutosize from 'react-textarea-autosize';
 
-import Button from '../../../components/Button';
-import Profile from '../../../components/Profile';
+import Button from 'components/Button';
+import Profile from 'components/Profile';
+import UploadPlusButton from './UploadPlusButton';
+import { Scalars } from 'react-components.d';
+import { Maybe } from 'react-components.d';
+import UploadPreviewImg from './UploadPreviewImg';
 
 const Form = styled.form`
   width: 510px;
@@ -35,15 +39,18 @@ const Footer = styled.div`
   background-color: white;
 `;
 
-const ContentContainer = styled.div`
+const ContentRow = styled.div`
   display: flex;
   width: 100%;
   border-bottom: 1px solid ${props => props.theme.colors.borderColor};
+  padding: 5px 0px;
+  overflow-x: scroll;
 `;
 
 const ContentWrapper = styled.div`
   padding-left: 0.5rem;
   padding-right: 0.5rem;
+  background-color: white;
 `;
 
 const Content = styled(TextareaAutosize)`
@@ -103,17 +110,34 @@ const PhotoIcon = styled(MdPhotoSizeSelectActual)`
   margin-right: 0.3rem;
 `;
 
+const FilesContainer = styled.div`
+  display: flex;
+`;
+
 interface IProps {
   content: string;
+  files: Maybe<Scalars['Upload']>;
   onChangeTextArea: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onChangeFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  deleteFile: (e: React.MouseEvent<SVGElement, MouseEvent>) => void;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
-function WritingFeedPresenter({ content, onChangeTextArea }: IProps) {
+const FILE_INPUT_ID = 'upload';
+
+function WritingFeedPresenter({
+  content,
+  onChangeTextArea,
+  onChangeFile,
+  files,
+  deleteFile,
+  onSubmit
+}: IProps) {
   return (
-    <Form encType="multipart/form-data">
+    <Form encType="multipart/form-data" onSubmit={onSubmit}>
       <Header>게시물 만들기</Header>
       <ContentWrapper>
-        <ContentContainer>
+        <ContentRow>
           <ProfileColumn>
             <Profile
               imageUrl={process.env.PUBLIC_URL + '/images/profile.jpg'}
@@ -125,11 +149,33 @@ function WritingFeedPresenter({ content, onChangeTextArea }: IProps) {
             placeholder={'게시물 작성'}
             value={content}
           />
-        </ContentContainer>
+        </ContentRow>
+        <ContentRow>
+          {files && files.length > 0 && (
+            <>
+              <FilesContainer>
+                {files.map((file: { fileUrl: string; fileId: number }) => (
+                  <UploadPreviewImg
+                    key={file.fileId}
+                    fileUrl={file.fileUrl}
+                    fileId={file.fileId}
+                    deleteFile={deleteFile}
+                  />
+                ))}
+                <UploadPlusButton targetId={FILE_INPUT_ID} />
+              </FilesContainer>
+            </>
+          )}
+        </ContentRow>
       </ContentWrapper>
-      <UploadInput id="upload" type="file" />
+      <UploadInput
+        id={FILE_INPUT_ID}
+        type="file"
+        onChange={onChangeFile}
+        accept="image/*"
+      />
       <Footer>
-        <UploadButton htmlFor="upload">
+        <UploadButton htmlFor={FILE_INPUT_ID}>
           <PhotoIcon />
           <PhotoText>사진 업로드</PhotoText>
         </UploadButton>
