@@ -3,11 +3,11 @@ import WritingFeedPresenter from './WritingPresenter';
 import {
   Scalars,
   EnrollFeedMutationHookResult,
-  EnrollFeedMutationVariables,
-  EnrollFeedDocument
+  EnrollFeedMutationVariables
 } from 'react-components.d';
 import { Maybe } from 'react-components.d';
 import { useMutation } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
 
 function WritingFeedContainer() {
   const [content, setContent] = useState('');
@@ -47,11 +47,16 @@ function WritingFeedContainer() {
       );
     }
   };
+  const ENROLL_FEED_MUTATION = gql`
+    mutation enrollFeed($content: String!, $files: [Upload]) {
+      enrollFeed(content: $content, files: $files)
+    }
+  `;
 
   const [writingFeedMutation] = useMutation<
     EnrollFeedMutationHookResult,
     EnrollFeedMutationVariables
-  >(EnrollFeedDocument);
+  >(ENROLL_FEED_MUTATION);
 
   const onSubmit = async (
     e: React.FormEvent<HTMLFormElement>

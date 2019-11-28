@@ -76,8 +76,7 @@ function Button({
       full={full}
       textColor={textColor}
       backgroundColor={backgroundColor}
-      {...rest}
-    >
+      {...rest}>
       {text}
     </SButton>
   );

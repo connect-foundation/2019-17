@@ -1,13 +1,18 @@
 import React from 'react';
-import FeedPresentor from './FeedPresentor';
+import FeedList from './index';
 import WritingFeedContainer from './WritingFeed';
+import styled from 'styled-components';
 
-const FeedContainer: React.FC = () => {
+const CenterContainer = styled.div`
+  margin: 0 auto;
+`;
+
+const FeedContainer = () => {
   return (
-    <>
+    <CenterContainer>
       <WritingFeedContainer />
-      <FeedPresentor />
-    </>
+      <FeedList />
+    </CenterContainer>
   );
 };
 
