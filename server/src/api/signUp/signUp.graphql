@@ -1,0 +1,19 @@
+scalar Upload
+
+type User {
+  email: String!
+  nickname: String!
+  residence: String!
+  hometown: String!
+  thumbnail: String
+}
+
+type Mutation {
+  signUp(
+    nickname: String!
+    residence: String!
+    hometown: String!
+    email: String!
+    file: Upload
+  ): User!
+}
