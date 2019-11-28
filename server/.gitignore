@@ -99,3 +99,5 @@ public/
 
 yarn.lock
 src/types
+src/schema.graphql
+types.d.ts

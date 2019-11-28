@@ -1,5 +1,5 @@
-const CREATE_USER = num => `query {
-    signUp(nickname: "testUser${num}", residence: "Seoul", hometown: "Seoul", googleId: "${num}" thumbnail: "https://images.velog.io/post-images/jerrynim_/d641d1f0-98d3-11e9-a4a8-6f520035a6ca/-2019-06-27-8.45.35.png"){
+const CREATE_USER = userId => `mutation($file: Upload!) {
+    signUp(nickname: "testUser${userId}", residence: "Seoul", hometown: "Seoul", email: "${userId}q2w3e@naver.com", file: $file){
       nickname
       residence
       thumbnail
@@ -7,4 +7,23 @@ const CREATE_USER = num => `query {
     }
   }`;
 
-export { CREATE_USER };
+const CREATE_USER_WITHOUT_THUMBNAIL = userId => `mutation {
+    signUp(nickname: "testUser${userId}", residence: "Seoul", hometown: "Seoul", email: "${userId}q2w3e@naver.com"){
+      nickname
+      residence
+      thumbnail
+      hometown
+    }
+  }`;
+
+const FIND_USER_BY_NICKNAME = nickname =>
+  `MATCH (u: User) WHERE u.nickname= '${nickname}' return u`;
+
+const DELETE_ALL_USERS = `MATCH (u: User) WHERE u.nickname=~ 'testUser.*' DELETE u`;
+
+export {
+  CREATE_USER,
+  CREATE_USER_WITHOUT_THUMBNAIL,
+  DELETE_ALL_USERS,
+  FIND_USER_BY_NICKNAME
+};

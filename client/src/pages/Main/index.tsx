@@ -1,9 +1,8 @@
 import React from 'react';
+import FeedContainer from 'composition/Feed';
 
 const Main: React.FC = () => {
-    return (
-        <div>main</div>
-    )
-}
+  return <FeedContainer />;
+};
 
 export default Main;

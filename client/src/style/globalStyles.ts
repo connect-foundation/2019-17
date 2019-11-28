@@ -19,7 +19,8 @@ export default createGlobalStyle`
         }
     }
     button,
-    input {
+    input,
+    textarea {
         &:active, &:focus {
             outline: none;
         }

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { FaPlus } from 'react-icons/fa';
 import { darken } from 'polished';
-import { IUseInput } from './SignUpContainer';
+import { IUseInput } from 'hooks/useInput';
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -146,24 +146,26 @@ const NICKNAME_VALIDATION_FAIL =
 
 interface IProps {
   nickname: IUseInput;
-  location: IUseInput;
+  residence: IUseInput;
   hometown: IUseInput;
-  onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   src: string;
   nameValid: boolean;
+  onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
 function SignUpPresenter({
   nickname,
-  location,
+  residence,
   hometown,
-  onFileChange,
   src,
-  nameValid
+  nameValid,
+  onSubmit,
+  onFileChange
 }: IProps) {
   return (
     <Wrapper>
-      <Form>
+      <Form method="post" onSubmit={onSubmit} encType="multipart/form-data">
         <Title>프로필 입력</Title>
         <InputFile
           id="profileFile"
@@ -188,10 +190,10 @@ function SignUpPresenter({
           )}
         </Label>
         <InputContainer>
-          <Input placeholder="닉네임" {...nickname} />
+          <Input placeholder="닉네임" {...nickname} required />
           <WarnSpan> {nameValid ? '' : NICKNAME_VALIDATION_FAIL} </WarnSpan>
-          <Input placeholder="거주지" {...location} />
-          <Input placeholder="출신" {...hometown} />
+          <Input placeholder="거주지" {...residence} required />
+          <Input placeholder="출신" {...hometown} required />
         </InputContainer>
         <Button> 등록하기 </Button>
       </Form>
