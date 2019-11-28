@@ -4,7 +4,7 @@ import config from './utils/config';
 import app from './app';
 import './db';
 
-const PORT: string | number = config.port || 4000;
+const PORT: string | number = config.port;
 const ENDPOINT: string = '/graphql';
 const PLAYGROUND: string = '/playground';
 

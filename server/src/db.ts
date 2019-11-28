@@ -3,7 +3,7 @@ import config from './utils/config';
 
 const db = neo4j.driver(
   config.db.host,
-  neo4j.auth.basic(config.db.id || '', config.db.password || '')
+  neo4j.auth.basic(config.db.id, config.db.password)
 );
 
 db.onCompleted = () => {
