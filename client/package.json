@@ -35,6 +35,7 @@
     "@types/testing-library__react": "^9.1.2",
     "apollo-boost": "^0.4.4",
     "apollo-client": "^2.6.4",
+    "apollo-link-ws": "^1.0.19",
     "apollo-upload-client": "^11.0.0",
     "dotenv": "^8.2.0",
     "graphql": "^14.5.8",
