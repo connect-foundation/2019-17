@@ -84,6 +84,7 @@ function SignUpContainer({ history, location }: RouteComponentProps) {
           file
         }
       });
+      history.push('/');
     }
   };
 
