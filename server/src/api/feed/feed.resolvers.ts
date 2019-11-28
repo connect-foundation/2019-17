@@ -1,7 +1,11 @@
 import db from '../../db';
 import { MATCH_FEEDS, UPDATE_LIKE, DELETE_LIKE } from '../../schema/feed/query';
 import { ParseResultRecords } from '../../utils/parseData';
-import { MutationEnrollFeedArgs, MutationResolvers } from '../../types';
+import {
+  MutationEnrollFeedArgs,
+  MutationResolvers,
+  QueryResolvers
+} from '../../types';
 import uploadToObjStorage from '../../middleware/uploadToObjStorage';
 import { requestDB } from '../../utils/requestDB';
 import { WRITING_FEED_QUERY, createImageNodeAndRelation } from './feed.query';
@@ -87,26 +91,28 @@ const mutationResolvers: MutationResolvers = {
   }
 };
 
-export default {
-  Query: {
-    feedItems: async (
-      _,
-      { first, cursor = DEFAUT_MAX_DATE }: IPageParam,
-      { req }
-    ) => {
-      console.log('---cursor1 ', cursor);
-      let useremail = '';
-      if (checkReqUserEmail(req)) {
-        useremail = req.user.email;
-      }
+const queryResolvers: QueryResolvers = {
+  feedItems: async (
+    _,
+    { first, cursor = DEFAUT_MAX_DATE }: IPageParam,
+    { req }
+  ) => {
+    console.log('---cursor1 ', cursor);
+    let useremail = '';
+    if (checkReqUserEmail(req)) {
       useremail = req.user.email;
-      const result = await session.run(MATCH_FEEDS, {
-        cursor,
-        first,
-        useremail
-      });
-      return ParseResultRecords(result.records);
     }
-  },
+    useremail = req.user.email;
+    const result = await session.run(MATCH_FEEDS, {
+      cursor,
+      first,
+      useremail
+    });
+    return ParseResultRecords(result.records);
+  }
+};
+
+export default {
+  Query: queryResolvers,
   Mutation: mutationResolvers
 };
