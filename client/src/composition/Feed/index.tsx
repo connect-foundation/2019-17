@@ -5,6 +5,7 @@ import gql from 'graphql-tag';
 import useIntersect from 'hooks/useIntersectObserver';
 import styled from 'styled-components';
 import { Feeds, Idate, IFeedItem } from './feed.type';
+import WritingFeed from '../Feed/WritingFeed';
 
 interface FeedVars {
   first: number;
@@ -117,6 +118,7 @@ const FeedList = () => {
 
   return (
     <>
+      <WritingFeed />
       {feeds.map(feed => (
         <Feed
           key={getDate(feed.feed.createdAt).toISOString()}
