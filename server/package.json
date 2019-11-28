@@ -5,8 +5,6 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon --exec ts-node src/init.ts delay 2",
-    "pretypes": "gql-merge -o ./src/schema.graphql ./src/api/**/*.graphql ",
-    "types": "mkdir -p src/types && graphql-to-typescript ./src/schema.graphql ./src/types/graph.d.ts",
     "test": "jest --forceExit",
     "build": "tsc && copyfiles --up 1 src/api/**/*.graphql dist/",
     "prd": "NODE_ENV=PRODUCTION pm2 start --name boostbook:server dist/init.js",

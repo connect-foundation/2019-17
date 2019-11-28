@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Feed from './Feed';
 import { useQuery } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 import WritingFeedContainer from './WritingFeed';
 import useIntersect from 'hooks/useIntersectObserver';
 import styled from 'styled-components';
+import { GetfeedsDocument } from 'react-components.d';
 
 interface IFeed {
   content: string;
@@ -20,20 +20,13 @@ interface FeedVars {
   currentCursor: string;
 }
 
-const GET_FEEDS = gql`
-  query getfeeds($first: Int, $currentCursor: String) {
-    feeds(first: $first, cursor: $currentCursor) {
-      content
-      createdAt
-    }
-  }
-`;
-
 const LoadCheckContainer = styled.div`
   height: 50px;
   position: relative;
   top: -50px;
 `;
+
+const Loading = styled.div``;
 
 const OFFSET = 4;
 const FeedContainer = () => {
@@ -45,7 +38,7 @@ const FeedContainer = () => {
   const [ref, setRef] = useIntersect(checkIsEnd, {});
 
   // hooks 에서 useQuery 1 부터 시작
-  const { loading, data, fetchMore } = useQuery<Feeds, FeedVars>(GET_FEEDS, {
+  const { loading, data, fetchMore } = useQuery<Feeds, FeedVars>(GetfeedsDocument, {
     variables: { first: OFFSET, currentCursor: cursor }
   });
 
@@ -98,13 +91,13 @@ const FeedContainer = () => {
           createdAt={feed.createdAt}
         />
       ))}
-      {/* <LoadCheckContainer
+      <LoadCheckContainer
         onClick={fetchMoreFeed}
-        ref={setRef as any}></LoadCheckContainer> */}
-      {/* <div>
+        ref={setRef as any}></LoadCheckContainer>
+      <Loading>
         {isLoading ? 'LOADING' : ''}
         {isEnd ? '마지막 글입니다' : ''}
-      </div> */}
+      </Loading>
     </>
   );
 };

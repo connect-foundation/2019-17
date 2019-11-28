@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import WritingFeedPresenter from './WritingPresenter';
 import {
   Scalars,
-  EnrollFeedMutationResult,
-  EnrollFeedMutationVariables
+  EnrollFeedMutationHookResult,
+  EnrollFeedMutationVariables,
+  EnrollFeedDocument
 } from 'react-components.d';
 import { Maybe } from 'react-components.d';
 import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 
 function WritingFeedContainer() {
   const [content, setContent] = useState('');
@@ -37,31 +37,35 @@ function WritingFeedContainer() {
     let fileId: number;
     if (fileIdAttribute) {
       fileId = parseInt(fileIdAttribute);
-      setFiles(props => props.filter(file => file.fileId !== fileId));
+      setFiles(props =>
+        props.filter(file => {
+          if (file.fileId === fileId) {
+            window.URL.revokeObjectURL(file.fileUrl);
+          }
+          return file.fileId !== fileId;
+        })
+      );
     }
   };
 
-  const WRITING_FEED_MUTATION = gql`
-    mutation enrollFeed($content: String!, $files: [Upload]) {
-      enrollFeed(content: $content, files: $files)
-    }
-  `;
-
   const [writingFeedMutation] = useMutation<
-    EnrollFeedMutationResult,
+    EnrollFeedMutationHookResult,
     EnrollFeedMutationVariables
-  >(WRITING_FEED_MUTATION);
+  >(EnrollFeedDocument);
 
   const onSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
-    console.log('submit');
     const parseFiles = files.map(item => item.file);
-    const result = await writingFeedMutation({
+    const {
+      data: { enrollFeed }
+    } = (await writingFeedMutation({
       variables: { content, files: parseFiles }
-    });
-    console.log(result);
+    })) as any;
+    if (enrollFeed) alert('피드가 등록되었습니다.');
+    setFiles([]);
+    setContent('');
   };
 
   return (

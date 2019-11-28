@@ -24,4 +24,4 @@ yarn-error.log*
 
 .env
 yarn.lock
-.env
+react-components.d.tsx
