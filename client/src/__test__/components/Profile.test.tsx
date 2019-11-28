@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { render, cleanup } from '@testing-library/react';
-import Profile from '../../components/Profile';
+import Profile from 'components/Profile';
 
 afterEach(cleanup);
 

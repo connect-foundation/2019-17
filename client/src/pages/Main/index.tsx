@@ -1,8 +1,8 @@
 import React from 'react';
-import Feed from '../../composition/feed';
+import FeedContainer from 'composition/Feed';
 
-const SignUp: React.FC = () => {
-  return <Feed />;
+const Main: React.FC = () => {
+  return <FeedContainer />;
 };
 
-export default SignUp;
+export default Main;

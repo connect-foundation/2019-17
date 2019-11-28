@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import loginIcon from '../../image/btn_google_signin_normal.png';
 
 const LoginBtnImg = styled.img`
   width: 220px;
@@ -20,7 +19,10 @@ const LoginBtn = () => {
           ? process.env.REACT_APP_SERVER_HOST
           : 'localhost:4000'
       }/auth/google`}>
-      <LoginBtnImg alt="LOGIN" src={loginIcon} />
+      <LoginBtnImg
+        alt="LOGIN"
+        src={process.env.PUBLIC_URL + '/images/btn_google_signin_normal.png'}
+      />
     </Link>
   );
 };

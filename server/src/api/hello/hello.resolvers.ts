@@ -1,9 +1,9 @@
-import { Hello, SayHelloQueryArgs } from "../../types/graph";
+import { QuerySayHelloArgs, Hello } from '../../types';
 
 export default {
   Query: {
-    sayHello: (_, args: SayHelloQueryArgs): Hello => {
-      return { text: "waa" };
+    sayHello: (_, args: QuerySayHelloArgs): Hello => {
+      return { text: 'waa' };
     }
   }
 };
