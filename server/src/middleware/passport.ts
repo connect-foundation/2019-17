@@ -1,13 +1,13 @@
-import passport from 'passport';
-import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
-import config from '../utils/config';
+import passport from "passport";
+import { OAuth2Strategy as GoogleStrategy } from "passport-google-oauth";
+import config from "../utils/config";
 
 passport.use(
   new GoogleStrategy(
     {
       clientID: config.google.clientId,
       clientSecret: config.google.clientSecret,
-      callbackURL: config.serverHost + '/auth/google/callback'
+      callbackURL: config.serverHost + "/auth/google/callback"
     },
     (accessToken, refreshToken, profile, done) => {
       done(null, profile);
