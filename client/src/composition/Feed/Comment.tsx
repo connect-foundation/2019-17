@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Profile from '../../components/Profile';
+import Profile from 'components/Profile';
 
 // comment
 const CommentDiv = styled.div`

@@ -8,4 +8,5 @@ type File {
 
 type Mutation {
   uploadImage(file: Upload!): File!
+  uploadImages(files: [Upload]!): [File]!
 }

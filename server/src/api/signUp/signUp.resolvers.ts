@@ -1,6 +1,6 @@
 import { GraphQLUpload } from 'apollo-upload-server';
 import uploadToObjStorage from '../../middleware/uploadToObjStorage';
-import { SignUpMutationArgs, User } from '../../types/graph';
+import { MutationSignUpArgs, User } from '../../types';
 import { requestDB } from '../../utils/requestDB';
 import { parseNodeResult } from '../../utils/parseDB';
 import { encodeJWT } from '../../utils/jwt';
@@ -40,13 +40,12 @@ const createUser = async info => {
 
 export default {
   Mutation: {
-    signUp: async (_, args: SignUpMutationArgs, { res }): Promise<User> => {
+    signUp: async (_, args: MutationSignUpArgs, { res }): Promise<User> => {
       await checkIsEmailExist(args.email);
       const thumbnail = await getUrlWhenFileExists(args);
       const user = await createUser({ ...args, thumbnail });
       const token: string = encodeJWT({ email: args.email });
       res.cookie('token', token);
-
       return user;
     }
   },

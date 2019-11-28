@@ -23,10 +23,8 @@ jobs:
         run: |
           cd ./server
           yarn install
-          yarn types
+          yarn generate
           yarn test
-          cd ../client
-          yarn test --watchAll=false
         env:
           PORT: ${{secrets.Port}}
           DB_HOST: ${{secrets.DbHost}}

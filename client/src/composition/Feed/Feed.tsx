@@ -33,7 +33,6 @@ interface Iprops {
 }
 
 function Feed({ content, createdAt }: Iprops) {
-  const cc = content;
   return (
     <>
       <FeedDiv>

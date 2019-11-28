@@ -1,16 +1,16 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { render, cleanup } from '@testing-library/react';
-import WritingFeed from '../../composition/Feed/WritingFeed';
+import UploadPlusButton from 'composition/Feed/WritingFeed/UploadPlusButton';
 import { ThemeProvider } from 'styled-components';
-import theme from '../../style/theme';
+import theme from 'style/theme';
 
 afterEach(cleanup);
 
-test('<WritingFeed />', () => {
+test('<UploadPlusButton />', () => {
   const { container } = render(
     <ThemeProvider theme={theme}>
-      <WritingFeed />
+      <UploadPlusButton targetId="1" />
     </ThemeProvider>
   );
   expect(container).toMatchSnapshot();

@@ -1,4 +1,4 @@
-const MATCH_NEW_FEEDS = `MATCH (user:User { email: 'abc@naver.com' })-[:AUTHOR]->(feed:Feed)
+const MATCH_NEW_FEEDS = `MATCH (user:User { email: 'kyujong93@gmail.com' })-[:AUTHOR]->(feed:Feed)
 where feed.createdAt <  datetime({cursor})
 RETURN user.nickname as nickname, user.thumbnail as thumbnail ,
 feed.content as content ,apoc.convert.toString(feed.createdAt)  as createdAt 
