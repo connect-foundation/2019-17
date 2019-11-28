@@ -17,6 +17,7 @@ const GET_FEEDS = gql`
     feedItems(first: $first, cursor: $currentCursor) {
       searchUser {
         nickname
+        thumbnail
       }
       feed {
         createdAt {
@@ -133,7 +134,6 @@ const FeedList = () => {
       <div onClick={fetchMoreFeed}>
         {isLoading ? 'LOADING' : ''}
         {isEnd ? '마지막 글입니다' : ''}
-        aa
       </div>
     </>
   );
