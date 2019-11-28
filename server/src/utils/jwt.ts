@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { IKey } from 'src/schema/commonTypes';
-const SECRET: string = process.env.JWT_SECRET || '';
+import config from '../utils/config';
+const SECRET = config.jwtSecret;
+
 function encodeJWT(target: IKey<string | number>): string {
   return jwt.sign(target, SECRET, {
     expiresIn: '7d',
@@ -8,7 +10,9 @@ function encodeJWT(target: IKey<string | number>): string {
     subject: 'authentication'
   });
 }
+
 function decodeJWT(token): object | string {
   return jwt.verify(token, SECRET);
 }
+
 export { encodeJWT, decodeJWT };

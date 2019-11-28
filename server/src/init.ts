@@ -1,18 +1,18 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
 import { Options } from 'graphql-yoga';
 
+import config from './utils/config';
 import app from './app';
 import './db';
 
-const PORT: string | number = process.env.PORT || 4000;
+const PORT: string | number = config.port;
 const ENDPOINT: string = '/graphql';
 const PLAYGROUND: string = '/playground';
+
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: config.clientHost,
   credentials: true
 };
+
 const appOptions: Options = {
   port: PORT,
   endpoint: ENDPOINT,

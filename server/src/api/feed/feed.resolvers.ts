@@ -1,7 +1,10 @@
 import db from '../../db';
 import { MATCH_FEEDS, UPDATE_LIKE, DELETE_LIKE } from '../../schema/feed/query';
 import { ParseResultRecords } from '../../utils/parseData';
-import console = require('console');
+import { MutationEnrollFeedArgs, MutationResolvers } from '../../types';
+import uploadToObjStorage from '../../middleware/uploadToObjStorage';
+import { requestDB } from '../../utils/requestDB';
+import { WRITING_FEED_QUERY, createImageNodeAndRelation } from './feed.query';
 
 const session = db.session();
 
@@ -11,6 +14,8 @@ interface IPageParam {
   cursor: string;
 }
 // property로 조회할 때
+
+const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
 
 const getUpdateLikeQuery = count => {
   if (count > 0) {
@@ -27,7 +32,60 @@ const checkReqUserEmail = (req): boolean => {
   }
   return true;
 };
-const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
+
+const createImages = async (feedId, files) => {
+  try {
+    let filePromises: Promise<any>[] = [];
+    for await (const file of files) {
+      const { filename, createReadStream } = file;
+      filePromises = [
+        ...filePromises,
+        uploadToObjStorage(createReadStream(), filename)
+      ];
+    }
+    const fileLocations = await Promise.all(filePromises);
+    const matchQuery = `MATCH (f:Feed) WHERE ID(f) = $feedId `;
+    const query = fileLocations.reduce((acc, { Location }, idx) => {
+      acc += createImageNodeAndRelation(idx, Location);
+      return acc;
+    }, matchQuery);
+    await requestDB(query, { feedId });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const mutationResolvers: MutationResolvers = {
+  enrollFeed: async (
+    _,
+    { content, files }: MutationEnrollFeedArgs,
+    { req }
+  ): Promise<boolean> => {
+    const { email } = req;
+    if (!email) return false;
+    const params = { content, email };
+    const results = await requestDB(WRITING_FEED_QUERY, params);
+    const feedId = Number(results[0].get(0).identity);
+    if (files && files.length) {
+      createImages(feedId, files);
+    }
+    return true;
+  },
+  updateLike: async (_, { feedId, count }, { req }) => {
+    let useremail = '';
+    if (checkReqUserEmail(req)) {
+      useremail = req.user.email;
+    }
+    const UPDATE_QUERY = getUpdateLikeQuery(count);
+    const result = await session.run(UPDATE_QUERY, {
+      useremail,
+      feedId
+    });
+
+    console.log('result: ', result);
+    return true;
+  }
+};
 
 export default {
   Query: {
@@ -50,21 +108,5 @@ export default {
       return ParseResultRecords(result.records);
     }
   },
-
-  Mutation: {
-    updateLike: async (_, { feedId, count }, { req }) => {
-      let useremail = '';
-      if (checkReqUserEmail(req)) {
-        useremail = req.user.email;
-      }
-      const UPDATE_QUERY = getUpdateLikeQuery(count);
-      const result = await session.run(UPDATE_QUERY, {
-        useremail,
-        feedId
-      });
-
-      console.log('result: ', result);
-      return true;
-    }
-  }
+  Mutation: mutationResolvers
 };

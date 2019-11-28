@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Profile from '../../components/Profile';
+import Profile from 'components/Profile';
 
 const ProfileDiv = styled.div`
   display: inline-block;
@@ -17,14 +17,6 @@ const ProfileImgBox = styled.a`
 interface ITest {
   size: string;
 }
-
-const ProfileImg = styled.img<ITest>`
-  border-radius: 50%;
-  border: 1px solid black;
-  width: ${props => props.size}px;
-  width: 2.5rem;
-  height: 2.5rem;
-`;
 
 const ProfileNameDiv = styled.div`
   margin-bottom: 0.25rem;

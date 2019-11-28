@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import Feed from './Feed';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
-import useIntersect from '../../hooks/useIntersectObserver';
+import useIntersect from 'hooks/useIntersectObserver';
 import styled from 'styled-components';
 import { Feeds, Idate, IFeedItem } from './feed.type';
 
@@ -12,15 +12,6 @@ interface FeedVars {
 }
 
 const GET_FEEDS = gql`
-  query getfeeds($first: Int, $currentCursor: String) {
-    feeds(first: $first, cursor: $currentCursor) {
-      content
-      createdAt
-    }
-  }
-`;
-
-const GET_FEEDS2 = gql`
   query getfeeds($first: Int, $currentCursor: String) {
     feedItems(first: $first, cursor: $currentCursor) {
       searchUser {
@@ -78,7 +69,7 @@ const FeedList = () => {
   const [ref, setRef] = useIntersect(checkIsEnd, {});
 
   // hooks 에서 useQuery 1 부터 시작
-  const { loading, data, fetchMore } = useQuery<Feeds, FeedVars>(GET_FEEDS2, {
+  const { loading, data, fetchMore } = useQuery<Feeds, FeedVars>(GET_FEEDS, {
     variables: { first: OFFSET, currentCursor: cursor }
   });
 
