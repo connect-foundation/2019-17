@@ -5,8 +5,9 @@ type UserInfo {
   nickname: String!
   thumbnail: String!
   relation: String!
+  email: String!
 }
 
 type Query {
-  searchUser(keyword: String!): [User!]!
+  searchUser(keyword: String!): [UserInfo!]!
 }

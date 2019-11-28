@@ -9,6 +9,7 @@ const SEARCH_USER = gql`
   query getUserName($keyword: String!) {
     searchUser(keyword: $keyword) {
       nickname
+      email
     }
   }
 `;
@@ -34,7 +35,7 @@ function CardContainer(props: IProps) {
     return (
       <>
         <UserCard
-          nickname="데이터를 가져오는 데 에러가 발생하였습니다!"
+          nickname="데이터를 가져오는데 에러가 발생하였습니다!"
           imageUrl={
             process.env.PUBLIC_URL + '/images/search_notfound.png'
           }></UserCard>
@@ -51,13 +52,20 @@ function CardContainer(props: IProps) {
       </>
     );
 
+  function sendFriendRequest(email: string) {
+    return (e: React.MouseEvent) => {
+      console.log(email);
+      console.log(e);
+    };
+  }
+
   return (
     <>
       {data.searchUser.map((user: { [key: string]: string }) => (
         <UserCard nickname={user.nickname} key={user.nickname}>
           <ActionButton
             text="친구 추가"
-            onClick={e => console.log('test')}></ActionButton>
+            onClick={sendFriendRequest(user.email)}></ActionButton>
         </UserCard>
       ))}
     </>
