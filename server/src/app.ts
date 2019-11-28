@@ -7,7 +7,7 @@ import config from './utils/config';
 import { signInWithEmail, checkToken } from './middleware/authController';
 import passport from './middleware/passport';
 import schema from './schema';
-import { decodeJWT } from './utils/jwt';
+import setUserFromJWT from './middleware/setUserFromJWT';
 
 class App {
   public app: GraphQLServer;
@@ -39,14 +39,7 @@ class App {
       }),
       signInWithEmail
     );
-    this.app.express.use((req, res, next) => {
-      if (req.cookies.token) {
-        const token = req.cookies.token;
-        const email = decodeJWT(token);
-        req['user'] = email;
-      }
-      return next();
-    });
+    this.app.express.use(setUserFromJWT);
   };
 }
 
