@@ -17,5 +17,5 @@ type Query {
 }
 
 type Mutation {
-  enrollFeed(content: String): Boolean!
+  enrollFeed(content: String!, files: [Upload]): Boolean!
 }

@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import WritingFeedPresenter from './WritingPresenter';
-import { Scalars } from 'react-components.d';
+import {
+  Scalars,
+  EnrollFeedMutationResult,
+  EnrollFeedMutationVariables
+} from 'react-components.d';
 import { Maybe } from 'react-components.d';
+import { useMutation } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
 
 function WritingFeedContainer() {
   const [content, setContent] = useState('');
@@ -19,7 +25,7 @@ function WritingFeedContainer() {
     if (target.files && target.files.length) {
       const file = target.files[0];
       const fileUrl = URL.createObjectURL(file);
-      setFiles(props => [...props, { ...file, fileId, fileUrl }]);
+      setFiles(props => [...props, { file, fileId, fileUrl }]);
       setFileId(fileId + 1);
       target.value = '';
     }
@@ -35,8 +41,32 @@ function WritingFeedContainer() {
     }
   };
 
+  const WRITING_FEED_MUTATION = gql`
+    mutation enrollFeed($content: String!, $files: [Upload]) {
+      enrollFeed(content: $content, files: $files)
+    }
+  `;
+
+  const [writingFeedMutation] = useMutation<
+    EnrollFeedMutationResult,
+    EnrollFeedMutationVariables
+  >(WRITING_FEED_MUTATION);
+
+  const onSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
+    e.preventDefault();
+    console.log('submit');
+    const parseFiles = files.map(item => item.file);
+    const result = await writingFeedMutation({
+      variables: { content, files: parseFiles }
+    });
+    console.log(result);
+  };
+
   return (
     <WritingFeedPresenter
+      onSubmit={onSubmit}
       content={content}
       onChangeTextArea={onChangeTextArea}
       files={files}

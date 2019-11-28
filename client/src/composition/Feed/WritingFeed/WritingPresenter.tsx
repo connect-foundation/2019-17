@@ -120,6 +120,7 @@ interface IProps {
   onChangeTextArea: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onChangeFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
   deleteFile: (e: React.MouseEvent<SVGElement, MouseEvent>) => void;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
 const FILE_INPUT_ID = 'upload';
@@ -129,10 +130,11 @@ function WritingFeedPresenter({
   onChangeTextArea,
   onChangeFile,
   files,
-  deleteFile
+  deleteFile,
+  onSubmit
 }: IProps) {
   return (
-    <Form encType="multipart/form-data">
+    <Form encType="multipart/form-data" onSubmit={onSubmit}>
       <Header>게시물 만들기</Header>
       <ContentWrapper>
         <ContentRow>

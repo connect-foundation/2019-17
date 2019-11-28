@@ -22,16 +22,15 @@ class App {
   constructor() {
     this.app = new GraphQLServer({
       schema,
-      context: ({ request, response }) => ({
-        req: request,
-        res: response
-      })
+      context: ({ request, response }) => ({ req: request, res: response })
     });
     this.middlewares();
   }
 
   private middlewares = (): void => {
-    this.app.express.use(cors());
+    this.app.express.use(
+      cors({ credentials: true, origin: 'http://localhost:3000' })
+    );
     this.app.express.use(logger('dev'));
     this.app.express.use(helmet());
     this.app.express.use(cookieParser());

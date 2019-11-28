@@ -12,7 +12,14 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
+  /** The `Upload` scalar type represents a file upload. */
   Upload: any,
+};
+
+export type Feed = {
+   __typename?: 'Feed',
+  content: Scalars['String'],
+  createdAt?: Maybe<Scalars['String']>,
 };
 
 export type File = {
@@ -29,13 +36,26 @@ export type Hello = {
 
 export type Mutation = {
    __typename?: 'Mutation',
+  enrollFeed: Scalars['Boolean'],
   uploadImage: File,
+  uploadImages: Array<Maybe<File>>,
   signUp: User,
+};
+
+
+export type MutationEnrollFeedArgs = {
+  content: Scalars['String'],
+  files?: Maybe<Array<Maybe<Scalars['Upload']>>>
 };
 
 
 export type MutationUploadImageArgs = {
   file: Scalars['Upload']
+};
+
+
+export type MutationUploadImagesArgs = {
+  files: Array<Maybe<Scalars['Upload']>>
 };
 
 
@@ -47,9 +67,24 @@ export type MutationSignUpArgs = {
   file?: Maybe<Scalars['Upload']>
 };
 
+export type PageInfo = {
+   __typename?: 'PageInfo',
+  endCursor?: Maybe<Scalars['String']>,
+  hasNextPage?: Maybe<Scalars['Boolean']>,
+};
+
 export type Query = {
    __typename?: 'Query',
+  getFeeds: Array<Maybe<Feed>>,
+  feeds: Array<Maybe<Feed>>,
+  pageInfo?: Maybe<PageInfo>,
   sayHello: Hello,
+};
+
+
+export type QueryFeedsArgs = {
+  first?: Maybe<Scalars['Int']>,
+  cursor?: Maybe<Scalars['String']>
 };
 
 
@@ -66,6 +101,31 @@ export type User = {
   hometown: Scalars['String'],
   thumbnail?: Maybe<Scalars['String']>,
 };
+
+export type EnrollFeedMutationVariables = {
+  content: Scalars['String'],
+  files?: Maybe<Array<Maybe<Scalars['Upload']>>>
+};
+
+
+export type EnrollFeedMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'enrollFeed'>
+);
+
+export type GetfeedsQueryVariables = {
+  first?: Maybe<Scalars['Int']>,
+  currentCursor?: Maybe<Scalars['String']>
+};
+
+
+export type GetfeedsQuery = (
+  { __typename?: 'Query' }
+  & { feeds: Array<Maybe<(
+    { __typename?: 'Feed' }
+    & Pick<Feed, 'content' | 'createdAt'>
+  )>> }
+);
 
 export type SignUpMutationVariables = {
   nickname: Scalars['String'],
@@ -85,6 +145,57 @@ export type SignUpMutation = (
 );
 
 
+export const EnrollFeedDocument = gql`
+    mutation enrollFeed($content: String!, $files: [Upload]) {
+  enrollFeed(content: $content, files: $files)
+}
+    `;
+export type EnrollFeedMutationFn = ApolloReactCommon.MutationFunction<EnrollFeedMutation, EnrollFeedMutationVariables>;
+export type EnrollFeedComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<EnrollFeedMutation, EnrollFeedMutationVariables>, 'mutation'>;
+
+    export const EnrollFeedComponent = (props: EnrollFeedComponentProps) => (
+      <ApolloReactComponents.Mutation<EnrollFeedMutation, EnrollFeedMutationVariables> mutation={EnrollFeedDocument} {...props} />
+    );
+    
+export type EnrollFeedProps<TChildProps = {}> = ApolloReactHoc.MutateProps<EnrollFeedMutation, EnrollFeedMutationVariables> & TChildProps;
+export function withEnrollFeed<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  EnrollFeedMutation,
+  EnrollFeedMutationVariables,
+  EnrollFeedProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, EnrollFeedMutation, EnrollFeedMutationVariables, EnrollFeedProps<TChildProps>>(EnrollFeedDocument, {
+      alias: 'enrollFeed',
+      ...operationOptions
+    });
+};
+export type EnrollFeedMutationResult = ApolloReactCommon.MutationResult<EnrollFeedMutation>;
+export type EnrollFeedMutationOptions = ApolloReactCommon.BaseMutationOptions<EnrollFeedMutation, EnrollFeedMutationVariables>;
+export const GetfeedsDocument = gql`
+    query getfeeds($first: Int, $currentCursor: String) {
+  feeds(first: $first, cursor: $currentCursor) {
+    content
+    createdAt
+  }
+}
+    `;
+export type GetfeedsComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetfeedsQuery, GetfeedsQueryVariables>, 'query'>;
+
+    export const GetfeedsComponent = (props: GetfeedsComponentProps) => (
+      <ApolloReactComponents.Query<GetfeedsQuery, GetfeedsQueryVariables> query={GetfeedsDocument} {...props} />
+    );
+    
+export type GetfeedsProps<TChildProps = {}> = ApolloReactHoc.DataProps<GetfeedsQuery, GetfeedsQueryVariables> & TChildProps;
+export function withGetfeeds<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  GetfeedsQuery,
+  GetfeedsQueryVariables,
+  GetfeedsProps<TChildProps>>) {
+    return ApolloReactHoc.withQuery<TProps, GetfeedsQuery, GetfeedsQueryVariables, GetfeedsProps<TChildProps>>(GetfeedsDocument, {
+      alias: 'getfeeds',
+      ...operationOptions
+    });
+};
+export type GetfeedsQueryResult = ApolloReactCommon.QueryResult<GetfeedsQuery, GetfeedsQueryVariables>;
 export const SignUpDocument = gql`
     mutation signUp($nickname: String!, $hometown: String!, $residence: String!, $email: String!, $file: Upload) {
   signUp(nickname: $nickname, hometown: $hometown, residence: $residence, email: $email, file: $file) {

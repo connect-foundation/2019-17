@@ -33,17 +33,24 @@ export type Mutation = {
    __typename?: 'Mutation',
   enrollFeed: Scalars['Boolean'],
   uploadImage: File,
+  uploadImages: Array<Maybe<File>>,
   signUp: User,
 };
 
 
 export type MutationEnrollFeedArgs = {
-  content?: Maybe<Scalars['String']>
+  content: Scalars['String'],
+  files?: Maybe<Array<Maybe<Scalars['Upload']>>>
 };
 
 
 export type MutationUploadImageArgs = {
   file: Scalars['Upload']
+};
+
+
+export type MutationUploadImagesArgs = {
+  files: Array<Maybe<Scalars['Upload']>>
 };
 
 
@@ -205,8 +212,9 @@ export type HelloResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  enrollFeed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, MutationEnrollFeedArgs>,
+  enrollFeed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationEnrollFeedArgs, 'content'>>,
   uploadImage?: Resolver<ResolversTypes['File'], ParentType, ContextType, RequireFields<MutationUploadImageArgs, 'file'>>,
+  uploadImages?: Resolver<Array<Maybe<ResolversTypes['File']>>, ParentType, ContextType, RequireFields<MutationUploadImagesArgs, 'files'>>,
   signUp?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'nickname' | 'residence' | 'hometown' | 'email'>>,
 };
 

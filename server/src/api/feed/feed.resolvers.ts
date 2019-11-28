@@ -33,7 +33,7 @@ const createImages = async (feedId, files) => {
   const session = db.session();
   try {
     let filePromises: Promise<any>[] = [];
-    for (const file of files) {
+    for await (const file of files) {
       const { filename, createReadStream } = file;
       filePromises = [
         ...filePromises,
@@ -58,7 +58,7 @@ const createImages = async (feedId, files) => {
 const mutationResolvers: MutationResolvers = {
   enrollFeed: async (
     _,
-    { content }: MutationEnrollFeedArgs,
+    { content, files }: MutationEnrollFeedArgs,
     { req }
   ): Promise<boolean> => {
     const { email } = req;
@@ -74,8 +74,8 @@ const mutationResolvers: MutationResolvers = {
         { content, email }
       );
       const feedId = Number(result.records[0].get(0).identity);
-      if (req.files && req.files.length) {
-        createImages(feedId, req.files);
+      if (files && files.length) {
+        createImages(feedId, files);
       }
       return true;
     } catch (error) {
