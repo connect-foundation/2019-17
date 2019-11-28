@@ -1,5 +1,6 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
+import Profile from '../../components/Profile';
 
 const ProfileDiv = styled.div`
   display: inline-block;
@@ -47,7 +48,11 @@ const FeedHeader = ({ createdAt }: Iprops) => {
     <>
       <div>
         <ProfileImgBox>
-          <ProfileImg size="40"></ProfileImg>
+          <Profile
+            imageUrl={process.env.PUBLIC_URL + '/images/profile.jpg'}
+            alt={'profile image'}
+            size="40px"
+          />
         </ProfileImgBox>
         <ProfileDiv>
           <ProfileNameDiv>우연서</ProfileNameDiv>
