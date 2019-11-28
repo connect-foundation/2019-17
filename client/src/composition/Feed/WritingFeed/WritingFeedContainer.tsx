@@ -47,6 +47,7 @@ function WritingFeedContainer() {
       );
     }
   };
+
   const ENROLL_FEED_MUTATION = gql`
     mutation enrollFeed($content: String!, $files: [Upload]) {
       enrollFeed(content: $content, files: $files)

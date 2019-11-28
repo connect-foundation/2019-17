@@ -41,7 +41,7 @@ export default {
   Mutation: {
     signUp: async (_, args: MutationSignUpArgs, { res }): Promise<User> => {
       await checkIsEmailExist(args.email);
-      const thumbnail = await getUrlWhenFileExists(args);
+      const thumbnail = await getUrlWhenFileExists(args.file);
       const user = await createUser({ ...args, thumbnail });
       const token: string = encodeJWT({ email: args.email });
       res.cookie('token', token);

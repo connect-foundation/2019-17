@@ -6,6 +6,7 @@ import GlobalStyles from './style/globalStyles';
 import LoginRoutes from './pages/Routes/LoginRoutes';
 
 const App: React.FC = () => {
+  
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
