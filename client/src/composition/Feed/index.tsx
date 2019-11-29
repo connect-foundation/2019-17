@@ -17,6 +17,7 @@ const GET_FEEDS = gql`
     feedItems(first: $first, cursor: $currentCursor) {
       searchUser {
         nickname
+        thumbnail
       }
       feed {
         createdAt {
@@ -32,6 +33,9 @@ const GET_FEEDS = gql`
       }
       feedId
       totallikes
+      imglist {
+        url
+      }
       hasLiked
       comments {
         id
@@ -47,10 +51,6 @@ const LoadCheckContainer = styled.div`
   top: -50px;
 `;
 
-const Container = styled.div`
-  margin: 0 auto;
-  width: 1000px;
-`;
 // 모듈로 빼자 new Date(year, month, day, hours, minutes, seconds, milliseconds)
 const getDate = (date: Idate): Date => {
   const dateob = new Date(
@@ -72,10 +72,10 @@ const FeedList = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEnd, setIsEnd] = useState<boolean>(false);
 
-  const [ref, setRef] = useIntersect(checkIsEnd, {});
+  const [_, setRef] = useIntersect(checkIsEnd, {});
 
   // hooks 에서 useQuery 1 부터 시작
-  const { loading, data, fetchMore } = useQuery<Feeds, FeedVars>(GET_FEEDS, {
+  const { fetchMore } = useQuery<Feeds, FeedVars>(GET_FEEDS, {
     variables: { first: OFFSET, currentCursor: cursor }
   });
 
@@ -90,19 +90,12 @@ const FeedList = () => {
         if (!fetchMoreResult) {
           return prev;
         }
-        console.log('cursor ', cursor);
         if (!fetchMoreResult.feedItems.length) {
           setIsEnd(true);
           return prev;
         }
-
         const { feedItems } = fetchMoreResult;
         const lastFeedItem = feedItems[feedItems.length - 1];
-        console.log(
-          'lastFeedItem ',
-          getDate(lastFeedItem.feed.createdAt).toISOString()
-        );
-
         setCursor(getDate(lastFeedItem.feed.createdAt).toISOString());
 
         return Object.assign({}, prev, {
@@ -123,25 +116,22 @@ const FeedList = () => {
 
   return (
     <>
-      <Container>
-        <WritingFeed />
-        {feeds.map(feed => (
-          <Feed
-            key={getDate(feed.feed.createdAt).toISOString()}
-            content={feed.feed.content}
-            feedinfo={feed}
-            createdAt={getDate(feed.feed.createdAt).toISOString()}
-          />
-        ))}
-        <LoadCheckContainer
-          onClick={fetchMoreFeed}
-          ref={setRef as any}></LoadCheckContainer>
-        <div onClick={fetchMoreFeed}>
-          {isLoading ? 'LOADING' : ''}
-          {isEnd ? '마지막 글입니다' : ''}
-          aa
-        </div>
-      </Container>
+      <WritingFeed />
+      {feeds.map(feed => (
+        <Feed
+          key={getDate(feed.feed.createdAt).toISOString()}
+          content={feed.feed.content}
+          feedinfo={feed}
+          createdAt={getDate(feed.feed.createdAt).toISOString()}
+        />
+      ))}
+      <LoadCheckContainer
+        onClick={fetchMoreFeed}
+        ref={setRef as any}></LoadCheckContainer>
+      <div onClick={fetchMoreFeed}>
+        {isLoading ? 'LOADING' : ''}
+        {isEnd ? '마지막 글입니다' : ''}
+      </div>
     </>
   );
 };

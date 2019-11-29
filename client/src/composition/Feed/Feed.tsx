@@ -37,6 +37,7 @@ interface Iprops {
 function Feed({ content, createdAt, feedinfo }: Iprops) {
   const [likeCnt, setLikeCnt] = useState<number>(0);
   const [hasLiked, setHasLiked] = useState<boolean>(false);
+
   useEffect(() => {
     setLikeCnt(feedinfo.totallikes);
     setHasLiked(feedinfo.hasLiked ? true : false);
@@ -47,8 +48,12 @@ function Feed({ content, createdAt, feedinfo }: Iprops) {
       <FeedDiv>
         <FeedContentDiv className="mainbox">
           <FeedEditDiv></FeedEditDiv>
-          <FeedHeader createdAt={createdAt} />
-          <FeedBody content={content} />
+          <FeedHeader
+            thumbnail={feedinfo.searchUser.thumbnail}
+            nickName={feedinfo.searchUser.nickname}
+            createdAt={createdAt}
+          />
+          <FeedBody content={content} images={feedinfo.imglist} />
           <FeedFooter
             likeCnt={likeCnt}
             setLikeCnt={setLikeCnt}

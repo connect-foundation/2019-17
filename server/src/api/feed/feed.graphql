@@ -44,11 +44,16 @@ type Comment {
   content: String
 }
 
+type Image {
+  url: String
+}
+
 type IFeed {
   searchUser: IUser
   feed: Content
   feedId: Int
   totallikes: Int
+  imglist: [Image]
   hasLiked: Int
   comments: [Comment]
 }

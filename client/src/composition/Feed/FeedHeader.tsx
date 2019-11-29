@@ -33,21 +33,20 @@ const ProfileDateDiv = styled.span`
 
 interface Iprops {
   createdAt: string;
+  thumbnail: string;
+  nickName: string;
 }
 
-const FeedHeader = ({ createdAt }: Iprops) => {
+const FeedHeader = ({ createdAt, thumbnail, nickName }: Iprops) => {
+  const Thumbnail = thumbnail || process.env.PUBLIC_URL + '/images/profile.jpg';
   return (
     <>
       <div>
         <ProfileImgBox>
-          <Profile
-            imageUrl={process.env.PUBLIC_URL + '/images/profile.jpg'}
-            alt={'profile image'}
-            size="40px"
-          />
+          <Profile imageUrl={Thumbnail} alt={'profile image'} size="40px" />
         </ProfileImgBox>
         <ProfileDiv>
-          <ProfileNameDiv>우연서</ProfileNameDiv>
+          <ProfileNameDiv>{nickName}</ProfileNameDiv>
           <ProfileDateDiv>{createdAt} </ProfileDateDiv>
         </ProfileDiv>
       </div>

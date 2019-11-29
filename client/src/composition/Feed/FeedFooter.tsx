@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import ThumbLikeIcon from 'components/Icon/ThumbLikeIcon';
 import RoundThumbIcon from 'components/Icon/RoundThumbIcon';
 import CommentIcon from 'components/Icon/CommentIcon';
@@ -57,7 +57,11 @@ const FeedActionBtn = styled.span<IStyleprops>`
   height: 32px;
   line-height: 14px;
   cursor: pointer;
+  font-weight: ${props => {
+    return props.hasLiked ? '700' : '600';
+  }};
 `;
+
 interface IStyleprops {
   hasLiked?: boolean;
 }
@@ -102,7 +106,7 @@ const FeedFooter = ({
     <>
       <FeedActionDiv>
         <LikeShowDiv>
-          <RoundThumbIcon /> <span> {likeCnt}</span>
+          <RoundThumbIcon hasLiked={hasLiked} /> <span> {likeCnt}</span>
         </LikeShowDiv>
 
         <ActionStateDiv>
