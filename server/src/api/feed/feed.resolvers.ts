@@ -78,15 +78,16 @@ const mutationResolvers: MutationResolvers = {
   updateLike: async (_, { feedId, count }, { req }) => {
     let useremail = '';
     if (checkReqUserEmail(req)) {
-      useremail = req.user;
+      useremail = req.user.email;
     }
+    console.log('UPDATE_QUERY', feedId, count, useremail);
     const UPDATE_QUERY = getUpdateLikeQuery(count);
-    await session.run(UPDATE_QUERY, {
+    const result = await session.run(UPDATE_QUERY, {
       useremail,
       feedId
     });
 
-    // console.log('result: ', JSON.stringify(result, null, 2));
+    console.log('result: ', JSON.stringify(result, null, 2));
     return true;
   }
 };
@@ -100,9 +101,8 @@ const queryResolvers: QueryResolvers = {
     console.log('---cursor1 ', cursor);
     let useremail = '';
     if (checkReqUserEmail(req)) {
-      useremail = req.user;
+      useremail = req.user.email;
     }
-    useremail = req.user;
     const result = await session.run(MATCH_FEEDS, {
       cursor,
       first,
