@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 import useIntersect from 'hooks/useIntersectObserver';
 import styled from 'styled-components';
 import { Feeds, Idate, IFeedItem } from './feed.type';
-import WritingFeed from '../Feed/WritingFeed';
+import WritingFeed from './WritingFeed';
 
 interface FeedVars {
   first: number;
@@ -46,6 +46,11 @@ const LoadCheckContainer = styled.div`
   height: 50px;
   position: relative;
   top: -50px;
+`;
+
+const Container = styled.div`
+  margin: 0 auto;
+  width: 900px;
 `;
 // 모듈로 빼자 new Date(year, month, day, hours, minutes, seconds, milliseconds)
 const getDate = (date: Idate): Date => {
@@ -112,20 +117,24 @@ const FeedList = () => {
 
   return (
     <>
-      <WritingFeed />
-      {feeds.map(feed => (
-        <Feed
-          key={getDate(feed.feed.createdAt).toISOString()}
-          content={feed.feed.content}
-          feedinfo={feed}
-          createdAt={getDate(feed.feed.createdAt).toISOString()}
-        />
-      ))}
-      <LoadCheckContainer onClick={fetchMoreFeed} ref={setRef as any} />
-      <div onClick={fetchMoreFeed}>
-        {isLoading ? 'LOADING' : ''}
-        {isEnd ? '마지막 글입니다' : ''}
-      </div>
+      <Container>
+        <WritingFeed />
+        {feeds.map(feed => (
+          <Feed
+            key={getDate(feed.feed.createdAt).toISOString()}
+            content={feed.feed.content}
+            feedinfo={feed}
+            createdAt={getDate(feed.feed.createdAt).toISOString()}
+          />
+        ))}
+        <LoadCheckContainer
+          onClick={fetchMoreFeed}
+          ref={setRef as any}></LoadCheckContainer>
+        <div onClick={fetchMoreFeed}>
+          {isLoading ? 'LOADING' : ''}
+          {isEnd ? '마지막 글입니다' : ''}
+        </div>
+      </Container>
     </>
   );
 };

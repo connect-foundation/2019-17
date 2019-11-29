@@ -84,7 +84,7 @@ function SignUpContainer({ history, location }: RouteComponentProps) {
           file
         }
       });
-      history.push('/');
+      window.location.href = '/';
     }
   };
 

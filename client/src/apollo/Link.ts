@@ -37,7 +37,7 @@ const checkFile = (value: any) => {
       (typeof File !== 'undefined' && variables.file instanceof File) ||
       (typeof Blob !== 'undefined' && variables.file instanceof Blob)
     );
-  } else if (variables.files) {
+  } else if (variables.files && variables.files.length) {
     return variables.files.every(
       (file: any) =>
         (typeof File !== 'undefined' && file instanceof File) ||
