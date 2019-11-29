@@ -9,7 +9,7 @@ const CardDiv = styled.div`
   width: 32rem;
   contain: content;
   padding: 12px;
-  margin: auto;
+  margin-top: 10px;
 `;
 
 const CardContentDiv = styled.div`

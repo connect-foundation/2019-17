@@ -34,7 +34,9 @@ const GET_FEEDS = gql`
       feedId
       totallikes
       imglist {
-        url
+        id {
+          url
+        }
       }
       hasLiked
       comments {
@@ -51,10 +53,6 @@ const LoadCheckContainer = styled.div`
   top: -50px;
 `;
 
-const Container = styled.div`
-  margin: 0 auto;
-  width: 900px;
-`;
 // 모듈로 빼자 new Date(year, month, day, hours, minutes, seconds, milliseconds)
 const getDate = (date: Idate): Date => {
   const dateob = new Date(
@@ -120,24 +118,22 @@ const FeedList = () => {
 
   return (
     <>
-      <Container>
-        <WritingFeed />
-        {feeds.map(feed => (
-          <Feed
-            key={getDate(feed.feed.createdAt).toISOString()}
-            content={feed.feed.content}
-            feedinfo={feed}
-            createdAt={getDate(feed.feed.createdAt).toISOString()}
-          />
-        ))}
-        <LoadCheckContainer
-          onClick={fetchMoreFeed}
-          ref={setRef as any}></LoadCheckContainer>
-        <div onClick={fetchMoreFeed}>
-          {isLoading ? 'LOADING' : ''}
-          {isEnd ? '마지막 글입니다' : ''}
-        </div>
-      </Container>
+      <WritingFeed />
+      {feeds.map(feed => (
+        <Feed
+          key={getDate(feed.feed.createdAt).toISOString()}
+          content={feed.feed.content}
+          feedinfo={feed}
+          createdAt={getDate(feed.feed.createdAt).toISOString()}
+        />
+      ))}
+      <LoadCheckContainer
+        onClick={fetchMoreFeed}
+        ref={setRef as any}></LoadCheckContainer>
+      <div onClick={fetchMoreFeed}>
+        {isLoading ? 'LOADING' : ''}
+        {isEnd ? '마지막 글입니다' : ''}
+      </div>
     </>
   );
 };
