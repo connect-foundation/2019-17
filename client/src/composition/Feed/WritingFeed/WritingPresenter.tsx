@@ -80,6 +80,7 @@ const UploadInput = styled.input`
   top: 0px;
   left: 0px;
   opacity: 0;
+  display: none;
 `;
 
 const UploadButton = styled.label`
