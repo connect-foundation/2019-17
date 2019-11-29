@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 5376757ff72aa32ec3edcd67ebb25315ec2442e0
 
 # Created by https://www.gitignore.io/api/node
 # Edit at https://www.gitignore.io/?templates=node
@@ -96,3 +99,9 @@ typings/
 # End of https://www.gitignore.io/api/node
 
 yarn.lock
+
+# 빌드된 js파일
+dist/
+
+# vscode 에디터 설정 파일
+.vscode/

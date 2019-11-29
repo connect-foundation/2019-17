@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import ImageContainer from './ImageContainer';
 
 const FeedContents = styled.div`
   margin-top: 6px;
@@ -12,15 +13,21 @@ const FeedText = styled.div`
   line-height: 1.38;
 `;
 
+interface Image {
+  url: string;
+}
 interface Iprops {
   content: string;
+  images: [Image];
 }
-const FeedBody = ({ content }: Iprops) => {
+const FeedBody = ({ content, images }: Iprops) => {
   return (
     <FeedContents>
       <FeedText>{content}</FeedText>
+      {images && images.length > 0 && <ImageContainer images={images} />}
     </FeedContents>
   );
+  // {images && images.length > 0 && <ImageContainer images={images} />}
 };
 
 export default FeedBody;

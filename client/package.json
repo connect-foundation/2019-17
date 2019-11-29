@@ -55,7 +55,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "prd": "pm2 start --name boostbook:client serve -- -s build",
+    "prd": "NODE_ENV=production pm2 start --name boostbook:client serve -- -s build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "generate": "graphql-codegen"

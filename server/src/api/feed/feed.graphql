@@ -10,10 +10,63 @@ type PageInfo {
   hasNextPage: Boolean
 }
 
+type tempFeed {
+  createdAt: Idate
+  content: String!
+}
+
+type Idate {
+  year: Int
+  month: Int
+  day: Int
+  hour: Int
+  minute: Int
+  second: Int
+  nanosecond: String
+  timeZoneOffsetSeconds: Int
+  timeZoneId: String
+}
+
+type IUser {
+  nickname: String
+  hometown: String
+  thumbnail: String
+  residence: String
+  email: String
+}
+type Content {
+  createdAt: Idate
+  content: String
+}
+
+type Comment {
+  id: String
+  content: String
+}
+
+type Image {
+  url: String
+}
+
+type IFeed {
+  searchUser: IUser
+  feed: Content
+  feedId: Int
+  totallikes: Int
+  imglist: [Image]
+  hasLiked: Int
+  comments: [Comment]
+}
+
 type Query {
   getFeeds: [Feed]!
   feeds(first: Int, cursor: String): [Feed]!
   pageInfo: PageInfo
+  feedItems(first: Int, cursor: String): [IFeed]
+}
+
+type Mutation {
+  updateLike(feedId: Int, count: Int): Boolean
 }
 
 type Mutation {

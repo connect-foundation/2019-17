@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { MdPhotoSizeSelectActual } from 'react-icons/md';
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -11,8 +11,11 @@ import { Maybe } from 'react-components.d';
 import UploadPreviewImg from './UploadPreviewImg';
 
 const Form = styled.form`
-  width: 510px;
+  width: 32rem;
   min-height: 150px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  box-sizing: border-box;
   border: 1px solid ${props => props.theme.colors.borderColor};
 `;
 
@@ -42,7 +45,9 @@ const Footer = styled.div`
 const ContentRow = styled.div`
   display: flex;
   width: 100%;
-  border-bottom: 1px solid ${props => props.theme.colors.borderColor};
+  &:not(:last-child) {
+    border-bottom: 1px solid ${props => props.theme.colors.borderColor};
+  }
   padding: 5px 0px;
   overflow-x: scroll;
 `;
@@ -80,6 +85,7 @@ const UploadInput = styled.input`
   top: 0px;
   left: 0px;
   opacity: 0;
+  display: none;
 `;
 
 const UploadButton = styled.label`

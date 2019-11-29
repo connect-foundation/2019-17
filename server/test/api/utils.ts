@@ -1,8 +1,7 @@
 import request from 'supertest';
-import config from '../src/utils/config';
-
-import app from '../src/app';
-import db from '../src/db';
+import config from '../../src/utils/config';
+import app from '../../src/app';
+import db from '../../src/db';
 
 const PORT: string | number = config.port || 5000;
 

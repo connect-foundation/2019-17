@@ -18,7 +18,6 @@ const CommentBubble = styled.div`
   margin: 0;
   max-width: 100%;
   word-wrap: break-word;
-  position: relative;
   white-space: normal;
   word-break: break-word;
 `;

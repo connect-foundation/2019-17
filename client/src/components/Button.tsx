@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import theme from '../style/theme';
+import theme from 'style/theme';
 
 interface ISize {
   height: string;
@@ -76,8 +76,7 @@ function Button({
       full={full}
       textColor={textColor}
       backgroundColor={backgroundColor}
-      {...rest}
-    >
+      {...rest}>
       {text}
     </SButton>
   );
