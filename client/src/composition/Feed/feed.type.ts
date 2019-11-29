@@ -31,11 +31,15 @@ export interface Comment {
   content: string;
 }
 
+export interface Image {
+  url: string;
+}
 export interface IFeedItem {
   searchUser: IUser;
   feed: Content;
   feedId: number;
   totallikes: number;
+  imglist: [Image];
   hasLiked: number;
   comments: [Comment];
 }

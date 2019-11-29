@@ -33,6 +33,9 @@ const GET_FEEDS = gql`
       }
       feedId
       totallikes
+      imglist {
+        url
+      }
       hasLiked
       comments {
         id
