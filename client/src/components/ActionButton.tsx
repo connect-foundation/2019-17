@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import theme from '../style/theme';
+import theme from 'style/theme';
 
 const SButton = styled.button<IProps>`
   color: ${props => props.textColor};

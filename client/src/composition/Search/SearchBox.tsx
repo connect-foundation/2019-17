@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SearchButtonIcon from '../../components/Icon/SearchButtonIcon';
+import SearchButtonIcon from 'components/Icon/SearchButtonIcon';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 

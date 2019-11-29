@@ -1,6 +1,6 @@
-import React from "react";
-import { ButtonSVG } from "../../style/feed";
-import styled from "styled-components";
+import React from 'react';
+import { ButtonSVG } from 'style/feed';
+import styled from 'styled-components';
 
 const ButtonSVGWithFloat = styled(ButtonSVG)`
   float: left;

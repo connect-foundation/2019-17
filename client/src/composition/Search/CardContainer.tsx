@@ -1,9 +1,9 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
-import UserCard from '../../components/UserCard';
+import UserCard from 'components/UserCard';
 import queryString from 'querystring';
-import ActionButton from '../../components/ActionButton';
+import ActionButton from 'components/ActionButton';
 
 const SEARCH_USER = gql`
   query getUserName($keyword: String!) {
