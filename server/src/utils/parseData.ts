@@ -62,7 +62,7 @@ export const ParseResultRecords = records => {
           temp[nodeKey] = [];
           for (const no of node) {
             let innerTemp = {};
-            innerTemp[no.identity] = Datetransform(no.properties);
+            innerTemp = { ...innerTemp, ...Datetransform(no.properties) }; // !!
             temp[nodeKey].push(innerTemp);
           }
           arr = { ...arr, ...temp };
@@ -74,6 +74,7 @@ export const ParseResultRecords = records => {
     }
     result.push(arr);
   }
-  // console.log('결과!!! ', JSON.stringify(result));
+  // console.log('결과!!! ', JSON.stringify(result, null, 2));
+
   return result;
 };

@@ -81,12 +81,12 @@ const mutationResolvers: MutationResolvers = {
       useremail = req.user;
     }
     const UPDATE_QUERY = getUpdateLikeQuery(count);
-    const result = await session.run(UPDATE_QUERY, {
+    await session.run(UPDATE_QUERY, {
       useremail,
       feedId
     });
 
-    // console.log('result: ', JSON.stringify(result));
+    // console.log('result: ', JSON.stringify(result, null, 2));
     return true;
   }
 };

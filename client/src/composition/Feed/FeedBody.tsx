@@ -14,15 +14,17 @@ const FeedText = styled.div`
 `;
 
 interface Image {
-  id: { url: string };
+  url: string;
 }
 interface Iprops {
   content: string;
+  images: [Image];
 }
-const FeedBody = ({ content }: Iprops) => {
+const FeedBody = ({ content, images }: Iprops) => {
   return (
     <FeedContents>
       <FeedText>{content}</FeedText>
+      {images && images.length > 0 && <ImageContainer images={images} />}
     </FeedContents>
   );
   // {images && images.length > 0 && <ImageContainer images={images} />}

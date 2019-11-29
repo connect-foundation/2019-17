@@ -53,7 +53,7 @@ function Feed({ content, createdAt, feedinfo }: Iprops) {
             nickName={feedinfo.searchUser.nickname}
             createdAt={createdAt}
           />
-          <FeedBody content={content} />
+          <FeedBody content={content} images={feedinfo.imglist} />
           <FeedFooter
             likeCnt={likeCnt}
             setLikeCnt={setLikeCnt}

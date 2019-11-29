@@ -10,13 +10,14 @@ const ImageBox = styled.img`
   display: inline-block;
   border: 1px solid gray;
   border-radius: 2px;
+  margin: 0.2rem 0rem;
+  margin-right: 0.2rem;
 `;
 const Image = ({ url }: Image) => {
   return (
     <>
       <span>
-        {url}
-        <ImageBox src="images/200x200_.png" alt="My Image" />
+        <ImageBox src={url} alt="My Image" />
       </span>
     </>
   );

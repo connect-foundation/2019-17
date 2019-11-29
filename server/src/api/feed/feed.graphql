@@ -44,12 +44,8 @@ type Comment {
   content: String
 }
 
-type ImageUrl {
-  url: String
-}
-
 type Image {
-  id: ImageUrl
+  url: String
 }
 
 type IFeed {

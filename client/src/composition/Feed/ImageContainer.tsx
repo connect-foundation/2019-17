@@ -2,7 +2,7 @@ import React from 'react';
 import Image from './Image';
 
 interface IImage {
-  id: { url: string };
+  url: string;
 }
 interface Iprops {
   images: [IImage];
@@ -11,9 +11,8 @@ interface Iprops {
 const ImageContainer = ({ images }: Iprops) => {
   return (
     <>
-      {console.log('aaa', images)}
       {images.map(image => (
-        <Image url={image.id.url} key={image.id.url} />
+        <Image url={image.url} key={image.url} />
       ))}
     </>
   );
