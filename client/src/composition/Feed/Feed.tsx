@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import FeedHeader from './FeedHeader';
 import FeedBody from './FeedBody';
 import FeedFooter from './FeedFooter';
 import Comment from './Comment';
+import { IFeedItem } from './feed.type';
 
 const FeedDiv = styled.div`
   ${props => props.theme.borders.feedBorder};
@@ -30,9 +31,17 @@ const FeedEditDiv = styled.span`
 interface Iprops {
   content: string;
   createdAt: string;
+  feedinfo: IFeedItem;
 }
 
-function Feed({ content, createdAt }: Iprops) {
+function Feed({ content, createdAt, feedinfo }: Iprops) {
+  const [likeCnt, setLikeCnt] = useState<number>(0);
+  const [hasLiked, setHasLiked] = useState<boolean>(false);
+  useEffect(() => {
+    setLikeCnt(feedinfo.totallikes);
+    setHasLiked(feedinfo.hasLiked ? true : false);
+  }, []);
+
   return (
     <>
       <FeedDiv>
@@ -40,7 +49,13 @@ function Feed({ content, createdAt }: Iprops) {
           <FeedEditDiv></FeedEditDiv>
           <FeedHeader createdAt={createdAt} />
           <FeedBody content={content} />
-          <FeedFooter />
+          <FeedFooter
+            likeCnt={likeCnt}
+            setLikeCnt={setLikeCnt}
+            hasLiked={hasLiked}
+            setHasLiked={setHasLiked}
+            feedId={feedinfo.feedId}
+          />
         </FeedContentDiv>
         <Comment />
       </FeedDiv>

@@ -1,4 +1,3 @@
-import { GraphQLUpload } from 'apollo-upload-server';
 import uploadToObjStorage from '../../middleware/uploadToObjStorage';
 import { MutationSignUpArgs, User } from '../../types';
 import { requestDB } from '../../utils/requestDB';
@@ -20,9 +19,9 @@ const getFileUrl = async file => {
   return res.Location;
 };
 
-const getUrlWhenFileExists = args => {
-  if (args.file) {
-    return getFileUrl(args.file);
+const getUrlWhenFileExists = file => {
+  if (file) {
+    return getFileUrl(file);
   }
   return null;
 };
@@ -42,12 +41,11 @@ export default {
   Mutation: {
     signUp: async (_, args: MutationSignUpArgs, { res }): Promise<User> => {
       await checkIsEmailExist(args.email);
-      const thumbnail = await getUrlWhenFileExists(args);
+      const thumbnail = await getUrlWhenFileExists(args.file);
       const user = await createUser({ ...args, thumbnail });
       const token: string = encodeJWT({ email: args.email });
       res.cookie('token', token);
       return user;
     }
-  },
-  Upload: GraphQLUpload
+  }
 };

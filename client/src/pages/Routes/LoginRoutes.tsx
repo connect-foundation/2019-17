@@ -1,8 +1,8 @@
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
 import AuthRoutes from '../Routes/AuthRoutes';
 import NonAuthRoutes from '../Routes/NonAuthRoutes';
-import { login, getIsLoggedIn } from '../../cache/client.gql';
+import { login, getIsLoggedIn } from 'cache/client.gql';
+import { useQuery } from '@apollo/react-hooks';
 
 const LoginRoutes = () => {
   useQuery(login);
