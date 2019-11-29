@@ -30,7 +30,7 @@ const getUpdateLikeQuery = count => {
 };
 
 const checkReqUserEmail = (req): boolean => {
-  if (!req.user) {
+  if (!req.email) {
     console.log('사용자 정보가 없습니다 다시 로그인해 주세요');
     return false;
   }
@@ -78,9 +78,8 @@ const mutationResolvers: MutationResolvers = {
   updateLike: async (_, { feedId, count }, { req }) => {
     let useremail = '';
     if (checkReqUserEmail(req)) {
-      useremail = req.user.email;
+      useremail = req.email;
     }
-    console.log('UPDATE_QUERY', feedId, count, useremail);
     const UPDATE_QUERY = getUpdateLikeQuery(count);
     const result = await session.run(UPDATE_QUERY, {
       useremail,
@@ -101,7 +100,7 @@ const queryResolvers: QueryResolvers = {
     console.log('---cursor1 ', cursor);
     let useremail = '';
     if (checkReqUserEmail(req)) {
-      useremail = req.user.email;
+      useremail = req.email;
     }
     const result = await session.run(MATCH_FEEDS, {
       cursor,
