@@ -16,7 +16,7 @@
 ## :wave: Links
 ### [📃 WIKI](https://github.com/connect-foundation/2019-17/wiki)
 
-### [🎲 HOMEPAGE](http://106.10.39.105:3000)(준비중)
+### [🎲 HOMEPAGE](http://106.10.39.105:5000)
 
 ### [🧱 Ground Rule](https://github.com/connect-foundation/2019-17/wiki/GROUND-RULE)
 
@@ -52,15 +52,15 @@ Connect boost camper
 
 ## 🌏 기술스텍 
 
-OS: linux
-DB: neo4j(graph db)
-Language: TypeScript
-Server: Node.js
-Backend: GraphQL, express
-Frontend: React.js, Apollo
-Code Convention: prettier , typescript-eslint
-test: jest 
-infra: actions 
+OS: linux  
+DB: neo4j (graph db)  
+Language: TypeScript   
+Server: Node.js  
+Backend: GraphQL, express  
+Frontend: React.js, Apollo   
+Code Convention: prettier , typescript-eslint  
+test: jest  
+infra: actions  
 
 
 <div style="width:500px;height:10px"></div>
