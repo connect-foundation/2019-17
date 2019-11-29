@@ -1,5 +1,5 @@
 import React from 'react';
-import { ButtonSVG } from '../../style/feed';
+import { ButtonSVG } from 'style/feed';
 
 interface IStyleprops {
   hasLiked?: boolean;

@@ -80,9 +80,6 @@ typings/
 # nuxt.js build output
 .nuxt
 
-# react / gatsby 
-public/
-
 # vuepress build output
 .vuepress/dist
 
@@ -98,3 +95,9 @@ public/
 # End of https://www.gitignore.io/api/node
 
 yarn.lock
+
+# 빌드된 js파일
+dist/
+
+# vscode 에디터 설정 파일
+.vscode/
