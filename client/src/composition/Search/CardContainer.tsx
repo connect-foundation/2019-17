@@ -22,8 +22,8 @@ interface IProps {
   location: IKey;
 }
 
-function CardContainer(props: IProps) {
-  const keyword = queryString.parse(props.location.search.slice(1))[`keyword`];
+function CardContainer({ location }: IProps) {
+  const keyword = queryString.parse(location.search.slice(1))[`keyword`];
   const { loading, error, data } = useQuery(SEARCH_USER, {
     variables: {
       keyword

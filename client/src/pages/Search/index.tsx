@@ -1,5 +1,5 @@
 import React from 'react';
-import CardContainer from '../../composition/Search/CardContainer';
+import CardContainer from 'composition/Search/CardContainer';
 
 interface IProps {
   location: any;

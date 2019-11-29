@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import SearchBox from './SearchBox';
+import SearchBox from '../Search/SearchBox';
 
 const HeaderWrapper = styled.div`
   height: 43px;

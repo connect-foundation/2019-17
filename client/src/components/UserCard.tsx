@@ -45,21 +45,16 @@ interface IProps {
   // friendStatus: number;
 }
 
-function UserCard(props: IProps) {
+function UserCard({ imageUrl, nickname, children }: IProps) {
   return (
     <CardDiv>
       <CardContentDiv className="mainbox">
         <ProfileImgBox>
-          <Profile
-            imageUrl={props.imageUrl}
-            alt={'profile image'}
-            size="72px"
-          />
+          <Profile imageUrl={imageUrl} alt={'profile image'} size="72px" />
         </ProfileImgBox>
         <ProfileDiv>
-          <ProfileNameDiv>{props.nickname}</ProfileNameDiv>
-
-          {props.children}
+          <ProfileNameDiv>{nickname}</ProfileNameDiv>
+          {children}
         </ProfileDiv>
       </CardContentDiv>
     </CardDiv>

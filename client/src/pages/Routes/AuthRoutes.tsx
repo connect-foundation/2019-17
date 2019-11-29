@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { PAGE_PATHS } from '../../constants';
-import Header from '../../components/Header';
+import Header from 'composition/Header';
 import Main from '../Main';
 import MyPage from '../MyPage';
 import NoMatch from '../NoMatch';
