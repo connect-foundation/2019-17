@@ -86,7 +86,7 @@ const mutationResolvers: MutationResolvers = {
       feedId
     });
 
-    console.log('result: ', JSON.stringify(result));
+    // console.log('result: ', JSON.stringify(result));
     return true;
   }
 };
