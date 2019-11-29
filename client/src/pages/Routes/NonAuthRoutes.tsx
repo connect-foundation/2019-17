@@ -12,6 +12,7 @@ const NonAuthRoutes: React.FC = () => {
       <Route exact path={PAGE_PATHS.SIGNUP} component={SignUp} />
       <Redirect from={PAGE_PATHS.SIGNIN} to={PAGE_PATHS.MAIN} />
       <Redirect from={PAGE_PATHS.MY_PAGE} to={PAGE_PATHS.MAIN} />
+      <Redirect from={PAGE_PATHS.SEARCH} to={PAGE_PATHS.MAIN} />
       <Route component={NoMatch} />
     </Switch>
   );

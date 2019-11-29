@@ -1,5 +1,5 @@
-import React from "react";
-import { ButtonSVG } from "../../style/feed";
+import React from 'react';
+import { ButtonSVG } from 'style/feed';
 
 function CommentIcon() {
   return (
