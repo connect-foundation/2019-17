@@ -3,7 +3,7 @@
 exports[`<WritingFeed /> 1`] = `
 <div>
   <form
-    class="sc-gzVnrw gLWUZz"
+    class="sc-gzVnrw hxyAtP"
     enctype="multipart/form-data"
   >
     <div
@@ -15,7 +15,7 @@ exports[`<WritingFeed /> 1`] = `
       class="sc-gZMcBi eCVzxD"
     >
       <div
-        class="sc-iwsKbI bwGYRA"
+        class="sc-iwsKbI dYPrPu"
       >
         <div
           class="sc-VigVT jDRjwl"
@@ -33,12 +33,12 @@ exports[`<WritingFeed /> 1`] = `
         />
       </div>
       <div
-        class="sc-iwsKbI bwGYRA"
+        class="sc-iwsKbI dYPrPu"
       />
     </div>
     <input
       accept="image/*"
-      class="sc-jTzLTM kuOZbb"
+      class="sc-jTzLTM eFoXsh"
       id="upload"
       type="file"
     />

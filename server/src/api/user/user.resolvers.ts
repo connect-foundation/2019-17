@@ -16,7 +16,9 @@ import { findUserWithEmail } from '../../schema/user/user';
 const checkIsEmailExist = async (email): Promise<void> => {
   const sameUsers = await requestDB(findUserWithEmailQuery, { email });
 
-  if (parseNodeResult(sameUsers).length) throw new SameEmailError();
+  if (parseNodeResult(sameUsers).length) {
+    throw new SameEmailError();
+  }
 };
 
 const getFileUrl = async file => {
@@ -59,9 +61,7 @@ const Query: QueryResolvers = {
   me: async (_, __, { req }): Promise<User> => {
     isAuthenticated(req);
     const { email } = req;
-    console.log(email);
     const user = await findUserWithEmail({ email });
-    console.log(user);
     if (user) {
       return user;
     }

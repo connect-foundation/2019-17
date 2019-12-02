@@ -1,9 +1,19 @@
 import React, { useState, useRef } from 'react';
 import WritingFeedPresenter from './WritingPresenter';
-import { Scalars, useMeQuery, useEnrollFeedMutation } from 'react-components.d';
+import {
+  Scalars,
+  useMeQuery,
+  useEnrollFeedMutation,
+  Image
+} from 'react-components.d';
 import { Maybe } from 'react-components.d';
+import { IFeedItem } from '../feed.type';
 
-function WritingFeedContainer() {
+interface IProps {
+  setFeeds: React.Dispatch<React.SetStateAction<IFeedItem[]>>;
+}
+
+function WritingFeedContainer({ setFeeds }: IProps) {
   const [content, setContent] = useState('');
   const contentCursor = useRef<HTMLTextAreaElement>(null);
   const onChangeTextArea = (
@@ -59,10 +69,21 @@ function WritingFeedContainer() {
     const { data } = await enrollFeedMutation({
       variables: { content, files: parseFiles }
     });
-    if (data && data.enrollFeed) alert('피드가 등록되었습니다.');
-    files.forEach(file => {
-      window.URL.revokeObjectURL(file.fileUrl);
-    });
+    if (data && data.enrollFeed) {
+      const {
+        enrollFeed: { searchUser, feedId, feed, totallikes, hasLiked }
+      } = data;
+      let imglist: Image[] = [];
+      imglist = files.map(file => ({ url: file.fileUrl }));
+      setFeeds(
+        props =>
+          [
+            { searchUser, feedId, feed, totallikes, hasLiked, imglist },
+            ...props
+          ] as any
+      );
+      alert('피드가 등록되었습니다.');
+    }
     setFiles([]);
     setContent('');
   };
