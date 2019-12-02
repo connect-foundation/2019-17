@@ -1,7 +1,7 @@
-import UserIsNotExistError from 'src/errors/UserIsNotExistError';
+import UserIsNotExistError from '../errors/UserIsNotExistError';
 
 const checkReqUserEmail = (req): boolean => {
-  if (!req.user) {
+  if (!req.email) {
     throw new UserIsNotExistError();
   }
   return true;

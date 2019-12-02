@@ -1,7 +1,7 @@
 import { MutationRequestFriendArgs } from '../../types';
 import { requestDB } from '../../utils/requestDB';
 import { createRelationWithEmailQuery } from '../../schema/friend/query';
-import { checkReqUserEmail } from 'src/utils/context';
+import { checkReqUserEmail } from '../../utils/context';
 
 export default {
   Mutation: {
