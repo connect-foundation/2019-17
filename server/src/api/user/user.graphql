@@ -8,6 +8,10 @@ type User {
   thumbnail: String
 }
 
+type Query {
+  me: User!
+}
+
 type Mutation {
   signUp(
     nickname: String!

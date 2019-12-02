@@ -8,7 +8,10 @@ import {
 } from '../../types';
 import uploadToObjStorage from '../../middleware/uploadToObjStorage';
 import { requestDB } from '../../utils/requestDB';
-import { WRITING_FEED_QUERY, createImageNodeAndRelation } from './feed.query';
+import {
+  WRITING_FEED_QUERY,
+  createImageNodeAndRelation
+} from '../../schema/feed/query';
 
 const session = db.session();
 
@@ -66,7 +69,9 @@ const mutationResolvers: MutationResolvers = {
     { req }
   ): Promise<boolean> => {
     const { email } = req;
-    if (!email) return false;
+    if (!email) {
+      return false;
+    }
     const params = { content, email };
     const results = await requestDB(WRITING_FEED_QUERY, params);
     const feedId = Number(results[0].get(0).identity);

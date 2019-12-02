@@ -1,10 +1,17 @@
 import uploadToObjStorage from '../../middleware/uploadToObjStorage';
-import { MutationSignUpArgs, User } from '../../types';
+import {
+  MutationSignUpArgs,
+  User,
+  MutationResolvers,
+  QueryResolvers
+} from '../../types';
 import { requestDB } from '../../utils/requestDB';
 import { parseNodeResult } from '../../utils/parseDB';
 import { encodeJWT } from '../../utils/jwt';
 import SameEmailError from '../../errors/EmailAlreadyExistsError';
 import { findUserWithEmailQuery } from '../../schema/user/query';
+import isAuthenticated from '../../utils/isAuthenticated';
+import { findUserWithEmail } from '../../schema/user/user';
 
 const checkIsEmailExist = async (email): Promise<void> => {
   const sameUsers = await requestDB(findUserWithEmailQuery, { email });
@@ -37,15 +44,32 @@ const createUser = async info => {
   return result[0].get(0).properties;
 };
 
-export default {
-  Mutation: {
-    signUp: async (_, args: MutationSignUpArgs, { res }): Promise<User> => {
-      await checkIsEmailExist(args.email);
-      const thumbnail = await getUrlWhenFileExists(args.file);
-      const user = await createUser({ ...args, thumbnail });
-      const token: string = encodeJWT({ email: args.email });
-      res.cookie('token', token);
+const Mutation: MutationResolvers = {
+  signUp: async (_, args: MutationSignUpArgs, { res }): Promise<User> => {
+    await checkIsEmailExist(args.email);
+    const thumbnail = await getUrlWhenFileExists(args.file);
+    const user = await createUser({ ...args, thumbnail });
+    const token: string = encodeJWT({ email: args.email });
+    res.cookie('token', token);
+    return user;
+  }
+};
+
+const Query: QueryResolvers = {
+  me: async (_, __, { req }): Promise<User> => {
+    isAuthenticated(req);
+    const { email } = req;
+    console.log(email);
+    const user = await findUserWithEmail({ email });
+    console.log(user);
+    if (user) {
       return user;
     }
+    throw Error('유저 정보를 찾을 수 없습니다.');
   }
+};
+
+export default {
+  Mutation,
+  Query
 };

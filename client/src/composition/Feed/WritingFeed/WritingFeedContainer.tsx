@@ -1,13 +1,7 @@
 import React, { useState, useRef } from 'react';
 import WritingFeedPresenter from './WritingPresenter';
-import {
-  Scalars,
-  EnrollFeedMutationHookResult,
-  EnrollFeedMutationVariables
-} from 'react-components.d';
+import { Scalars, useMeQuery, useEnrollFeedMutation } from 'react-components.d';
 import { Maybe } from 'react-components.d';
-import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 
 function WritingFeedContainer() {
   const [content, setContent] = useState('');
@@ -49,16 +43,8 @@ function WritingFeedContainer() {
     }
   };
 
-  const ENROLL_FEED_MUTATION = gql`
-    mutation enrollFeed($content: String!, $files: [Upload]) {
-      enrollFeed(content: $content, files: $files)
-    }
-  `;
-
-  const [writingFeedMutation] = useMutation<
-    EnrollFeedMutationHookResult,
-    EnrollFeedMutationVariables
-  >(ENROLL_FEED_MUTATION);
+  const [enrollFeedMutation] = useEnrollFeedMutation();
+  const { data } = useMeQuery();
 
   const onSubmit = async (
     e: React.FormEvent<HTMLFormElement>
@@ -70,12 +56,10 @@ function WritingFeedContainer() {
       return;
     }
     const parseFiles = files.map(item => item.file);
-    const {
-      data: { enrollFeed }
-    } = (await writingFeedMutation({
+    const { data } = await enrollFeedMutation({
       variables: { content, files: parseFiles }
-    })) as any;
-    if (enrollFeed) alert('피드가 등록되었습니다.');
+    });
+    if (data && data.enrollFeed) alert('피드가 등록되었습니다.');
     files.forEach(file => {
       window.URL.revokeObjectURL(file.fileUrl);
     });
@@ -85,6 +69,11 @@ function WritingFeedContainer() {
 
   return (
     <WritingFeedPresenter
+      thumbnail={
+        data && data.me && data.me.thumbnail
+          ? data.me.thumbnail
+          : process.env.PUBLIC_URL + '/images/profile.jpg'
+      }
       contentCursor={contentCursor}
       onSubmit={onSubmit}
       content={content}
