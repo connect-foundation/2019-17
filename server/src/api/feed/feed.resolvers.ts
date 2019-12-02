@@ -9,6 +9,7 @@ import {
 import uploadToObjStorage from '../../middleware/uploadToObjStorage';
 import { requestDB } from '../../utils/requestDB';
 import { WRITING_FEED_QUERY, createImageNodeAndRelation } from './feed.query';
+import { checkReqUserEmail } from '../../utils/context';
 
 const session = db.session();
 
@@ -27,14 +28,6 @@ const getUpdateLikeQuery = count => {
   } else {
     return DELETE_LIKE;
   }
-};
-
-const checkReqUserEmail = (req): boolean => {
-  if (!req.user) {
-    console.log('사용자 정보가 없습니다 다시 로그인해 주세요');
-    return false;
-  }
-  return true;
 };
 
 const createImages = async (feedId, files) => {
