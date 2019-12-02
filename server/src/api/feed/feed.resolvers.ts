@@ -39,7 +39,7 @@ const checkReqUserEmail = (req): boolean => {
 
 const createImages = async (feedId, files) => {
   try {
-    let filePromises: Promise<any>[] = [];
+    let filePromises: Array<Promise<any>> = [];
     for await (const file of files) {
       const { filename, createReadStream } = file;
       filePromises = [
@@ -66,7 +66,9 @@ const mutationResolvers: MutationResolvers = {
     { req }
   ): Promise<boolean> => {
     const { email } = req;
-    if (!email) return false;
+    if (!email) {
+      return false;
+    }
     const params = { content, email };
     const results = await requestDB(WRITING_FEED_QUERY, params);
     const feedId = Number(results[0].get(0).identity);
