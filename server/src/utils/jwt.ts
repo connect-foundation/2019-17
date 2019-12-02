@@ -11,7 +11,7 @@ function encodeJWT(target: IKey<string | number>): string {
   });
 }
 
-function decodeJWT(token): object | string {
+function decodeJWT(token): any {
   return jwt.verify(token, SECRET);
 }
 

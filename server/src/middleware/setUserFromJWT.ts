@@ -6,10 +6,9 @@ function setUserFromJWT(req, res, next) {
   } = req;
 
   if (token) {
-    const email = decodeJWT(token);
-    req['user'] = email;
+    const { email } = decodeJWT(token);
+    req.email = email;
   }
-  // req['user'] = 'vantovan7414@gmail.com';
 
   return next();
 }
