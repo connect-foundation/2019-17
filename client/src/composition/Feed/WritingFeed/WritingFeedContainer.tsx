@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import WritingFeedPresenter from './WritingPresenter';
 import {
   Scalars,
@@ -11,6 +11,7 @@ import gql from 'graphql-tag';
 
 function WritingFeedContainer() {
   const [content, setContent] = useState('');
+  const contentCursor = useRef<HTMLTextAreaElement>(null);
   const onChangeTextArea = (
     e: React.ChangeEvent<HTMLTextAreaElement>
   ): void => {
@@ -63,6 +64,11 @@ function WritingFeedContainer() {
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
+    if (!content) {
+      alert('피드 내용을 입력해주세요.');
+      if (contentCursor.current) contentCursor.current.focus();
+      return;
+    }
     const parseFiles = files.map(item => item.file);
     const {
       data: { enrollFeed }
@@ -79,6 +85,7 @@ function WritingFeedContainer() {
 
   return (
     <WritingFeedPresenter
+      contentCursor={contentCursor}
       onSubmit={onSubmit}
       content={content}
       onChangeTextArea={onChangeTextArea}

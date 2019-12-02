@@ -123,6 +123,7 @@ const FilesContainer = styled.div`
 interface IProps {
   content: string;
   files: Maybe<Scalars['Upload']>;
+  contentCursor: React.RefObject<HTMLTextAreaElement>;
   onChangeTextArea: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onChangeFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
   deleteFile: (e: React.MouseEvent<SVGElement, MouseEvent>) => void;
@@ -133,6 +134,7 @@ const FILE_INPUT_ID = 'upload';
 
 function WritingFeedPresenter({
   content,
+  contentCursor,
   onChangeTextArea,
   onChangeFile,
   files,
@@ -154,6 +156,7 @@ function WritingFeedPresenter({
             onChange={onChangeTextArea}
             placeholder={'게시물 작성'}
             value={content}
+            inputRef={contentCursor}
           />
         </ContentRow>
         <ContentRow>
