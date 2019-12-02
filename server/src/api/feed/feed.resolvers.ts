@@ -1,5 +1,10 @@
 import db from '../../db';
-import { MATCH_FEEDS, UPDATE_LIKE, DELETE_LIKE } from '../../schema/feed/query';
+import {
+  MATCH_FEEDS,
+  UPDATE_LIKE,
+  DELETE_LIKE,
+  GET_NEW_FEED
+} from '../../schema/feed/query';
 import { ParseResultRecords } from '../../utils/parseData';
 import {
   MutationEnrollFeedArgs,
@@ -63,7 +68,7 @@ const mutationResolvers: MutationResolvers = {
   enrollFeed: async (
     _,
     { content, files }: MutationEnrollFeedArgs,
-    { req }
+    { req, pubsub }
   ): Promise<boolean> => {
     const { email } = req;
     if (!email) return false;
@@ -73,6 +78,18 @@ const mutationResolvers: MutationResolvers = {
     if (files && files.length) {
       createImages(feedId, files);
     }
+
+    const registerdFeed = await requestDB(GET_NEW_FEED, {
+      feedId,
+      useremail: email
+    });
+    // console.log('registerdFeed?? ', registerdFeed);
+    const parsedRegisterdFeed = ParseResultRecords(registerdFeed);
+    // console.log('parsedRegisterdFeed?? ', parsedRegisterdFeed);
+
+    pubsub.publish(NEW_FEED, {
+      newFeed: parsedRegisterdFeed
+    });
     return true;
   },
   updateLike: async (_, { feedId, count }, { req }) => {
@@ -112,7 +129,17 @@ const queryResolvers: QueryResolvers = {
   }
 };
 
+const NEW_FEED = 'NEW_FEED_PUBSUB';
+
 export default {
   Query: queryResolvers,
-  Mutation: mutationResolvers
+  Mutation: mutationResolvers,
+  Subscription: {
+    newFeed: {
+      subscribe: (_, __, { pubsub }) => {
+        console.log('subscripbed');
+        return pubsub.asyncIterator(NEW_FEED);
+      }
+    }
+  }
 };

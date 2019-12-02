@@ -1,6 +1,6 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import { GraphQLServer } from 'graphql-yoga';
+import { GraphQLServer, PubSub } from 'graphql-yoga';
 import helmet from 'helmet';
 import logger from 'morgan';
 import config from './utils/config';
@@ -12,9 +12,14 @@ import setUserFromJWT from './middleware/setUserFromJWT';
 class App {
   public app: GraphQLServer;
   constructor() {
+    const pubsub = new PubSub();
     this.app = new GraphQLServer({
       schema,
-      context: ({ request, response }) => ({ req: request, res: response })
+      context: ({ request, response }) => ({
+        req: request,
+        res: response,
+        pubsub
+      })
     });
     this.middlewares();
   }

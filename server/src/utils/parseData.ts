@@ -39,7 +39,10 @@ export const Datetransform = object => {
   }
   return returnobj;
 };
-
+/**
+ * 주의사항 : 결과가 여러개이면 result.records 한개이면 result를 record로 받아야 함
+ * @param records
+ */
 export const ParseResultRecords = records => {
   let result: any[] = [];
   for (const item of records) {
