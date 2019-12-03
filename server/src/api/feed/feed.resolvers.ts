@@ -1,6 +1,6 @@
 import db from '../../db';
 import { MATCH_FEEDS, UPDATE_LIKE, DELETE_LIKE } from '../../schema/feed/query';
-import { ParseResultRecords } from '../../utils/parseData';
+import { parseResultRecords } from '../../utils/parseData';
 import {
   MutationEnrollFeedArgs,
   MutationResolvers,
@@ -102,7 +102,7 @@ const queryResolvers: QueryResolvers = {
       first,
       useremail
     });
-    return ParseResultRecords(result.records);
+    return parseResultRecords(result.records);
   }
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import UserCard from 'components/UserCard';
 import queryString from 'querystring';
 import ActionButton from 'components/ActionButton';
@@ -11,6 +11,12 @@ const SEARCH_USER = gql`
       nickname
       email
     }
+  }
+`;
+
+const REQUEST_FRIEND = gql`
+  mutation sendRequest($email: String!) {
+    requestFriend(targetEmail: $email)
   }
 `;
 
@@ -29,6 +35,8 @@ function CardContainer({ location }: IProps) {
       keyword
     }
   });
+
+  const [requestFriend] = useMutation(REQUEST_FRIEND);
 
   if (loading) return <p>로딩중...</p>;
   if (error)
@@ -53,9 +61,9 @@ function CardContainer({ location }: IProps) {
     );
 
   function sendFriendRequest(email: string) {
-    return (e: React.MouseEvent) => {
-      console.log(email);
-      console.log(e);
+    return (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      requestFriend({ variables: { email } });
     };
   }
 

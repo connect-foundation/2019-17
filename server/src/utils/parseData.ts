@@ -1,5 +1,6 @@
 import { IKey } from '../schema/commonTypes';
 import neo4j from 'neo4j-driver';
+import { isString } from 'util';
 
 export const parseResult = (
   result: Array<IKey<any>>
@@ -40,7 +41,7 @@ export const Datetransform = object => {
   return returnobj;
 };
 
-export const ParseResultRecords = records => {
+export const parseResultRecords = records => {
   let result: any[] = [];
   for (const item of records) {
     let arr: any = {};
@@ -66,7 +67,11 @@ export const ParseResultRecords = records => {
             temp[nodeKey].push(innerTemp);
           }
           arr = { ...arr, ...temp };
-        } //else if string , else if  neo4j.types.Record
+        } else if (isString(node)) {
+          //type을 가져올 때
+          arr = { ...arr, type: node };
+        }
+        //else if string , else if  neo4j.types.Record
         else {
           console.log('???????!! : ', node);
         }
