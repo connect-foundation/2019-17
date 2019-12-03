@@ -10,7 +10,7 @@ const CenterContainer = styled.div`
 const FeedContainer = () => {
   return (
     <CenterContainer>
-      <WritingFeedContainer />
+      {/* <WritingFeedContainer /> */}
       <FeedList />
     </CenterContainer>
   );

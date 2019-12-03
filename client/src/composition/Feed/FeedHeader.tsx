@@ -33,8 +33,8 @@ const ProfileDateDiv = styled.span`
 
 interface Iprops {
   createdAt: string;
-  thumbnail: string;
-  nickName: string;
+  thumbnail?: string | null;
+  nickName: string | null | undefined;
 }
 
 const FeedHeader = ({ createdAt, thumbnail, nickName }: Iprops) => {

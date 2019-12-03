@@ -1,58 +1,96 @@
 import React, { useState } from 'react';
 import Feed from './Feed';
-import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import useIntersect from 'hooks/useIntersectObserver';
 import styled from 'styled-components';
-import { Feeds, Idate, IFeedItem } from './feed.type';
 import WritingFeed from './WritingFeed';
-
-interface FeedVars {
-  first: number;
-  currentCursor: string;
-}
-
-const GET_FEEDS = gql`
-  query getfeeds($first: Int, $currentCursor: String) {
-    feedItems(first: $first, cursor: $currentCursor) {
-      searchUser {
-        nickname
-        thumbnail
-      }
-      feed {
-        createdAt {
-          year
-          month
-          day
-          hour
-          minute
-          second
-          nanosecond
-        }
-        content
-      }
-      feedId
-      totallikes
-      imglist {
-        url
-      }
-      hasLiked
-      comments {
-        id
-        content
-      }
-    }
-  }
-`;
-
+import NewFeedAlarm from './NewFeedAlarm';
+import { Idate, useGetfeedsQuery } from 'react-components.d';
 const LoadCheckContainer = styled.div`
   height: 50px;
   position: relative;
   top: -50px;
 `;
 
+const GET_FEEDS = gql`
+  query getfeeds($first: Int, $currentCursor: String) {
+    feeds(first: $first, cursor: $currentCursor) {
+      cursor
+      feedItems {
+        searchUser {
+          nickname
+        }
+        feed {
+          createdAt {
+            year
+            month
+            day
+            hour
+            minute
+            second
+            nanosecond
+          }
+          content
+        }
+        feedId
+        totallikes
+        hasLiked
+        imglist {
+          url
+        }
+        comments {
+          id
+          content
+        }
+      }
+    }
+  }
+`;
+
+const FEEDS_SUBSCRIPTION = gql`
+  subscription subscribeFeed {
+    feeds {
+      cursor
+      feedItems {
+        searchUser {
+          nickname
+        }
+        feed {
+          createdAt {
+            year
+            month
+            day
+            hour
+            minute
+            second
+            nanosecond
+          }
+          content
+        }
+        feedId
+        totallikes
+        hasLiked
+        comments {
+          id
+          content
+        }
+      }
+    }
+  }
+`;
+
 // 모듈로 빼자 new Date(year, month, day, hours, minutes, seconds, milliseconds)
 const getDate = (date: Idate): Date => {
+  if (
+    !date ||
+    !date.year ||
+    !date.month ||
+    !date.day ||
+    !date.hour ||
+    !date.minute ||
+    !date.second
+  )
+    return new Date();
   const dateob = new Date(
     date.year,
     date.month - 1,
@@ -67,71 +105,110 @@ const getDate = (date: Idate): Date => {
 
 const OFFSET = 4;
 const FeedList = () => {
-  const [feeds, setFeeds] = useState<IFeedItem[]>([]);
-  const [cursor, setCursor] = useState<string>('9999-12-31T09:29:26.050Z');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isEnd, setIsEnd] = useState<boolean>(false);
-
-  const [_, setRef] = useIntersect(checkIsEnd, {});
+  // const [isEnd, setIsEnd] = useState<boolean>(false);
+  const [_, setRef] = useIntersect(fetchMoreFeed, {});
 
   // hooks 에서 useQuery 1 부터 시작
-  const { fetchMore } = useQuery<Feeds, FeedVars>(GET_FEEDS, {
-    variables: { first: OFFSET, currentCursor: cursor }
+  const { data, fetchMore, subscribeToMore } = useGetfeedsQuery({
+    variables: { first: OFFSET, currentCursor: '9999-12-31T09:29:26.050Z' }
   });
 
   async function fetchMoreFeed() {
-    setIsLoading(true);
     const { data: value } = await fetchMore({
       variables: {
         first: OFFSET,
-        currentCursor: cursor
+        currentCursor: data && data.feeds ? data.feeds.cursor : ''
       },
       updateQuery: (prev, { fetchMoreResult }) => {
-        if (!fetchMoreResult) {
+        if (
+          !fetchMoreResult ||
+          !fetchMoreResult.feeds ||
+          !fetchMoreResult.feeds.feedItems ||
+          !prev.feeds ||
+          !prev.feeds.feedItems
+        ) {
           return prev;
         }
-        if (!fetchMoreResult.feedItems.length) {
-          setIsEnd(true);
+
+        if (!fetchMoreResult.feeds.feedItems.length) {
           return prev;
         }
-        const { feedItems } = fetchMoreResult;
-        const lastFeedItem = feedItems[feedItems.length - 1];
-        setCursor(getDate(lastFeedItem.feed.createdAt).toISOString());
+        const {
+          feeds: { feedItems, cursor: newCursor }
+        } = fetchMoreResult;
 
         return Object.assign({}, prev, {
-          feeds: [...feedItems]
+          feeds: {
+            cursor: newCursor,
+            feedItems: [...prev.feeds.feedItems, ...feedItems],
+            __typename: 'IFeeds'
+          }
         });
       }
     });
-
-    setFeeds([...feeds, ...value.feedItems]);
-    setIsLoading(false);
   }
 
-  function checkIsEnd() {
-    if (!isEnd) {
-      fetchMoreFeed();
-    }
-  }
+  const subscribeToNewComments = () => {
+    return subscribeToMore({
+      document: FEEDS_SUBSCRIPTION,
+      variables: {},
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const { data: newFeeds } = subscriptionData;
+        console.log('feedItems , ', prev);
+        console.log('newFeeds , ', subscriptionData);
+        if (
+          !newFeeds ||
+          !newFeeds.feeds ||
+          !newFeeds.feeds.feedItems ||
+          !prev.feeds ||
+          !prev.feeds.feedItems
+        ) {
+          return prev;
+        }
+
+        if (!newFeeds.feeds.feedItems.length) {
+          return prev;
+        }
+
+        const {
+          feeds: { feedItems }
+        } = newFeeds;
+
+        return Object.assign({}, prev, {
+          feeds: {
+            cursor: prev.feeds.cursor,
+            feedItems: [...feedItems, ...prev.feeds.feedItems],
+            __typename: 'IFeeds'
+          }
+        });
+      }
+    });
+  };
 
   return (
     <>
       <WritingFeed />
-      {feeds.map(feed => (
-        <Feed
-          key={getDate(feed.feed.createdAt).toISOString()}
-          content={feed.feed.content}
-          feedinfo={feed}
-          createdAt={getDate(feed.feed.createdAt).toISOString()}
-        />
-      ))}
+      New FEED!: {data ? 'feed?' : 'no data'}
+      <NewFeedAlarm data={'aa'} onEffect={subscribeToNewComments} />
+      {data && data.feeds && data.feeds.feedItems
+        ? data.feeds.feedItems.map(feed =>
+            feed && feed.feed && feed.feed.createdAt ? (
+              <Feed
+                key={getDate(feed.feed.createdAt).toISOString()}
+                content={feed.feed.content}
+                feedinfo={feed}
+                createdAt={getDate(feed.feed.createdAt).toISOString()}
+              />
+            ) : (
+              <></>
+            )
+          )
+        : 'no data'}
       <LoadCheckContainer
         onClick={fetchMoreFeed}
         ref={setRef as any}></LoadCheckContainer>
-      <div onClick={fetchMoreFeed}>
-        {isLoading ? 'LOADING' : ''}
-        {isEnd ? '마지막 글입니다' : ''}
-      </div>
+      <div>is End</div>
     </>
   );
 };

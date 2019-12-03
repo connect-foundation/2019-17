@@ -4,7 +4,7 @@ import FeedHeader from './FeedHeader';
 import FeedBody from './FeedBody';
 import FeedFooter from './FeedFooter';
 import Comment from './Comment';
-import { IFeedItem } from './feed.type';
+import { IFeed } from 'react-components.d';
 
 const FeedDiv = styled.div`
   ${props => props.theme.borders.feedBorder};
@@ -29,9 +29,9 @@ const FeedEditDiv = styled.span`
 `;
 
 interface Iprops {
-  content: string;
+  content: string | null | undefined;
   createdAt: string;
-  feedinfo: IFeedItem;
+  feedinfo: IFeed;
 }
 
 function Feed({ content, createdAt, feedinfo }: Iprops) {
@@ -39,10 +39,13 @@ function Feed({ content, createdAt, feedinfo }: Iprops) {
   const [hasLiked, setHasLiked] = useState<boolean>(false);
 
   useEffect(() => {
-    setLikeCnt(feedinfo.totallikes);
-    setHasLiked(feedinfo.hasLiked ? true : false);
+    if (feedinfo.totallikes) {
+      setLikeCnt(feedinfo.totallikes);
+      setHasLiked(feedinfo.hasLiked ? true : false);
+    }
   }, []);
 
+  if (!feedinfo || !feedinfo.searchUser) return <></>;
   return (
     <>
       <FeedDiv>

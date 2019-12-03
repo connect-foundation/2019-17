@@ -70,7 +70,7 @@ interface Iprops {
   setLikeCnt: any;
   hasLiked: boolean;
   setHasLiked: any;
-  feedId: number;
+  feedId: number | null | undefined;
 }
 
 const SEND_LIKE = gql`

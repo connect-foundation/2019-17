@@ -14,14 +14,12 @@ import {
 import uploadToObjStorage from '../../middleware/uploadToObjStorage';
 import { requestDB } from '../../utils/requestDB';
 import { WRITING_FEED_QUERY, createImageNodeAndRelation } from './feed.query';
+import console = require('console');
+import { FeedsQueryArgs } from 'src/types/graph';
+import { dateToISO, objToDate } from '../../utils/dateutil';
 
 const session = db.session();
 
-interface IPageParam {
-  first: number;
-  after: number;
-  cursor: string;
-}
 // property로 조회할 때
 
 const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
@@ -83,12 +81,16 @@ const mutationResolvers: MutationResolvers = {
       feedId,
       useremail: email
     });
+
     // console.log('registerdFeed?? ', registerdFeed);
     const parsedRegisterdFeed = ParseResultRecords(registerdFeed);
     // console.log('parsedRegisterdFeed?? ', parsedRegisterdFeed);
 
     pubsub.publish(NEW_FEED, {
-      newFeed: parsedRegisterdFeed
+      feeds: {
+        cursor: '',
+        feedItems: parsedRegisterdFeed
+      }
     });
     return true;
   },
@@ -110,12 +112,11 @@ const mutationResolvers: MutationResolvers = {
 };
 
 const queryResolvers: QueryResolvers = {
-  feedItems: async (
+  feeds: async (
     _,
-    { first, cursor = DEFAUT_MAX_DATE }: IPageParam,
+    { first, cursor = DEFAUT_MAX_DATE }: FeedsQueryArgs,
     { req }
-  ) => {
-    console.log('---cursor1 ', cursor);
+  ): Promise<any> => {
     let useremail = '';
     if (checkReqUserEmail(req)) {
       useremail = req.user.email;
@@ -125,7 +126,18 @@ const queryResolvers: QueryResolvers = {
       first,
       useremail
     });
-    return ParseResultRecords(result.records);
+
+    const feeds = ParseResultRecords(result.records);
+    const lastFeed = feeds[feeds.length - 1];
+    const cursorDate = lastFeed.feed.createdAt;
+    const cursorDateType = objToDate(cursorDate);
+    const dateDBISOString = dateToISO(cursorDateType);
+
+    const ret = {
+      cursor: dateDBISOString,
+      feedItems: feeds
+    };
+    return ret;
   }
 };
 
@@ -135,9 +147,9 @@ export default {
   Query: queryResolvers,
   Mutation: mutationResolvers,
   Subscription: {
-    newFeed: {
+    feeds: {
       subscribe: (_, __, { pubsub }) => {
-        console.log('subscripbed');
+        // console.log('subscripbed');
         return pubsub.asyncIterator(NEW_FEED);
       }
     }

@@ -1,9 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Image } from 'react-components.d';
 
-interface Image {
-  url: string;
-}
 const ImageBox = styled.img`
   width: 100px;
   height: 100px;
@@ -13,7 +11,8 @@ const ImageBox = styled.img`
   margin: 0.2rem 0rem;
   margin-right: 0.2rem;
 `;
-const Image = ({ url }: Image) => {
+const ImagePreview = ({ url }: Image) => {
+  if (!url) return <></>;
   return (
     <>
       <span>
@@ -23,4 +22,4 @@ const Image = ({ url }: Image) => {
   );
 };
 
-export default Image;
+export default ImagePreview;
