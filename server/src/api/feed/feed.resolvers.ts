@@ -79,7 +79,8 @@ const mutationResolvers: MutationResolvers = {
     const params = { content, email };
     const results = await requestDB(WRITING_FEED_QUERY, params);
     const feedId = Number(results[0].get(0).identity);
-    if (files && files.length) {
+    const FILE_LIMIT = 30;
+    if (files && files.length < FILE_LIMIT) {
       createImages(feedId, files);
     }
     const registerdFeed = await requestDB(GET_NEW_FEED, {
