@@ -39,7 +39,8 @@ const getUpdateLikeQuery = count => {
 };
 
 const checkReqUserEmail = (req): boolean => {
-  if (!req.user) {
+  if (!req.email) {
+    console.log('사용자 정보가 없습니다 다시 로그인해 주세요');
     return false;
   }
   return true;
@@ -72,6 +73,9 @@ const mutationResolvers: MutationResolvers = {
   ): Promise<IFeed> => {
     isAuthenticated(req);
     const { email } = req;
+    if (!email) {
+      throw Error('사용자를 찾을 수 없습니다.');
+    }
     const params = { content, email };
     const results = await requestDB(WRITING_FEED_QUERY, params);
     const feedId = Number(results[0].get(0).identity);
@@ -88,7 +92,7 @@ const mutationResolvers: MutationResolvers = {
   updateLike: async (_, { feedId, count }, { req }) => {
     let useremail = '';
     if (checkReqUserEmail(req)) {
-      useremail = req.user.email;
+      useremail = req.email;
     }
     const UPDATE_QUERY = getUpdateLikeQuery(count);
     await session.run(UPDATE_QUERY, {
@@ -107,7 +111,7 @@ const queryResolvers: QueryResolvers = {
   ) => {
     let useremail = '';
     if (checkReqUserEmail(req)) {
-      useremail = req.user.email;
+      useremail = req.email;
     }
     const result = await session.run(MATCH_FEEDS, {
       cursor,
