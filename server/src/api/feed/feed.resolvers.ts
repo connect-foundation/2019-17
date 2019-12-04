@@ -73,9 +73,6 @@ const mutationResolvers: MutationResolvers = {
   ): Promise<IFeed> => {
     isAuthenticated(req);
     const { email } = req;
-    if (!email) {
-      throw Error('사용자를 찾을 수 없습니다.');
-    }
     const params = { content, email };
     const results = await requestDB(WRITING_FEED_QUERY, params);
     const feedId = Number(results[0].get(0).identity);

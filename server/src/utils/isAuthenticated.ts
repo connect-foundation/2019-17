@@ -1,5 +1,7 @@
+import AuthenticatedError from '../errors/AuthenticatedError';
+
 export default req => {
   if (!req.email) {
-    throw Error('유저를 찾을 수 없습니다.');
+    throw new AuthenticatedError();
   }
 };
