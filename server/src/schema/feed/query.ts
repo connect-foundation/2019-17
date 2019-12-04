@@ -32,7 +32,7 @@ length(filter(x IN cp WHERE x.email= {useremail} )) AS hasLiked, comments
 order by feed.createdAt desc
 `;
 
-export const GET_FRIENDS = `MATCH (searchUser:User)-[:FRIEND]->(friend:User)
+export const GET_FRIENDS = `MATCH (searchUser:User)<-[:FRIEND]->(friend:User)
 where searchUser.email = {userEmail} and friend.email = {friendEmail}
 with collect(friend) as t
 return length(t) as isFriend`;
