@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import FeedHeader from './FeedHeader';
 import FeedBody from './FeedBody';
 import FeedFooter from './FeedFooter';
-import Comment from './Comment';
+import CommentContainer from './FeedComment';
 import { IFeed } from 'react-components.d';
 
 const FeedDiv = styled.div`
@@ -65,7 +65,17 @@ function Feed({ content, createdAt, feedinfo }: Iprops) {
             feedId={feedinfo.feedId}
           />
         </FeedContentDiv>
-        <Comment />
+        {feedinfo.comments && feedinfo.comments.length > 0 ? (
+          feedinfo.comments.map(comment => {
+            if (comment) {
+              return <CommentContainer comment={comment} />;
+            } else {
+              return <></>;
+            }
+          })
+        ) : (
+          <></>
+        )}
       </FeedDiv>
     </>
   );
