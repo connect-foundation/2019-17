@@ -1,24 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import WritingFeedPresenter from './WritingPresenter';
 import {
   Scalars,
-  EnrollFeedMutationHookResult,
-  EnrollFeedMutationVariables
+  useMeQuery,
+  useEnrollFeedMutation,
+  Image
 } from 'react-components.d';
 import { Maybe } from 'react-components.d';
-import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
+import { IFeedItem } from '../feed.type';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import {
+  enrollWritingFeedData,
+  getWritingFeedData
+} from 'cache/writingFeed.gql';
 
-function WritingFeedContainer() {
-  const [content, setContent] = useState('');
+interface IProps {
+  setFeeds: React.Dispatch<React.SetStateAction<IFeedItem[]>>;
+}
+
+function WritingFeedContainer({ setFeeds }: IProps) {
+  const { data: writingFeedData } = useQuery(getWritingFeedData);
+  const [writingFeedDataMutation] = useMutation(enrollWritingFeedData);
+  const [fileId, setFileId] = useState(0);
+  const [files, setFiles] = useState<Maybe<Scalars['Upload']>[]>([]);
+  const [content, setContent] = useState(
+    writingFeedData && writingFeedData.writingFeedContent
+      ? writingFeedData.writingFeedContent
+      : ''
+  );
+  const contentCursor = useRef<HTMLTextAreaElement>(null);
+  if (contentCursor.current) {
+    const len = contentCursor.current.value.length;
+    contentCursor.current.focus();
+    contentCursor.current.setSelectionRange(len, len);
+  }
   const onChangeTextArea = (
     e: React.ChangeEvent<HTMLTextAreaElement>
   ): void => {
-    setContent(e.target.value);
+    const {
+      target: { value: content }
+    } = e;
+    setContent(content);
+    writingFeedDataMutation({ variables: { content } });
   };
-
-  const [fileId, setFileId] = useState(0);
-  const [files, setFiles] = useState<Maybe<Scalars['Upload']>[]>([]);
 
   const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { target } = e;
@@ -48,37 +72,57 @@ function WritingFeedContainer() {
     }
   };
 
-  const ENROLL_FEED_MUTATION = gql`
-    mutation enrollFeed($content: String!, $files: [Upload]) {
-      enrollFeed(content: $content, files: $files)
-    }
-  `;
+  const [enrollFeedMutation] = useEnrollFeedMutation();
+  const { data } = useMeQuery();
 
-  const [writingFeedMutation] = useMutation<
-    EnrollFeedMutationHookResult,
-    EnrollFeedMutationVariables
-  >(ENROLL_FEED_MUTATION);
+  const checkEnrollFeed = (data: any) => {
+    if (data && data.enrollFeed) {
+      const {
+        enrollFeed: { searchUser, feedId, feed, totallikes, hasLiked }
+      } = data;
+      let imglist: Image[] = [];
+      imglist = files.map(file => ({ url: file.fileUrl }));
+      setFeeds(
+        props =>
+          [
+            { searchUser, feedId, feed, totallikes, hasLiked, imglist },
+            ...props
+          ] as any
+      );
+      return true;
+    }
+    return false;
+  };
 
   const onSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
+    if (!content) {
+      alert('피드 내용을 입력해주세요.');
+      if (contentCursor.current) contentCursor.current.focus();
+      return;
+    }
     const parseFiles = files.map(item => item.file);
-    const {
-      data: { enrollFeed }
-    } = (await writingFeedMutation({
+    const { data } = await enrollFeedMutation({
       variables: { content, files: parseFiles }
-    })) as any;
-    if (enrollFeed) alert('피드가 등록되었습니다.');
-    files.forEach(file => {
-      window.URL.revokeObjectURL(file.fileUrl);
     });
+    if (checkEnrollFeed(data)) {
+      alert('피드가 등록되었습니다.');
+    }
+    writingFeedDataMutation({ variables: { content: '' } });
     setFiles([]);
     setContent('');
   };
 
   return (
     <WritingFeedPresenter
+      thumbnail={
+        data && data.me && data.me.thumbnail
+          ? data.me.thumbnail
+          : process.env.PUBLIC_URL + '/images/profile.jpg'
+      }
+      contentCursor={contentCursor}
       onSubmit={onSubmit}
       content={content}
       onChangeTextArea={onChangeTextArea}

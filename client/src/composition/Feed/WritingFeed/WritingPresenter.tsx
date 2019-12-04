@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { MdPhotoSizeSelectActual } from 'react-icons/md';
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -122,7 +122,9 @@ const FilesContainer = styled.div`
 
 interface IProps {
   content: string;
+  thumbnail: string;
   files: Maybe<Scalars['Upload']>;
+  contentCursor: React.RefObject<HTMLTextAreaElement>;
   onChangeTextArea: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onChangeFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
   deleteFile: (e: React.MouseEvent<SVGElement, MouseEvent>) => void;
@@ -133,6 +135,8 @@ const FILE_INPUT_ID = 'upload';
 
 function WritingFeedPresenter({
   content,
+  thumbnail,
+  contentCursor,
   onChangeTextArea,
   onChangeFile,
   files,
@@ -145,15 +149,13 @@ function WritingFeedPresenter({
       <ContentWrapper>
         <ContentRow>
           <ProfileColumn>
-            <Profile
-              imageUrl={process.env.PUBLIC_URL + '/images/profile.jpg'}
-              alt={'profile image'}
-            />
+            <Profile imageUrl={thumbnail} alt={'profile image'} />
           </ProfileColumn>
           <Content
             onChange={onChangeTextArea}
             placeholder={'게시물 작성'}
             value={content}
+            inputRef={contentCursor}
           />
         </ContentRow>
         <ContentRow>
