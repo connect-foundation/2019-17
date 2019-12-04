@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import SearchBox from 'composition/Search/SearchBox';
 import HelmetTitle from 'components/Helmet';
+import AlarmTab from './AlarmTab';
 
 const HeaderWrapper = styled.div`
   height: 40px;
@@ -28,14 +29,33 @@ const ItemContainer = styled.div`
   align-items: center;
 `;
 
+const LogoutButton = styled.span`
+  color: white;
+  font-weight: 600;
+  text-transform: capitalize;
+  margin-left: 15px;
+  cursor: pointer;
+`;
+
+const ItemColumn = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 function Header() {
   return (
     <>
-      <HelmetTitle message={"main"} />
+      <HelmetTitle message={'main'} />
       <HeaderWrapper>
         <Backgound>
           <ItemContainer>
-            <SearchBox />
+            <ItemColumn>
+              <SearchBox />
+            </ItemColumn>
+            <ItemColumn>
+              <AlarmTab />
+              <LogoutButton>logout</LogoutButton>
+            </ItemColumn>
           </ItemContainer>
         </Backgound>
       </HeaderWrapper>
