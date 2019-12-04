@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import SearchBox from 'composition/Search/SearchBox';
+import HelmetTitle from 'components/Helmet';
 
 const HeaderWrapper = styled.div`
-  height: 43px;
+  height: 40px;
 `;
 
 const Backgound = styled.div`
@@ -12,26 +13,33 @@ const Backgound = styled.div`
   display: flex;
   color: #fff;
   justify-content: space-between;
-  height: 43px;
+  align-items: center;
+  height: 40px;
   position: fixed;
   top: 0;
   right: 0;
 `;
 
 const ItemContainer = styled.div`
-  width: 1012px;
-  margin: auto;
+  width: 900px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 function Header() {
   return (
-    <HeaderWrapper>
-      <Backgound>
-        <ItemContainer>
-          <SearchBox></SearchBox>
-        </ItemContainer>
-      </Backgound>
-    </HeaderWrapper>
+    <>
+      <HelmetTitle message={"main"} />
+      <HeaderWrapper>
+        <Backgound>
+          <ItemContainer>
+            <SearchBox />
+          </ItemContainer>
+        </Backgound>
+      </HeaderWrapper>
+    </>
   );
 }
 
