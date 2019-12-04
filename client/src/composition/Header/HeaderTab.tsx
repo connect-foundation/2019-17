@@ -29,19 +29,19 @@ const nonActive = css`
   color: #203257;
 `;
 
-const FriendsIcon = styled(FaUserFriends)<{ active: boolean }>`
+const FriendsIcon = styled(FaUserFriends)<{ selected: boolean }>`
   ${cursor}
-  ${props => (props.active ? active : nonActive)}
+  ${props => (props.selected ? active : nonActive)}
 `;
 
-const MessageIcon = styled(AiFillMessage)<{ active: boolean }>`
+const MessageIcon = styled(AiFillMessage)<{ selected: boolean }>`
   ${cursor}
-  ${props => (props.active ? active : nonActive)}
+  ${props => (props.selected ? active : nonActive)}
 `;
 
-const AlarmIcon = styled(FaBell)<{ active: boolean }>`
+const AlarmIcon = styled(FaBell)<{ selected: boolean }>`
   ${cursor}
-  ${props => (props.active ? active : nonActive)}
+  ${props => (props.selected ? active : nonActive)}
 `;
 
 interface IInitState {
@@ -58,32 +58,32 @@ function HeaderTab() {
   const [tabState, setTabState] = useState<IInitState>(initState);
   const clickIcon = (key: string): void => {
     if (tabState[key]) {
-      setTabState(_ => ({ ...initState }));
+      setTabState({ ...initState });
     } else {
-      setTabState(_ => ({ ...initState, [key]: true }));
+      setTabState({ ...initState, [key]: true });
     }
   };
   return (
     <Container>
       <FriendsIcon
-        active={tabState.friends}
+        selected={tabState.friends ? true : false}
         onClick={clickIcon.bind(null, 'friends')}
       />
-      <Tab active={tabState.friends}>
+      <Tab selected={tabState.friends}>
         <FriendsTab />
       </Tab>
       <MessageIcon
-        active={tabState.message}
+        selected={tabState.message}
         onClick={clickIcon.bind(null, 'message')}
       />
-      <Tab active={tabState.message}>
+      <Tab selected={tabState.message}>
         <MessageTab />
       </Tab>
       <AlarmIcon
-        active={tabState.alarm}
+        selected={tabState.alarm}
         onClick={clickIcon.bind(null, 'alarm')}
       />
-      <Tab active={tabState.alarm}>
+      <Tab selected={tabState.alarm}>
         <AlarmTab />
       </Tab>
     </Container>
