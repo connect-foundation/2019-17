@@ -47,13 +47,10 @@ const checkReqUserEmail = (req): boolean => {
 
 const createImages = async (feedId, files) => {
   try {
-    let filePromises: Array<Promise<any>> = [];
+    const filePromises: Array<Promise<any>> = [];
     for await (const file of files) {
       const { filename, createReadStream } = file;
-      filePromises = [
-        ...filePromises,
-        uploadToObjStorage(createReadStream(), filename)
-      ];
+      filePromises.push(uploadToObjStorage(createReadStream(), filename));
     }
     const fileLocations = await Promise.all(filePromises);
     const matchQuery = `MATCH (f:Feed) WHERE ID(f) = $feedId `;
@@ -61,7 +58,7 @@ const createImages = async (feedId, files) => {
       acc += createImageNodeAndRelation(idx, Location);
       return acc;
     }, matchQuery);
-    await requestDB(query, { feedId });
+    requestDB(query, { feedId });
   } catch (error) {
     console.error(error);
   }
