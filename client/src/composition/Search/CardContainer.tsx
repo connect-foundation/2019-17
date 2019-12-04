@@ -1,22 +1,17 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import UserCard from 'components/UserCard';
 import queryString from 'querystring';
-import ActionButton from 'components/ActionButton';
+import ButtonContainer from './ButtonContainer';
 
 const SEARCH_USER = gql`
   query getUserName($keyword: String!) {
     searchUser(keyword: $keyword) {
       nickname
       email
+      relation
     }
-  }
-`;
-
-const REQUEST_FRIEND = gql`
-  mutation sendRequest($email: String!) {
-    requestFriend(targetEmail: $email)
   }
 `;
 
@@ -35,8 +30,6 @@ function CardContainer({ location }: IProps) {
       keyword
     }
   });
-
-  const [requestFriend] = useMutation(REQUEST_FRIEND);
 
   if (loading) return <p>로딩중...</p>;
   if (error)
@@ -60,20 +53,11 @@ function CardContainer({ location }: IProps) {
       </>
     );
 
-  function sendFriendRequest(email: string) {
-    return (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault();
-      requestFriend({ variables: { email } });
-    };
-  }
-
   return (
     <>
       {data.searchUser.map((user: { [key: string]: string }) => (
         <UserCard nickname={user.nickname} key={user.nickname}>
-          <ActionButton
-            text="친구 추가"
-            onClick={sendFriendRequest(user.email)}></ActionButton>
+          <ButtonContainer email={user.email} initialRelation={user.relation} />
         </UserCard>
       ))}
     </>
