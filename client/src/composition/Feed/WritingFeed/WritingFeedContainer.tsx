@@ -8,22 +8,36 @@ import {
 } from 'react-components.d';
 import { Maybe } from 'react-components.d';
 import { IFeedItem } from '../feed.type';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import {
+  enrollWritingFeedData,
+  getWritingFeedData
+} from 'cache/writingFeed.gql';
 
 interface IProps {
   setFeeds: React.Dispatch<React.SetStateAction<IFeedItem[]>>;
 }
 
 function WritingFeedContainer({ setFeeds }: IProps) {
-  const [content, setContent] = useState('');
+  const { data: writingFeedData } = useQuery(getWritingFeedData);
+  const [writingFeedDataMutation] = useMutation(enrollWritingFeedData);
+  const [fileId, setFileId] = useState(0);
+  const [files, setFiles] = useState<Maybe<Scalars['Upload']>[]>([]);
+  const [content, setContent] = useState(
+    writingFeedData && writingFeedData.writingFeedContent
+      ? writingFeedData.writingFeedContent
+      : ''
+  );
   const contentCursor = useRef<HTMLTextAreaElement>(null);
   const onChangeTextArea = (
     e: React.ChangeEvent<HTMLTextAreaElement>
   ): void => {
-    setContent(e.target.value);
+    const {
+      target: { value: content }
+    } = e;
+    setContent(content);
+    writingFeedDataMutation({ variables: { content } });
   };
-
-  const [fileId, setFileId] = useState(0);
-  const [files, setFiles] = useState<Maybe<Scalars['Upload']>[]>([]);
 
   const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { target } = e;
@@ -84,6 +98,7 @@ function WritingFeedContainer({ setFeeds }: IProps) {
       );
       alert('피드가 등록되었습니다.');
     }
+    writingFeedDataMutation({ variables: { content: '' } });
     setFiles([]);
     setContent('');
   };
