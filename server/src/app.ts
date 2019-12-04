@@ -15,9 +15,10 @@ class App {
     const pubsub = new PubSub();
     this.app = new GraphQLServer({
       schema,
-      context: ({ request, response }) => ({
+      context: ({ request, response, connection }) => ({
         req: request,
         res: response,
+        email: connection ? connection.context.email : undefined,
         pubsub
       })
     });

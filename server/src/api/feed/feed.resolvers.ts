@@ -3,7 +3,8 @@ import {
   MATCH_FEEDS,
   UPDATE_LIKE,
   DELETE_LIKE,
-  GET_NEW_FEED
+  GET_NEW_FEED,
+  GET_FRIENDS
 } from '../../schema/feed/query';
 import { ParseResultRecords } from '../../utils/parseData';
 import {
@@ -17,6 +18,7 @@ import { WRITING_FEED_QUERY, createImageNodeAndRelation } from './feed.query';
 import console = require('console');
 import { FeedsQueryArgs } from 'src/types/graph';
 import { dateToISO, objToDate } from '../../utils/dateutil';
+import { withFilter } from 'graphql-subscriptions';
 
 const session = db.session();
 
@@ -62,6 +64,18 @@ const createImages = async (feedId, files) => {
   }
 };
 
+const checkIsFriend = async (friendEmail, myEmail) => {
+  const result = await session.run(GET_FRIENDS, {
+    userEmail: myEmail,
+    friendEmail
+  });
+  const [parsedResult] = ParseResultRecords(result.records);
+  if (parsedResult.isFriend > 0) {
+    return true;
+  }
+  return false;
+};
+
 const mutationResolvers: MutationResolvers = {
   enrollFeed: async (
     _,
@@ -90,7 +104,8 @@ const mutationResolvers: MutationResolvers = {
       feeds: {
         cursor: '',
         feedItems: parsedRegisterdFeed
-      }
+      },
+      pubUserEmail: email
     });
     return true;
   },
@@ -148,10 +163,18 @@ export default {
   Mutation: mutationResolvers,
   Subscription: {
     feeds: {
-      subscribe: (_, __, { pubsub }) => {
-        // console.log('subscripbed');
-        return pubsub.asyncIterator(NEW_FEED);
-      }
+      subscribe: withFilter(
+        (_, __, { pubsub }) => {
+          return pubsub.asyncIterator(NEW_FEED);
+        },
+        async (_, variables, context) => {
+          const myEmail = context.email;
+          const friendEmail = variables.userEmail;
+          const isFriend = checkIsFriend(friendEmail, myEmail);
+
+          return isFriend;
+        }
+      )
     }
   }
 };

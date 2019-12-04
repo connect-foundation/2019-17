@@ -32,4 +32,9 @@ length(filter(x IN cp WHERE x.email= {useremail} )) AS hasLiked, comments
 order by feed.createdAt desc
 `;
 
-export { MATCH_FEEDS, UPDATE_LIKE, DELETE_LIKE, GET_NEW_FEED };
+const GET_FRIENDS = `MATCH (searchUser:User)-[:FRIEND]->(friend:User)
+where searchUser.email = {userEmail} and friend.email = {friendEmail}
+with collect(friend) as t
+return length(t) as isFriend`;
+
+export { MATCH_FEEDS, UPDATE_LIKE, DELETE_LIKE, GET_NEW_FEED, GET_FRIENDS };

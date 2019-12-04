@@ -48,8 +48,8 @@ const GET_FEEDS = gql`
 `;
 
 const FEEDS_SUBSCRIPTION = gql`
-  subscription subscribeFeed {
-    feeds {
+  subscription subscribeFeed($userEmail: String!) {
+    feeds(userEmail: $userEmail) {
       cursor
       feedItems {
         searchUser {
@@ -117,7 +117,8 @@ const FeedList = () => {
     const { data: value } = await fetchMore({
       variables: {
         first: OFFSET,
-        currentCursor: data && data.feeds ? data.feeds.cursor : ''
+        currentCursor:
+          data && data.feeds ? data.feeds.cursor : '9999-12-31T09:29:26.050Z'
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (
@@ -151,7 +152,7 @@ const FeedList = () => {
   const subscribeToNewComments = () => {
     return subscribeToMore({
       document: FEEDS_SUBSCRIPTION,
-      variables: {},
+      variables: { userEmail: 'yeonseo007d@gmail.com' },
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
         const { data: newFeeds } = subscriptionData;

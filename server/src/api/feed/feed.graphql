@@ -77,5 +77,10 @@ type Mutation {
 }
 
 type Subscription {
-  feeds: IFeeds
+  feeds(userEmail: String): ISubsFeeds
+}
+
+type ISubsFeeds {
+  cursor: String
+  feedItems: [IFeed]
 }
