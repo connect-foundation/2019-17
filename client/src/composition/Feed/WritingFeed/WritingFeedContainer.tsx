@@ -29,6 +29,11 @@ function WritingFeedContainer({ setFeeds }: IProps) {
       : ''
   );
   const contentCursor = useRef<HTMLTextAreaElement>(null);
+  if (contentCursor.current) {
+    const len = contentCursor.current.value.length;
+    contentCursor.current.focus();
+    contentCursor.current.setSelectionRange(len, len);
+  }
   const onChangeTextArea = (
     e: React.ChangeEvent<HTMLTextAreaElement>
   ): void => {
@@ -70,19 +75,7 @@ function WritingFeedContainer({ setFeeds }: IProps) {
   const [enrollFeedMutation] = useEnrollFeedMutation();
   const { data } = useMeQuery();
 
-  const onSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ): Promise<void> => {
-    e.preventDefault();
-    if (!content) {
-      alert('피드 내용을 입력해주세요.');
-      if (contentCursor.current) contentCursor.current.focus();
-      return;
-    }
-    const parseFiles = files.map(item => item.file);
-    const { data } = await enrollFeedMutation({
-      variables: { content, files: parseFiles }
-    });
+  const checkEnrollFeed = (data: any) => {
     if (data && data.enrollFeed) {
       const {
         enrollFeed: { searchUser, feedId, feed, totallikes, hasLiked }
@@ -96,6 +89,25 @@ function WritingFeedContainer({ setFeeds }: IProps) {
             ...props
           ] as any
       );
+      return true;
+    }
+    return false;
+  };
+
+  const onSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
+    e.preventDefault();
+    if (!content) {
+      alert('피드 내용을 입력해주세요.');
+      if (contentCursor.current) contentCursor.current.focus();
+      return;
+    }
+    const parseFiles = files.map(item => item.file);
+    const { data } = await enrollFeedMutation({
+      variables: { content, files: parseFiles }
+    });
+    if (checkEnrollFeed(data)) {
       alert('피드가 등록되었습니다.');
     }
     writingFeedDataMutation({ variables: { content: '' } });
