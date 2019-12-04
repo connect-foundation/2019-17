@@ -1,10 +1,24 @@
 import { useEffect } from 'react';
 import React from 'react';
-import { IFeedItem } from './feed.type';
+import styled from 'styled-components';
 interface Props {
+  onClick: () => void;
   onEffect: () => void | (() => void);
   data: string;
 }
+const NewFeedAlarmContainer = styled.div`
+  border: 1px solid #dadde1;
+  display: inline-block;
+  position: fixed;
+  top: 70px;
+  left: 40%;
+  transform: translate(-100%, -50%);
+  padding: 0.5rem 0.75rem;
+  border-radius: 5rem;
+  font-size: 14px;
+  background: white;
+  box-shadow: 0.5px 0.5px 2px 0px #dadde1;
+`;
 
 const NewFeedAlarm = ({ onEffect, data }: Props) => {
   useEffect(() => {
@@ -12,13 +26,9 @@ const NewFeedAlarm = ({ onEffect, data }: Props) => {
   }, [onEffect]);
 
   if (data) {
-    return <div>{data}</div>;
+    return <NewFeedAlarmContainer>{data}</NewFeedAlarmContainer>;
   } else {
-    return (
-      <>
-        <div>WHAT?</div>
-      </>
-    );
+    return <></>;
   }
 };
 

@@ -70,6 +70,8 @@ const checkIsFriend = async (friendEmail, myEmail) => {
     friendEmail
   });
   const [parsedResult] = ParseResultRecords(result.records);
+
+  console.log('parsedResult ', parsedResult);
   if (parsedResult.isFriend > 0) {
     return true;
   }
@@ -96,16 +98,13 @@ const mutationResolvers: MutationResolvers = {
       useremail: email
     });
 
-    // console.log('registerdFeed?? ', registerdFeed);
     const parsedRegisterdFeed = ParseResultRecords(registerdFeed);
-    // console.log('parsedRegisterdFeed?? ', parsedRegisterdFeed);
 
     pubsub.publish(NEW_FEED, {
       feeds: {
         cursor: '',
         feedItems: parsedRegisterdFeed
-      },
-      pubUserEmail: email
+      }
     });
     return true;
   },
@@ -114,14 +113,13 @@ const mutationResolvers: MutationResolvers = {
     if (checkReqUserEmail(req)) {
       useremail = req.user.email;
     }
-    console.log('UPDATE_QUERY', feedId, count, useremail);
+
     const UPDATE_QUERY = getUpdateLikeQuery(count);
-    const result = await session.run(UPDATE_QUERY, {
+    await session.run(UPDATE_QUERY, {
       useremail,
       feedId
     });
 
-    console.log('result: ', JSON.stringify(result, null, 2));
     return true;
   }
 };
@@ -165,12 +163,16 @@ export default {
     feeds: {
       subscribe: withFilter(
         (_, __, { pubsub }) => {
+          console.log('subscribed');
           return pubsub.asyncIterator(NEW_FEED);
         },
         async (_, variables, context) => {
           const myEmail = context.email;
           const friendEmail = variables.userEmail;
-          const isFriend = checkIsFriend(friendEmail, myEmail);
+          const isFriend = await checkIsFriend(friendEmail, myEmail);
+          console.log(isFriend);
+          console.log('myEmail ', myEmail);
+          console.log('friendEmail ', friendEmail);
 
           return isFriend;
         }

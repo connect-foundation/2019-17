@@ -1,124 +1,57 @@
 import React, { useState } from 'react';
 import Feed from './Feed';
-import gql from 'graphql-tag';
 import useIntersect from 'hooks/useIntersectObserver';
 import styled from 'styled-components';
 import WritingFeed from './WritingFeed';
 import NewFeedAlarm from './NewFeedAlarm';
-import { Idate, useGetfeedsQuery } from 'react-components.d';
+import { useGetfeedsQuery } from 'react-components.d';
+import { getDate } from '../../utils/dateUtil';
+import { FEEDS_SUBSCRIPTION } from './feed.query';
+
 const LoadCheckContainer = styled.div`
   height: 50px;
   position: relative;
   top: -50px;
 `;
 
-const GET_FEEDS = gql`
-  query getfeeds($first: Int, $currentCursor: String) {
-    feeds(first: $first, cursor: $currentCursor) {
-      cursor
-      feedItems {
-        searchUser {
-          nickname
-        }
-        feed {
-          createdAt {
-            year
-            month
-            day
-            hour
-            minute
-            second
-            nanosecond
-          }
-          content
-        }
-        feedId
-        totallikes
-        hasLiked
-        imglist {
-          url
-        }
-        comments {
-          id
-          content
-        }
-      }
-    }
-  }
-`;
-
-const FEEDS_SUBSCRIPTION = gql`
-  subscription subscribeFeed($userEmail: String!) {
-    feeds(userEmail: $userEmail) {
-      cursor
-      feedItems {
-        searchUser {
-          nickname
-        }
-        feed {
-          createdAt {
-            year
-            month
-            day
-            hour
-            minute
-            second
-            nanosecond
-          }
-          content
-        }
-        feedId
-        totallikes
-        hasLiked
-        comments {
-          id
-          content
-        }
-      }
-    }
-  }
-`;
-
-// 모듈로 빼자 new Date(year, month, day, hours, minutes, seconds, milliseconds)
-const getDate = (date: Idate): Date => {
-  if (
-    !date ||
-    !date.year ||
-    !date.month ||
-    !date.day ||
-    !date.hour ||
-    !date.minute ||
-    !date.second
-  )
-    return new Date();
-  const dateob = new Date(
-    date.year,
-    date.month - 1,
-    date.day,
-    date.hour + 9,
-    date.minute,
-    date.second,
-    Number(String(date.nanosecond).substr(0, 3))
-  );
-  return dateob;
-};
-
 const OFFSET = 4;
+const ALARM_LIMIT = 0;
 const FeedList = () => {
-  // const [isEnd, setIsEnd] = useState<boolean>(false);
-  const [_, setRef] = useIntersect(fetchMoreFeed, {});
+  const [_, setRef] = useIntersect(fetchMoreFeed, () => {}, {});
+  const [__, setTopRef] = useIntersect(feedAlarmOff, feedAlarmOn, {});
 
-  // hooks 에서 useQuery 1 부터 시작
+  const [feedAlarm, setFeedAlarm] = useState(0);
+  const [AlarmMessage, setAlarmMessage] = useState('');
+
   const { data, fetchMore, subscribeToMore } = useGetfeedsQuery({
     variables: { first: OFFSET, currentCursor: '9999-12-31T09:29:26.050Z' }
   });
 
+  const scrollTop = () => {
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  async function feedAlarmOn() {
+    if (feedAlarm > ALARM_LIMIT) {
+      setAlarmMessage('새 피드 ' + feedAlarm + '개');
+    } else {
+      setAlarmMessage('');
+    }
+  }
+  async function feedAlarmOff() {
+    setFeedAlarm(0);
+    setAlarmMessage('');
+  }
+
   async function fetchMoreFeed() {
-    const { data: value } = await fetchMore({
+    await fetchMore({
       variables: {
         first: OFFSET,
-        currentCursor:
-          data && data.feeds ? data.feeds.cursor : '9999-12-31T09:29:26.050Z'
+        currentCursor: data && data.feeds ? data.feeds.cursor : ''
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (
@@ -156,8 +89,7 @@ const FeedList = () => {
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
         const { data: newFeeds } = subscriptionData;
-        console.log('feedItems , ', prev);
-        console.log('newFeeds , ', subscriptionData);
+
         if (
           !newFeeds ||
           !newFeeds.feeds ||
@@ -176,6 +108,7 @@ const FeedList = () => {
           feeds: { feedItems }
         } = newFeeds;
 
+        setFeedAlarm(props => props + 1);
         return Object.assign({}, prev, {
           feeds: {
             cursor: prev.feeds.cursor,
@@ -189,9 +122,15 @@ const FeedList = () => {
 
   return (
     <>
-      <WritingFeed />
-      New FEED!: {data ? 'feed?' : 'no data'}
-      <NewFeedAlarm data={'aa'} onEffect={subscribeToNewComments} />
+      <div ref={setTopRef as any}>
+        <WritingFeed />
+      </div>
+
+      <NewFeedAlarm
+        onClick={scrollTop}
+        data={AlarmMessage}
+        onEffect={subscribeToNewComments}
+      />
       {data && data.feeds && data.feeds.feedItems
         ? data.feeds.feedItems.map(feed =>
             feed && feed.feed && feed.feed.createdAt ? (
@@ -206,9 +145,15 @@ const FeedList = () => {
             )
           )
         : 'no data'}
-      <LoadCheckContainer
-        onClick={fetchMoreFeed}
-        ref={setRef as any}></LoadCheckContainer>
+
+      {data ? (
+        <LoadCheckContainer
+          onClick={fetchMoreFeed}
+          ref={setRef as any}></LoadCheckContainer>
+      ) : (
+        <></>
+      )}
+
       <div>is End</div>
     </>
   );
