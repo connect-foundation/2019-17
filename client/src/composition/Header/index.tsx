@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import SearchBox from 'composition/Search/SearchBox';
 import HelmetTitle from 'components/Helmet';
-import AlarmTab from './AlarmTab';
+import AlarmTab from './HeaderTab';
 
 const HeaderWrapper = styled.div`
   height: 40px;

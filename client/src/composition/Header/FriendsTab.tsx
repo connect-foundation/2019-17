@@ -3,8 +3,8 @@ import styled from 'styled-components';
 
 const Header = styled.div``;
 
-function AlarmTab() {
-  return <Header>alarm</Header>;
+function FriendsTab() {
+  return <Header>friends</Header>;
 }
 
-export default AlarmTab;
+export default FriendsTab;
