@@ -7,6 +7,10 @@ export const GET_FEEDS = gql`
       feedItems {
         searchUser {
           nickname
+          hometown
+          thumbnail
+          residence
+          email
         }
         feed {
           createdAt {
@@ -42,6 +46,10 @@ export const FEEDS_SUBSCRIPTION = gql`
       feedItems {
         searchUser {
           nickname
+          hometown
+          thumbnail
+          residence
+          email
         }
         feed {
           createdAt {

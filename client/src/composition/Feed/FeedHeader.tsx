@@ -39,6 +39,7 @@ interface Iprops {
 
 const FeedHeader = ({ createdAt, thumbnail, nickName }: Iprops) => {
   const Thumbnail = thumbnail || process.env.PUBLIC_URL + '/images/profile.jpg';
+
   return (
     <>
       <div>
