@@ -11,6 +11,7 @@ const SEARCH_USER = gql`
       nickname
       email
       relation
+      thumbnail
     }
   }
 `;
@@ -56,7 +57,10 @@ function CardContainer({ location }: IProps) {
   return (
     <>
       {data.searchUser.map((user: { [key: string]: string }) => (
-        <UserCard nickname={user.nickname} key={user.nickname}>
+        <UserCard
+          nickname={user.nickname}
+          key={user.email}
+          imageUrl={user.thumbnail}>
           <ButtonContainer email={user.email} initialRelation={user.relation} />
         </UserCard>
       ))}
