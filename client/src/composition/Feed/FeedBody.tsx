@@ -12,8 +12,9 @@ const FeedText = styled.div`
   font-size: 14px;
   font-weight: normal;
   line-height: 1.38;
-  word-break: break-all;
-  white-space: pre;
+  word-break: break-word;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 `;
 
 interface Iprops {
@@ -27,7 +28,6 @@ const FeedBody = ({ content, images }: Iprops) => {
       {images && images.length > 0 && <ImageContainer images={images} />}
     </FeedContents>
   );
-  // {images && images.length > 0 && <ImageContainer images={images} />}
 };
 
 export default FeedBody;
