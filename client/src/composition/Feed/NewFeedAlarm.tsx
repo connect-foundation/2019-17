@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import React from 'react';
 import styled from 'styled-components';
 interface Props {
-  onClick: () => void;
+  onClick: (event: React.MouseEvent<HTMLElement>) => void;
   onEffect: () => void | (() => void);
   data: string;
 }
@@ -10,6 +10,7 @@ const NewFeedAlarmContainer = styled.div`
   border: 1px solid #dadde1;
   display: inline-block;
   position: fixed;
+  cursor: pointer;
   top: 70px;
   left: 40%;
   transform: translate(-100%, -50%);
@@ -20,13 +21,15 @@ const NewFeedAlarmContainer = styled.div`
   box-shadow: 0.5px 0.5px 2px 0px #dadde1;
 `;
 
-const NewFeedAlarm = ({ onEffect, data }: Props) => {
+const NewFeedAlarm = ({ onEffect, data, onClick }: Props) => {
   useEffect(() => {
     return onEffect();
   }, [onEffect]);
 
   if (data) {
-    return <NewFeedAlarmContainer>{data}</NewFeedAlarmContainer>;
+    return (
+      <NewFeedAlarmContainer onClick={onClick}>{data}</NewFeedAlarmContainer>
+    );
   } else {
     return <></>;
   }

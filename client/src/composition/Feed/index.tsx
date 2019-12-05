@@ -28,6 +28,7 @@ const FeedList = () => {
   });
 
   const scrollTop = () => {
+    console.log('scroll');
     window.scroll({
       top: 0,
       left: 0,
@@ -126,11 +127,13 @@ const FeedList = () => {
         <WritingFeed />
       </div>
 
-      <NewFeedAlarm
-        onClick={scrollTop}
-        data={AlarmMessage}
-        onEffect={subscribeToNewComments}
-      />
+      <div>
+        <NewFeedAlarm
+          onClick={scrollTop}
+          data={AlarmMessage}
+          onEffect={subscribeToNewComments}
+        />
+      </div>
       {data && data.feeds && data.feeds.feedItems
         ? data.feeds.feedItems.map(feed =>
             feed && feed.feed && feed.feed.createdAt ? (

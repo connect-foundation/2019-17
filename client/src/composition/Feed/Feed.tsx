@@ -5,6 +5,7 @@ import FeedBody from './FeedBody';
 import FeedFooter from './FeedFooter';
 import CommentContainer from './FeedComment';
 import { IFeed } from 'react-components.d';
+import WriteCommentPresentor from './FeedComment/WriteCommentPresentor';
 
 const FeedDiv = styled.div`
   ${props => props.theme.borders.feedBorder};
@@ -26,6 +27,11 @@ const FeedEditDiv = styled.span`
   background-position: 0 -66px;
   height: 20px;
   width: 20px;
+`;
+// comment
+const CommentDiv = styled.div`
+  border-top: 1px solid #dadde1;
+  padding: 4px 12px;
 `;
 
 interface Iprops {
@@ -65,17 +71,26 @@ function Feed({ content, createdAt, feedinfo }: Iprops) {
             feedId={feedinfo.feedId}
           />
         </FeedContentDiv>
-        {feedinfo.comments && feedinfo.comments.length > 0 ? (
-          feedinfo.comments.map(comment => {
-            if (comment) {
-              return <CommentContainer comment={comment} />;
-            } else {
-              return <></>;
-            }
-          })
-        ) : (
-          <></>
-        )}
+        <CommentDiv>
+          {feedinfo.comments && feedinfo.comments.length > 0 ? (
+            feedinfo.comments.map(comment => {
+              if (comment) {
+                return (
+                  <>
+                    <CommentContainer comment={comment} />
+                    <WriteCommentPresentor />
+                  </>
+                );
+              } else {
+                return <></>;
+              }
+            })
+          ) : (
+            <>
+              <WriteCommentPresentor />
+            </>
+          )}
+        </CommentDiv>
       </FeedDiv>
     </>
   );
