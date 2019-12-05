@@ -13,6 +13,7 @@ import {
   enrollWritingFeedData,
   getWritingFeedData
 } from 'cache/writingFeed.gql';
+import { useEffect } from 'react';
 
 interface IProps {
   setFeeds: React.Dispatch<React.SetStateAction<IFeedItem[]>>;
@@ -27,6 +28,17 @@ function WritingFeedContainer({ setFeeds }: IProps) {
   const [files, setFiles] = useState<Maybe<Scalars['Upload']>[]>([]);
   const [content, setContent] = useState(writingFeedContent || '');
   const contentCursor = useRef<HTMLTextAreaElement>(null);
+  const [enrollFeedMutation] = useEnrollFeedMutation();
+  const { data: { me = null } = {} } = useMeQuery();
+
+  useEffect(() => {
+    if (contentCursor.current) {
+      const len = contentCursor.current.value.length;
+      contentCursor.current.focus();
+      contentCursor.current.setSelectionRange(len, len);
+    }
+  }, []);
+
   const onChangeTextArea = (
     e: React.ChangeEvent<HTMLTextAreaElement>
   ): void => {
@@ -65,9 +77,6 @@ function WritingFeedContainer({ setFeeds }: IProps) {
     }
   };
 
-  const [enrollFeedMutation] = useEnrollFeedMutation();
-  const { data: { me = null } = {} } = useMeQuery();
-
   const onSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
@@ -82,18 +91,6 @@ function WritingFeedContainer({ setFeeds }: IProps) {
       variables: { content, files: parseFiles }
     });
     if (data && data.enrollFeed) {
-      const {
-        enrollFeed: { searchUser, feedId, feed, totallikes, hasLiked }
-      } = data;
-      let imglist: Image[] = [];
-      imglist = files.map(file => ({ url: file.fileUrl }));
-      setFeeds(
-        props =>
-          [
-            { searchUser, feedId, feed, totallikes, hasLiked, imglist },
-            ...props
-          ] as any
-      );
       alert('피드가 등록되었습니다.');
     }
     writingFeedDataMutation({ variables: { content: '' } });
