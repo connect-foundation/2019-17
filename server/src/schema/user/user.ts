@@ -1,6 +1,7 @@
 import db from '../../db';
 import { findUserWithEmailQuery } from './query';
-import { FindUserWithEmailQueryArgs, User } from './types';
+import { FindUserWithEmailQueryArgs } from './type';
+import { User } from '../../types';
 
 export const findUserWithEmail = async (
   args: FindUserWithEmailQueryArgs

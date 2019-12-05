@@ -116,7 +116,7 @@ const FeedList = () => {
 
   return (
     <>
-      <WritingFeed />
+      <WritingFeed setFeeds={setFeeds} />
       {feeds.map(feed => (
         <Feed
           key={getDate(feed.feed.createdAt).toISOString()}

@@ -9,7 +9,7 @@ order by feed.createdAt desc
 LIMIT {first} 
 `; */
 
-const MATCH_FEEDS = `MATCH (searchUser:User)-[:AUTHOR]->(feed:Feed)
+export const MATCH_FEEDS = `MATCH (searchUser:User)-[:AUTHOR]->(feed:Feed)
 OPTIONAL MATCH (likeUser:User)-[like:LIKE]->(feed)
 OPTIONAL MATCH (feed)-[:HAS]->(com:Comment)
 OPTIONAL MATCH (feed)<-[:HAS]-(img:Image)
@@ -21,15 +21,33 @@ order by feed.createdAt desc
 LIMIT {first} 
 `;
 
-const UPDATE_LIKE = `
+export const UPDATE_LIKE = `
 MATCH (u:User),(f:Feed)
 WHERE u.email = {useremail} AND ID(f) = {feedId}
 MERGE (u)-[r:LIKE]->(f)
 RETURN type(r)`;
 
-const DELETE_LIKE = `
+export const DELETE_LIKE = `
 MATCH (u:User)-[r:LIKE]->(f:Feed)
 WHERE u.email = {useremail} AND ID(f) = {feedId}
 delete r`;
 
-export { MATCH_FEEDS, UPDATE_LIKE, DELETE_LIKE };
+export const GET_NEW_FEED = `MATCH (searchUser:User)-[:AUTHOR]->(feed:Feed)
+OPTIONAL MATCH (likeUser:User)-[like:LIKE]->(feed)
+OPTIONAL MATCH (feed)-[:HAS]->(com:Comment)
+OPTIONAL MATCH (feed)<-[:HAS]-(img:Image)
+WITH searchUser, feed, COLLECT(DISTINCT likeUser) AS cp , COLLECT(com) as comments, COLLECT(DISTINCT img) as imgs
+where ID(feed) = {feedId}
+RETURN searchUser , feed,  ID(feed) as feedId , length(cp) AS totallikes, imgs as imglist,
+length(filter(x IN cp WHERE x.email= {useremail} )) AS hasLiked, comments
+order by feed.createdAt desc
+`;
+
+export const WRITING_FEED_QUERY = `MATCH (u:User)
+                                   WHERE u.email = $email
+                                  CREATE (f:Feed {content: $content, createdAt: datetime()}) 
+                                  CREATE (u)-[r:AUTHOR]->(f)
+                                  RETURN f`;
+
+export const createImageNodeAndRelation = (idx, Location) =>
+  `CREATE (i${idx}:Image {url: '${Location}'}) CREATE (i${idx})-[:HAS]->(f) `;

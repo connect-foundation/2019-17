@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import ThumbLikeIcon from 'components/Icon/ThumbLikeIcon';
 import RoundThumbIcon from 'components/Icon/RoundThumbIcon';
 import CommentIcon from 'components/Icon/CommentIcon';

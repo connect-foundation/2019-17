@@ -49,7 +49,10 @@ function Feed({ content, createdAt, feedinfo }: Iprops) {
         <FeedContentDiv className="mainbox">
           <FeedEditDiv></FeedEditDiv>
           <FeedHeader
-            thumbnail={feedinfo.searchUser.thumbnail}
+            thumbnail={
+              feedinfo.searchUser.thumbnail ||
+              process.env.PUBLIC_URL + '/images/profile.jpg'
+            }
             nickName={feedinfo.searchUser.nickname}
             createdAt={createdAt}
           />
