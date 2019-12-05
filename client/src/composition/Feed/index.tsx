@@ -83,7 +83,7 @@ const FeedList = () => {
     });
   }
 
-  const subscribeToNewComments = () => {
+  const subscribeToNewFeeds = () => {
     return subscribeToMore({
       document: FEEDS_SUBSCRIPTION,
       variables: {
@@ -133,7 +133,7 @@ const FeedList = () => {
         <NewFeedAlarm
           onClick={scrollTop}
           data={AlarmMessage}
-          onEffect={subscribeToNewComments}
+          onEffect={subscribeToNewFeeds}
         />
       </div>
 
