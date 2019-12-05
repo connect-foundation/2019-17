@@ -28,7 +28,6 @@ const FeedList = () => {
   });
 
   const scrollTop = () => {
-    console.log('scroll');
     window.scroll({
       top: 0,
       left: 0,

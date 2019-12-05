@@ -28,7 +28,7 @@ const FeedEditDiv = styled.span`
   height: 20px;
   width: 20px;
 `;
-// comment
+
 const CommentDiv = styled.div`
   border-top: 1px solid #dadde1;
   padding: 4px 12px;
