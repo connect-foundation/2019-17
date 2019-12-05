@@ -15,22 +15,30 @@ interface IProps {
 }
 
 function getReleationText(relation: string) {
-  if (relation === 'NONE') return '친구 요청';
-  else if (relation === 'REQUEST') return '친구 요청 전송됨';
-  else if (relation === 'REQUESTED_FROM') return '친구 승인';
-  else return '친구';
+  switch (relation) {
+    case 'NONE':
+      return '친구 요청';
+    case 'REQUEST':
+      return '친구 요청 전송됨';
+    case 'REQUESTED_FROM':
+      return '친구 승인';
+    default:
+      return '친구';
+  }
 }
 
 function getNextRelation(relation: string) {
-  if (relation === 'NONE') {
-    return 'REQUEST';
-  } else if (relation === 'REQUEST') {
-    if (window.confirm('친구신청을 취소하시겠습니까?')) return 'NONE';
-    return '';
-  } else if (relation === 'REQUESTED_FROM') return 'FRIEND';
-  else {
-    if (window.confirm('친구관계를 끊겠습니까?')) return 'NONE';
-    return '';
+  switch (relation) {
+    case 'NONE':
+      return 'REQUEST';
+    case 'REQUEST':
+      if (window.confirm('친구신청을 취소하시겠습니까?')) return 'NONE';
+      return '';
+    case 'REQUESTED_FROM':
+      return 'FRIEND';
+    default:
+      if (window.confirm('친구관계를 끊겠습니까?')) return 'NONE';
+      return '';
   }
 }
 

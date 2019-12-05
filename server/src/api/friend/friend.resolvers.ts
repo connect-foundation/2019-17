@@ -6,7 +6,7 @@ import {
   cancelFriendRequestByEmailQuery,
   cancelFriendByEmailQuery
 } from '../../schema/friend/query';
-import { checkReqUserEmail } from '../../utils/context';
+import isAuthenticated from '../../utils/isAuthenticated';
 
 function getQueryByRelation(relation: string) {
   if (relation === 'NONE') {
@@ -27,7 +27,7 @@ export default {
       { targetEmail, relation }: MutationRequestFriendArgs,
       { req }
     ) => {
-      checkReqUserEmail(req);
+      isAuthenticated(req);
 
       await requestDB(getQueryByRelation(relation), {
         email: req.email,

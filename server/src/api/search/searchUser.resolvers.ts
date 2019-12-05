@@ -1,13 +1,13 @@
 import { QuerySearchUserArgs, UserInfo } from '../../types';
 import { requestDB } from '../../utils/requestDB';
 import { findUserAndRelationByNicknameWithoutMeQuery } from '../../schema/user/query';
-import { checkReqUserEmail } from '../../utils/context';
 import { parseResultRecords } from '../../utils/parseData';
+import isAuthenticated from '../../utils/isAuthenticated';
 
 export default {
   Query: {
     searchUser: async (_, { keyword }: QuerySearchUserArgs, { req }) => {
-      checkReqUserEmail(req);
+      isAuthenticated(req);
 
       const allUser = await requestDB(
         findUserAndRelationByNicknameWithoutMeQuery,

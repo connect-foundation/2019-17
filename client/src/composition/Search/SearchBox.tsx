@@ -9,7 +9,7 @@ import BoostBookLogo from 'components/Icon/BoostBookLogo';
 
 const Container = styled.div`
   display: flex;
-  width: 800px;
+  width: 500px;
   align-items: center;
 `;
 
