@@ -12,7 +12,8 @@ function encodeJWT(target: IKey<string | number>): string {
 }
 
 function decodeJWT(token): any {
-  return jwt.verify(token, SECRET);
+  const decodedToken = jwt.verify(token, SECRET);
+  return decodedToken;
 }
 
 export { encodeJWT, decodeJWT };

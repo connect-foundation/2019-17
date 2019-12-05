@@ -160,19 +160,17 @@ function WritingFeedPresenter({
         </ContentRow>
         <ContentRow>
           {files && files.length > 0 && (
-            <>
-              <FilesContainer>
-                {files.map((file: { fileUrl: string; fileId: number }) => (
-                  <UploadPreviewImg
-                    key={file.fileId}
-                    fileUrl={file.fileUrl}
-                    fileId={file.fileId}
-                    deleteFile={deleteFile}
-                  />
-                ))}
-                <UploadPlusButton targetId={FILE_INPUT_ID} />
-              </FilesContainer>
-            </>
+            <FilesContainer>
+              {files.map((file: { fileUrl: string; fileId: number }) => (
+                <UploadPreviewImg
+                  key={file.fileId}
+                  fileUrl={file.fileUrl}
+                  fileId={file.fileId}
+                  deleteFile={deleteFile}
+                />
+              ))}
+              <UploadPlusButton targetId={FILE_INPUT_ID} />
+            </FilesContainer>
           )}
         </ContentRow>
       </ContentWrapper>

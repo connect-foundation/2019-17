@@ -6,7 +6,11 @@ const baseOption = {
   rootMargin: '0px'
 };
 
-const useIntersect = (interSectAction: any, option: any) => {
+const useIntersect = (
+  interSectAction: any,
+  outterSectAction: any,
+  option: any
+) => {
   const [ref, setRef] = useState(null);
 
   const checkIntersect = (
@@ -15,6 +19,8 @@ const useIntersect = (interSectAction: any, option: any) => {
   ) => {
     if (entry[0].isIntersecting) {
       interSectAction();
+    } else {
+      outterSectAction();
     }
   };
 

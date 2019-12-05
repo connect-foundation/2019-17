@@ -33,23 +33,19 @@ function CardContainer({ location }: IProps) {
   if (loading) return <p>로딩중...</p>;
   if (error)
     return (
-      <>
-        <UserCard
-          nickname="데이터를 가져오는데 에러가 발생하였습니다!"
-          imageUrl={
-            process.env.PUBLIC_URL + '/images/search_notfound.png'
-          }></UserCard>
-      </>
+      <UserCard
+        nickname="데이터를 가져오는데 에러가 발생하였습니다!"
+        imageUrl={
+          process.env.PUBLIC_URL + '/images/search_notfound.png'
+        }></UserCard>
     );
   if (data.searchUser.length === 0)
     return (
-      <>
-        <UserCard
-          nickname={`${keyword}에 대한 검색 결과가 없습니다`}
-          imageUrl={
-            process.env.PUBLIC_URL + '/images/search_notfound.png'
-          }></UserCard>
-      </>
+      <UserCard
+        nickname={`${keyword}에 대한 검색 결과가 없습니다`}
+        imageUrl={
+          process.env.PUBLIC_URL + '/images/search_notfound.png'
+        }></UserCard>
     );
 
   function sendFriendRequest(email: string) {
