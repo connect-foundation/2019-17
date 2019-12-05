@@ -87,7 +87,6 @@ const checkIsFriend = async (friendEmail, myEmail) => {
   });
   const [parsedResult] = ParseResultRecords(result.records);
 
-  console.log('parsedResult ', parsedResult);
   if (parsedResult.isFriend > 0) {
     return true;
   }
@@ -174,23 +173,18 @@ export default {
     feeds: {
       subscribe: withFilter(
         (_, __, { pubsub }) => {
-          console.log('subscribed');
           return pubsub.asyncIterator(NEW_FEED);
         },
-        async (_, variables, context) => {
+        async (payload, _, context) => {
           const myEmail = context.email;
-          const friendEmail = variables.userEmail;
+          const friendEmail = payload.feeds.feedItems[0].searchUser.email;
           const isFriend = await checkIsFriend(friendEmail, myEmail);
-          /* if (isFriend && myEmail === friendEmail) {
+
+          if (isFriend || myEmail === friendEmail) {
             return true;
           } else {
             return false;
-          } */
-
-          console.log(isFriend);
-          console.log('myEmail ', myEmail);
-          console.log('friendEmail ', friendEmail);
-          return true;
+          }
         }
       )
     }

@@ -25,7 +25,7 @@ const FeedList = () => {
   const { data: myInfo } = useMeQuery();
   const { data, fetchMore, subscribeToMore } = useGetfeedsQuery({
     variables: { first: OFFSET, currentCursor: '9999-12-31T09:29:26.050Z' },
-    notifyOnNetworkStatusChange: true
+    fetchPolicy: 'network-only'
   });
 
   const scrollTop = () => {
