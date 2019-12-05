@@ -20,19 +20,17 @@ interface IProps {
 }
 
 function WritingFeedContainer({ setFeeds }: IProps) {
-  const { data: writingFeedData } = useQuery(getWritingFeedData);
+  const { data: { writingFeedContent = null } = {} } = useQuery(
+    getWritingFeedData
+  );
   const [writingFeedDataMutation] = useMutation(enrollWritingFeedData);
   const [fileId, setFileId] = useState(0);
   const [files, setFiles] = useState<Maybe<Scalars['Upload']>[]>([]);
-  const [content, setContent] = useState(
-    writingFeedData && writingFeedData.writingFeedContent
-      ? writingFeedData.writingFeedContent
-      : ''
-  );
+  const [content, setContent] = useState(writingFeedContent || '');
   const contentCursor = useRef<HTMLTextAreaElement>(null);
   const [enrollFeedMutation] = useEnrollFeedMutation();
-  const { data } = useMeQuery();
-  
+  const { data: { me = null } = {} } = useMeQuery();
+
   useEffect(() => {
     if (contentCursor.current) {
       const len = contentCursor.current.value.length;
@@ -79,25 +77,6 @@ function WritingFeedContainer({ setFeeds }: IProps) {
     }
   };
 
-  const checkEnrollFeed = (data: any) => {
-    if (data && data.enrollFeed) {
-      const {
-        enrollFeed: { searchUser, feedId, feed, totallikes, hasLiked }
-      } = data;
-      let imglist: Image[] = [];
-      imglist = files.map(file => ({ url: file.fileUrl }));
-      setFeeds(
-        props =>
-          [
-            { searchUser, feedId, feed, totallikes, hasLiked, imglist },
-            ...props
-          ] as any
-      );
-      return true;
-    }
-    return false;
-  };
-
   const onSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
@@ -111,7 +90,7 @@ function WritingFeedContainer({ setFeeds }: IProps) {
     const { data } = await enrollFeedMutation({
       variables: { content, files: parseFiles }
     });
-    if (checkEnrollFeed(data)) {
+    if (data && data.enrollFeed) {
       alert('피드가 등록되었습니다.');
     }
     writingFeedDataMutation({ variables: { content: '' } });
@@ -122,9 +101,7 @@ function WritingFeedContainer({ setFeeds }: IProps) {
   return (
     <WritingFeedPresenter
       thumbnail={
-        data && data.me && data.me.thumbnail
-          ? data.me.thumbnail
-          : process.env.PUBLIC_URL + '/images/profile.jpg'
+        (me && me.thumbnail) || process.env.PUBLIC_URL + '/images/profile.jpg'
       }
       contentCursor={contentCursor}
       onSubmit={onSubmit}
