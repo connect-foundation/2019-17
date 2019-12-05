@@ -1,5 +1,6 @@
 import { IKey } from '../schema/commonTypes';
 import neo4j from 'neo4j-driver';
+import { isString } from 'util';
 
 export const parseResult = (
   result: Array<IKey<any>>
@@ -68,7 +69,11 @@ export const parseResultRecords = records => {
             temp[nodeKey].push(innerTemp);
           }
           arr = { ...arr, ...temp };
-        } //else if string , else if  neo4j.types.Record
+        } else if (isString(node)) {
+          //type을 가져올 때
+          arr = { ...arr, type: node };
+        }
+        //else if string , else if  neo4j.types.Record
         else {
           console.log('???????!! : ', node);
         }

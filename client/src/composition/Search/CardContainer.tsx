@@ -3,13 +3,15 @@ import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import UserCard from 'components/UserCard';
 import queryString from 'querystring';
-import ActionButton from 'components/ActionButton';
+import ButtonContainer from './ButtonContainer';
 
 const SEARCH_USER = gql`
   query getUserName($keyword: String!) {
     searchUser(keyword: $keyword) {
       nickname
       email
+      relation
+      thumbnail
     }
   }
 `;
@@ -22,15 +24,23 @@ interface IProps {
   location: IKey;
 }
 
+interface IUser {
+  nickname: string;
+  email: string;
+  thumbnail: string;
+  relation: string;
+}
+
 function CardContainer({ location }: IProps) {
   const keyword = queryString.parse(location.search.slice(1))[`keyword`];
   const { loading, error, data } = useQuery(SEARCH_USER, {
     variables: {
       keyword
-    }
+    },
+    fetchPolicy: 'network-only'
   });
 
-  if (loading) return <p>로딩중...</p>;
+  if (loading) return <></>;
   if (error)
     return (
       <UserCard
@@ -48,22 +58,15 @@ function CardContainer({ location }: IProps) {
         }></UserCard>
     );
 
-  function sendFriendRequest(email: string) {
-    return (e: React.MouseEvent) => {
-      console.log(email);
-      console.log(e);
-    };
-  }
-
   return (
     <>
-      {data.searchUser.map((user: { [key: string]: string }) => (
-        <UserCard nickname={user.nickname} key={user.nickname}>
-          <ActionButton
-            text="친구 추가"
-            onClick={sendFriendRequest(user.email)}></ActionButton>
-        </UserCard>
-      ))}
+      {data.searchUser.map(
+        ({ nickname, email, thumbnail, relation }: IUser) => (
+          <UserCard nickname={nickname} key={email} imageUrl={thumbnail}>
+            <ButtonContainer email={email} initialRelation={relation} />
+          </UserCard>
+        )
+      )}
     </>
   );
 }
