@@ -1,0 +1,50 @@
+scalar Upload
+
+type Feed {
+  content: String!
+  createdAt: String
+}
+
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean
+}
+
+type Query {
+  getFeeds: [Feed]!
+  feeds(first: Int, cursor: String): [Feed]!
+  pageInfo: PageInfo
+  sayHello(name: String!): Hello!
+  searchUser(keyword: String!): [UserInfo!]!
+}
+
+type Hello {
+  text: String!
+}
+
+type File {
+  filename: String!
+  mimetype: String!
+  encoding: String!
+}
+
+type Mutation {
+  uploadImage(file: Upload!): File!
+  signUp(nickname: String!, residence: String!, hometown: String!, email: String!, file: Upload): User!
+}
+
+type UserInfo {
+  id: String!
+  nickname: String!
+  thumbnail: String!
+  relation: String!
+  email: String!
+}
+
+type User {
+  email: String!
+  nickname: String!
+  residence: String!
+  hometown: String!
+  thumbnail: String
+}
