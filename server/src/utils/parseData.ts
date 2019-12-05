@@ -76,7 +76,6 @@ export const ParseResultRecords = records => {
     }
     result.push(arr);
   }
-  // console.log('결과!!! ', JSON.stringify(result, null, 2));
 
   return result;
 };
