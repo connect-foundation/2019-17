@@ -19,16 +19,8 @@ export const resolvers = {
     }
   },
   Mutation: {
-    enrollWritingFeed: (
-      _: any,
-      { content }: IArgs,
-      { cache }: { cache: any }
-    ) => {
-      cache.writeData({
-        data: {
-          writingFeedContent: content
-        }
-      });
+    enrollWritingFeed: (_: any, { content }: IArgs, __: any) => {
+      localStorage.setItem('writingFeedContent', content);
     }
   }
 };

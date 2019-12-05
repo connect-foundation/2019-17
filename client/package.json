@@ -35,7 +35,6 @@
     "@types/react-textarea-autosize": "^4.3.5",
     "@types/testing-library__react": "^9.1.2",
     "apollo-boost": "^0.4.4",
-    "apollo-cache-persist": "^0.1.1",
     "apollo-client": "^2.6.4",
     "apollo-link-ws": "^1.0.19",
     "apollo-upload-client": "^11.0.0",
