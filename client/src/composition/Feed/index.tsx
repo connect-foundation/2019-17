@@ -24,8 +24,7 @@ const FeedList = () => {
   const [AlarmMessage, setAlarmMessage] = useState('');
   const { data: myInfo } = useMeQuery();
   const { data, fetchMore, subscribeToMore } = useGetfeedsQuery({
-    variables: { first: OFFSET, currentCursor: '9999-12-31T09:29:26.050Z' },
-    fetchPolicy: 'network-only'
+    variables: { first: OFFSET, currentCursor: '9999-12-31T09:29:26.050Z' }
   });
 
   const scrollTop = () => {
