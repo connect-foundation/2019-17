@@ -22,10 +22,16 @@ function getReleationText(relation: string) {
 }
 
 function getNextRelation(relation: string) {
-  if (relation === 'NONE') return 'REQUEST';
-  else if (relation === 'REQUEST') return 'NONE';
-  else if (relation === 'REQUESTED_FROM') return 'FRIEND';
-  else return 'NONE';
+  if (relation === 'NONE') {
+    return 'REQUEST';
+  } else if (relation === 'REQUEST') {
+    if (window.confirm('친구신청을 취소하시겠습니까?')) return 'NONE';
+    return '';
+  } else if (relation === 'REQUESTED_FROM') return 'FRIEND';
+  else {
+    if (window.confirm('친구관계를 끊겠습니까?')) return 'NONE';
+    return '';
+  }
 }
 
 function ButtonContainer({ email, initialRelation }: IProps) {
@@ -35,8 +41,11 @@ function ButtonContainer({ email, initialRelation }: IProps) {
   async function clicked(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
-    requestFriend({ variables: { email, relation } });
-    setRelation(getNextRelation(relation));
+    const changedRelation = getNextRelation(relation);
+    if (changedRelation) {
+      requestFriend({ variables: { email, relation } });
+      setRelation(changedRelation);
+    }
   }
 
   return (
