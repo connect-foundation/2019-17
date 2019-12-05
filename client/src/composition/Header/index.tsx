@@ -5,6 +5,8 @@ import HelmetTitle from 'components/Helmet';
 import AlarmTab from './HeaderTab';
 import Profile from 'components/Profile';
 import { useMeQuery } from 'react-components.d';
+import { useLazyQuery } from '@apollo/react-hooks';
+import { LOGOUT } from 'cache/client.gql';
 
 const HeaderWrapper = styled.div`
   height: 40px;
@@ -47,7 +49,12 @@ const HeaderProfile = styled(Profile)`
   margin-right: 5px;
 `;
 
-const NicknameText = styled.span`
+const NicknameText = styled.button`
+  all: unset;
+  color: white;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   margin-right: 10px;
   border-right: 1px solid rgba(0, 0, 0, 0.2);
   padding-right: 10px;
@@ -55,7 +62,12 @@ const NicknameText = styled.span`
 `;
 
 function Header() {
-  const { data } = useMeQuery();
+  const { data: { me = null } = {} } = useMeQuery();
+  const [logoutLazyQuery] = useLazyQuery(LOGOUT);
+  const logout = (e: React.MouseEvent<HTMLButtonElement>): void => {
+    logoutLazyQuery();
+    window.location.href = '/';
+  };
   return (
     <>
       <HelmetTitle message={'main'} />
@@ -68,17 +80,14 @@ function Header() {
             <ItemColumn>
               <HeaderProfile
                 imageUrl={
-                  data && data.me && data.me.thumbnail
-                    ? data.me.thumbnail
-                    : process.env.PUBLIC_URL + '/images/profile.jpg'
+                  (me && me.thumbnail) ||
+                  process.env.PUBLIC_URL + '/images/profile.jpg'
                 }
                 size={'25px'}
               />
-              <NicknameText>
-                {data && data.me && data.me.nickname ? data.me.nickname : ''}
-              </NicknameText>
+              <NicknameText>{(me && me.nickname) || ''}</NicknameText>
               <AlarmTab />
-              <LogoutButton>logout</LogoutButton>
+              <LogoutButton onClick={logout}>logout</LogoutButton>
             </ItemColumn>
           </ItemContainer>
         </Backgound>

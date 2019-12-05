@@ -19,15 +19,13 @@ interface IProps {
 }
 
 function WritingFeedContainer({ setFeeds }: IProps) {
-  const { data: writingFeedData } = useQuery(getWritingFeedData);
+  const { data: { writingFeedContent = null } = {} } = useQuery(
+    getWritingFeedData
+  );
   const [writingFeedDataMutation] = useMutation(enrollWritingFeedData);
   const [fileId, setFileId] = useState(0);
   const [files, setFiles] = useState<Maybe<Scalars['Upload']>[]>([]);
-  const [content, setContent] = useState(
-    writingFeedData && writingFeedData.writingFeedContent
-      ? writingFeedData.writingFeedContent
-      : ''
-  );
+  const [content, setContent] = useState(writingFeedContent || '');
   const contentCursor = useRef<HTMLTextAreaElement>(null);
   const onChangeTextArea = (
     e: React.ChangeEvent<HTMLTextAreaElement>
@@ -68,7 +66,7 @@ function WritingFeedContainer({ setFeeds }: IProps) {
   };
 
   const [enrollFeedMutation] = useEnrollFeedMutation();
-  const { data } = useMeQuery();
+  const { data: { me = null } = {} } = useMeQuery();
 
   const onSubmit = async (
     e: React.FormEvent<HTMLFormElement>
@@ -106,9 +104,7 @@ function WritingFeedContainer({ setFeeds }: IProps) {
   return (
     <WritingFeedPresenter
       thumbnail={
-        data && data.me && data.me.thumbnail
-          ? data.me.thumbnail
-          : process.env.PUBLIC_URL + '/images/profile.jpg'
+        (me && me.thumbnail) || process.env.PUBLIC_URL + '/images/profile.jpg'
       }
       contentCursor={contentCursor}
       onSubmit={onSubmit}
