@@ -6,11 +6,7 @@ interface IProps {
 }
 
 const Search = (props: IProps) => {
-  return (
-    <>
-      <CardContainer location={props.location} />
-    </>
-  );
+  return <CardContainer location={props.location} />;
 };
 
 export default Search;

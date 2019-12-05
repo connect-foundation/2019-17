@@ -1,5 +1,8 @@
 export interface Feeds {
-  feedItems: IFeedItem[];
+  feeds: {
+    cursor: string;
+    feedItems: IFeedItem[];
+  };
 }
 
 export interface Idate {

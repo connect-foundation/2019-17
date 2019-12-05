@@ -1,13 +1,7 @@
 import React, { useState, useRef } from 'react';
 import WritingFeedPresenter from './WritingPresenter';
-import {
-  Scalars,
-  useMeQuery,
-  useEnrollFeedMutation,
-  Image
-} from 'react-components.d';
+import { Scalars, useMeQuery, useEnrollFeedMutation } from 'react-components.d';
 import { Maybe } from 'react-components.d';
-import { IFeedItem } from '../feed.type';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import {
   enrollWritingFeedData,
@@ -15,11 +9,7 @@ import {
 } from 'cache/writingFeed.gql';
 import { useEffect } from 'react';
 
-interface IProps {
-  setFeeds: React.Dispatch<React.SetStateAction<IFeedItem[]>>;
-}
-
-function WritingFeedContainer({ setFeeds }: IProps) {
+function WritingFeedContainer() {
   const { data: { writingFeedContent = null } = {} } = useQuery(
     getWritingFeedData
   );
@@ -27,6 +17,7 @@ function WritingFeedContainer({ setFeeds }: IProps) {
   const [fileId, setFileId] = useState(0);
   const [files, setFiles] = useState<Maybe<Scalars['Upload']>[]>([]);
   const [content, setContent] = useState(writingFeedContent || '');
+
   const contentCursor = useRef<HTMLTextAreaElement>(null);
   const [enrollFeedMutation] = useEnrollFeedMutation();
   const { data: { me = null } = {} } = useMeQuery();
