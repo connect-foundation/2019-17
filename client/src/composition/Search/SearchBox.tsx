@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import SearchButtonIcon from 'components/Icon/SearchButtonIcon';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useRef } from 'react';
 
 const SearchBoxInput = styled.input`
   height: 23px;
@@ -26,6 +28,9 @@ const SearchButton = styled.button`
 function SearchBox() {
   const [keyword, setKeyword] = useState('');
   const [btnColor, setBtnColor] = useState(false);
+  const wrapperRef = useRef(null);
+  useOutsideReset(wrapperRef);
+
   const ConditionalLink = ({ children }: any) =>
     keyword ? (
       <Link to={`/search?keyword=${keyword}`}>{children}</Link>
@@ -33,24 +38,47 @@ function SearchBox() {
       <>{children}</>
     );
 
+  function useOutsideReset(ref: any) {
+    function handleClickOutside(event: any) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setBtnColor(false);
+      }
+    }
+
+    useEffect(() => {
+      document.addEventListener('mousedown', handleClickOutside);
+
+      return () =>
+        document.removeEventListener('mousedown', handleClickOutside);
+    });
+  }
+
   function checkInput(event: any) {
-    if (keyword.length) return true;
+    if (keyword.length) {
+      setBtnColor(false);
+      return true;
+    }
+
     event.preventDefault();
     return false;
   }
 
   return (
-    <form onSubmit={checkInput}>
+    <form onSubmit={checkInput} ref={wrapperRef}>
       <SearchBoxInput
+        onSubmit={checkInput}
         type="text"
         placeholder="검색"
         value={keyword}
         onChange={e => setKeyword(e.target.value)}
         onFocus={() => setBtnColor(true)}
-        onBlur={() => setBtnColor(false)}
       />
       <ConditionalLink>
-        <SearchButton type="submit" color={btnColor ? 'none' : 'blue'}>
+        <SearchButton
+          type="submit"
+          color={btnColor ? 'none' : 'blue'}
+          onSubmit={checkInput}
+          onClick={() => setBtnColor(true)}>
           <SearchButtonIcon></SearchButtonIcon>
         </SearchButton>
       </ConditionalLink>
