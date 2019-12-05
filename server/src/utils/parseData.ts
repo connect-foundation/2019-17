@@ -18,7 +18,7 @@ export const parseResult = (
   return returnArr;
 };
 
-export const Datetransform = object => {
+export const datetransform = object => {
   let returnobj = {};
   for (let property in object) {
     if (object.hasOwnProperty(property)) {
@@ -31,7 +31,7 @@ export const Datetransform = object => {
         returnobj = { ...returnobj, ...temp };
       } else if (toString.call(propertyValue) === '[object Object]') {
         let temp = {};
-        temp[property] = Datetransform(propertyValue);
+        temp[property] = datetransform(propertyValue);
         returnobj = { ...returnobj, ...temp };
       }
     }
@@ -42,7 +42,7 @@ export const Datetransform = object => {
  * 주의사항 : 결과가 여러개이면 result.records 한개이면 result를 record로 받아야 함
  * @param records
  */
-export const ParseResultRecords = records => {
+export const parseResultRecords = records => {
   let result: any[] = [];
   for (const item of records) {
     let arr: any = {};
@@ -53,7 +53,7 @@ export const ParseResultRecords = records => {
         let nodeKey = item.keys[i];
         if (node instanceof neo4j.types.Node) {
           let temp = {};
-          temp[nodeKey] = Datetransform(node.properties);
+          temp[nodeKey] = datetransform(node.properties);
           arr = { ...arr, ...temp };
         } else if (node instanceof neo4j.types.Integer) {
           const temp = {};
@@ -64,7 +64,7 @@ export const ParseResultRecords = records => {
           temp[nodeKey] = [];
           for (const no of node) {
             let innerTemp = {};
-            innerTemp = { ...innerTemp, ...Datetransform(no.properties) }; // !!
+            innerTemp = { ...innerTemp, ...datetransform(no.properties) }; // !!
             temp[nodeKey].push(innerTemp);
           }
           arr = { ...arr, ...temp };

@@ -5,7 +5,7 @@ import {
   GET_NEW_FEED,
   GET_FRIENDS
 } from '../../schema/feed/query';
-import { ParseResultRecords } from '../../utils/parseData';
+import { parseResultRecords } from '../../utils/parseData';
 import {
   MutationEnrollFeedArgs,
   MutationResolvers,
@@ -36,14 +36,6 @@ const getUpdateLikeQuery = count => {
   }
 };
 
-const checkReqUserEmail = (req): boolean => {
-  if (!req.email) {
-    console.log('사용자 정보가 없습니다 다시 로그인해 주세요');
-    return false;
-  }
-  return true;
-};
-
 const createImages = async (pubsub, email, feedId, files) => {
   try {
     const filePromises: Array<Promise<any>> = [];
@@ -53,12 +45,12 @@ const createImages = async (pubsub, email, feedId, files) => {
     }
     const fileLocations = await Promise.all(filePromises);
     const matchQuery = `MATCH (f:Feed) WHERE ID(f) = $feedId `;
-    let RegisterImagesQuery = fileLocations.reduce((acc, { Location }, idx) => {
+    let REGISTER_IMAGE = fileLocations.reduce((acc, { Location }, idx) => {
       acc += createImageNodeAndRelation(idx, Location);
       return acc;
     }, matchQuery);
-    RegisterImagesQuery += ' RETURN f';
-    await requestDB(RegisterImagesQuery, { feedId });
+    REGISTER_IMAGE += ' RETURN f';
+    await requestDB(REGISTER_IMAGE, { feedId });
     publishingFeed(pubsub, feedId, email);
   } catch (error) {
     console.error(error);
@@ -71,7 +63,7 @@ const publishingFeed = async (pubsub, feedId, email) => {
     useremail: email
   });
 
-  const parsedRegisterdFeed = ParseResultRecords(registerdFeed);
+  const parsedRegisterdFeed = parseResultRecords(registerdFeed);
   pubsub.publish(NEW_FEED, {
     feeds: {
       cursor: '',
@@ -85,12 +77,9 @@ const checkIsFriend = async (friendEmail, myEmail) => {
     userEmail: myEmail,
     friendEmail
   });
-  const [parsedResult] = ParseResultRecords(result);
+  const [parsedResult] = parseResultRecords(result);
 
-  if (parsedResult.isFriend > 0) {
-    return true;
-  }
-  return false;
+  return parsedResult.isFriend > 0;
 };
 
 const mutationResolvers: MutationResolvers = {
@@ -120,10 +109,8 @@ const mutationResolvers: MutationResolvers = {
     }
   },
   updateLike: async (_, { feedId, count }, { req }) => {
-    let useremail = '';
-    if (checkReqUserEmail(req)) {
-      useremail = req.email;
-    }
+    isAuthenticated(req);
+    const useremail = req.email;
 
     const UPDATE_QUERY = getUpdateLikeQuery(count);
     try {
@@ -145,17 +132,15 @@ const queryResolvers: QueryResolvers = {
     { first, cursor = DEFAUT_MAX_DATE }: QueryFeedsArgs,
     { req }
   ): Promise<any> => {
-    let useremail = '';
-    if (checkReqUserEmail(req)) {
-      useremail = req.email;
-    }
+    isAuthenticated(req);
+    const useremail = req.email;
 
     const result = await requestDB(MATCH_FEEDS, {
       cursor,
       first,
       useremail
     });
-    const feeds = ParseResultRecords(result);
+    const feeds = parseResultRecords(result);
     const lastFeed = feeds[feeds.length - 1];
     const cursorDate = lastFeed.feed.createdAt;
     const cursorDateType = objToDate(cursorDate);
