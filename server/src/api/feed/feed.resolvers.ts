@@ -19,6 +19,7 @@ import {
   createImageNodeAndRelation
 } from '../../schema/feed/query';
 import isAuthenticated from '../../utils/isAuthenticated';
+import createDBError from '../../errors/createDBError';
 
 const session = db.session();
 
@@ -74,18 +75,23 @@ const mutationResolvers: MutationResolvers = {
     isAuthenticated(req);
     const { email } = req;
     const params = { content, email };
-    const results = await requestDB(WRITING_FEED_QUERY, params);
-    const feedId = Number(results[0].get(0).identity);
-    const FILE_LIMIT = 30;
-    if (files && files.length < FILE_LIMIT) {
-      createImages(feedId, files);
+    try {
+      const results = await requestDB(WRITING_FEED_QUERY, params);
+      const feedId = Number(results[0].get(0).identity);
+      const FILE_LIMIT = 30;
+      if (files && files.length < FILE_LIMIT) {
+        createImages(feedId, files);
+      }
+      const registerdFeed = await requestDB(GET_NEW_FEED, {
+        feedId,
+        useremail: email
+      });
+      const parsedRegisterdFeed = ParseResultRecords(registerdFeed);
+      return parsedRegisterdFeed[0];
+    } catch (error) {
+      const DBError = createDBError(error);
+      throw new DBError();
     }
-    const registerdFeed = await requestDB(GET_NEW_FEED, {
-      feedId,
-      useremail: email
-    });
-    const parsedRegisterdFeed = ParseResultRecords(registerdFeed);
-    return parsedRegisterdFeed[0];
   },
   updateLike: async (_, { feedId, count }, { req }) => {
     let useremail = '';

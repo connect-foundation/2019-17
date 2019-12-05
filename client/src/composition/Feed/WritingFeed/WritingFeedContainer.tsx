@@ -13,6 +13,7 @@ import {
   enrollWritingFeedData,
   getWritingFeedData
 } from 'cache/writingFeed.gql';
+import { useEffect } from 'react';
 
 interface IProps {
   setFeeds: React.Dispatch<React.SetStateAction<IFeedItem[]>>;
@@ -29,11 +30,17 @@ function WritingFeedContainer({ setFeeds }: IProps) {
       : ''
   );
   const contentCursor = useRef<HTMLTextAreaElement>(null);
-  if (contentCursor.current) {
-    const len = contentCursor.current.value.length;
-    contentCursor.current.focus();
-    contentCursor.current.setSelectionRange(len, len);
-  }
+  const [enrollFeedMutation] = useEnrollFeedMutation();
+  const { data } = useMeQuery();
+  
+  useEffect(() => {
+    if (contentCursor.current) {
+      const len = contentCursor.current.value.length;
+      contentCursor.current.focus();
+      contentCursor.current.setSelectionRange(len, len);
+    }
+  }, []);
+
   const onChangeTextArea = (
     e: React.ChangeEvent<HTMLTextAreaElement>
   ): void => {
@@ -71,9 +78,6 @@ function WritingFeedContainer({ setFeeds }: IProps) {
       );
     }
   };
-
-  const [enrollFeedMutation] = useEnrollFeedMutation();
-  const { data } = useMeQuery();
 
   const checkEnrollFeed = (data: any) => {
     if (data && data.enrollFeed) {
