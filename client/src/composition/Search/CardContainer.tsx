@@ -29,7 +29,8 @@ function CardContainer({ location }: IProps) {
   const { loading, error, data } = useQuery(SEARCH_USER, {
     variables: {
       keyword
-    }
+    },
+    fetchPolicy: 'network-only'
   });
 
   if (loading) return <></>;
