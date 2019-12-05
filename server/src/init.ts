@@ -26,7 +26,6 @@ const appOptions: Options = {
         .filter(e => e.startsWith('token='))[0]
         .split('token=')[1];
       const { email } = decodeJWT(token);
-      // const email = 'vantovan7414@gmail.com';
       return { email };
     }
   }
