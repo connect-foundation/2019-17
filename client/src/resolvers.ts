@@ -7,6 +7,24 @@ export const typeDefs = gql`
   }
 `;
 
+export const loggedIn = gql`
+  query publishUser {
+    loginUser
+  }
+`;
+
+export const loginSubscription = gql`
+  subscription {
+    login
+  }
+`;
+
+export const logoutSubscription = gql`
+  subscription {
+    logout
+  }
+`;
+
 export const resolvers = {
   Query: {
     login: (_: any, __: any, { cache }: { cache: any }) => {

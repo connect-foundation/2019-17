@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import SearchBox from 'composition/Search/SearchBox';
+import { loginSubscription, logoutSubscription } from 'resolvers';
+import { useSubscription } from '@apollo/react-hooks';
 
 const HeaderWrapper = styled.div`
   height: 43px;
@@ -23,7 +25,14 @@ const ItemContainer = styled.div`
   margin: auto;
 `;
 
-function Header() {
+const Header: React.FC = () => {
+  const { loading: loginLoading, data: loginUser } = useSubscription(
+    loginSubscription
+  );
+  const { loading: logoutLoading, data: logoutUser } = useSubscription(
+    logoutSubscription
+  );
+  console.log(loginLoading, loginUser, logoutLoading, logoutUser);
   return (
     <HeaderWrapper>
       <Backgound>
@@ -33,6 +42,6 @@ function Header() {
       </Backgound>
     </HeaderWrapper>
   );
-}
+};
 
 export default Header;

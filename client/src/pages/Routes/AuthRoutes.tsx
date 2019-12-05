@@ -7,6 +7,8 @@ import Main from '../Main';
 import MyPage from '../MyPage';
 import NoMatch from '../NoMatch';
 import Search from '../Search';
+import { useQuery } from '@apollo/react-hooks';
+import { loggedIn } from 'resolvers';
 
 const Container = styled.div`
   margin: 0 auto;
@@ -14,6 +16,7 @@ const Container = styled.div`
 `;
 
 const AuthRoutes: React.FC = () => {
+  useQuery(loggedIn);
   return (
     <>
       <Header />

@@ -6,6 +6,7 @@ import logger from 'morgan';
 import config from './utils/config';
 import { signInWithEmail, checkToken } from './middleware/authController';
 import passport from './middleware/passport';
+import { pubsub } from './utils/pubsub';
 import schema from './schema';
 import setUserFromJWT from './middleware/setUserFromJWT';
 
@@ -14,7 +15,12 @@ class App {
   constructor() {
     this.app = new GraphQLServer({
       schema,
-      context: ({ request, response }) => ({ req: request, res: response })
+      context: ({ request, response, connection }) => ({
+        req: request,
+        res: response,
+        email: connection ? connection.context.email : undefined,
+        pubsub
+      })
     });
     this.middlewares();
   }

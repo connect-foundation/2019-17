@@ -1,0 +1,9 @@
+type Query {
+  loginUser(email: String): Boolean
+  logoutUser(email: String): Boolean
+}
+
+type Subscription {
+  login: String!
+  logout: String!
+}
