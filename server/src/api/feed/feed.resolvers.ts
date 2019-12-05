@@ -14,7 +14,6 @@ import {
 } from '../../types';
 import uploadToObjStorage from '../../middleware/uploadToObjStorage';
 import { requestDB } from '../../utils/requestDB';
-
 import {
   WRITING_FEED_QUERY,
   createImageNodeAndRelation

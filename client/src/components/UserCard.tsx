@@ -42,7 +42,6 @@ interface IProps {
   children?: ReactNode;
   imageUrl: string;
   nickname: string;
-  // friendStatus: number;
 }
 
 function UserCard({ imageUrl, nickname, children }: IProps) {
@@ -50,7 +49,13 @@ function UserCard({ imageUrl, nickname, children }: IProps) {
     <CardDiv>
       <CardContentDiv className="mainbox">
         <ProfileImgBox>
-          <Profile imageUrl={imageUrl} alt={'profile image'} size="72px" />
+          <Profile
+            imageUrl={
+              imageUrl || process.env.PUBLIC_URL + '/images/profile.jpg'
+            }
+            alt={'profile image'}
+            size="72px"
+          />
         </ProfileImgBox>
         <ProfileDiv>
           <ProfileNameDiv>{nickname}</ProfileNameDiv>
