@@ -9,13 +9,13 @@ import BoostBookLogo from 'components/Icon/BoostBookLogo';
 
 const Container = styled.div`
   display: flex;
-  width: 500px;
+  width: 800px;
   align-items: center;
 `;
 
 const SearchBoxInput = styled.input`
   height: 23px;
-  width: 100%;
+  width: 400px;
   padding-left: 5px;
   float: left;
   max-width: 448px;
@@ -80,7 +80,9 @@ function SearchBox() {
 
   return (
     <Container>
-      <Logo size={'23px'} />
+      <Link to="/">
+        <Logo size={'23px'} />
+      </Link>
       <form onSubmit={checkInput} ref={wrapperRef}>
         <SearchBoxInput
           onSubmit={checkInput}
