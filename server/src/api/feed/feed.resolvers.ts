@@ -21,6 +21,8 @@ import {
   createImageNodeAndRelation
 } from '../../schema/feed/query';
 
+import createDBError from '../../errors/createDBError';
+
 import { dateToISO, objToDate } from '../../utils/dateutil';
 import { withFilter } from 'graphql-subscriptions';
 import isAuthenticated from '../../utils/isAuthenticated';
@@ -115,7 +117,8 @@ const mutationResolvers: MutationResolvers = {
       return true;
     } catch (error) {
       console.log(error);
-      return false;
+      const DBError = createDBError(error);
+      throw new DBError();
     }
   },
   updateLike: async (_, { feedId, count }, { req }) => {

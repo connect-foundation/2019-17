@@ -66,6 +66,9 @@ export const FEEDS_SUBSCRIPTION = gql`
         feedId
         totallikes
         hasLiked
+        imglist {
+          url
+        }
         comments {
           id
           content
