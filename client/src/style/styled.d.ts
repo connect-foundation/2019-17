@@ -18,5 +18,7 @@ declare module 'styled-components' {
       radius: string;
       feedBorder: FlattenInterpolation;
     };
+    alarmWidth: string;
+    alarmHeight: string;
   }
 }

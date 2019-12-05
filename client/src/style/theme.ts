@@ -18,7 +18,9 @@ const theme: DefaultTheme = {
       border: 1px solid #dddfe2;
       border-radius: 3px;
     `
-  }
+  },
+  alarmWidth: '430px',
+  alarmHeight: '650px'
 };
 
 export default theme;
