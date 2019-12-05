@@ -10,16 +10,18 @@ import {
 import { useEffect } from 'react';
 
 function WritingFeedContainer() {
-  const { data: writingFeedData } = useQuery(getWritingFeedData);
+  const { data: { writingFeedContent = null } = {} } = useQuery(
+    getWritingFeedData
+  );
   const [writingFeedDataMutation] = useMutation(enrollWritingFeedData);
   const [fileId, setFileId] = useState(0);
   const [files, setFiles] = useState<Maybe<Scalars['Upload']>[]>([]);
-  const [content, setContent] = useState(
-    writingFeedData && writingFeedData.writingFeedContent
-      ? writingFeedData.writingFeedContent
-      : ''
-  );
+  const [content, setContent] = useState(writingFeedContent || '');
+
   const contentCursor = useRef<HTMLTextAreaElement>(null);
+  const [enrollFeedMutation] = useEnrollFeedMutation();
+  const { data: { me = null } = {} } = useMeQuery();
+
   useEffect(() => {
     if (contentCursor.current) {
       const len = contentCursor.current.value.length;
@@ -66,9 +68,6 @@ function WritingFeedContainer() {
     }
   };
 
-  const [enrollFeedMutation] = useEnrollFeedMutation();
-  const { data } = useMeQuery();
-
   const onSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
@@ -93,9 +92,7 @@ function WritingFeedContainer() {
   return (
     <WritingFeedPresenter
       thumbnail={
-        data && data.me && data.me.thumbnail
-          ? data.me.thumbnail
-          : process.env.PUBLIC_URL + '/images/profile.jpg'
+        (me && me.thumbnail) || process.env.PUBLIC_URL + '/images/profile.jpg'
       }
       contentCursor={contentCursor}
       onSubmit={onSubmit}
