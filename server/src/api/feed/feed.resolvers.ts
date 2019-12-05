@@ -1,4 +1,3 @@
-import db from '../../db';
 import {
   MATCH_FEEDS,
   UPDATE_LIKE,
@@ -26,7 +25,6 @@ import createDBError from '../../errors/createDBError';
 import { dateToISO, objToDate } from '../../utils/dateutil';
 import { withFilter } from 'graphql-subscriptions';
 import isAuthenticated from '../../utils/isAuthenticated';
-const session = db.session();
 
 const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
 
@@ -83,11 +81,11 @@ const publishingFeed = async (pubsub, feedId, email) => {
 };
 
 const checkIsFriend = async (friendEmail, myEmail) => {
-  const result = await session.run(GET_FRIENDS, {
+  const result = await requestDB(GET_FRIENDS, {
     userEmail: myEmail,
     friendEmail
   });
-  const [parsedResult] = ParseResultRecords(result.records);
+  const [parsedResult] = ParseResultRecords(result);
 
   if (parsedResult.isFriend > 0) {
     return true;
@@ -128,12 +126,16 @@ const mutationResolvers: MutationResolvers = {
     }
 
     const UPDATE_QUERY = getUpdateLikeQuery(count);
-    await session.run(UPDATE_QUERY, {
-      useremail,
-      feedId
-    });
-
-    return true;
+    try {
+      await requestDB(UPDATE_QUERY, {
+        useremail,
+        feedId
+      });
+      return true;
+    } catch (error) {
+      const DBError = createDBError(error);
+      throw new DBError();
+    }
   }
 };
 
@@ -147,13 +149,13 @@ const queryResolvers: QueryResolvers = {
     if (checkReqUserEmail(req)) {
       useremail = req.email;
     }
-    const result = await session.run(MATCH_FEEDS, {
+
+    const result = await requestDB(MATCH_FEEDS, {
       cursor,
       first,
       useremail
     });
-
-    const feeds = ParseResultRecords(result.records);
+    const feeds = ParseResultRecords(result);
     const lastFeed = feeds[feeds.length - 1];
     const cursorDate = lastFeed.feed.createdAt;
     const cursorDateType = objToDate(cursorDate);
