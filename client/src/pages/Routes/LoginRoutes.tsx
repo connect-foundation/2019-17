@@ -6,7 +6,10 @@ import { useQuery } from '@apollo/react-hooks';
 
 const LoginRoutes = () => {
   useQuery(login);
-  const { data } = useQuery(getIsLoggedIn, { fetchPolicy: 'network-only' });
+  const { data, loading } = useQuery(getIsLoggedIn, {
+    fetchPolicy: 'network-only'
+  });
+  if (loading) return <></>;
   return data && data.isLoggedIn ? <AuthRoutes /> : <NonAuthRoutes />;
 };
 
