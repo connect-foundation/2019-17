@@ -4,13 +4,7 @@ import { Comment } from 'react-components.d';
 
 // 역할 :
 const CommentContainer = ({ comment }: { comment: Comment }) => {
-  return (
-    <>
-      <div>
-        <CommentPresentor content={comment.content} />
-      </div>
-    </>
-  );
+  return <CommentPresentor content={comment.content} />;
 };
 
 export default CommentContainer;

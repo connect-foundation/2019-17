@@ -7,7 +7,7 @@ interface Iprops {
 }
 
 const ImageContainer = ({ images }: Iprops) => {
-  if (!images) return <>______</>;
+  if (!images) return <></>;
   return (
     <>
       {images.map(image =>

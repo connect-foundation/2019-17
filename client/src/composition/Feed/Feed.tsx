@@ -77,16 +77,14 @@ function Feed({ content, createdAt, feedinfo }: Iprops) {
         <CommentDiv>
           {feedinfo.comments && feedinfo.comments.length > 0 ? (
             feedinfo.comments.map(comment => {
-              if (comment) {
-                return (
-                  <>
-                    <CommentContainer comment={comment} />
-                    <WriteCommentPresentor />
-                  </>
-                );
-              } else {
-                return <></>;
-              }
+              return comment ? (
+                <>
+                  <CommentContainer comment={comment} />
+                  <WriteCommentPresentor />
+                </>
+              ) : (
+                <></>
+              );
             })
           ) : (
             <>

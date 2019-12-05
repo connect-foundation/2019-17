@@ -14,11 +14,9 @@ const ImageBox = styled.img`
 const ImagePreview = ({ url }: Image) => {
   if (!url) return <></>;
   return (
-    <>
-      <span>
-        <ImageBox src={url} alt="My Image" />
-      </span>
-    </>
+    <span>
+      <ImageBox src={url} alt="My Image" />
+    </span>
   );
 };
 
