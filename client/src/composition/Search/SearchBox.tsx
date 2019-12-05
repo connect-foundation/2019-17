@@ -69,12 +69,13 @@ function SearchBox() {
   }
 
   function checkInput(event: any) {
+    event.preventDefault();
+
     if (keyword.length) {
       setBtnColor(false);
       return true;
     }
 
-    event.preventDefault();
     return false;
   }
 
@@ -98,7 +99,8 @@ function SearchBox() {
             color={btnColor ? 'none' : 'blue'}
             onSubmit={checkInput}
             onClick={() => setBtnColor(true)}>
-            <SearchButtonIcon></SearchButtonIcon>
+            <SearchButtonIcon
+              color={btnColor ? 'white' : 'gray'}></SearchButtonIcon>
           </SearchButton>
         </ConditionalLink>
       </form>

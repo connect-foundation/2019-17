@@ -24,6 +24,13 @@ interface IProps {
   location: IKey;
 }
 
+interface IUser {
+  nickname: string;
+  email: string;
+  thumbnail: string;
+  relation: string;
+}
+
 function CardContainer({ location }: IProps) {
   const keyword = queryString.parse(location.search.slice(1))[`keyword`];
   const { loading, error, data } = useQuery(SEARCH_USER, {
@@ -53,14 +60,13 @@ function CardContainer({ location }: IProps) {
 
   return (
     <>
-      {data.searchUser.map((user: { [key: string]: string }) => (
-        <UserCard
-          nickname={user.nickname}
-          key={user.email}
-          imageUrl={user.thumbnail}>
-          <ButtonContainer email={user.email} initialRelation={user.relation} />
-        </UserCard>
-      ))}
+      {data.searchUser.map(
+        ({ nickname, email, thumbnail, relation }: IUser) => (
+          <UserCard nickname={nickname} key={email} imageUrl={thumbnail}>
+            <ButtonContainer email={email} initialRelation={relation} />
+          </UserCard>
+        )
+      )}
     </>
   );
 }
