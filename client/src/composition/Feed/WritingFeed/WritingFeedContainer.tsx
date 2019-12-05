@@ -1,24 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import WritingFeedPresenter from './WritingPresenter';
-import {
-  Scalars,
-  EnrollFeedMutationHookResult,
-  EnrollFeedMutationVariables
-} from 'react-components.d';
+import { Scalars, useMeQuery, useEnrollFeedMutation } from 'react-components.d';
 import { Maybe } from 'react-components.d';
-import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import {
+  enrollWritingFeedData,
+  getWritingFeedData
+} from 'cache/writingFeed.gql';
+import { useEffect } from 'react';
 
 function WritingFeedContainer() {
-  const [content, setContent] = useState('');
+  const { data: writingFeedData } = useQuery(getWritingFeedData);
+  const [writingFeedDataMutation] = useMutation(enrollWritingFeedData);
+  const [fileId, setFileId] = useState(0);
+  const [files, setFiles] = useState<Maybe<Scalars['Upload']>[]>([]);
+  const [content, setContent] = useState(
+    writingFeedData && writingFeedData.writingFeedContent
+      ? writingFeedData.writingFeedContent
+      : ''
+  );
+  const contentCursor = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    if (contentCursor.current) {
+      const len = contentCursor.current.value.length;
+      contentCursor.current.focus();
+      contentCursor.current.setSelectionRange(len, len);
+    }
+  }, []);
+
   const onChangeTextArea = (
     e: React.ChangeEvent<HTMLTextAreaElement>
   ): void => {
-    setContent(e.target.value);
+    const {
+      target: { value: content }
+    } = e;
+    setContent(content);
+    writingFeedDataMutation({ variables: { content } });
   };
-
-  const [fileId, setFileId] = useState(0);
-  const [files, setFiles] = useState<Maybe<Scalars['Upload']>[]>([]);
 
   const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { target } = e;
@@ -48,37 +66,38 @@ function WritingFeedContainer() {
     }
   };
 
-  const ENROLL_FEED_MUTATION = gql`
-    mutation enrollFeed($content: String!, $files: [Upload]) {
-      enrollFeed(content: $content, files: $files)
-    }
-  `;
-
-  const [writingFeedMutation] = useMutation<
-    EnrollFeedMutationHookResult,
-    EnrollFeedMutationVariables
-  >(ENROLL_FEED_MUTATION);
+  const [enrollFeedMutation] = useEnrollFeedMutation();
+  const { data } = useMeQuery();
 
   const onSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
+    if (!content) {
+      alert('피드 내용을 입력해주세요.');
+      if (contentCursor.current) contentCursor.current.focus();
+      return;
+    }
     const parseFiles = files.map(item => item.file);
-    const {
-      data: { enrollFeed }
-    } = (await writingFeedMutation({
+    const { data } = await enrollFeedMutation({
       variables: { content, files: parseFiles }
-    })) as any;
-    if (enrollFeed) alert('피드가 등록되었습니다.');
-    files.forEach(file => {
-      window.URL.revokeObjectURL(file.fileUrl);
     });
+    if (data && data.enrollFeed) {
+      alert('피드가 등록되었습니다.');
+    }
+    writingFeedDataMutation({ variables: { content: '' } });
     setFiles([]);
     setContent('');
   };
 
   return (
     <WritingFeedPresenter
+      thumbnail={
+        data && data.me && data.me.thumbnail
+          ? data.me.thumbnail
+          : process.env.PUBLIC_URL + '/images/profile.jpg'
+      }
+      contentCursor={contentCursor}
       onSubmit={onSubmit}
       content={content}
       onChangeTextArea={onChangeTextArea}

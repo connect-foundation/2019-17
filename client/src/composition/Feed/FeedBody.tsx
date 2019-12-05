@@ -12,6 +12,8 @@ const FeedText = styled.div`
   font-size: 14px;
   font-weight: normal;
   line-height: 1.38;
+  word-break: break-all;
+  white-space: pre;
 `;
 
 interface Iprops {

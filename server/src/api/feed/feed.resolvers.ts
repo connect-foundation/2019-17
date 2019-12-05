@@ -10,19 +10,21 @@ import { ParseResultRecords } from '../../utils/parseData';
 import {
   MutationEnrollFeedArgs,
   MutationResolvers,
-  QueryResolvers
+  QueryResolvers,
+  QueryFeedsArgs
 } from '../../types';
 import uploadToObjStorage from '../../middleware/uploadToObjStorage';
 import { requestDB } from '../../utils/requestDB';
-import { WRITING_FEED_QUERY, createImageNodeAndRelation } from './feed.query';
-import console = require('console');
-import { FeedsQueryArgs } from 'src/types/graph';
+
+import {
+  WRITING_FEED_QUERY,
+  createImageNodeAndRelation
+} from '../../schema/feed/query';
+
 import { dateToISO, objToDate } from '../../utils/dateutil';
 import { withFilter } from 'graphql-subscriptions';
-
+import isAuthenticated from '../../utils/isAuthenticated';
 const session = db.session();
-
-// property로 조회할 때
 
 const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
 
@@ -35,33 +37,47 @@ const getUpdateLikeQuery = count => {
 };
 
 const checkReqUserEmail = (req): boolean => {
-  if (!req.user) {
+  if (!req.email) {
     console.log('사용자 정보가 없습니다 다시 로그인해 주세요');
     return false;
   }
   return true;
 };
 
-const createImages = async (feedId, files) => {
+const createImages = async (pubsub, email, feedId, files) => {
   try {
-    let filePromises: Promise<any>[] = [];
+    const filePromises: Array<Promise<any>> = [];
     for await (const file of files) {
       const { filename, createReadStream } = file;
-      filePromises = [
-        ...filePromises,
-        uploadToObjStorage(createReadStream(), filename)
-      ];
+      filePromises.push(uploadToObjStorage(createReadStream(), filename));
     }
     const fileLocations = await Promise.all(filePromises);
     const matchQuery = `MATCH (f:Feed) WHERE ID(f) = $feedId `;
-    const query = fileLocations.reduce((acc, { Location }, idx) => {
+    let RegisterImagesQuery = fileLocations.reduce((acc, { Location }, idx) => {
       acc += createImageNodeAndRelation(idx, Location);
       return acc;
     }, matchQuery);
-    await requestDB(query, { feedId });
+    RegisterImagesQuery += ' RETURN f';
+    await requestDB(RegisterImagesQuery, { feedId });
+    publishingFeed(pubsub, feedId, email);
   } catch (error) {
     console.error(error);
   }
+};
+
+const publishingFeed = async (pubsub, feedId, email) => {
+  const registerdFeed = await requestDB(GET_NEW_FEED, {
+    feedId,
+    useremail: email
+  });
+
+  const parsedRegisterdFeed = ParseResultRecords(registerdFeed);
+  pubsub.publish(NEW_FEED, {
+    feeds: {
+      cursor: '',
+      feedItems: parsedRegisterdFeed
+    }
+  });
 };
 
 const checkIsFriend = async (friendEmail, myEmail) => {
@@ -84,34 +100,29 @@ const mutationResolvers: MutationResolvers = {
     { content, files }: MutationEnrollFeedArgs,
     { req, pubsub }
   ): Promise<boolean> => {
+    isAuthenticated(req);
     const { email } = req;
-    if (!email) return false;
     const params = { content, email };
-    const results = await requestDB(WRITING_FEED_QUERY, params);
-    const feedId = Number(results[0].get(0).identity);
-    if (files && files.length) {
-      createImages(feedId, files);
-    }
+    try {
+      const results = await requestDB(WRITING_FEED_QUERY, params);
+      const feedId = Number(results[0].get(0).identity);
+      const FILE_LIMIT = 30;
 
-    const registerdFeed = await requestDB(GET_NEW_FEED, {
-      feedId,
-      useremail: email
-    });
-
-    const parsedRegisterdFeed = ParseResultRecords(registerdFeed);
-
-    pubsub.publish(NEW_FEED, {
-      feeds: {
-        cursor: '',
-        feedItems: parsedRegisterdFeed
+      if (files && files.length < FILE_LIMIT) {
+        createImages(pubsub, email, feedId, files);
+      } else {
+        publishingFeed(pubsub, feedId, email);
       }
-    });
-    return true;
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   },
   updateLike: async (_, { feedId, count }, { req }) => {
     let useremail = '';
     if (checkReqUserEmail(req)) {
-      useremail = req.user.email;
+      useremail = req.email;
     }
 
     const UPDATE_QUERY = getUpdateLikeQuery(count);
@@ -127,12 +138,12 @@ const mutationResolvers: MutationResolvers = {
 const queryResolvers: QueryResolvers = {
   feeds: async (
     _,
-    { first, cursor = DEFAUT_MAX_DATE }: FeedsQueryArgs,
+    { first, cursor = DEFAUT_MAX_DATE }: QueryFeedsArgs,
     { req }
   ): Promise<any> => {
     let useremail = '';
     if (checkReqUserEmail(req)) {
-      useremail = req.user.email;
+      useremail = req.email;
     }
     const result = await session.run(MATCH_FEEDS, {
       cursor,
@@ -170,11 +181,16 @@ export default {
           const myEmail = context.email;
           const friendEmail = variables.userEmail;
           const isFriend = await checkIsFriend(friendEmail, myEmail);
+          /* if (isFriend && myEmail === friendEmail) {
+            return true;
+          } else {
+            return false;
+          } */
+
           console.log(isFriend);
           console.log('myEmail ', myEmail);
           console.log('friendEmail ', friendEmail);
-
-          return isFriend;
+          return true;
         }
       )
     }

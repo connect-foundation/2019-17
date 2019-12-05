@@ -4,7 +4,7 @@ import useIntersect from 'hooks/useIntersectObserver';
 import styled from 'styled-components';
 import WritingFeed from './WritingFeed';
 import NewFeedAlarm from './NewFeedAlarm';
-import { useGetfeedsQuery } from 'react-components.d';
+import { useGetfeedsQuery, useMeQuery } from 'react-components.d';
 import { getDate } from '../../utils/dateUtil';
 import { FEEDS_SUBSCRIPTION } from './feed.query';
 
@@ -22,9 +22,10 @@ const FeedList = () => {
 
   const [feedAlarm, setFeedAlarm] = useState(0);
   const [AlarmMessage, setAlarmMessage] = useState('');
-
+  const { data: myInfo } = useMeQuery();
   const { data, fetchMore, subscribeToMore } = useGetfeedsQuery({
-    variables: { first: OFFSET, currentCursor: '9999-12-31T09:29:26.050Z' }
+    variables: { first: OFFSET, currentCursor: '9999-12-31T09:29:26.050Z' },
+    notifyOnNetworkStatusChange: true
   });
 
   const scrollTop = () => {
@@ -85,7 +86,9 @@ const FeedList = () => {
   const subscribeToNewComments = () => {
     return subscribeToMore({
       document: FEEDS_SUBSCRIPTION,
-      variables: { userEmail: 'yeonseo007d@gmail.com' },
+      variables: {
+        userEmail: myInfo && myInfo.me && myInfo.me.email ? myInfo.me.email : ''
+      },
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
         const { data: newFeeds } = subscriptionData;
@@ -133,6 +136,7 @@ const FeedList = () => {
           onEffect={subscribeToNewComments}
         />
       </div>
+
       {data && data.feeds && data.feeds.feedItems
         ? data.feeds.feedItems.map(feed =>
             feed && feed.feed && feed.feed.createdAt ? (

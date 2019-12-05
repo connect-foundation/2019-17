@@ -71,9 +71,6 @@ type Query {
 
 type Mutation {
   updateLike(feedId: Int, count: Int): Boolean
-}
-
-type Mutation {
   enrollFeed(content: String!, files: [Upload]): Boolean!
 }
 
