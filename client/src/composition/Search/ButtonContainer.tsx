@@ -38,7 +38,7 @@ function ButtonContainer({ email, initialRelation }: IProps) {
   const [relation, setRelation] = useState(initialRelation);
   const [requestFriend] = useMutation(REQUEST_FRIEND);
 
-  async function clicked(e: React.MouseEvent<HTMLButtonElement>) {
+  async function sendRequest(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
     const changedRelation = getNextRelation(relation);
@@ -52,7 +52,7 @@ function ButtonContainer({ email, initialRelation }: IProps) {
     <>
       <ActionButton
         text={getReleationText(relation)}
-        onClick={clicked}></ActionButton>
+        onClick={sendRequest}></ActionButton>
     </>
   );
 }

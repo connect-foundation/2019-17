@@ -12,7 +12,7 @@ export default {
       const allUser = await requestDB(
         findUserAndRelationByNicknameWithoutMeQuery,
         {
-          nickname: `${keyword}.*`,
+          nickname: `.*${keyword}.*`,
           email: req.email
         }
       );
