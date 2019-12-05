@@ -21,7 +21,6 @@ export const parseResult = (
 export const Datetransform = object => {
   let returnobj = {};
   for (let property in object) {
-    // console.log('---property --- ', property); 뮤터블!!
     if (object.hasOwnProperty(property)) {
       const propertyValue = object[property];
       if (neo4j.isInt(propertyValue)) {

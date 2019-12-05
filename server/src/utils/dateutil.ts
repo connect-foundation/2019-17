@@ -5,9 +5,7 @@ import { Idate } from 'src/types';
  * @param date
  */
 export const dateToISO = (date): string => {
-  console.log(date);
   const momentTime = moment(date);
-  console.log('momentTime created', momentTime.format());
   return momentTime.format('YYYY-MM-DDTHH:mm:ss.SSS');
 };
 

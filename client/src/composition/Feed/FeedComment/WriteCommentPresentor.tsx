@@ -28,7 +28,6 @@ const WriteCommentPresentor = ({ content }: Comment) => {
 
   function validateNullCheck(e: React.ChangeEvent<HTMLInputElement>) {
     const result = e.target.value;
-    console.log('result ', result);
   }
 
   return (

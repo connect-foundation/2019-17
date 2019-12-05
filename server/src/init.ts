@@ -21,7 +21,6 @@ const appOptions: Options = {
   cors: corsOptions,
   subscriptions: {
     onConnect: (connectionParams, webSocket, context) => {
-      console.log('connection');
       const token = context.request.headers.cookie
         .split(';')
         .filter(e => e.startsWith('token='))[0]
