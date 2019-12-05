@@ -15,7 +15,7 @@ const SearchBoxInput = styled.input`
 `;
 
 const SearchButton = styled.button`
-  background-color: #f5f6f7;
+  background-color: ${props => (props.color === 'none' ? '#4080FF' : '#f5f6f7')}
   cursor: pointer;
   border-radius: 0 2px 2px 0;
   bottom: 0;
@@ -25,20 +25,36 @@ const SearchButton = styled.button`
 
 function SearchBox() {
   const [keyword, setKeyword] = useState('');
+  const [btnColor, setBtnColor] = useState(false);
+  const ConditionalLink = ({ children }: any) =>
+    keyword ? (
+      <Link to={`/search?keyword=${keyword}`}>{children}</Link>
+    ) : (
+      <>{children}</>
+    );
+
+  function checkInput(event: any) {
+    if (keyword.length) return true;
+    event.preventDefault();
+    return false;
+  }
+
   return (
-    <>
+    <form onSubmit={checkInput}>
       <SearchBoxInput
         type="text"
         placeholder="검색"
         value={keyword}
         onChange={e => setKeyword(e.target.value)}
+        onFocus={() => setBtnColor(true)}
+        onBlur={() => setBtnColor(false)}
       />
-      <Link to={`/search?keyword=${keyword}`}>
-        <SearchButton>
+      <ConditionalLink>
+        <SearchButton type="submit" color={btnColor ? 'none' : 'blue'}>
           <SearchButtonIcon></SearchButtonIcon>
         </SearchButton>
-      </Link>
-    </>
+      </ConditionalLink>
+    </form>
   );
 }
 

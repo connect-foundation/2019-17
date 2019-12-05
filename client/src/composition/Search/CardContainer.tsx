@@ -32,7 +32,7 @@ function CardContainer({ location }: IProps) {
     }
   });
 
-  if (loading) return <p>로딩중...</p>;
+  if (loading) return <></>;
   if (error)
     return (
       <>
