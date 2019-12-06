@@ -4,7 +4,7 @@ import FeedHeader from './FeedHeader';
 import FeedBody from './FeedBody';
 import FeedFooter from './FeedFooter';
 import CommentContainer from './FeedComment';
-import { IFeed } from 'react-components.d';
+import { IFeed, Comment } from 'react-components.d';
 import WriteCommentPresentor from './FeedComment/WriteCommentPresentor';
 
 const FeedDiv = styled.div`
@@ -43,7 +43,7 @@ interface Iprops {
 function Feed({ content, createdAt, feedinfo }: Iprops) {
   const [likeCnt, setLikeCnt] = useState<number>(0);
   const [hasLiked, setHasLiked] = useState<boolean>(false);
-
+  const [myComments, setMyComments] = useState<Comment[]>();
   useEffect(() => {
     if (feedinfo.totallikes) {
       setLikeCnt(feedinfo.totallikes);
@@ -79,7 +79,10 @@ function Feed({ content, createdAt, feedinfo }: Iprops) {
             feedinfo.comments.map(comment => {
               return comment ? (
                 <>
-                  <CommentContainer comment={comment} />
+                  <CommentContainer
+                    comment={comment}
+                    key={createdAt.toString()}
+                  />
                 </>
               ) : (
                 <></>
@@ -88,7 +91,27 @@ function Feed({ content, createdAt, feedinfo }: Iprops) {
           ) : (
             <></>
           )}
-          <WriteCommentPresentor feedId={feedinfo.feedId} />
+          {myComments ? (
+            myComments.map((myComment, idx) => {
+              return myComment ? (
+                <CommentContainer
+                  comment={myComment}
+                  key={new Date().toISOString() + idx}
+                />
+              ) : (
+                <></>
+              );
+            })
+          ) : (
+            <></>
+          )}
+          {
+            <WriteCommentPresentor
+              feedId={feedinfo.feedId}
+              setComment={setMyComments}
+              myComments={myComments ? myComments : []}
+            />
+          }
         </CommentDiv>
       </FeedDiv>
     </>

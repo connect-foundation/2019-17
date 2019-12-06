@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { darken } from 'polished';
-import { Comment, useWriteCommentMutation } from 'react-components.d';
+import { useWriteCommentMutation, Comment } from 'react-components.d';
 import useInput, { IUseInput } from 'hooks/useInput';
 import Profile from 'components/Profile';
 
@@ -25,9 +25,13 @@ const Input = styled.input`
 
 // 역할 :
 const WriteCommentPresentor = ({
-  feedId
+  feedId,
+  setComment,
+  myComments
 }: {
   feedId: number | null | undefined;
+  setComment: React.Dispatch<React.SetStateAction<Comment[]>>;
+  myComments: Comment[];
 }) => {
   const commentText: IUseInput = useInput('', () => {});
 
@@ -43,6 +47,14 @@ const WriteCommentPresentor = ({
         variables: { content: comment, feedId: Number(feedId) }
       });
       commentText.setValue('');
+      const mergedComments = [
+        ...myComments,
+        {
+          content: comment,
+          createdAt: null
+        }
+      ];
+      setComment(mergedComments);
     }
   }
 
