@@ -1,19 +1,22 @@
 import React from 'react';
-import Image from './Image';
+import ImagePreview from './Image';
+import { Image } from 'react-components.d';
 
-interface IImage {
-  url: string;
-}
 interface Iprops {
-  images: [IImage];
+  images: (Image | null)[];
 }
 
 const ImageContainer = ({ images }: Iprops) => {
+  if (!images) return <></>;
   return (
     <>
-      {images.map(image => (
-        <Image url={image.url} key={image.url} />
-      ))}
+      {images.map(image =>
+        image && image.url ? (
+          <ImagePreview url={image.url} key={image.url} />
+        ) : (
+          <></>
+        )
+      )}
     </>
   );
 };

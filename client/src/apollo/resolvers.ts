@@ -1,11 +1,8 @@
 import gql from 'graphql-tag';
 
-export const typeDefs = gql`
-  extend type Query {
-    login: void
-    logout: void
-  }
-`;
+export interface IArgs {
+  content: string;
+}
 
 export const loggedIn = gql`
   query publishUser {
@@ -48,8 +45,12 @@ export const resolvers = {
       const date = new Date();
       const expires = `token=; expires=${date.toUTCString()};`;
       document.cookie = expires;
-      cache.writeData({ isLoggedIn: false });
+      cache.writeData({ data: { isLoggedIn: false } });
     }
   },
-  Mutation: {}
+  Mutation: {
+    enrollWritingFeed: (_: any, { content }: IArgs, __: any) => {
+      localStorage.setItem('writingFeedContent', content);
+    }
+  }
 };

@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import { IFriend } from './friend.type';
 import User from '../../components/User';
-import { loginSubscription, logoutSubscription } from 'resolvers';
+import { loginSubscription, logoutSubscription } from 'apollo/resolvers';
 
 const Wrapper = styled.div`
   right: 0;

@@ -1,9 +1,8 @@
 scalar Upload
 
 type UserInfo {
-  id: String!
   nickname: String!
-  thumbnail: String!
+  thumbnail: String
   relation: String!
   email: String!
 }

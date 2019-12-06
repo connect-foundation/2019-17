@@ -1,6 +1,5 @@
 import React from 'react';
 import FeedList from './index';
-import WritingFeedContainer from './WritingFeed';
 import styled from 'styled-components';
 
 const CenterContainer = styled.div`
@@ -10,7 +9,6 @@ const CenterContainer = styled.div`
 const FeedContainer = () => {
   return (
     <CenterContainer>
-      <WritingFeedContainer />
       <FeedList />
     </CenterContainer>
   );

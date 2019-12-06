@@ -1,10 +1,5 @@
 scalar Upload
 
-type Feed {
-  content: String!
-  createdAt: String
-}
-
 type PageInfo {
   endCursor: String
   hasNextPage: Boolean
@@ -34,13 +29,14 @@ type IUser {
   residence: String
   email: String
 }
+
 type Content {
   createdAt: Idate
   content: String
 }
 
 type Comment {
-  id: String
+  createdAt: Idate
   content: String
 }
 
@@ -57,18 +53,27 @@ type IFeed {
   hasLiked: Int
   comments: [Comment]
 }
+type IFeeds {
+  cursor: String
+  feedItems: [IFeed]
+}
 
 type Query {
-  getFeeds: [Feed]!
-  feeds(first: Int, cursor: String): [Feed]!
   pageInfo: PageInfo
-  feedItems(first: Int, cursor: String): [IFeed]
+  feeds(first: Int, cursor: String): IFeeds
 }
 
 type Mutation {
   updateLike(feedId: Int, count: Int): Boolean
+  enrollFeed(content: String!, files: [Upload]): Boolean!
+  writeComment(content: String!, feedId: Int!): Boolean!
 }
 
-type Mutation {
-  enrollFeed(content: String!, files: [Upload]): Boolean!
+type Subscription {
+  feeds(userEmail: String): ISubsFeeds
+}
+
+type ISubsFeeds {
+  cursor: String
+  feedItems: [IFeed]
 }

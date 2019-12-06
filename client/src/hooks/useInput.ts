@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, Dispatch, SetStateAction } from 'react';
 
 export interface IUseInput {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setValue: Dispatch<SetStateAction<string>>;
 }
 
 function useInput(
@@ -17,7 +18,7 @@ function useInput(
     setValue(val);
     customOnChange(e);
   };
-  return { value, onChange };
+  return { value, onChange, setValue };
 }
 
 export default useInput;

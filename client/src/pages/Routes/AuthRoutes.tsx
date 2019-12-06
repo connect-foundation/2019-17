@@ -8,7 +8,7 @@ import MyPage from '../MyPage';
 import NoMatch from '../NoMatch';
 import Search from '../Search';
 import { useQuery } from '@apollo/react-hooks';
-import { loggedIn } from 'resolvers';
+import { loggedIn } from 'apollo/resolvers';
 
 const Container = styled.div`
   margin: 0 auto;

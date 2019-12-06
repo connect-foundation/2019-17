@@ -1,5 +1,8 @@
 export interface Feeds {
-  feedItems: IFeedItem[];
+  feeds: {
+    cursor: string;
+    feedItems: IFeedItem[];
+  };
 }
 
 export interface Idate {
@@ -16,10 +19,10 @@ export interface Idate {
 
 export interface IUser {
   nickname: string;
-  hometown: string;
-  thumbnail: string;
-  residence: string;
-  email: string;
+  hometown?: string;
+  thumbnail?: string;
+  residence?: string;
+  email?: string;
 }
 export interface Content {
   createdAt: Idate;
@@ -41,5 +44,5 @@ export interface IFeedItem {
   totallikes: number;
   imglist: [Image];
   hasLiked: number;
-  comments: [Comment];
+  comments?: [Comment];
 }

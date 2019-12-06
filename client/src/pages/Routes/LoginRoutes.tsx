@@ -8,7 +8,10 @@ const LoginRoutes = () => {
   useQuery(login, {
     pollInterval: 2000
   });
-  const { data } = useQuery(getIsLoggedIn, { fetchPolicy: 'network-only' });
+  const { data, loading } = useQuery(getIsLoggedIn, {
+    fetchPolicy: 'network-only'
+  });
+  if (loading) return <></>;
   return data && data.isLoggedIn ? <AuthRoutes /> : <NonAuthRoutes />;
 };
 

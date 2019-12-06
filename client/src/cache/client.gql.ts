@@ -11,3 +11,9 @@ export const getIsLoggedIn = gql`
     isLoggedIn @client
   }
 `;
+
+export const LOGOUT = gql`
+  query logout {
+    logout @client
+  }
+`;

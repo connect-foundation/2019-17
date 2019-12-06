@@ -1,18 +1,18 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import { GraphQLServer } from 'graphql-yoga';
+import { GraphQLServer, PubSub } from 'graphql-yoga';
 import helmet from 'helmet';
 import logger from 'morgan';
 import config from './utils/config';
 import { signInWithEmail, checkToken } from './middleware/authController';
 import passport from './middleware/passport';
-import { pubsub } from './utils/pubsub';
 import schema from './schema';
 import setUserFromJWT from './middleware/setUserFromJWT';
 
 class App {
   public app: GraphQLServer;
   constructor() {
+    const pubsub = new PubSub();
     this.app = new GraphQLServer({
       schema,
       context: ({ request, response, connection }) => ({

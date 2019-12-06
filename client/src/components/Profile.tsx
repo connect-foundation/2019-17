@@ -11,10 +11,11 @@ interface IProps {
   imageUrl: string;
   size: string;
   alt: string;
+  className?: string;
 }
 
-function Profile({ imageUrl, size, alt }: IProps) {
-  return <Image src={imageUrl} size={size} alt={alt} />;
+function Profile({ imageUrl, size, alt, className }: IProps) {
+  return <Image className={className} src={imageUrl} size={size} alt={alt} />;
 }
 
 Profile.defaultProps = {

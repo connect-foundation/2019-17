@@ -3,13 +3,15 @@ import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import UserCard from 'components/UserCard';
 import queryString from 'querystring';
-import ActionButton from 'components/ActionButton';
+import ButtonContainer from './ButtonContainer';
 
 const SEARCH_USER = gql`
   query getUserName($keyword: String!) {
     searchUser(keyword: $keyword) {
       nickname
       email
+      relation
+      thumbnail
     }
   }
 `;
@@ -22,6 +24,13 @@ interface IProps {
   location: IKey;
 }
 
+interface IUser {
+  nickname: string;
+  email: string;
+  thumbnail: string;
+  relation: string;
+}
+
 function CardContainer({ location }: IProps) {
   const keyword = queryString.parse(location.search.slice(1))[`keyword`];
   const { loading, error, data } = useQuery(SEARCH_USER, {
@@ -30,44 +39,33 @@ function CardContainer({ location }: IProps) {
     }
   });
 
-  if (loading) return <p>로딩중...</p>;
+  if (loading) return <></>;
   if (error)
     return (
-      <>
-        <UserCard
-          nickname="데이터를 가져오는데 에러가 발생하였습니다!"
-          imageUrl={
-            process.env.PUBLIC_URL + '/images/search_notfound.png'
-          }></UserCard>
-      </>
+      <UserCard
+        nickname="데이터를 가져오는데 에러가 발생하였습니다!"
+        imageUrl={
+          process.env.PUBLIC_URL + '/images/search_notfound.png'
+        }></UserCard>
     );
   if (data.searchUser.length === 0)
     return (
-      <>
-        <UserCard
-          nickname={`${keyword}에 대한 검색 결과가 없습니다`}
-          imageUrl={
-            process.env.PUBLIC_URL + '/images/search_notfound.png'
-          }></UserCard>
-      </>
+      <UserCard
+        nickname={`${keyword}에 대한 검색 결과가 없습니다`}
+        imageUrl={
+          process.env.PUBLIC_URL + '/images/search_notfound.png'
+        }></UserCard>
     );
-
-  function sendFriendRequest(email: string) {
-    return (e: React.MouseEvent) => {
-      console.log(email);
-      console.log(e);
-    };
-  }
 
   return (
     <>
-      {data.searchUser.map((user: { [key: string]: string }) => (
-        <UserCard nickname={user.nickname} key={user.nickname}>
-          <ActionButton
-            text="친구 추가"
-            onClick={sendFriendRequest(user.email)}></ActionButton>
-        </UserCard>
-      ))}
+      {data.searchUser.map(
+        ({ nickname, email, thumbnail, relation }: IUser) => (
+          <UserCard nickname={nickname} key={email} imageUrl={thumbnail}>
+            <ButtonContainer email={email} initialRelation={relation} />
+          </UserCard>
+        )
+      )}
     </>
   );
 }

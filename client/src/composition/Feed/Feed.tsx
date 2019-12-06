@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import FeedHeader from './FeedHeader';
 import FeedBody from './FeedBody';
 import FeedFooter from './FeedFooter';
-import Comment from './Comment';
-import { IFeedItem } from './feed.type';
+import CommentContainer from './FeedComment';
+import { IFeed, Comment } from 'react-components.d';
+import WriteCommentPresentor from './FeedComment/WriteCommentPresentor';
 
 const FeedDiv = styled.div`
   ${props => props.theme.borders.feedBorder};
@@ -28,28 +29,39 @@ const FeedEditDiv = styled.span`
   width: 20px;
 `;
 
+const CommentDiv = styled.div`
+  border-top: 1px solid #dadde1;
+  padding: 4px 12px;
+`;
+
 interface Iprops {
-  content: string;
+  content: string | null | undefined;
   createdAt: string;
-  feedinfo: IFeedItem;
+  feedinfo: IFeed;
 }
 
 function Feed({ content, createdAt, feedinfo }: Iprops) {
   const [likeCnt, setLikeCnt] = useState<number>(0);
   const [hasLiked, setHasLiked] = useState<boolean>(false);
-
+  const [myComments, setMyComments] = useState<Comment[]>();
   useEffect(() => {
-    setLikeCnt(feedinfo.totallikes);
-    setHasLiked(feedinfo.hasLiked ? true : false);
+    if (feedinfo.totallikes) {
+      setLikeCnt(feedinfo.totallikes);
+      setHasLiked(feedinfo.hasLiked ? true : false);
+    }
   }, []);
 
+  if (!feedinfo || !feedinfo.searchUser) return <></>;
   return (
     <>
       <FeedDiv>
         <FeedContentDiv className="mainbox">
           <FeedEditDiv></FeedEditDiv>
           <FeedHeader
-            thumbnail={feedinfo.searchUser.thumbnail}
+            thumbnail={
+              feedinfo.searchUser.thumbnail ||
+              process.env.PUBLIC_URL + '/images/profile.jpg'
+            }
             nickName={feedinfo.searchUser.nickname}
             createdAt={createdAt}
           />
@@ -62,7 +74,38 @@ function Feed({ content, createdAt, feedinfo }: Iprops) {
             feedId={feedinfo.feedId}
           />
         </FeedContentDiv>
-        <Comment />
+        <CommentDiv>
+          {feedinfo.comments && feedinfo.comments.length > 0 ? (
+            feedinfo.comments.map(comment => {
+              return (
+                comment && (
+                  <>
+                    <CommentContainer
+                      comment={comment}
+                      key={createdAt.toString()}
+                    />
+                  </>
+                )
+              );
+            })
+          ) : (
+            <></>
+          )}
+          {myComments &&
+            myComments.map((myComment, idx) => (
+              <CommentContainer
+                comment={myComment}
+                key={new Date().toISOString() + idx}
+              />
+            ))}
+          {
+            <WriteCommentPresentor
+              feedId={feedinfo.feedId}
+              setComment={setMyComments}
+              myComments={myComments ? myComments : []}
+            />
+          }
+        </CommentDiv>
       </FeedDiv>
     </>
   );

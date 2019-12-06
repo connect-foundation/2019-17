@@ -8,6 +8,7 @@ async function requestDB(query: string, param?) {
     const res = await session.run(query, param);
     return res.records;
   } catch (err) {
+    console.log('err!!! ', err);
     const DBError = createDBError(err);
     throw new DBError();
   } finally {
