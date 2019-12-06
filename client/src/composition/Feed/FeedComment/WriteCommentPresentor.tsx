@@ -6,12 +6,14 @@ import useInput, { IUseInput } from 'hooks/useInput';
 import Profile from 'components/Profile';
 import Button from 'components/Button';
 
-const CommentForm = styled.div``;
+const CommentForm = styled.div`
+  position: relative;
+`;
 
 const CommentInputForm = styled.div`
   display: inline-block;
   padding: 0 0.5rem;
-  width: 60%;
+  width: 100%;
   position: absolute;
   & > button {
     margin: 0 0.25rem;
@@ -23,7 +25,7 @@ const CommentInputForm = styled.div`
 const Input = styled.input`
   all: unset;
   box-sizing: border-box;
-  width: 80%;
+  width: 83%;
   height: 20px;
   border: ${props => props.theme.borders.borderStyle};
   border-radius: ${props => props.theme.borders.radius};
