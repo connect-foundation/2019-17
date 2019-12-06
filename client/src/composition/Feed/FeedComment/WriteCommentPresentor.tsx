@@ -4,7 +4,6 @@ import { darken } from 'polished';
 import { useWriteCommentMutation, Comment } from 'react-components.d';
 import useInput, { IUseInput } from 'hooks/useInput';
 import Profile from 'components/Profile';
-import { boolean } from 'joi';
 
 const Input = styled.input`
   all: unset;
@@ -48,13 +47,12 @@ const WriteCommentPresentor = ({
         variables: { content: comment, feedId: Number(feedId) }
       });
       commentText.setValue('');
-      const mergedComments = [
-        ...myComments,
-        {
-          content: comment,
-          createdAt: null
-        }
-      ];
+      const newComment: Comment = {
+        content: comment,
+        createdAt: null,
+        nickname: ''
+      };
+      const mergedComments = [...myComments, newComment];
       setComment(mergedComments);
     }
   }
