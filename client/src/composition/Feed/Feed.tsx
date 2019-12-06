@@ -28,11 +28,6 @@ const FeedEditDiv = styled.span`
   width: 20px;
 `;
 
-const CommentDiv = styled.div`
-  border-top: 1px solid #dadde1;
-  padding: 4px 12px;
-`;
-
 interface Iprops {
   content: string | null | undefined;
   createdAt: string;
@@ -42,7 +37,7 @@ interface Iprops {
 function Feed({ content, createdAt, feedinfo }: Iprops) {
   const [likeCnt, setLikeCnt] = useState<number>(0);
   const [hasLiked, setHasLiked] = useState<boolean>(false);
-  // const [myComments, setMyComments] = useState<Comment[]>();
+
   useEffect(() => {
     if (feedinfo.totallikes) {
       setLikeCnt(feedinfo.totallikes);
@@ -73,12 +68,11 @@ function Feed({ content, createdAt, feedinfo }: Iprops) {
             feedId={feedinfo.feedId}
           />
         </FeedContentDiv>
-        <CommentDiv>
-          <CommentContainer
-            comments={feedinfo.comments}
-            feedId={feedinfo.feedId}
-          />
-        </CommentDiv>
+
+        <CommentContainer
+          comments={feedinfo.comments}
+          feedId={feedinfo.feedId}
+        />
       </FeedDiv>
     </>
   );

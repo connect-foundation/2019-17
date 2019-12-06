@@ -4,11 +4,10 @@ import Profile from 'components/Profile';
 import { Comment } from 'react-components.d';
 
 const CommentLine = styled.div`
-  display: block;
   margin: 0.25rem 0;
 `;
 
-const CommentContent = styled.p`
+const CommentContent = styled.div`
   margin: 0 0.5rem;
   font-size: 0.75rem;
   position: absolute;
@@ -36,7 +35,7 @@ const CommentBubble = styled.div`
   top: 0.05rem;
 `;
 
-const CommentText = styled.p`
+const CommentText = styled.div`
   padding: 8px 10px;
 `;
 
