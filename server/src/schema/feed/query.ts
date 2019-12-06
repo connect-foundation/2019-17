@@ -3,7 +3,7 @@ OPTIONAL MATCH (likeUser:User)-[like:LIKE]->(feed)
 OPTIONAL MATCH (feed)-[:HAS]->(com:Comment)
 OPTIONAL MATCH (feed)<-[:HAS]-(img:Image)
 WITH searchUser, feed, COLLECT(DISTINCT likeUser) AS cp , com, COLLECT(DISTINCT img) as imgs
-ORDER BY com 
+ORDER BY com.createdAt 
 where feed.createdAt <  datetime({cursor})
 RETURN searchUser , feed,  ID(feed) as feedId , length(cp) AS totallikes, imgs as imglist,
 length(filter(x IN cp WHERE x.email= {useremail} )) AS hasLiked, COLLECT(com) as comments
