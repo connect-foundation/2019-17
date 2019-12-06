@@ -20,20 +20,23 @@ const CommentBubble = styled.div`
 const CommentText = styled.p`
   padding: 8px 10px;
 `;
+const CommentLine = styled.div`
+  display: block;
+`;
 
 // 역할 :
 const CommentPresentor = ({ content }: Comment) => {
   return (
-    <>
+    <CommentLine>
       <Profile
         imageUrl={process.env.PUBLIC_URL + '/images/profile.jpg'}
         alt={'profile image'}
         size="32px"
       />
       <CommentBubble>
-        <CommentText>댓글 : {content}</CommentText>
+        <CommentText>{content}</CommentText>
       </CommentBubble>
-    </>
+    </CommentLine>
   );
 };
 

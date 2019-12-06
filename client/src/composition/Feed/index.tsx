@@ -137,18 +137,18 @@ const FeedList = () => {
       </div>
 
       {data && data.feeds && data.feeds.feedItems
-        ? data.feeds.feedItems.map(feed =>
-            feed && feed.feed && feed.feed.createdAt ? (
+        ? data.feeds.feedItems.map((feed, idx) => {
+            return feed && feed.feed && feed.feed.createdAt ? (
               <Feed
-                key={getDate(feed.feed.createdAt).toISOString()}
+                key={getDate(feed.feed.createdAt).toISOString() + idx}
                 content={feed.feed.content}
                 feedinfo={feed}
                 createdAt={getDate(feed.feed.createdAt).toISOString()}
               />
             ) : (
               <></>
-            )
-          )
+            );
+          })
         : 'no data'}
 
       {data ? (
