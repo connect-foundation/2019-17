@@ -2,10 +2,11 @@ export const MATCH_FEEDS = `MATCH (searchUser:User)-[:AUTHOR]->(feed:Feed)
 OPTIONAL MATCH (likeUser:User)-[like:LIKE]->(feed)
 OPTIONAL MATCH (feed)-[:HAS]->(com:Comment)
 OPTIONAL MATCH (feed)<-[:HAS]-(img:Image)
-WITH searchUser, feed, COLLECT(DISTINCT likeUser) AS cp , COLLECT(com) as comments, COLLECT(DISTINCT img) as imgs
+WITH searchUser, feed, COLLECT(DISTINCT likeUser) AS cp , com, COLLECT(DISTINCT img) as imgs
+ORDER BY com 
 where feed.createdAt <  datetime({cursor})
 RETURN searchUser , feed,  ID(feed) as feedId , length(cp) AS totallikes, imgs as imglist,
-length(filter(x IN cp WHERE x.email= {useremail} )) AS hasLiked, comments
+length(filter(x IN cp WHERE x.email= {useremail} )) AS hasLiked, COLLECT(com) as comments
 order by feed.createdAt desc
 LIMIT {first} 
 `;
@@ -45,3 +46,9 @@ export const WRITING_FEED_QUERY = `MATCH (u:User)
 
 export const createImageNodeAndRelation = (idx, Location) =>
   `CREATE (i${idx}:Image {url: '${Location}'}) CREATE (i${idx})-[:HAS]->(f) `;
+
+export const WRITE_COMMENT = `MATCH (f:Feed), (u:User)
+WHERE ID(f) = {feedId} and u.email = {userEmail}
+CREATE (c:Comment {content: {content} ,createdAt: datetime()}) 
+CREATE (f)-[r:HAS]->(c)
+CREATE (u)-[wr:AUTHOR]->(c)`;

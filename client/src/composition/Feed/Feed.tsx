@@ -80,17 +80,15 @@ function Feed({ content, createdAt, feedinfo }: Iprops) {
               return comment ? (
                 <>
                   <CommentContainer comment={comment} />
-                  <WriteCommentPresentor />
                 </>
               ) : (
                 <></>
               );
             })
           ) : (
-            <>
-              <WriteCommentPresentor />
-            </>
+            <></>
           )}
+          <WriteCommentPresentor feedId={feedinfo.feedId} />
         </CommentDiv>
       </FeedDiv>
     </>

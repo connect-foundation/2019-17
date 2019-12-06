@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { darken } from 'polished';
-import { Comment } from 'react-components.d';
+import { Comment, useWriteCommentMutation } from 'react-components.d';
 import useInput, { IUseInput } from 'hooks/useInput';
 import Profile from 'components/Profile';
+
 const Input = styled.input`
   all: unset;
   box-sizing: border-box;
@@ -23,11 +24,26 @@ const Input = styled.input`
 `;
 
 // 역할 :
-const WriteCommentPresentor = ({ content }: Comment) => {
-  const commentText: IUseInput = useInput('', validateNullCheck);
+const WriteCommentPresentor = ({
+  feedId
+}: {
+  feedId: number | null | undefined;
+}) => {
+  const commentText: IUseInput = useInput('', () => {});
 
-  function validateNullCheck(e: React.ChangeEvent<HTMLInputElement>) {
-    const result = e.target.value;
+  function validateNullCheck(comment: string) {
+    return comment ? true : false;
+  }
+
+  const [writeComment] = useWriteCommentMutation();
+  function submitComment() {
+    const comment = commentText.value;
+    if (validateNullCheck(comment)) {
+      writeComment({
+        variables: { content: comment, feedId: Number(feedId) }
+      });
+      commentText.setValue('');
+    }
   }
 
   return (
@@ -38,7 +54,7 @@ const WriteCommentPresentor = ({ content }: Comment) => {
         size="32px"
       />
       <Input placeholder="댓글을 입력하세요" {...commentText} required />
-      <input type="button" value="입력"></input>
+      <input type="button" value="입력" onClick={submitComment}></input>
     </>
   );
 };
