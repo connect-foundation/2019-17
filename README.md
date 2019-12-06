@@ -16,7 +16,7 @@
 ## :wave: Links
 ### [📃 WIKI](https://github.com/connect-foundation/2019-17/wiki)
 
-### [🎲 HOMEPAGE](http://106.10.39.105:5000)
+### [🎲 HOMEPAGE](http://boostbook.shop)
 
 ### [🧱 Ground Rule](https://github.com/connect-foundation/2019-17/wiki/GROUND-RULE)
 
@@ -50,7 +50,7 @@ Connect boost camper
 - 현재 접속자 확인
 - Graph db(neo4j)
 
-## 🌏 기술스텍 
+## 🌏 기술스택 
 
 OS: linux  
 DB: neo4j (graph db)  
@@ -64,6 +64,10 @@ infra: actions
 
 
 <div style="width:500px;height:10px"></div>
+
+### DB 스키마
+![image](https://user-images.githubusercontent.com/19178129/70308828-7a350700-184f-11ea-82d9-86b4eedb3b63.png)
+
 
 ### 📘 Usage for dev
 - client
