@@ -77,34 +77,27 @@ function Feed({ content, createdAt, feedinfo }: Iprops) {
         <CommentDiv>
           {feedinfo.comments && feedinfo.comments.length > 0 ? (
             feedinfo.comments.map(comment => {
-              return comment ? (
-                <>
-                  <CommentContainer
-                    comment={comment}
-                    key={createdAt.toString()}
-                  />
-                </>
-              ) : (
-                <></>
+              return (
+                comment && (
+                  <>
+                    <CommentContainer
+                      comment={comment}
+                      key={createdAt.toString()}
+                    />
+                  </>
+                )
               );
             })
           ) : (
             <></>
           )}
-          {myComments ? (
-            myComments.map((myComment, idx) => {
-              return myComment ? (
-                <CommentContainer
-                  comment={myComment}
-                  key={new Date().toISOString() + idx}
-                />
-              ) : (
-                <></>
-              );
-            })
-          ) : (
-            <></>
-          )}
+          {myComments &&
+            myComments.map((myComment, idx) => (
+              <CommentContainer
+                comment={myComment}
+                key={new Date().toISOString() + idx}
+              />
+            ))}
           {
             <WriteCommentPresentor
               feedId={feedinfo.feedId}
