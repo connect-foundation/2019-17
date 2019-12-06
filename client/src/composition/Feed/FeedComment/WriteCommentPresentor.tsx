@@ -4,6 +4,7 @@ import { darken } from 'polished';
 import { useWriteCommentMutation, Comment } from 'react-components.d';
 import useInput, { IUseInput } from 'hooks/useInput';
 import Profile from 'components/Profile';
+import { boolean } from 'joi';
 
 const Input = styled.input`
   all: unset;
@@ -35,14 +36,14 @@ const WriteCommentPresentor = ({
 }) => {
   const commentText: IUseInput = useInput('', () => {});
 
-  function validateNullCheck(comment: string) {
-    return comment ? true : false;
+  function validateNull(comment: string) {
+    return Boolean(comment);
   }
 
   const [writeComment] = useWriteCommentMutation();
   function submitComment() {
     const comment = commentText.value;
-    if (validateNullCheck(comment)) {
+    if (validateNull(comment)) {
       writeComment({
         variables: { content: comment, feedId: Number(feedId) }
       });

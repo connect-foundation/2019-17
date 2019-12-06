@@ -47,8 +47,8 @@ export const WRITING_FEED_QUERY = `MATCH (u:User)
 export const createImageNodeAndRelation = (idx, Location) =>
   `CREATE (i${idx}:Image {url: '${Location}'}) CREATE (i${idx})-[:HAS]->(f) `;
 
-export const WRITE_COMMENT = `MATCH (f:Feed), (u:User)
-WHERE ID(f) = {feedId} and u.email = {userEmail}
+export const WRITE_COMMENT = `MATCH (f:Feed), (u:User{email:{userEmail} })
+WHERE ID(f) = {feedId} 
 CREATE (c:Comment {content: {content} ,createdAt: datetime()}) 
 CREATE (f)-[r:HAS]->(c)
 CREATE (u)-[wr:AUTHOR]->(c)`;
