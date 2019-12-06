@@ -5,6 +5,7 @@ import './db';
 import { decodeJWT } from './utils/jwt';
 import { emailWithSocket, socketCountWithEmail } from './utils/socketManager';
 import { logoutPublish } from './utils/pubsub';
+import { getUserWithStatus } from './schema/user/user';
 
 const PORT: string | number = config.port;
 const ENDPOINT: string = '/graphql';
@@ -47,13 +48,14 @@ const appOptions: Options = {
         return webSocket.close();
       }
     },
-    onDisconnect: (webSocket, context) => {
+    onDisconnect: async (webSocket, context) => {
       console.log('disconnection');
       const email = emailWithSocket.get(webSocket);
       const currentCount = socketCountWithEmail.get(email);
       if (currentCount === 1) {
+        const user = await getUserWithStatus(email, 'offline');
+        logoutPublish(user);
         socketCountWithEmail.delete(email);
-        logoutPublish(email);
       } else {
         socketCountWithEmail.set(email, currentCount - 1);
       }

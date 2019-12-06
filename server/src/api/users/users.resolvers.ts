@@ -1,25 +1,55 @@
 import { withFilter } from 'graphql-subscriptions';
 import gql from 'graphql-tag';
 import { loginChannel, logoutChannel } from '../../utils/channels';
+import { requestDB } from '../../utils/requestDB';
+import { findFriendsQuery } from '../../schema/user/query';
+import { parseNodeResult } from '../../utils/parseDB';
+import { socketCountWithEmail } from '../../utils/socketManager';
+import { logoutPublish, loginPublish } from '../../utils/pubsub';
+import { getUserWithStatus } from '../../schema/user/user';
 
 export const publishLoginUser = gql`
   query {
-    loginUser
+    loginUser {
+      id
+      email
+      nickname
+      thumbnail
+      status
+    }
   }
 `;
 export const publishLogoutUser = gql`
   query {
-    logoutUser
+    logoutUser {
+      id
+      email
+      nickname
+      thumbnail
+      status
+    }
   }
 `;
 
 export default {
   Query: {
-    loginUser: (_, __, { req, pubsub }) => {
-      pubsub.publish(loginChannel, req.email);
+    loginUser: async (_, __, { req }) => {
+      const user = await getUserWithStatus(req.email, 'online');
+      loginPublish(user);
     },
-    logoutUser: (_, __, { req, pubsub }) => {
-      pubsub.publish(logoutChannel, req.email);
+    logoutUser: async (_, __, { req, pubsub }) => {
+      const user = await getUserWithStatus(req.email, 'offline');
+      logoutPublish(user);
+    },
+    friends: async (_, __, { req }) => {
+      const result = await requestDB(findFriendsQuery, {
+        email: req.email
+      });
+      const friends = await parseNodeResult(result).map(e => {
+        e.status = socketCountWithEmail.has(e.email) ? 'online' : 'offline';
+        return e;
+      });
+      return friends;
     }
   },
   Subscription: {
@@ -32,7 +62,7 @@ export default {
           return pubsub.asyncIterator([loginChannel]);
         },
         (payload, _, { email }) => {
-          return email ? payload !== email : false;
+          return email ? payload.email !== email : false;
         }
       )
     },
@@ -40,9 +70,14 @@ export default {
       resolve: payload => {
         return payload;
       },
-      subscribe: (_, __, { pubsub }) => {
-        return pubsub.asyncIterator([logoutChannel]);
-      }
+      subscribe: withFilter(
+        (_, __, { pubsub }) => {
+          return pubsub.asyncIterator([logoutChannel]);
+        },
+        (payload, _, { email }) => {
+          return email ? payload.email !== email : false;
+        }
+      )
     }
   }
 };

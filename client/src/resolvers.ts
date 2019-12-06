@@ -15,13 +15,23 @@ export const loggedIn = gql`
 
 export const loginSubscription = gql`
   subscription {
-    login
+    login {
+      email
+      nickname
+      thumbnail
+      status
+    }
   }
 `;
 
 export const logoutSubscription = gql`
   subscription {
-    logout
+    logout {
+      email
+      nickname
+      thumbnail
+      status
+    }
   }
 `;
 

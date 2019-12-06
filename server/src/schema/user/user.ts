@@ -1,6 +1,8 @@
 import db from '../../db';
 import { findUserWithEmailQuery } from './query';
 import { FindUserWithEmailQueryArgs, User } from './types';
+import { requestDB } from '../../utils/requestDB';
+import { getNode } from '../../utils/parseDB';
 
 export const findUserWithEmail = async (
   args: FindUserWithEmailQueryArgs
@@ -23,4 +25,13 @@ export const findUserWithEmail = async (
     });
   });
   return result;
+};
+
+export const getUserWithStatus = async (email, status) => {
+  const result = await requestDB(findUserWithEmailQuery, {
+    email
+  });
+  const user = getNode(result);
+  user.status = status;
+  return user;
 };

@@ -1,5 +1,5 @@
 import { RedisPubSub } from 'graphql-redis-subscriptions';
-import { logoutChannel } from './channels';
+import { loginChannel, logoutChannel } from './channels';
 
 export const pubsub = new RedisPubSub({
   connection: {
@@ -12,6 +12,10 @@ export const pubsub = new RedisPubSub({
   }
 });
 
-export const logoutPublish = email => {
-  pubsub.publish(logoutChannel, email);
+export const loginPublish = args => {
+  pubsub.publish(loginChannel, args);
+};
+
+export const logoutPublish = args => {
+  pubsub.publish(logoutChannel, args);
 };
