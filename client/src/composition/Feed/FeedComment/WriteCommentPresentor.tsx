@@ -4,7 +4,6 @@ import { darken } from 'polished';
 import { useWriteCommentMutation, Comment } from 'react-components.d';
 import useInput, { IUseInput } from 'hooks/useInput';
 import Profile from 'components/Profile';
-import { boolean } from 'joi';
 
 const Input = styled.input`
   all: unset;
@@ -24,7 +23,6 @@ const Input = styled.input`
   }
 `;
 
-// 역할 :
 const WriteCommentPresentor = ({
   feedId,
   setComment,

@@ -40,13 +40,18 @@ function WritingFeedContainer() {
     writingFeedDataMutation({ variables: { content } });
   };
 
+  const reg = /image\/(jpg|jpeg|png|gif|bmp)$/;
   const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { target } = e;
     if (target.files && target.files.length) {
       const file = target.files[0];
-      const fileUrl = URL.createObjectURL(file);
-      setFiles(props => [...props, { file, fileId, fileUrl }]);
-      setFileId(fileId + 1);
+      if (!file.type.match(reg)) {
+        alert('해당 파일은 이미지 파일이 아닙니다.');
+      } else {
+        const fileUrl = URL.createObjectURL(file);
+        setFiles(props => [...props, { file, fileId, fileUrl }]);
+        setFileId(fileId + 1);
+      }
       target.value = '';
     }
   };
