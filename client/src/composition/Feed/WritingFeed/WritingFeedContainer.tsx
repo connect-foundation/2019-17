@@ -9,6 +9,8 @@ import {
 } from 'cache/writingFeed.gql';
 import { useEffect } from 'react';
 
+const FEED_MAX_LENGTH = 1500;
+
 function WritingFeedContainer() {
   const { data: { writingFeedContent = null } = {} } = useQuery(
     getWritingFeedData
@@ -81,6 +83,10 @@ function WritingFeedContainer() {
     if (!content) {
       alert('피드 내용을 입력해주세요.');
       if (contentCursor.current) contentCursor.current.focus();
+      return;
+    }
+    if(content.length >= FEED_MAX_LENGTH) {
+      alert(`피드 글자수 제한(${FEED_MAX_LENGTH}자)`);
       return;
     }
     overlapFlag = true;
