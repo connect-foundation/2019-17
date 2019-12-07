@@ -72,16 +72,18 @@ function WritingFeedContainer() {
       );
     }
   };
-
+  let overlapFlag = false;
   const onSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
+    if (overlapFlag) return;
     if (!content) {
       alert('피드 내용을 입력해주세요.');
       if (contentCursor.current) contentCursor.current.focus();
       return;
     }
+    overlapFlag = true;
     const parseFiles = files.map(item => item.file);
     const { data } = await enrollFeedMutation({
       variables: { content, files: parseFiles }
@@ -92,6 +94,7 @@ function WritingFeedContainer() {
     writingFeedDataMutation({ variables: { content: '' } });
     setFiles([]);
     setContent('');
+    overlapFlag = false;
   };
 
   return (
