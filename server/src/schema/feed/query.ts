@@ -1,16 +1,3 @@
-/* export const MATCH_FEEDS = `MATCH (searchUser:User)-[:AUTHOR]->(feed:Feed)
-OPTIONAL MATCH (likeUser:User)-[like:LIKE]->(feed)
-OPTIONAL MATCH (feed)-[:HAS]->(com:Comment)
-OPTIONAL MATCH (feed)<-[:HAS]-(img:Image)
-WITH searchUser, feed, COLLECT(DISTINCT likeUser) AS cp , com, COLLECT(DISTINCT img) as imgs
-ORDER BY com.createdAt 
-where feed.createdAt <  datetime({cursor})
-RETURN searchUser , feed,  ID(feed) as feedId , length(cp) AS totallikes, imgs as imglist,
-length(filter(x IN cp WHERE x.email= {useremail} )) AS hasLiked, COLLECT(com) as comments
-order by feed.createdAt desc
-LIMIT {first} 
-`; */
-
 export const MATCH_FEEDS = `MATCH (searchUser:User)-[:AUTHOR]->(feed:Feed)
 OPTIONAL MATCH (likeUser:User)-[like:LIKE]->(feed)
 OPTIONAL MATCH (feed)-[:HAS]->(com:Comment)<-[:AUTHOR]-(w:User)
@@ -66,3 +53,15 @@ WHERE ID(f) = {feedId}
 CREATE (c:Comment {content: {content} ,createdAt: datetime()}) 
 CREATE (f)-[r:HAS]->(c)
 CREATE (u)-[wr:AUTHOR]->(c)`;
+
+export const ALARM_NEW_FEED = `
+MATCH (searchUser:User)-[:FRIEND]-(friend:User), (f:Feed)
+WHERE searchUser.email = {userEmail} and ID(f)={feedId}
+MERGE (f)-[al:ALARM{isRead:false}]->(friend)
+return searchUser,al,friend
+`;
+
+export const DELETE_ALARM = `
+MATCH (f:Feed{ID:{feedId}})-[al:ALARM{isRead:true}]->(fr:User{email:{userEmail}})
+delete al
+return f, al,fr`;
