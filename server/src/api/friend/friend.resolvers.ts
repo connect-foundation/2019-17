@@ -4,9 +4,12 @@ import {
   sendFriendRequestByEmailQuery,
   acceptFriendRequestByEmailQuery,
   cancelFriendRequestByEmailQuery,
-  cancelFriendByEmailQuery
+  cancelFriendByEmailQuery,
+  findUserByRequestRelation,
+  findUserByNoRelation
 } from '../../schema/friend/query';
 import isAuthenticated from '../../utils/isAuthenticated';
+import { parseResultRecords, gatherValuesByKey } from '../../utils/parseData';
 
 function getQueryByRelation(relation: string) {
   if (relation === 'NONE') {
@@ -21,6 +24,26 @@ function getQueryByRelation(relation: string) {
 }
 
 export default {
+  Query: {
+    getFriendAlarm: async (_, __, { req }) => {
+      isAuthenticated(req);
+
+      const reqUsers = await requestDB(findUserByRequestRelation, {
+        email: req.email
+      });
+      const recUsers = await requestDB(findUserByNoRelation, {
+        email: req.email
+      });
+
+      const parsedReq = parseResultRecords(reqUsers);
+      const parsedRec = parseResultRecords(recUsers);
+
+      return {
+        requestedUser: gatherValuesByKey(parsedReq, 'u'),
+        friendRecommendation: gatherValuesByKey(parsedRec, 'target')
+      };
+    }
+  },
   Mutation: {
     requestFriend: async (
       _,

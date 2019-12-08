@@ -1,3 +1,18 @@
+type SimpleUserInfo {
+  nickname: String!
+  thumbnail: String
+  email: String!
+}
+
+type FriendAlarm {
+  requestedUser: [SimpleUserInfo]
+  friendRecommendation: [SimpleUserInfo!]!
+}
+
 type Mutation {
   requestFriend(targetEmail: String!, relation: String!): Boolean!
+}
+
+type Query {
+  getFriendAlarm: FriendAlarm!
 }
