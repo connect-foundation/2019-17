@@ -2,7 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import Profile from 'components/Profile';
 import CommonBox from '../CommonBox';
-import { useState } from 'react';
+import { useHeaderTabDispatch } from 'stores/HeaderTabContext';
+import { HEADER_TAB } from '../../../constants';
 
 const Container = styled(CommonBox)<{ isRead: boolean; onClick: () => void }>`
   display: flex;
@@ -59,10 +60,13 @@ interface IProps {
 }
 
 function MessageBox({ isRead }: IProps) {
-  const [readState, setReadState] = useState(isRead);
-  const onClick = () => setReadState(true);
+  const headerTabDispatch = useHeaderTabDispatch();
+
+  const onClick = () => {
+    headerTabDispatch({ type: 'CLICK_MESSAGE', key: HEADER_TAB.MESSAGE });
+  };
   return (
-    <Container isRead={readState} onClick={onClick}>
+    <Container isRead={isRead} onClick={onClick}>
       <Column>
         <Profile size={'45px'} />
         <TextContainer>
@@ -72,7 +76,7 @@ function MessageBox({ isRead }: IProps) {
       </Column>
       <Column>
         <DateText>4월 20일</DateText>
-        <Dot isRead={readState} />
+        <Dot isRead={isRead} />
       </Column>
     </Container>
   );

@@ -6,7 +6,11 @@ import Tab from './Tab';
 import MessageTab from './MessageTab';
 import FriendsTab from './FriendsTab';
 import AlarmTab from './AlarmTab';
-import { useState } from 'react';
+import {
+  useHeaderTabState,
+  useHeaderTabDispatch
+} from 'stores/HeaderTabContext';
+import { HEADER_TAB } from '../../constants';
 
 const Container = styled.div`
   position: relative;
@@ -44,50 +48,34 @@ const AlarmIcon = styled(FaBell)<{ selected: boolean }>`
   ${props => (props.selected ? active : nonActive)}
 `;
 
-interface IInitState {
-  [key: string]: boolean;
-}
-
-const FRIENDS = 'friends';
-const MESSAGE = 'message';
-const ALARM = 'alarm';
-
-const initState = {
-  [FRIENDS]: false,
-  [MESSAGE]: false,
-  [ALARM]: false
-};
-
 function HeaderTab() {
-  const [tabState, setTabState] = useState<IInitState>(initState);
-  const clickIcon = (key: string): void => {
-    if (tabState[key]) {
-      setTabState({ ...initState });
-    } else {
-      setTabState({ ...initState, [key]: true });
-    }
-  };
+  const headerTabState = useHeaderTabState();
+  const headerTabDispatch = useHeaderTabDispatch();
   return (
     <Container>
       <FriendsIcon
-        selected={tabState.friends}
-        onClick={clickIcon.bind(null, FRIENDS)}
+        selected={headerTabState.friends}
+        onClick={() =>
+          headerTabDispatch({ type: 'CLICK_FRIENDS', key: HEADER_TAB.FRIENDS })
+        }
       />
-      <Tab left={'-230px'} selected={tabState.friends}>
+      <Tab left={'-230px'} selected={headerTabState.friends}>
         <FriendsTab />
       </Tab>
       <MessageIcon
-        selected={tabState.message}
-        onClick={clickIcon.bind(null, MESSAGE)}
+        selected={headerTabState.message}
+        onClick={() =>
+          headerTabDispatch({ type: 'CLICK_MESSAGE', key: HEADER_TAB.MESSAGE })
+        }
       />
-      <Tab selected={tabState.message}>
+      <Tab selected={headerTabState.message}>
         <MessageTab />
       </Tab>
       <AlarmIcon
-        selected={tabState.alarm}
-        onClick={clickIcon.bind(null, ALARM)}
+        selected={headerTabState.alarm}
+        onClick={() => headerTabDispatch({ type: 'CLICK_ALARM', key: HEADER_TAB.ALARM })}
       />
-      <Tab left={'-160px'} selected={tabState.alarm}>
+      <Tab left={'-160px'} selected={headerTabState.alarm}>
         <AlarmTab />
       </Tab>
     </Container>
