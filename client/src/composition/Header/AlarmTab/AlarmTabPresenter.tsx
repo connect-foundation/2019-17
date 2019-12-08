@@ -4,7 +4,7 @@ import CommonHeader from '../CommonHeader';
 import CommonFooter from '../CommonFooter';
 import { GET_ALARMS } from './alarm.query';
 import { useLazyQuery, useQuery } from '@apollo/react-hooks';
-import Alam from './Alarm';
+import AlamBox from './AlarmBox';
 import { Alarm } from 'react-components.d';
 
 const Container = styled.div`
@@ -53,7 +53,7 @@ function AlarmTabPresenter() {
         {data &&
           data.alarms &&
           data.alarms.map((alarm: Alarm, idx: number) => {
-            return <Alam alarm={alarm} key={'alarm_' + idx} />;
+            return <AlamBox alarm={alarm} key={'alarm_' + idx} />;
           })}
       </div>
       <Footer>
