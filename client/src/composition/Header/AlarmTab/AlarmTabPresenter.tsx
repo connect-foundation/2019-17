@@ -34,6 +34,7 @@ const Footer = styled(CommonFooter)`
 `;
 
 function AlarmTabPresenter() {
+  // const alarms
   return (
     <Container>
       <Header>

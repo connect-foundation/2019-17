@@ -4,7 +4,8 @@ import {
   DELETE_LIKE,
   GET_NEW_FEED,
   GET_FRIENDS,
-  WRITE_COMMENT
+  WRITE_COMMENT,
+  ALARM_NEW_FEED
 } from '../../schema/feed/query';
 import { parseResultRecords } from '../../utils/parseData';
 
@@ -27,6 +28,7 @@ import {
   QueryFeedsArgs,
   MutationWriteCommentArgs
 } from '../../types';
+import console = require('console');
 
 const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
 
@@ -103,6 +105,12 @@ const mutationResolvers: MutationResolvers = {
       } else {
         publishingFeed(pubsub, feedId, email);
       }
+
+      await requestDB(ALARM_NEW_FEED, {
+        feedId,
+        userEmail: email
+      });
+
       return true;
     } catch (error) {
       console.log(error);
@@ -140,6 +148,7 @@ const mutationResolvers: MutationResolvers = {
         feedId,
         content
       });
+
       return true;
     } catch (error) {
       const DBError = createDBError(error);
@@ -186,6 +195,7 @@ export default {
     feeds: {
       subscribe: withFilter(
         (_, __, { pubsub }) => {
+          console.log('subscribed');
           return pubsub.asyncIterator(NEW_FEED);
         },
         async (payload, _, context) => {
