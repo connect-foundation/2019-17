@@ -37,7 +37,9 @@ type Content {
 
 type Comment {
   createdAt: Idate
-  content: String
+  content: String!
+  nickname: String!
+  thumbnail: String
 }
 
 type Image {

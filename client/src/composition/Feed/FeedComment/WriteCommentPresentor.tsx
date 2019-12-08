@@ -4,15 +4,32 @@ import { darken } from 'polished';
 import { useWriteCommentMutation, Comment } from 'react-components.d';
 import useInput, { IUseInput } from 'hooks/useInput';
 import Profile from 'components/Profile';
+import Button from 'components/Button';
+
+const CommentForm = styled.div`
+  position: relative;
+`;
+
+const CommentInputForm = styled.div`
+  display: inline-block;
+  padding: 0 0.5rem;
+  width: 100%;
+  position: absolute;
+  & > button {
+    margin: 0 0.25rem;
+    position: absolute;
+    top: 0.1rem;
+  }
+`;
 
 const Input = styled.input`
   all: unset;
   box-sizing: border-box;
-  width: 80%;
+  width: 83%;
   height: 20px;
   border: ${props => props.theme.borders.borderStyle};
   border-radius: ${props => props.theme.borders.radius};
-  padding: 1rem;
+  padding: 0.9rem;
   transition: border-color 0.5s ease-in-out;
   color: ${props => props.theme.colors.facebookTextColor};
   &:focus {
@@ -46,27 +63,29 @@ const WriteCommentPresentor = ({
         variables: { content: comment, feedId: Number(feedId) }
       });
       commentText.setValue('');
-      const mergedComments = [
-        ...myComments,
-        {
-          content: comment,
-          createdAt: null
-        }
-      ];
+      const newComment: Comment = {
+        content: comment,
+        createdAt: null,
+        nickname: ''
+      };
+      const mergedComments = [...myComments, newComment];
       setComment(mergedComments);
     }
   }
 
   return (
-    <>
+    <CommentForm>
       <Profile
         imageUrl={process.env.PUBLIC_URL + '/images/profile.jpg'}
         alt={'profile image'}
         size="32px"
       />
-      <Input placeholder="댓글을 입력하세요" {...commentText} required />
-      <input type="button" value="입력" onClick={submitComment}></input>
-    </>
+      <CommentInputForm>
+        <Input placeholder="댓글을 입력하세요" {...commentText} required />
+
+        <Button size={'medium'} onChange={submitComment} text={'등록'} />
+      </CommentInputForm>
+    </CommentForm>
   );
 };
 

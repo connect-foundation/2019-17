@@ -1,12 +1,26 @@
-export const MATCH_FEEDS = `MATCH (searchUser:User)-[:AUTHOR]->(feed:Feed)
+/* export const MATCH_FEEDS = `MATCH (searchUser:User)-[:AUTHOR]->(feed:Feed)
 OPTIONAL MATCH (likeUser:User)-[like:LIKE]->(feed)
 OPTIONAL MATCH (feed)-[:HAS]->(com:Comment)
 OPTIONAL MATCH (feed)<-[:HAS]-(img:Image)
 WITH searchUser, feed, COLLECT(DISTINCT likeUser) AS cp , com, COLLECT(DISTINCT img) as imgs
-ORDER BY com 
+ORDER BY com.createdAt 
 where feed.createdAt <  datetime({cursor})
 RETURN searchUser , feed,  ID(feed) as feedId , length(cp) AS totallikes, imgs as imglist,
 length(filter(x IN cp WHERE x.email= {useremail} )) AS hasLiked, COLLECT(com) as comments
+order by feed.createdAt desc
+LIMIT {first} 
+`; */
+
+export const MATCH_FEEDS = `MATCH (searchUser:User)-[:AUTHOR]->(feed:Feed)
+OPTIONAL MATCH (likeUser:User)-[like:LIKE]->(feed)
+OPTIONAL MATCH (feed)-[:HAS]->(com:Comment)<-[:AUTHOR]-(w:User)
+OPTIONAL MATCH (feed)<-[:HAS]-(img:Image)
+WITH searchUser, feed, COLLECT(DISTINCT likeUser) AS cp , com, COLLECT(DISTINCT img) as imgs, w
+ORDER BY com.createdAt 
+where feed.createdAt <  datetime({cursor})
+RETURN searchUser , feed,  ID(feed) as feedId , length(cp) AS totallikes, imgs as imglist,
+length(filter(x IN cp WHERE x.email= {useremail} )) AS hasLiked,  
+case when  com is not null then COLLECT(DISTINCT {content:com.content , createdAt:com.createdAt ,nickname:w.nickname , thumbnail: w.thumbnail}) else [] end as comments
 order by feed.createdAt desc
 LIMIT {first} 
 `;
