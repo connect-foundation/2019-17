@@ -50,7 +50,7 @@ interface IInitState {
 
 const FRIENDS = 'friends';
 const MESSAGE = 'message';
-const ALRAM = 'alram';
+const ALRAM = 'alarm';
 
 const initState = {
   [FRIENDS]: false,
