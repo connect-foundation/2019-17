@@ -20,7 +20,7 @@ const theme: DefaultTheme = {
     `
   },
   alarmWidth: '430px',
-  alarmHeight: '650px'
+  alarmHeight: '550px'
 };
 
 export default theme;

@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import CommonHeader from '../CommonHeader';
 import CommonFooter from '../CommonFooter';
+import CommonBody from '../CommonBody';
+import MessageBox from './MessageBox';
 
 const Container = styled.div`
   display: flex;
@@ -33,13 +35,29 @@ const Footer = styled(CommonFooter)`
   padding: 0.25rem 0.5rem;
 `;
 
+const Body = styled(CommonBody)``;
+
 function MessageTabPresenter() {
   return (
     <Container>
       <Header>
-        <RecentText>최근(12)</RecentText>
+        <RecentText>최근 (12)</RecentText>
         <Text>새 메세지</Text>
       </Header>
+      <Body>
+        <MessageBox isRead />
+        <MessageBox />
+        <MessageBox />
+        <MessageBox />
+        <MessageBox />
+        <MessageBox />
+        <MessageBox />
+        <MessageBox />
+        <MessageBox />
+        <MessageBox />
+        <MessageBox />
+        <MessageBox />
+      </Body>
       <Footer>
         <Text>모두 읽은 상태로 표시</Text>
       </Footer>
