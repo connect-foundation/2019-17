@@ -94,10 +94,7 @@ const WriteCommentPresentor = ({
       />
       <CommentInputForm>
         <Input placeholder="댓글을 입력하세요" {...commentText} required />
-
-        <span onClick={submitComment}>
-          <Button size={'medium'} text={'등록'} />
-        </span>
+        <Button size={'medium'} text={'등록'} onClick={submitComment} />
       </CommentInputForm>
     </CommentForm>
   );
