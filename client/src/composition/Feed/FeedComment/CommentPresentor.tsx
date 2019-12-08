@@ -3,6 +3,22 @@ import styled from 'styled-components';
 import Profile from 'components/Profile';
 import { Comment } from 'react-components.d';
 
+const CommentLine = styled.div`
+  margin: 0.25rem 0;
+`;
+
+const CommentContent = styled.div`
+  margin: 0 0.5rem;
+  font-size: 0.75rem;
+  position: absolute;
+  display: inline-block;
+`;
+const CommentNickname = styled.span`
+  font-weight: 600;
+  color: ${props => props.theme.colors.fontMainBlue};
+  padding: 0 0.25rem;
+  cursor: pointer;
+`;
 const CommentBubble = styled.div`
   background-color: #f2f3f5;
   border-radius: 18px;
@@ -15,27 +31,30 @@ const CommentBubble = styled.div`
   word-wrap: break-word;
   white-space: normal;
   word-break: break-word;
+  position: relative;
+  top: 0.05rem;
 `;
 
-const CommentText = styled.p`
+const CommentText = styled.div`
   padding: 8px 10px;
-`;
-const CommentLine = styled.div`
-  display: block;
 `;
 
 // 역할 :
-const CommentPresentor = ({ content }: Comment) => {
+const CommentPresentor = ({ comment }: { comment: Comment }) => {
+  const thumbnail =
+    (comment && comment.thumbnail) ||
+    process.env.PUBLIC_URL + '/images/profile.jpg';
   return (
     <CommentLine>
-      <Profile
-        imageUrl={process.env.PUBLIC_URL + '/images/profile.jpg'}
-        alt={'profile image'}
-        size="32px"
-      />
-      <CommentBubble>
-        <CommentText>{content}</CommentText>
-      </CommentBubble>
+      <Profile imageUrl={thumbnail} alt={'profile image'} size="32px" />
+      <CommentContent>
+        <CommentBubble>
+          <CommentText>
+            <CommentNickname>{comment.nickname}</CommentNickname>
+            {comment.content}
+          </CommentText>
+        </CommentBubble>
+      </CommentContent>
     </CommentLine>
   );
 };
