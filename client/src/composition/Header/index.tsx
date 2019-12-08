@@ -14,6 +14,7 @@ const HeaderWrapper = styled.div`
 
 const Backgound = styled.div`
   background-color: #4267b2;
+  z-index: 1000;
   width: 100%;
   display: flex;
   color: #fff;
