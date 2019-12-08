@@ -60,7 +60,6 @@ interface IProps {
 
 function MessageBox({ isRead }: IProps) {
   const [readState, setReadState] = useState(isRead);
-  console.log(readState);
   const onClick = () => setReadState(true);
   return (
     <Container isRead={readState} onClick={onClick}>
