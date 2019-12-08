@@ -3,15 +3,11 @@ import {
   UPDATE_LIKE,
   DELETE_LIKE,
   GET_NEW_FEED,
-  GET_FRIENDS
+  GET_FRIENDS,
+  WRITE_COMMENT
 } from '../../schema/feed/query';
 import { parseResultRecords } from '../../utils/parseData';
-import {
-  MutationEnrollFeedArgs,
-  MutationResolvers,
-  QueryResolvers,
-  QueryFeedsArgs
-} from '../../types';
+
 import uploadToObjStorage from '../../middleware/uploadToObjStorage';
 import { requestDB } from '../../utils/requestDB';
 import {
@@ -24,6 +20,13 @@ import createDBError from '../../errors/createDBError';
 import { dateToISO, objToDate } from '../../utils/dateutil';
 import { withFilter } from 'graphql-subscriptions';
 import isAuthenticated from '../../utils/isAuthenticated';
+import {
+  MutationResolvers,
+  MutationEnrollFeedArgs,
+  QueryResolvers,
+  QueryFeedsArgs,
+  MutationWriteCommentArgs
+} from '../../types';
 
 const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
 
@@ -122,6 +125,26 @@ const mutationResolvers: MutationResolvers = {
       const DBError = createDBError(error);
       throw new DBError();
     }
+  },
+  writeComment: async (
+    _,
+    { feedId, content }: MutationWriteCommentArgs,
+    { req }
+  ): Promise<boolean> => {
+    isAuthenticated(req);
+    const userEmail = req.email;
+
+    try {
+      await requestDB(WRITE_COMMENT, {
+        userEmail,
+        feedId,
+        content
+      });
+      return true;
+    } catch (error) {
+      const DBError = createDBError(error);
+      throw new DBError();
+    }
   }
 };
 
@@ -139,6 +162,7 @@ const queryResolvers: QueryResolvers = {
       first,
       useremail
     });
+
     const feeds = parseResultRecords(result);
     const lastFeed = feeds[feeds.length - 1];
     const cursorDate = lastFeed.feed.createdAt;

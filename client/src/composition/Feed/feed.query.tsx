@@ -31,7 +31,15 @@ export const GET_FEEDS = gql`
           url
         }
         comments {
-          id
+          createdAt {
+            year
+            month
+            day
+            hour
+            minute
+            second
+            nanosecond
+          }
           content
         }
       }
@@ -70,10 +78,24 @@ export const FEEDS_SUBSCRIPTION = gql`
           url
         }
         comments {
-          id
+          createdAt {
+            year
+            month
+            day
+            hour
+            minute
+            second
+            nanosecond
+          }
           content
         }
       }
     }
+  }
+`;
+
+export const WRITE_COMMENT = gql`
+  mutation writeComment($content: String!, $feedId: Int!) {
+    writeComment(content: $content, feedId: $feedId)
   }
 `;
