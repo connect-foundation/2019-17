@@ -65,3 +65,10 @@ export const DELETE_ALARM = `
 MATCH (f:Feed{ID:{feedId}})-[al:ALARM{isRead:true}]->(fr:User{email:{userEmail}})
 delete al
 return f, al,fr`;
+
+export const GET_FEED_ARALMS = `
+MATCH (u:User{email:{userEmail}})-[:ALARM]-(f:Feed)
+optional match (f)<-[:AUTHOR]-(w:User)
+return collect(distinct {createdAt : f.createdAt , content:f.content ,writer: w.nickname, email:w.email, thumbnail:w.thumbnail })
+ as alarms 
+`;
