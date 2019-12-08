@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import CommonHeader from '../CommonHeader';
 import CommonFooter from '../CommonFooter';
+import { GET_ALARMS } from './alarm.query';
+import { useQuery } from '@apollo/react-hooks';
+import Alam from './Alarm';
 
 const Container = styled.div`
   display: flex;
@@ -35,11 +38,20 @@ const Footer = styled(CommonFooter)`
 
 function AlarmTabPresenter() {
   // const alarms
+
+  const { data } = useQuery(GET_ALARMS);
+
+  if (data) {
+    console.log(data);
+  }
   return (
     <Container>
       <Header>
         <RecentText>알림</RecentText>
       </Header>
+      <div>
+        <Alam />
+      </div>
       <Footer>
         <Text>모두 읽은 상태로 표시</Text>
       </Footer>
