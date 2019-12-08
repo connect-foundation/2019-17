@@ -9,7 +9,8 @@ const theme: DefaultTheme = {
     fontMainBlue: '#385898',
     fontButtonGray: '#606770',
     borderColor: '#dddfe2',
-    textColor: '#4b4f56'
+    textColor: '#4b4f56',
+    messageBgBlue: 'rgb(0, 153, 255)'
   },
   borders: {
     borderStyle: '1px solid #ccd0d5',

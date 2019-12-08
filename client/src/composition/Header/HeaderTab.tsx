@@ -73,7 +73,9 @@ function HeaderTab() {
       </Tab>
       <AlarmIcon
         selected={headerTabState.alarm}
-        onClick={() => headerTabDispatch({ type: 'CLICK_ALARM', key: HEADER_TAB.ALARM })}
+        onClick={() =>
+          headerTabDispatch({ type: 'CLICK_ALARM', key: HEADER_TAB.ALARM })
+        }
       />
       <Tab left={'-160px'} selected={headerTabState.alarm}>
         <AlarmTab />
