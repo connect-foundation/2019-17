@@ -5,7 +5,8 @@ import {
   GET_NEW_FEED,
   GET_FRIENDS,
   WRITE_COMMENT,
-  ALARM_NEW_FEED
+  ALARM_NEW_FEED,
+  GET_FEED_ARALMS
 } from '../../schema/feed/query';
 import { parseResultRecords } from '../../utils/parseData';
 
@@ -26,9 +27,9 @@ import {
   MutationEnrollFeedArgs,
   QueryResolvers,
   QueryFeedsArgs,
-  MutationWriteCommentArgs
+  MutationWriteCommentArgs,
+  Alarm
 } from '../../types';
-import console = require('console');
 
 const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
 
@@ -183,6 +184,18 @@ const queryResolvers: QueryResolvers = {
       feedItems: feeds
     };
     return ret;
+  },
+  alarms: async (_, __, { req }): Promise<Alarm[]> => {
+    isAuthenticated(req);
+    const userEmail = req.email;
+
+    const result = await requestDB(GET_FEED_ARALMS, {
+      userEmail
+    });
+
+    const parsedAlarms = parseResultRecords(result);
+
+    return parsedAlarms;
   }
 };
 
@@ -195,7 +208,6 @@ export default {
     feeds: {
       subscribe: withFilter(
         (_, __, { pubsub }) => {
-          console.log('subscribed');
           return pubsub.asyncIterator(NEW_FEED);
         },
         async (payload, _, context) => {

@@ -60,9 +60,15 @@ type IFeeds {
   feedItems: [IFeed]
 }
 
+type Alarm {
+  writer: String
+  createdAt: Idate
+}
+
 type Query {
   pageInfo: PageInfo
   feeds(first: Int, cursor: String): IFeeds
+  alarms: [Alarm]
 }
 
 type Mutation {
