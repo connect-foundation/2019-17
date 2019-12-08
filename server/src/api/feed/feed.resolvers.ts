@@ -27,8 +27,7 @@ import {
   MutationEnrollFeedArgs,
   QueryResolvers,
   QueryFeedsArgs,
-  MutationWriteCommentArgs,
-  Alarm
+  MutationWriteCommentArgs
 } from '../../types';
 
 const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
@@ -185,17 +184,15 @@ const queryResolvers: QueryResolvers = {
     };
     return ret;
   },
-  alarms: async (_, __, { req }): Promise<Alarm[]> => {
+  alarms: async (_, __, { req }): Promise<any> => {
     isAuthenticated(req);
     const userEmail = req.email;
-
     const result = await requestDB(GET_FEED_ARALMS, {
       userEmail
     });
+    const [parsedAlarms] = parseResultRecords(result);
 
-    const parsedAlarms = parseResultRecords(result);
-
-    return parsedAlarms;
+    return parsedAlarms.alarms;
   }
 };
 
@@ -208,6 +205,7 @@ export default {
     feeds: {
       subscribe: withFilter(
         (_, __, { pubsub }) => {
+          console.log('subscribed');
           return pubsub.asyncIterator(NEW_FEED);
         },
         async (payload, _, context) => {

@@ -61,6 +61,9 @@ type IFeeds {
 }
 
 type Alarm {
+  thumbnail: String
+  email: String
+  content: String
   writer: String
   createdAt: Idate
 }
