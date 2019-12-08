@@ -41,6 +41,8 @@ export const GET_FEEDS = gql`
             nanosecond
           }
           content
+          nickname
+          thumbnail
         }
       }
     }
@@ -88,6 +90,8 @@ export const FEEDS_SUBSCRIPTION = gql`
             nanosecond
           }
           content
+          nickname
+          thumbnail
         }
       }
     }

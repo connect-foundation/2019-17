@@ -21,6 +21,7 @@ export const parseResult = (
 
 export const datetransform = object => {
   let returnobj = {};
+
   for (let property in object) {
     if (object.hasOwnProperty(property)) {
       const propertyValue = object[property];
@@ -63,10 +64,16 @@ export const parseResultRecords = records => {
         } else if (toString.call(node) === '[object Array]') {
           let temp: { [key: string]: any } = {};
           temp[nodeKey] = [];
+
           for (const no of node) {
             let innerTemp = {};
-            innerTemp = { ...innerTemp, ...datetransform(no.properties) }; // !!
-            temp[nodeKey].push(innerTemp);
+            if (no instanceof neo4j.types.Node) {
+              innerTemp = { ...innerTemp, ...datetransform(no.properties) }; // !!
+              temp[nodeKey].push(innerTemp);
+            } else {
+              innerTemp = { ...innerTemp, ...datetransform(no) }; // !!
+              temp[nodeKey].push(innerTemp);
+            }
           }
           arr = { ...arr, ...temp };
         } else if (isString(node)) {
