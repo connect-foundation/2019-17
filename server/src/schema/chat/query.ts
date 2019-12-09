@@ -1,6 +1,5 @@
 export const CREATE_CHAT_ROOM_QUERY = `
-MATCH (user1:User {email: $userEmail1})
-MATCH (user2:User {email: $userEmail2})
+MATCH (user1:User {email: $userEmail1}), (user2:User {email: $userEmail2})
 CREATE (c:ChatRoom) <- [:JOIN] - (user1)
 CREATE (c) <- [:JOIN] - (user2)
 CREATE (c) <- [:SEND] - (m:Chat {content: $content, createAt: datetime()}) <- [:HAS] - (user1)
