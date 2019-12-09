@@ -37,12 +37,8 @@ const Footer = styled(CommonFooter)`
 `;
 
 function AlarmTabPresenter() {
-  // const alarms
   const { data } = useGetAlarmsQuery();
 
-  if (data) {
-    console.log(data);
-  }
   return (
     <Container>
       <Header>

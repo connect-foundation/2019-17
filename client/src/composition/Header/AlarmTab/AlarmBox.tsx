@@ -69,8 +69,7 @@ const getAppliedReadAlarms = (alarms: Alarm[], data: any) => {
   });
 };
 
-function AlamBox({ alarm, isRead }: { alarm: Alarm; isRead: boolean }) {
-  // const alarms
+function AlamBox({ alarm }: { alarm: Alarm; isRead: boolean }) {
   const [readState, setReadState] = useState(
     alarm && alarm.isRead ? alarm.isRead : false
   );
