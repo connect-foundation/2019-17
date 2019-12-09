@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import CommonHeader from '../CommonHeader';
 import CommonFooter from '../CommonFooter';
+import CommonBody from '../CommonBody';
 
 import AlamBox from './AlarmBox';
 import { useGetAlarmsQuery, Alarm } from 'react-components.d';
@@ -44,13 +45,13 @@ function AlarmTabPresenter() {
       <Header>
         <RecentText>알림</RecentText>
       </Header>
-      <div>
+      <CommonBody>
         {data &&
           data.alarms &&
           data.alarms.map((alarm: Alarm, idx) => {
             return <AlamBox alarm={alarm} key={'alarm_' + idx} />;
           })}
-      </div>
+      </CommonBody>
       <Footer>
         <Text>모두 읽은 상태로 표시</Text>
       </Footer>

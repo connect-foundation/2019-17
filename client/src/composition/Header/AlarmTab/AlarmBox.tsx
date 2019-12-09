@@ -81,8 +81,6 @@ function AlamBox({ alarm }: { alarm: Alarm; isRead: boolean }) {
       });
 
       const test = getAppliedReadAlarms(alarms, data);
-      console.log('data ', data);
-      console.log('test ', test);
 
       // 이게 없어도 반영이 되는데 왜그럴까요..? ㅠ 쿼리자체에 바로 수정해도 캐시가 적용이 되나요.. ㅠㅠ
       cache.writeQuery({
