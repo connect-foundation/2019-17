@@ -2,10 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import CommonHeader from '../CommonHeader';
 import CommonFooter from '../CommonFooter';
-import { GET_ALARMS } from './alarm.query';
-import { useLazyQuery, useQuery } from '@apollo/react-hooks';
+
 import AlamBox from './AlarmBox';
-import { Alarm } from 'react-components.d';
+import { useGetAlarmsQuery, Alarm } from 'react-components.d';
 
 const Container = styled.div`
   display: flex;
@@ -39,7 +38,7 @@ const Footer = styled(CommonFooter)`
 
 function AlarmTabPresenter() {
   // const alarms
-  const { data } = useQuery(GET_ALARMS);
+  const { data } = useGetAlarmsQuery();
 
   if (data) {
     console.log(data);
@@ -52,7 +51,7 @@ function AlarmTabPresenter() {
       <div>
         {data &&
           data.alarms &&
-          data.alarms.map((alarm: Alarm, idx: number) => {
+          data.alarms.map((alarm: Alarm, idx) => {
             return <AlamBox alarm={alarm} key={'alarm_' + idx} />;
           })}
       </div>

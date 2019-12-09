@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import Profile from 'components/Profile';
-import { Alarm } from 'react-components.d';
+import { Alarm, useChangeReadStateMutation } from 'react-components.d';
 import CommonBox from '../CommonBox';
+import { GET_ALARMS } from './alarm.query';
 
 const cursor = css`
   cursor: pointer;
@@ -59,16 +60,18 @@ AlamBox.defaultProps = {
   isRead: false
 };
 
-//
 function AlamBox({ alarm, isRead }: { alarm: Alarm; isRead: boolean }) {
   // const alarms
   const [readState, setReadState] = useState(
     alarm && alarm.isRead ? alarm.isRead : false
   );
-  console.log(readState);
+
+  const [changeRedState] = useChangeReadStateMutation();
 
   const onClickFold = () => {
     setReadState(true);
+    console.log(Number(alarm.feedId));
+    changeRedState({ variables: { feedId: Number(alarm.feedId) } });
   };
   return (
     <Container isRead={readState} onClick={onClickFold}>
