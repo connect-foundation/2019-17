@@ -14,6 +14,9 @@ const changeAllRequestReadStateByEmailQuery = `
 MATCH (a: User)-[r: REQUEST_FRIEND]->(b: User {email})
 SET r.isRead = true
 `;
+const countUnreadRequestByEmailQuery = `
+Match(:User {email: {email}})<-[r:REQUEST_FRIEND {isRead: false}]-(:User)
+return count(r)`;
 
 export {
   sendFriendRequestByEmailQuery,
@@ -22,5 +25,6 @@ export {
   cancelFriendByEmailQuery,
   findUserByRequestRelation,
   findUserByNoRelation,
-  changeAllRequestReadStateByEmailQuery
+  changeAllRequestReadStateByEmailQuery,
+  countUnreadRequestByEmailQuery
 };

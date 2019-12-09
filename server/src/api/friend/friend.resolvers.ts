@@ -7,7 +7,8 @@ import {
   cancelFriendByEmailQuery,
   findUserByRequestRelation,
   findUserByNoRelation,
-  changeAllRequestReadStateByEmailQuery
+  changeAllRequestReadStateByEmailQuery,
+  countUnreadRequestByEmailQuery
 } from '../../schema/friend/query';
 import { findUserWithEmailQuery } from '../../schema/user/query';
 import isAuthenticated from '../../utils/isAuthenticated';
@@ -57,6 +58,16 @@ export default {
       const parsedRec = parseResultRecords(recUsers);
 
       return gatherValuesByKey(parsedRec, 'target');
+    },
+    friendUnreadAlarmNum: async (_, __, { req }) => {
+      isAuthenticated(req);
+
+      const countRes = await requestDB(countUnreadRequestByEmailQuery, {
+        email: req.email
+      });
+
+      console.log(countRes[0].get(0));
+      return String(countRes[0].get(0));
     }
   },
   Mutation: {

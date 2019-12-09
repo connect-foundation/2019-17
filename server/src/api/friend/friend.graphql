@@ -18,6 +18,7 @@ type Mutation {
 type Query {
   requestAlarm: [UserInfoWithTarget]
   recommendAlarm: [UserInfoWithTarget]
+  friendUnreadAlarmNum: Int!
 }
 
 type Subscription {
