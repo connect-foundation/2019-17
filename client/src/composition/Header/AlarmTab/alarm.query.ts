@@ -16,6 +16,8 @@ export const GET_ALARMS = gql`
       thumbnail
       email
       content
+      isRead
+      feedId
     }
   }
 `;

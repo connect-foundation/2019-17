@@ -62,12 +62,16 @@ AlamBox.defaultProps = {
 //
 function AlamBox({ alarm, isRead }: { alarm: Alarm; isRead: boolean }) {
   // const alarms
-  const [readState, setReadState] = useState(isRead);
+  const [readState, setReadState] = useState(
+    alarm && alarm.isRead ? alarm.isRead : false
+  );
   console.log(readState);
-  const onClick = () => setReadState(true);
 
+  const onClickFold = () => {
+    setReadState(true);
+  };
   return (
-    <Container isRead={readState} onClick={onClick}>
+    <Container isRead={readState} onClick={onClickFold}>
       <Column>
         <Profile
           size={'45px'}
