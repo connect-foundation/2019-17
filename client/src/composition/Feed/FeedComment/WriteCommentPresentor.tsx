@@ -1,7 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { darken } from 'polished';
-import { useWriteCommentMutation, Comment } from 'react-components.d';
+import {
+  useWriteCommentMutation,
+  Comment,
+  useMeQuery
+} from 'react-components.d';
 import useInput, { IUseInput } from 'hooks/useInput';
 import Profile from 'components/Profile';
 import Button from 'components/Button';
@@ -40,9 +44,6 @@ const Input = styled.input`
   }
 `;
 
-const CommentSubmitBtn = styled.input``;
-
-// 역할 :
 const WriteCommentPresentor = ({
   feedId,
   setComment,
@@ -59,6 +60,7 @@ const WriteCommentPresentor = ({
   }
 
   const [writeComment] = useWriteCommentMutation();
+  const { data: { me = null } = {} } = useMeQuery();
   function submitComment() {
     const comment = commentText.value;
     if (validateNull(comment)) {
@@ -69,7 +71,9 @@ const WriteCommentPresentor = ({
       const newComment: Comment = {
         content: comment,
         createdAt: null,
-        nickname: ''
+        nickname: (me && me.nickname) || '',
+        thumbnail:
+          (me && me.thumbnail) || process.env.PUBLIC_URL + '/images/profile.jpg'
       };
       const mergedComments = [...myComments, newComment];
       setComment(mergedComments);
@@ -79,14 +83,15 @@ const WriteCommentPresentor = ({
   return (
     <CommentForm>
       <Profile
-        imageUrl={process.env.PUBLIC_URL + '/images/profile.jpg'}
+        imageUrl={
+          (me && me.thumbnail) || process.env.PUBLIC_URL + '/images/profile.jpg'
+        }
         alt={'profile image'}
         size="32px"
       />
       <CommentInputForm>
         <Input placeholder="댓글을 입력하세요" {...commentText} required />
-
-        <Button size={'medium'} onChange={submitComment} text={'등록'} />
+        <Button size={'medium'} text={'등록'} onClick={submitComment} />
       </CommentInputForm>
     </CommentForm>
   );
