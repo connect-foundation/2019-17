@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import CommonHeader from '../CommonHeader';
 import CommonFooter from '../CommonFooter';
 import { GET_ALARMS } from './alarm.query';
-import { useQuery } from '@apollo/react-hooks';
+import { useLazyQuery, useQuery } from '@apollo/react-hooks';
 import Alam from './Alarm';
+import { Alarm } from 'react-components.d';
 
 const Container = styled.div`
   display: flex;
@@ -38,7 +39,6 @@ const Footer = styled(CommonFooter)`
 
 function AlarmTabPresenter() {
   // const alarms
-
   const { data } = useQuery(GET_ALARMS);
 
   if (data) {
@@ -50,7 +50,11 @@ function AlarmTabPresenter() {
         <RecentText>알림</RecentText>
       </Header>
       <div>
-        <Alam />
+        {data &&
+          data.alarms &&
+          data.alarms.map((alarm: Alarm, idx: number) => {
+            return <Alam alarm={alarm} key={'alarm_' + idx} />;
+          })}
       </div>
       <Footer>
         <Text>모두 읽은 상태로 표시</Text>

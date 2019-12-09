@@ -1,9 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
-
-import { GET_ALARMS } from './alarm.query';
-import { useQuery } from '@apollo/react-hooks';
+import styled, { css } from 'styled-components';
 import Profile from 'components/Profile';
+import { Alarm } from 'react-components.d';
 
 const AlarmContainer = styled.div`
   display: flex;
@@ -38,22 +36,32 @@ const AlarmContent = styled.span`
 const AlarmInfoText = styled.div`
   padding-top: 3px;
 `;
+const cursor = css`
+  cursor: pointer;
+`;
+const BoldText = styled.span`
+  ${cursor}
+  font-weight: 600;
+`;
+
 //
-function Alam() {
+function Alam({ alarm }: { alarm: Alarm }) {
   // const alarms
 
-  const { data } = useQuery(GET_ALARMS);
-
-  if (data) {
-    console.log(data);
-  }
   return (
     <AlarmContainer>
-      <AlarmProfile size="48px" />
+      <AlarmProfile
+        size="48px"
+        imageUrl={
+          alarm.thumbnail || process.env.PUBLIC_URL + '/images/profile.jpg'
+        }
+      />
       <AlarmText>
-        <AlarmContent> yeonseo 님이 새로운 게시글을 올렸습니다.</AlarmContent>
+        <AlarmContent>
+          <BoldText>{alarm.writer}</BoldText> 님이 새로운 게시글을 올렸습니다.
+        </AlarmContent>
         <AlarmInfoText>
-          <span> 좋아요 </span> <span> 2019.11.12 </span>
+          <span> 새 게시글 </span> <span> 2019.11.12 </span>
         </AlarmInfoText>
       </AlarmText>
     </AlarmContainer>

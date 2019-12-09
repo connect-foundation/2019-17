@@ -1,8 +1,10 @@
 import React from 'react';
 import MessageTabPresenter from './AlarmTabPresenter';
-
-function AlarmTabContainer() {
-  return <MessageTabPresenter />;
+interface Iprops {
+  selected: boolean;
+}
+function AlarmTabContainer({ selected }: Iprops) {
+  return selected ? <MessageTabPresenter /> : <></>;
 }
 
 export default AlarmTabContainer;

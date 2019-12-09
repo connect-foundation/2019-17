@@ -88,7 +88,7 @@ function HeaderTab() {
         onClick={clickIcon.bind(null, ALRAM)}
       />
       <Tab selected={tabState.alarm}>
-        <AlarmTab />
+        <AlarmTab selected={tabState.alarm} />
       </Tab>
     </Container>
   );
