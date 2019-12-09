@@ -78,7 +78,7 @@ function HeaderTab() {
         }
       />
       <Tab left={'-160px'} selected={headerTabState.alarm}>
-        <AlarmTab />
+        <AlarmTab selected={headerTabState.alarm} />
       </Tab>
     </Container>
   );
