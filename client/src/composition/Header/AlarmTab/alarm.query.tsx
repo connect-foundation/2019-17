@@ -23,7 +23,7 @@ export const GET_ALARMS = gql`
 `;
 
 export const CHANGE_READ_STATE = gql`
-  mutation changeReadState($feedId: Int!) {
-    changeReadState(feedId: $feedId)
+  mutation changeFeedAlarmReadState($feedId: Int!) {
+    changeFeedAlarmReadState(feedId: $feedId)
   }
 `;

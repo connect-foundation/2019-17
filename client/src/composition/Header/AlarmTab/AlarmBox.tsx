@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import Profile from 'components/Profile';
-import { Alarm, useChangeReadStateMutation } from 'react-components.d';
+import { Alarm, useChangeFeedAlarmReadStateMutation } from 'react-components.d';
 import CommonBox from '../CommonBox';
 import { GET_ALARMS } from './alarm.query';
 
@@ -61,7 +61,7 @@ AlamBox.defaultProps = {
 
 const getAppliedReadAlarms = (alarms: Alarm[], data: any) => {
   return alarms.map((alarm: any) => {
-    if (data && alarm.feedId === data.changeReadState) {
+    if (data && alarm.feedId === data.changeFeedAlarmReadState) {
       alarm.isRead = true;
       return alarm;
     }
@@ -74,13 +74,15 @@ function AlamBox({ alarm }: { alarm: Alarm; isRead: boolean }) {
     alarm && alarm.isRead ? alarm.isRead : false
   );
 
-  const [changeRedState] = useChangeReadStateMutation({
+  const [changeRedState] = useChangeFeedAlarmReadStateMutation({
     update(cache, { data }) {
       const { alarms }: any = cache.readQuery({
         query: GET_ALARMS
       });
 
       const test = getAppliedReadAlarms(alarms, data);
+      console.log('data ', data);
+      console.log('test ', test);
 
       // 이게 없어도 반영이 되는데 왜그럴까요..? ㅠ 쿼리자체에 바로 수정해도 캐시가 적용이 되나요.. ㅠㅠ
       cache.writeQuery({
