@@ -8,8 +8,12 @@ import {
   findUserByRequestRelation,
   findUserByNoRelation
 } from '../../schema/friend/query';
+import { findUserWithEmailQuery } from '../../schema/user/query';
 import isAuthenticated from '../../utils/isAuthenticated';
 import { parseResultRecords, gatherValuesByKey } from '../../utils/parseData';
+import { withFilter } from 'graphql-subscriptions';
+
+const FRD_ALARM_ADDED = 'FRD_ALARM_ADDED';
 
 function getQueryByRelation(relation: string) {
   if (relation === 'NONE') {
@@ -23,32 +27,41 @@ function getQueryByRelation(relation: string) {
   }
 }
 
+async function getUserInfoByEmail(email: string) {
+  const user = await requestDB(findUserWithEmailQuery, { email });
+  return user[0].get(0).properties;
+}
+
 export default {
   Query: {
-    getFriendAlarm: async (_, __, { req }) => {
+    getReqAlarm: async (_, __, { req }) => {
       isAuthenticated(req);
 
       const reqUsers = await requestDB(findUserByRequestRelation, {
         email: req.email
       });
+
+      const parsedReq = parseResultRecords(reqUsers);
+
+      return gatherValuesByKey(parsedReq, 'u');
+    },
+    getRecAlarm: async (_, __, { req }) => {
+      isAuthenticated(req);
+
       const recUsers = await requestDB(findUserByNoRelation, {
         email: req.email
       });
 
-      const parsedReq = parseResultRecords(reqUsers);
       const parsedRec = parseResultRecords(recUsers);
 
-      return {
-        requestedUser: gatherValuesByKey(parsedReq, 'u'),
-        friendRecommendation: gatherValuesByKey(parsedRec, 'target')
-      };
+      return gatherValuesByKey(parsedRec, 'target');
     }
   },
   Mutation: {
     requestFriend: async (
       _,
       { targetEmail, relation }: MutationRequestFriendArgs,
-      { req }
+      { req, pubsub }
     ) => {
       isAuthenticated(req);
 
@@ -57,7 +70,30 @@ export default {
         targetEmail
       });
 
+      if (getQueryByRelation(relation) === sendFriendRequestByEmailQuery) {
+        const user = await getUserInfoByEmail(req.email);
+
+        pubsub.publish(FRD_ALARM_ADDED, {
+          friendAlarmAdded: {
+            ...user,
+            targetEmail
+          }
+        });
+      }
+
       return true;
+    }
+  },
+  Subscription: {
+    friendAlarmAdded: {
+      subscribe: withFilter(
+        (_, __, { pubsub }) => {
+          console.log('published');
+          return pubsub.asyncIterator(FRD_ALARM_ADDED);
+        },
+        async (payload, _, { email }) =>
+          payload.friendAlarmAdded.targetEmail === email
+      )
     }
   }
 };
