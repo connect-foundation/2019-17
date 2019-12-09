@@ -66,6 +66,8 @@ type Alarm {
   content: String
   writer: String
   createdAt: Idate
+  isRead: Boolean
+  feedId: Int
 }
 
 type Query {
