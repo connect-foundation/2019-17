@@ -37,7 +37,9 @@ type Content {
 
 type Comment {
   createdAt: Idate
-  content: String
+  content: String!
+  nickname: String!
+  thumbnail: String
 }
 
 type Image {
@@ -58,15 +60,28 @@ type IFeeds {
   feedItems: [IFeed]
 }
 
+type Alarm {
+  thumbnail: String
+  email: String!
+  content: String
+  writer: String!
+  createdAt: Idate!
+  isRead: Boolean!
+  feedId: Int!
+}
+
 type Query {
   pageInfo: PageInfo
   feeds(first: Int, cursor: String): IFeeds
+  alarms: [Alarm]
 }
 
 type Mutation {
   updateLike(feedId: Int, count: Int): Boolean
   enrollFeed(content: String!, files: [Upload]): Boolean!
   writeComment(content: String!, feedId: Int!): Boolean!
+  changeFeedAlarmReadState(feedId: Int!, isRead: Boolean): Int!
+  changeAllFeedAlarmReadState: Boolean!
 }
 
 type Subscription {

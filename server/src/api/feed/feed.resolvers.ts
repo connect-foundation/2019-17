@@ -4,7 +4,11 @@ import {
   DELETE_LIKE,
   GET_NEW_FEED,
   GET_FRIENDS,
-  WRITE_COMMENT
+  WRITE_COMMENT,
+  ALARM_NEW_FEED,
+  GET_FEED_ARALMS,
+  CHANGE_ALARM_READSTATE,
+  CHANGE_ALL_ALARM_READSTATE
 } from '../../schema/feed/query';
 import { parseResultRecords } from '../../utils/parseData';
 
@@ -25,7 +29,8 @@ import {
   MutationEnrollFeedArgs,
   QueryResolvers,
   QueryFeedsArgs,
-  MutationWriteCommentArgs
+  MutationWriteCommentArgs,
+  Alarm
 } from '../../types';
 
 const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
@@ -103,6 +108,12 @@ const mutationResolvers: MutationResolvers = {
       } else {
         publishingFeed(pubsub, feedId, email);
       }
+
+      await requestDB(ALARM_NEW_FEED, {
+        feedId,
+        userEmail: email
+      });
+
       return true;
     } catch (error) {
       console.log(error);
@@ -140,6 +151,36 @@ const mutationResolvers: MutationResolvers = {
         feedId,
         content
       });
+
+      return true;
+    } catch (error) {
+      const DBError = createDBError(error);
+      throw new DBError();
+    }
+  },
+  changeFeedAlarmReadState: async (_, { feedId }, { req }): Promise<number> => {
+    isAuthenticated(req);
+    const userEmail = req.email;
+    try {
+      await requestDB(CHANGE_ALARM_READSTATE, {
+        userEmail,
+        feedId,
+        isRead: true
+      });
+      return feedId;
+    } catch (error) {
+      const DBError = createDBError(error);
+      throw new DBError();
+    }
+  },
+  changeAllFeedAlarmReadState: async (_, __, { req }): Promise<boolean> => {
+    isAuthenticated(req);
+    const userEmail = req.email;
+    try {
+      await requestDB(CHANGE_ALL_ALARM_READSTATE, {
+        userEmail,
+        isRead: true
+      });
       return true;
     } catch (error) {
       const DBError = createDBError(error);
@@ -174,6 +215,16 @@ const queryResolvers: QueryResolvers = {
       feedItems: feeds
     };
     return ret;
+  },
+  alarms: async (_, __, { req }): Promise<Alarm[]> => {
+    isAuthenticated(req);
+    const userEmail = req.email;
+    const result = await requestDB(GET_FEED_ARALMS, {
+      userEmail
+    });
+    const [parsedAlarms] = parseResultRecords(result);
+
+    return parsedAlarms.alarms;
   }
 };
 

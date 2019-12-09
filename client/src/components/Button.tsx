@@ -59,6 +59,7 @@ interface IProps {
   textColor: string;
   full: boolean;
   onChange?: (e: React.ChangeEvent<HTMLButtonElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 function Button({

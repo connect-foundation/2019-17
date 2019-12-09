@@ -1,12 +1,13 @@
 export const MATCH_FEEDS = `MATCH (searchUser:User)-[:AUTHOR]->(feed:Feed)
 OPTIONAL MATCH (likeUser:User)-[like:LIKE]->(feed)
-OPTIONAL MATCH (feed)-[:HAS]->(com:Comment)
+OPTIONAL MATCH (feed)-[:HAS]->(com:Comment)<-[:AUTHOR]-(w:User)
 OPTIONAL MATCH (feed)<-[:HAS]-(img:Image)
-WITH searchUser, feed, COLLECT(DISTINCT likeUser) AS cp , com, COLLECT(DISTINCT img) as imgs
-ORDER BY com 
+WITH searchUser, feed, COLLECT(DISTINCT likeUser) AS cp , com, COLLECT(DISTINCT img) as imgs, w
+ORDER BY com.createdAt 
 where feed.createdAt <  datetime({cursor})
 RETURN searchUser , feed,  ID(feed) as feedId , length(cp) AS totallikes, imgs as imglist,
-length(filter(x IN cp WHERE x.email= {useremail} )) AS hasLiked, COLLECT(com) as comments
+length(filter(x IN cp WHERE x.email= {useremail} )) AS hasLiked,  
+case when  com is not null then COLLECT(DISTINCT {content:com.content , createdAt:com.createdAt ,nickname:w.nickname , thumbnail: w.thumbnail}) else [] end as comments
 order by feed.createdAt desc
 LIMIT {first} 
 `;
@@ -52,3 +53,33 @@ WHERE ID(f) = {feedId}
 CREATE (c:Comment {content: {content} ,createdAt: datetime()}) 
 CREATE (f)-[r:HAS]->(c)
 CREATE (u)-[wr:AUTHOR]->(c)`;
+
+export const ALARM_NEW_FEED = `
+MATCH (searchUser:User)-[:FRIEND]-(friend:User), (f:Feed)
+WHERE searchUser.email = {userEmail} and ID(f)={feedId}
+MERGE (f)-[al:ALARM{isRead:false}]->(friend)
+return searchUser,al,friend
+`;
+
+export const DELETE_ALARM = `
+MATCH (f:Feed{ID:{feedId}})-[al:ALARM{isRead:true}]->(fr:User{email:{userEmail}})
+delete al
+return f, al,fr`;
+
+export const GET_FEED_ARALMS = `
+MATCH (u:User{email:{userEmail}})-[al:ALARM]-(f:Feed)
+optional match (f)<-[:AUTHOR]-(w:User)
+return collect(distinct {createdAt : f.createdAt , content:f.content ,writer: w.nickname, email:w.email, thumbnail:w.thumbnail,isRead: al.isRead, feedId:ID(f) })
+ as alarms 
+`;
+
+export const CHANGE_ALARM_READSTATE = `
+MATCH p=(f:Feed)-[r:ALARM]->(u:User{email:{userEmail}}) 
+WHERE ID(f) = {feedId}
+SET r.isRead = {isRead}
+RETURN p`;
+
+export const CHANGE_ALL_ALARM_READSTATE = `
+MATCH p=(f:Feed)-[r:ALARM]->(u:User{email:{userEmail}}) 
+SET r.isRead = {isRead}
+RETURN p`;
