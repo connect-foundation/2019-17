@@ -6,7 +6,8 @@ import {
   GET_FRIENDS,
   WRITE_COMMENT,
   ALARM_NEW_FEED,
-  GET_FEED_ARALMS
+  GET_FEED_ARALMS,
+  CHANGE_ALARM_READSTATE
 } from '../../schema/feed/query';
 import { parseResultRecords } from '../../utils/parseData';
 
@@ -150,6 +151,21 @@ const mutationResolvers: MutationResolvers = {
         content
       });
 
+      return true;
+    } catch (error) {
+      const DBError = createDBError(error);
+      throw new DBError();
+    }
+  },
+  changeReadState: async (_, { feedId }, { req }): Promise<boolean> => {
+    isAuthenticated(req);
+    const userEmail = req.email;
+    try {
+      await requestDB(CHANGE_ALARM_READSTATE, {
+        userEmail,
+        feedId,
+        isRead: true
+      });
       return true;
     } catch (error) {
       const DBError = createDBError(error);
