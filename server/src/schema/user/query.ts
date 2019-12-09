@@ -1,6 +1,7 @@
 const findUserWithEmailQuery = `MATCH (user:User {email: {email}}) RETURN user`;
 const findUserWithNicknameQuery = `MATCH (user:User) WHERE user.nickname=~{nickname} RETURN user`;
 const findFriendsQuery = `MATCH (user:User {email: {email}})-[:FRIEND]-(friends:User) RETURN friends`;
+const checkFriendQuery = `MATCH (user:User {email: {email}})-[:FRIEND]-(friend:User {email: {friendEmail}}) RETURN friend`;
 const findUserAndRelationByNicknameWithoutMeQuery = `MATCH (user:User {email: {email}})<-[r:REQUEST_FRIEND]-(target: User)
 WHERE target.nickname=~ {nickname} AND target.email <> {email} 
 RETURN "REQUESTED_FROM" as type, target
@@ -21,5 +22,6 @@ export {
   findFriendsQuery,
   findUserWithEmailQuery,
   findUserWithNicknameQuery,
+  checkFriendQuery,
   findUserAndRelationByNicknameWithoutMeQuery
 };

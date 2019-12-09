@@ -1,8 +1,8 @@
 import { withFilter } from 'graphql-subscriptions';
 import { loginChannel, logoutChannel } from '../../utils/channels';
 import { requestDB } from '../../utils/requestDB';
-import { findFriendsQuery } from '../../schema/user/query';
-import { parseNodeResult } from '../../utils/parseDB';
+import { findFriendsQuery, checkFriendQuery } from '../../schema/user/query';
+import { parseNodeResult, getNode } from '../../utils/parseDB';
 import { socketCountWithEmail } from '../../utils/socketManager';
 import { loginPublish } from '../../utils/pubsub';
 import { getUserWithStatus } from '../../schema/user/user';
@@ -33,8 +33,13 @@ export default {
         (_, __, { pubsub }) => {
           return pubsub.asyncIterator([loginChannel]);
         },
-        (payload, _, { email }) => {
-          return email ? payload.email !== email : false;
+        async (payload, _, { email }) => {
+          const result = await requestDB(checkFriendQuery, {
+            email: payload.email,
+            friendEmail: email
+          });
+          const friend = await getNode(result);
+          return !!friend;
         }
       )
     },
@@ -46,8 +51,13 @@ export default {
         (_, __, { pubsub }) => {
           return pubsub.asyncIterator([logoutChannel]);
         },
-        (payload, _, { email }) => {
-          return email ? payload.email !== email : false;
+        async (payload, _, { email }) => {
+          const result = await requestDB(checkFriendQuery, {
+            email: payload.email,
+            friendEmail: email
+          });
+          const friend = await getNode(result);
+          return !!friend;
         }
       )
     }
