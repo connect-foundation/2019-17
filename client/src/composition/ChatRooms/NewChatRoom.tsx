@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import ChatHeader from './ChatHeader';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
+import CommonFooter from 'composition/Header/CommonFooter';
 
 const Container = styled.div`
   width: 20rem;
@@ -44,13 +45,14 @@ function NewChatRoom({ idx }: { idx: number }) {
       <ChatHeader
         nickname="새 메세지"
         isProfile={false}
-        btncolor={'blue'}
+        btncolor={'#4267B2'}
         onClose={onClose}
       />
       <NewFriends>
         <Text>받는 사람 : </Text>
         <Input />
       </NewFriends>
+      <CommonFooter />
     </Container>
   );
 }
