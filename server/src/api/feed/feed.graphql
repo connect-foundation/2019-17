@@ -80,6 +80,7 @@ type Mutation {
   updateLike(feedId: Int, count: Int): Boolean
   enrollFeed(content: String!, files: [Upload]): Boolean!
   writeComment(content: String!, feedId: Int!): Boolean!
+  changeReadState(feedId: Int!, isRead: Boolean): Boolean!
 }
 
 type Subscription {
