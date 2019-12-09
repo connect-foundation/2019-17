@@ -67,8 +67,8 @@ delete al
 return f, al,fr`;
 
 export const GET_FEED_ARALMS = `
-MATCH (u:User{email:{userEmail}})-[:ALARM]-(f:Feed)
+MATCH (u:User{email:{userEmail}})-[al:ALARM]-(f:Feed)
 optional match (f)<-[:AUTHOR]-(w:User)
-return collect(distinct {createdAt : f.createdAt , content:f.content ,writer: w.nickname, email:w.email, thumbnail:w.thumbnail })
+return collect(distinct {createdAt : f.createdAt , content:f.content ,writer: w.nickname, email:w.email, thumbnail:w.thumbnail,isRead: al.isRead, feedId:ID(f) })
  as alarms 
 `;

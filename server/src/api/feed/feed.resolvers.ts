@@ -206,7 +206,6 @@ export default {
     feeds: {
       subscribe: withFilter(
         (_, __, { pubsub }) => {
-          console.log('subscribed');
           return pubsub.asyncIterator(NEW_FEED);
         },
         async (payload, _, context) => {
