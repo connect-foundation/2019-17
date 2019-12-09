@@ -78,3 +78,8 @@ MATCH p=(f:Feed)-[r:ALARM]->(u:User{email:{userEmail}})
 WHERE ID(f) = {feedId}
 SET r.isRead = {isRead}
 RETURN p`;
+
+export const CHANGE_ALL_ALARM_READSTATE = `
+MATCH p=(f:Feed)-[r:ALARM]->(u:User{email:{userEmail}}) 
+SET r.isRead = {isRead}
+RETURN p`;
