@@ -14,6 +14,7 @@ import { parseResultRecords, gatherValuesByKey } from '../../utils/parseData';
 import { withFilter } from 'graphql-subscriptions';
 
 const FRD_ALARM_ADDED = 'FRD_ALARM_ADDED';
+const REC_ALARM_ADDED = 'REC_ALARM_ADDED';
 
 function getQueryByRelation(relation: string) {
   if (relation === 'NONE') {
@@ -34,7 +35,7 @@ async function getUserInfoByEmail(email: string) {
 
 export default {
   Query: {
-    getReqAlarm: async (_, __, { req }) => {
+    requestAlarm: async (_, __, { req }) => {
       isAuthenticated(req);
 
       const reqUsers = await requestDB(findUserByRequestRelation, {
@@ -45,7 +46,7 @@ export default {
 
       return gatherValuesByKey(parsedReq, 'u');
     },
-    getRecAlarm: async (_, __, { req }) => {
+    recommendAlarm: async (_, __, { req }) => {
       isAuthenticated(req);
 
       const recUsers = await requestDB(findUserByNoRelation, {
@@ -74,7 +75,7 @@ export default {
         const user = await getUserInfoByEmail(req.email);
 
         pubsub.publish(FRD_ALARM_ADDED, {
-          friendAlarmAdded: {
+          requestAlarmAdded: {
             ...user,
             targetEmail
           }
@@ -85,14 +86,24 @@ export default {
     }
   },
   Subscription: {
-    friendAlarmAdded: {
+    requestAlarmAdded: {
       subscribe: withFilter(
         (_, __, { pubsub }) => {
           console.log('published');
           return pubsub.asyncIterator(FRD_ALARM_ADDED);
         },
         async (payload, _, { email }) =>
-          payload.friendAlarmAdded.targetEmail === email
+          payload.requestAlarmAdded.targetEmail === email
+      )
+    },
+    recommendAlarmAdded: {
+      subscribe: withFilter(
+        (_, __, { pubsub }) => {
+          console.log('published2');
+          return pubsub.asyncIterator(REC_ALARM_ADDED);
+        },
+        async (payload, _, { email }) =>
+          payload.requestAlarmAdded.targetEmail === email
       )
     }
   }

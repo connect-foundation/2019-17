@@ -15,10 +15,11 @@ type Mutation {
 }
 
 type Query {
-  getReqAlarm: [UserInfoWithTarget]
-  getRecAlarm: [UserInfoWithTarget]
+  requestAlarm: [UserInfoWithTarget]
+  recommendAlarm: [UserInfoWithTarget]
 }
 
 type Subscription {
-  friendAlarmAdded: UserInfoWithTarget
+  requestAlarmAdded: UserInfoWithTarget
+  recommendAlarmAdded: UserInfoWithTarget
 }

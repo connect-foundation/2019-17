@@ -5,9 +5,9 @@ import UserCard from 'components/UserCard';
 import ButtonContainer from 'composition/Search/ButtonContainer';
 import { useEffect } from 'react';
 
-const GET_REQ_ALARM = gql`
-  query requestAlarm {
-    requestAlarm {
+const GET_REC_ALARM = gql`
+  query recommendAlarm {
+    recommendAlarm {
       nickname
       email
       thumbnail
@@ -16,8 +16,8 @@ const GET_REQ_ALARM = gql`
 `;
 
 const ALARM_SUBSCRIPTION = gql`
-  subscription requestAlarmAdded {
-    requestAlarmAdded {
+  subscription recommendAlarmAdded {
+    recommendAlarmAdded {
       nickname
       email
       thumbnail
@@ -31,24 +31,24 @@ interface IUser {
   thumbnail: string;
 }
 
-interface IrequestAlarm {
-  requestAlarm: [IUser];
+interface IrecommendAlarm {
+  recommendAlarm: [IUser];
 }
 
-function FriendRequestContainer() {
+function FriendRecommendContainer() {
   const { subscribeToMore, data, loading, error }: any = useQuery(
-    GET_REQ_ALARM
+    GET_REC_ALARM
   );
 
   useEffect(() => {
     subscribeToMore({
       document: ALARM_SUBSCRIPTION,
-      updateQuery: (prev: IrequestAlarm, { subscriptionData }: any) => {
+      updateQuery: (prev: IrecommendAlarm, { subscriptionData }: any) => {
         if (!subscriptionData.data) return prev;
-        const newAlarmItem = subscriptionData.data.requestAlarmAdded;
+        const newAlarmItem = subscriptionData.data.recommendAlarmAdded;
 
         return Object.assign({}, prev, {
-          requestAlarm: [newAlarmItem, ...prev.requestAlarm]
+          recommendAlarm: [newAlarmItem, ...prev.recommendAlarm]
         });
       }
     });
@@ -59,13 +59,13 @@ function FriendRequestContainer() {
 
   return (
     <>
-      {data.requestAlarm.map(({ nickname, email, thumbnail }: IUser) => (
+      {data.recommendAlarm.map(({ nickname, email, thumbnail }: IUser) => (
         <UserCard nickname={nickname} key={email} imageUrl={thumbnail}>
-          <ButtonContainer email={email} initialRelation="REQUESTED_FROM" />
+          <ButtonContainer email={email} initialRelation="NONE" />
         </UserCard>
       ))}
     </>
   );
 }
 
-export default FriendRequestContainer;
+export default FriendRecommendContainer;
