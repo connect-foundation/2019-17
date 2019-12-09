@@ -42,12 +42,12 @@ function WritingFeedContainer() {
     writingFeedDataMutation({ variables: { content } });
   };
 
-  const reg = /image\/(jpg|jpeg|png|gif|bmp)$/;
+  const IMAGE_VALID_EXTENSION = /image\/(jpg|jpeg|png|gif|bmp)$/;
   const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { target } = e;
     if (target.files && target.files.length) {
       const file = target.files[0];
-      if (!file.type.match(reg)) {
+      if (!file.type.match(IMAGE_VALID_EXTENSION)) {
         alert('해당 파일은 이미지 파일이 아닙니다.');
       } else {
         const fileUrl = URL.createObjectURL(file);
