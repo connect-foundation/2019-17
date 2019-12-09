@@ -1,12 +1,16 @@
 import {
   MutationResolvers,
   MutationCreateChatRoomArgs,
-  Chat
+  Chat,
+  MutationCreateChatArgs
 } from '../../types';
 import { requestDB } from '../../utils/requestDB';
 import createDBError from '../../errors/createDBError';
 import isAuthenticated from '../../utils/isAuthenticated';
-import { CREATE_CHAT_ROOM_QUERY } from '../../schema/chat/query';
+import {
+  CREATE_CHAT_ROOM_QUERY,
+  CREATE_CHAT_QUERY
+} from '../../schema/chat/query';
 import { parseResultRecords } from '../../utils/parseData';
 
 const Mutation: MutationResolvers = {
@@ -26,6 +30,21 @@ const Mutation: MutationResolvers = {
       const [parsedResult] = parseResultRecords(result);
       const chats: Chat[] = parsedResult.chats;
       return chats;
+    } catch (error) {
+      const DBError = createDBError(error);
+      throw new DBError();
+    }
+  },
+  createChat: async (
+    _,
+    { chatRoomId, content }: MutationCreateChatArgs,
+    { req }
+  ): Promise<boolean> => {
+    isAuthenticated(req);
+    const { email } = req;
+    try {
+      await requestDB(CREATE_CHAT_QUERY, { email, content, chatRoomId });
+      return true;
     } catch (error) {
       const DBError = createDBError(error);
       throw new DBError();

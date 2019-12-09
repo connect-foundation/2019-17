@@ -4,6 +4,7 @@ type Chat {
   email: String!
   thumbnail: String
   nickname: String!
+  chatRoomId: Int!
 }
 
 type ChatRoom {
@@ -17,4 +18,5 @@ type ChatRooms {
 
 type Mutation {
   createChatRoom(userEmail: String!, content: String!): [Chat]!
+  createChat(chatRoomId: Int!, content: String!): Boolean!
 }
