@@ -72,3 +72,14 @@ optional match (f)<-[:AUTHOR]-(w:User)
 return collect(distinct {createdAt : f.createdAt , content:f.content ,writer: w.nickname, email:w.email, thumbnail:w.thumbnail,isRead: al.isRead, feedId:ID(f) })
  as alarms 
 `;
+
+export const CHANGE_ALARM_READSTATE = `
+MATCH p=(f:Feed)-[r:ALARM]->(u:User{email:{userEmail}}) 
+WHERE ID(f) = {feedId}
+SET r.isRead = {isRead}
+RETURN p`;
+
+export const CHANGE_ALL_ALARM_READSTATE = `
+MATCH p=(f:Feed)-[r:ALARM]->(u:User{email:{userEmail}}) 
+SET r.isRead = {isRead}
+RETURN p`;
