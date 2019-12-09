@@ -35,6 +35,8 @@ export const datetransform = object => {
         let temp = {};
         temp[property] = datetransform(propertyValue);
         returnobj = { ...returnobj, ...temp };
+      } else if (toString.call(propertyValue) === '[object Boolean]') {
+        returnobj[property] = propertyValue;
       }
     }
   }
