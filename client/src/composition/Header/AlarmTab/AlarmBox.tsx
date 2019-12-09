@@ -60,17 +60,40 @@ AlamBox.defaultProps = {
   isRead: false
 };
 
+const getAppliedReadAlarms = (alarms: Alarm[], data: any) => {
+  return alarms.map((alarm: any) => {
+    if (data && alarm.feedId === data.changeReadState) {
+      alarm.isRead = true;
+      return alarm;
+    }
+    return alarm;
+  });
+};
+
 function AlamBox({ alarm, isRead }: { alarm: Alarm; isRead: boolean }) {
   // const alarms
   const [readState, setReadState] = useState(
     alarm && alarm.isRead ? alarm.isRead : false
   );
 
-  const [changeRedState] = useChangeReadStateMutation();
+  const [changeRedState] = useChangeReadStateMutation({
+    update(cache, { data }) {
+      const { alarms }: any = cache.readQuery({
+        query: GET_ALARMS
+      });
+
+      const test = getAppliedReadAlarms(alarms, data);
+
+      // 이게 없어도 반영이 되는데 왜그럴까요..? ㅠ 쿼리자체에 바로 수정해도 캐시가 적용이 되나.. ㅠㅠ
+      cache.writeQuery({
+        query: GET_ALARMS,
+        data: { alarms: test }
+      });
+    }
+  });
 
   const onClickFold = () => {
     setReadState(true);
-    console.log(Number(alarm.feedId));
     changeRedState({ variables: { feedId: Number(alarm.feedId) } });
   };
   return (
