@@ -81,6 +81,7 @@ type Mutation {
   enrollFeed(content: String!, files: [Upload]): Boolean!
   writeComment(content: String!, feedId: Int!): Boolean!
   changeReadState(feedId: Int!, isRead: Boolean): Boolean!
+  changeAllReadState: Boolean!
 }
 
 type Subscription {
