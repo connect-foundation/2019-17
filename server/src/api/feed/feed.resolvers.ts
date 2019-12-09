@@ -158,7 +158,7 @@ const mutationResolvers: MutationResolvers = {
       throw new DBError();
     }
   },
-  changeReadState: async (_, { feedId }, { req }): Promise<boolean> => {
+  changeReadState: async (_, { feedId }, { req }): Promise<number> => {
     isAuthenticated(req);
     const userEmail = req.email;
     try {
@@ -167,7 +167,7 @@ const mutationResolvers: MutationResolvers = {
         feedId,
         isRead: true
       });
-      return true;
+      return feedId;
     } catch (error) {
       const DBError = createDBError(error);
       throw new DBError();
