@@ -7,6 +7,7 @@ import Main from '../Main';
 import MyPage from '../MyPage';
 import NoMatch from '../NoMatch';
 import Search from '../Search';
+import { ChatRoomProvider } from 'stores/ChatRoomContext';
 
 const Container = styled.div`
   margin: 0 auto;
@@ -15,7 +16,7 @@ const Container = styled.div`
 
 const AuthRoutes: React.FC = () => {
   return (
-    <>
+    <ChatRoomProvider>
       <Header />
       <Container>
         <Switch>
@@ -27,7 +28,7 @@ const AuthRoutes: React.FC = () => {
           <Route component={NoMatch} />
         </Switch>
       </Container>
-    </>
+    </ChatRoomProvider>
   );
 };
 

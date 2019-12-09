@@ -12,6 +12,7 @@ declare module 'styled-components' {
       textColor: string;
       fontMainBlue: string;
       fontButtonGray: string;
+      messageBgBlue: string;
     };
     borders: {
       borderStyle: string;
