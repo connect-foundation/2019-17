@@ -13,7 +13,7 @@ const initState = {
   [HEADER_TAB.ALARM]: false
 };
 
-interface IHeaderTabState {
+type IHeaderTabState = {
   [key: string]: boolean;
 }
 

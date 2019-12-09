@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import ChatHeader from './ChatHeader';
+import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 
 const Container = styled.div`
   width: 20rem;
@@ -71,10 +72,14 @@ const OtherContent = styled.span`
   padding: 0.5rem;
 `;
 
-function ChatRoom() {
+function ChatRoom({ idx }: { idx: number }) {
+  const chatRoomDispatch = useChatRoomDispatch();
+  const onClose = () => {
+    chatRoomDispatch({ type: 'DELETE_CHATROOM', idx });
+  };
   return (
     <Container>
-      <ChatHeader nickname={'규종'} />
+      <ChatHeader nickname={'규종'} onClose={onClose} />
       <ChatBody>
         <MyChat>
           <MyChatContent>안녕하세요?</MyChatContent>

@@ -9,6 +9,9 @@ const Container = styled.article`
   &:last-child {
     border-top: 1px solid #dddfe2;
   }
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
 `;
 
 interface IProps {

@@ -37,12 +37,16 @@ const Footer = styled(CommonFooter)`
 
 const Body = styled(CommonBody)``;
 
-function MessageTabPresenter() {
+interface IProps {
+  onClickNewMessage: (e: React.MouseEvent<HTMLSpanElement>) => void;
+}
+
+function MessageTabPresenter({ onClickNewMessage }: IProps) {
   return (
     <Container>
       <Header>
         <RecentText>최근 (12)</RecentText>
-        <Text>새 메세지</Text>
+        <Text onClick={onClickNewMessage}>새 메세지</Text>
       </Header>
       <Body>
         <MessageBox isRead />

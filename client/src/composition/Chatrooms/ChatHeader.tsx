@@ -25,32 +25,33 @@ const Nickname = styled.span`
   font-size: 0.875rem;
 `;
 
-const CloseButton = styled(IoIosClose)<{ btnColor: string }>`
+const CloseButton = styled(IoIosClose)<{ btncolor: string }>`
   font-size: 1.75rem;
-  color: ${props => props.btnColor || 'rgba(0, 0, 0, 0.3)'};
+  color: ${props => props.btncolor || 'rgba(0, 0, 0, 0.3)'};
   cursor: pointer;
 `;
 
 interface IProps {
   nickname: string;
-  btnColor: string;
+  btncolor: string;
   isProfile: boolean;
+  onClose?: (e: React.MouseEvent<SVGElement>) => void;
 }
 
-function ChatHeader({ nickname, isProfile, btnColor }: IProps) {
+function ChatHeader({ nickname, isProfile, btncolor, onClose }: IProps) {
   return (
     <Header>
       <ProfileContainer>
         {isProfile && <Profile size={'35px'} />}
         <Nickname>{nickname}</Nickname>
       </ProfileContainer>
-      <CloseButton btnColor={btnColor} />
+      <CloseButton btncolor={btncolor} onClick={onClose} />
     </Header>
   );
 }
 
 ChatHeader.defaultProps = {
-  btnColor: 'rgba(0, 0, 0, 0.3)',
+  btncolor: 'rgba(0, 0, 0, 0.3)',
   isProfile: true
 };
 

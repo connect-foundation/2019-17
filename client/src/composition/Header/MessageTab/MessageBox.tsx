@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import Profile from 'components/Profile';
 import CommonBox from '../CommonBox';
 import { useHeaderTabDispatch } from 'stores/HeaderTabContext';
-import { HEADER_TAB } from '../../../constants';
+import { CHAT_ROOM } from '../../../constants';
+import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 
 const Container = styled(CommonBox)<{ isRead: boolean; onClick: () => void }>`
   display: flex;
@@ -61,9 +62,17 @@ interface IProps {
 
 function MessageBox({ isRead }: IProps) {
   const headerTabDispatch = useHeaderTabDispatch();
+  const chatRoomDispatch = useChatRoomDispatch();
 
   const onClick = () => {
-    headerTabDispatch({ type: 'CLICK_MESSAGE', key: HEADER_TAB.MESSAGE });
+    headerTabDispatch({ type: 'INITSTATE' });
+    chatRoomDispatch({
+      type: 'CREATE_CHATROOM',
+      chatRoom: {
+        chatType: CHAT_ROOM.CHAT,
+        otherUserEmail: 'kyujong93@gmail.com'
+      }
+    });
   };
   return (
     <Container isRead={isRead} onClick={onClick}>

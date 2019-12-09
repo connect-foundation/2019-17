@@ -11,3 +11,8 @@ export enum HEADER_TAB {
   MESSAGE = 'message',
   ALARM = 'alarm'
 }
+
+export enum CHAT_ROOM {
+  NEW = 'new',
+  CHAT = 'chat'
+}

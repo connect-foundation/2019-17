@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import ChatHeader from './ChatHeader';
+import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 
 const Container = styled.div`
   width: 20rem;
@@ -33,10 +34,19 @@ const Input = styled.input`
   margin-left: 0.25rem;
 `;
 
-function NewChatRoom() {
+function NewChatRoom({ idx }: { idx: number }) {
+  const chatRoomDispatch = useChatRoomDispatch();
+  const onClose = () => {
+    chatRoomDispatch({ type: 'DELETE_CHATROOM', idx });
+  };
   return (
     <Container>
-      <ChatHeader nickname="새 메세지" isProfile={false} />
+      <ChatHeader
+        nickname="새 메세지"
+        isProfile={false}
+        btncolor={'blue'}
+        onClose={onClose}
+      />
       <NewFriends>
         <Text>받는 사람 : </Text>
         <Input />
