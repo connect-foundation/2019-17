@@ -9,6 +9,8 @@ import {
 } from 'cache/writingFeed.gql';
 import { useEffect } from 'react';
 
+const FEED_MAX_LENGTH = 1500;
+
 function WritingFeedContainer() {
   const { data: { writingFeedContent = null } = {} } = useQuery(
     getWritingFeedData
@@ -40,13 +42,18 @@ function WritingFeedContainer() {
     writingFeedDataMutation({ variables: { content } });
   };
 
+  const IMAGE_VALID_EXTENSION = /image\/(jpg|jpeg|png|gif|bmp)$/;
   const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { target } = e;
     if (target.files && target.files.length) {
       const file = target.files[0];
-      const fileUrl = URL.createObjectURL(file);
-      setFiles(props => [...props, { file, fileId, fileUrl }]);
-      setFileId(fileId + 1);
+      if (!file.type.match(IMAGE_VALID_EXTENSION)) {
+        alert('해당 파일은 이미지 파일이 아닙니다.');
+      } else {
+        const fileUrl = URL.createObjectURL(file);
+        setFiles(props => [...props, { file, fileId, fileUrl }]);
+        setFileId(fileId + 1);
+      }
       target.value = '';
     }
   };
@@ -67,16 +74,22 @@ function WritingFeedContainer() {
       );
     }
   };
-
+  let overlapFlag = false;
   const onSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
+    if (overlapFlag) return;
     if (!content) {
       alert('피드 내용을 입력해주세요.');
       if (contentCursor.current) contentCursor.current.focus();
       return;
     }
+    if(content.length >= FEED_MAX_LENGTH) {
+      alert(`피드 글자수 제한(${FEED_MAX_LENGTH}자)`);
+      return;
+    }
+    overlapFlag = true;
     const parseFiles = files.map(item => item.file);
     const { data } = await enrollFeedMutation({
       variables: { content, files: parseFiles }
@@ -87,6 +100,7 @@ function WritingFeedContainer() {
     writingFeedDataMutation({ variables: { content: '' } });
     setFiles([]);
     setContent('');
+    overlapFlag = false;
   };
 
   return (

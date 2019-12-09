@@ -48,10 +48,14 @@ interface IInitState {
   [key: string]: boolean;
 }
 
+const FRIENDS = 'friends';
+const MESSAGE = 'message';
+const ALARM = 'alarm';
+
 const initState = {
-  friends: false,
-  message: false,
-  alarm: false
+  [FRIENDS]: false,
+  [MESSAGE]: false,
+  [ALARM]: false
 };
 
 function HeaderTab() {
@@ -66,24 +70,24 @@ function HeaderTab() {
   return (
     <Container>
       <FriendsIcon
-        selected={tabState.friends ? true : false}
-        onClick={clickIcon.bind(null, 'friends')}
+        selected={tabState.friends}
+        onClick={clickIcon.bind(null, FRIENDS)}
       />
-      <Tab selected={tabState.friends}>
+      <Tab left={'-230px'} selected={tabState.friends}>
         <FriendsTab />
       </Tab>
       <MessageIcon
         selected={tabState.message}
-        onClick={clickIcon.bind(null, 'message')}
+        onClick={clickIcon.bind(null, MESSAGE)}
       />
       <Tab selected={tabState.message}>
         <MessageTab />
       </Tab>
       <AlarmIcon
         selected={tabState.alarm}
-        onClick={clickIcon.bind(null, 'alarm')}
+        onClick={clickIcon.bind(null, ALARM)}
       />
-      <Tab selected={tabState.alarm}>
+      <Tab left={'-160px'} selected={tabState.alarm}>
         <AlarmTab />
       </Tab>
     </Container>
