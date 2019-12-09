@@ -10,4 +10,9 @@ RETURN COLLECT(distinct
 as chats
 `;
 
+export const CREATE_CHAT_QUERY = `
+MATCH (c:ChatRoom) WHERE ID(c) = $chatRoomId
+MATCH (u:User {email: $email})
+CREATE (c) <- [:SEND] - (m:Chat {content: $content, createAt: datetime()}) <- [:HAS] - (u)
+`;
 

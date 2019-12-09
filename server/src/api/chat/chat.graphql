@@ -17,4 +17,5 @@ type ChatRooms {
 
 type Mutation {
   createChatRoom(userEmail: String!, content: String!): [Chat]!
+  createChat(chatRoomId: Int!, content: String!): Boolean!
 }
