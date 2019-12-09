@@ -1,0 +1,22 @@
+type Chat {
+  content: String!
+  createAt: Idate!
+  email: String!
+  thumbnail: String
+  nickname: String!
+  chatRoomId: Int!
+}
+
+type ChatRoom {
+  users: [User]!
+  lastChat: Chat!
+}
+
+type ChatRooms {
+  chatRooms: [ChatRoom]
+}
+
+type Mutation {
+  createChatRoom(userEmail: String!, content: String!): [Chat]!
+  createChat(chatRoomId: Int!, content: String!): Boolean!
+}

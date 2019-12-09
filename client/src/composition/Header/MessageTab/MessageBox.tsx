@@ -2,7 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import Profile from 'components/Profile';
 import CommonBox from '../CommonBox';
-import { useState } from 'react';
+import { useHeaderTabDispatch } from 'stores/HeaderTabContext';
+import { CHAT_ROOM } from '../../../constants';
+import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 
 const Container = styled(CommonBox)<{ isRead: boolean; onClick: () => void }>`
   display: flex;
@@ -59,10 +61,21 @@ interface IProps {
 }
 
 function MessageBox({ isRead }: IProps) {
-  const [readState, setReadState] = useState(isRead);
-  const onClick = () => setReadState(true);
+  const headerTabDispatch = useHeaderTabDispatch();
+  const chatRoomDispatch = useChatRoomDispatch();
+
+  const onClick = () => {
+    headerTabDispatch({ type: 'INITSTATE' });
+    chatRoomDispatch({
+      type: 'CREATE_CHATROOM',
+      chatRoom: {
+        chatType: CHAT_ROOM.CHAT,
+        otherUserEmail: 'kyujong93@gmail.com'
+      }
+    });
+  };
   return (
-    <Container isRead={readState} onClick={onClick}>
+    <Container isRead={isRead} onClick={onClick}>
       <Column>
         <Profile size={'45px'} />
         <TextContainer>
@@ -72,7 +85,7 @@ function MessageBox({ isRead }: IProps) {
       </Column>
       <Column>
         <DateText>4월 20일</DateText>
-        <Dot isRead={readState} />
+        <Dot isRead={isRead} />
       </Column>
     </Container>
   );

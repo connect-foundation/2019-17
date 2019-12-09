@@ -9,6 +9,7 @@ import NoMatch from '../NoMatch';
 import Search from '../Search';
 import { useQuery } from '@apollo/react-hooks';
 import { loggedIn } from 'apollo/resolvers';
+import { ChatRoomProvider } from 'stores/ChatRoomContext';
 
 const Container = styled.div`
   margin: 0 auto;
@@ -18,7 +19,7 @@ const Container = styled.div`
 const AuthRoutes: React.FC = () => {
   useQuery(loggedIn);
   return (
-    <>
+    <ChatRoomProvider>
       <Header />
       <Container>
         <Switch>
@@ -30,7 +31,7 @@ const AuthRoutes: React.FC = () => {
           <Route component={NoMatch} />
         </Switch>
       </Container>
-    </>
+    </ChatRoomProvider>
   );
 };
 

@@ -1,5 +1,6 @@
 import React from 'react';
-import FeedContainer from 'composition/Feed';
+import ChatRooms from 'composition/ChatRooms';
+import FeedContainer from 'composition/Feed/FeedContainer';
 import FriendList from 'composition/FriendList';
 
 const Main: React.FC = () => {
@@ -7,6 +8,7 @@ const Main: React.FC = () => {
     <>
       <FeedContainer />
       <FriendList />
+      <ChatRooms />
     </>
   );
 };

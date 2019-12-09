@@ -7,6 +7,7 @@ import Profile from 'components/Profile';
 import { useMeQuery } from 'react-components.d';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { LOGOUT } from 'cache/client.gql';
+import { HeaderAlarmProvider } from 'stores/HeaderTabContext';
 
 const HeaderWrapper = styled.div`
   height: 40px;
@@ -87,7 +88,9 @@ const Header: React.FC = () => {
                 size={'25px'}
               />
               <NicknameText>{(me && me.nickname) || ''}</NicknameText>
-              <AlarmTab />
+              <HeaderAlarmProvider>
+                <AlarmTab />
+              </HeaderAlarmProvider>
               <LogoutButton onClick={logout}>logout</LogoutButton>
             </ItemColumn>
           </ItemContainer>
