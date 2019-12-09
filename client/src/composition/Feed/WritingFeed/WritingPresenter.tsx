@@ -132,6 +132,7 @@ interface IProps {
 }
 
 const FILE_INPUT_ID = 'upload';
+const FEED_MAX_LENGTH = 1500;
 
 function WritingFeedPresenter({
   content,
@@ -156,6 +157,8 @@ function WritingFeedPresenter({
             placeholder={'게시물 작성'}
             value={content}
             inputRef={contentCursor}
+            required
+            maxLength={FEED_MAX_LENGTH}
           />
         </ContentRow>
         <ContentRow>
