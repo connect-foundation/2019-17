@@ -40,9 +40,6 @@ const Input = styled.input`
   }
 `;
 
-const CommentSubmitBtn = styled.input``;
-
-// 역할 :
 const WriteCommentPresentor = ({
   feedId,
   setComment,

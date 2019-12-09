@@ -156,6 +156,7 @@ function WritingFeedPresenter({
             placeholder={'게시물 작성'}
             value={content}
             inputRef={contentCursor}
+            required
           />
         </ContentRow>
         <ContentRow>
