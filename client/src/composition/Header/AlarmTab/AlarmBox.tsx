@@ -38,8 +38,7 @@ const TextContainer = styled.div`
   margin-left: 1rem;
 `;
 
-const MessageText = styled.span`
-  display: inline-block;
+const MessageText = styled.p`
   margin-top: 0.25rem;
   font-size: 0.75rem;
   color: ${props => props.theme.colors.textColor};
@@ -110,7 +109,11 @@ function AlamBox({ alarm, isRead }: { alarm: Alarm; isRead: boolean }) {
             <BoldText>{alarm.writer}</BoldText> 님이 새로운 게시글을 올렸습니다.
           </MessageText>
           <MessageText>
-            <span> 새 게시글 </span> <DateText> 2019.11.12 </DateText>
+            <span> 새 게시글 </span>
+            <DateText>
+              {alarm.createdAt.year}.{alarm.createdAt.month}.
+              {alarm.createdAt.day}
+            </DateText>
           </MessageText>
         </TextContainer>
       </Column>
