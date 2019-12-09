@@ -6,7 +6,8 @@ import {
   cancelFriendRequestByEmailQuery,
   cancelFriendByEmailQuery,
   findUserByRequestRelation,
-  findUserByNoRelation
+  findUserByNoRelation,
+  changeAllRequestReadStateByEmailQuery
 } from '../../schema/friend/query';
 import { findUserWithEmailQuery } from '../../schema/user/query';
 import isAuthenticated from '../../utils/isAuthenticated';
@@ -81,6 +82,15 @@ export default {
           }
         });
       }
+
+      return true;
+    },
+    changeAllRequestReadState: async (_, __, { req }) => {
+      isAuthenticated(req);
+
+      await requestDB(changeAllRequestReadStateByEmailQuery, {
+        email: req.email
+      });
 
       return true;
     }

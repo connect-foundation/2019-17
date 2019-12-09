@@ -1,5 +1,5 @@
 const sendFriendRequestByEmailQuery = `MATCH (a: User {email: {email}}), (b: User {email: {targetEmail}})
-MERGE (a)-[r: REQUEST_FRIEND]->(b)`;
+MERGE (a)-[r: REQUEST_FRIEND {isRead: false}]->(b)`;
 const acceptFriendRequestByEmailQuery = `MATCH (a:User {email: {email}})-[r:REQUEST_FRIEND]-(b:User {email: {targetEmail}}) delete r
 merge (a)<-[r2:FRIEND]-(b)
 return a, r2, b`;
@@ -10,11 +10,17 @@ const findUserByNoRelation = `MATCH(u: User {email: {email}})-[:FRIEND]-(:User)-
 where target.email <> {email} And not (u)-[]-(target)
 return target`;
 
+const changeAllRequestReadStateByEmailQuery = `
+MATCH (a: User)-[r: REQUEST_FRIEND]->(b: User {email})
+SET r.isRead = true
+`;
+
 export {
   sendFriendRequestByEmailQuery,
   acceptFriendRequestByEmailQuery,
   cancelFriendRequestByEmailQuery,
   cancelFriendByEmailQuery,
   findUserByRequestRelation,
-  findUserByNoRelation
+  findUserByNoRelation,
+  changeAllRequestReadStateByEmailQuery
 };
