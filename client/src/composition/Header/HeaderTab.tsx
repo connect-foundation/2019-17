@@ -4,9 +4,10 @@ import { FaBell, FaUserFriends } from 'react-icons/fa';
 import { AiFillMessage } from 'react-icons/ai';
 import Tab from './Tab';
 import MessageTab from './MessageTab';
-import FriendsTab from './FriendsTab';
+import FriendsTab from './FriendTab';
 import AlarmTab from './AlarmTab';
 import { useState } from 'react';
+import NewFriendAlarmNum from './NewFriendAlarmNum';
 
 const Container = styled.div`
   position: relative;
@@ -73,6 +74,7 @@ function HeaderTab() {
         selected={tabState.friends}
         onClick={clickIcon.bind(null, FRIENDS)}
       />
+      <NewFriendAlarmNum />
       <Tab left={'-230px'} selected={tabState.friends}>
         <FriendsTab />
       </Tab>
