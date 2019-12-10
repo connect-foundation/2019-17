@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import UserCard from 'components/UserCard';
 import ButtonContainer from 'composition/Search/ButtonContainer';
+import FriendBox from './FriendBox';
 
 const GET_REC_ALARM = gql`
   query recommendAlarm {
@@ -27,9 +28,9 @@ function FriendRecommendContainer() {
     <>
       {!loading &&
         data.recommendAlarm.map(({ nickname, email, thumbnail }: IUser) => (
-          <UserCard nickname={nickname} key={email} imageUrl={thumbnail}>
+          <FriendBox nickname={nickname} key={email} imageUrl={thumbnail}>
             <ButtonContainer email={email} initialRelation="NONE" />
-          </UserCard>
+          </FriendBox>
         ))}
     </>
   );

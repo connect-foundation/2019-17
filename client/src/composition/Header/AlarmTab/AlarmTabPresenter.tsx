@@ -3,7 +3,9 @@ import styled from 'styled-components';
 import CommonHeader from '../CommonHeader';
 import CommonFooter from '../CommonFooter';
 import CommonBody from '../CommonBody';
-import MessageBox from './MessageBox';
+
+import AlamBox from './AlarmBox';
+import { useGetAlarmsQuery, Alarm } from 'react-components.d';
 
 const Container = styled.div`
   display: flex;
@@ -35,33 +37,21 @@ const Footer = styled(CommonFooter)`
   padding: 0.25rem 0.5rem;
 `;
 
-const Body = styled(CommonBody)``;
+function AlarmTabPresenter() {
+  const { data } = useGetAlarmsQuery();
 
-interface IProps {
-  onClickNewMessage: (e: React.MouseEvent<HTMLSpanElement>) => void;
-}
-
-function MessageTabPresenter({ onClickNewMessage }: IProps) {
   return (
     <Container>
       <Header>
-        <RecentText>최근 (12)</RecentText>
-        <Text onClick={onClickNewMessage}>새 메세지</Text>
+        <RecentText>알림</RecentText>
       </Header>
-      <Body>
-        <MessageBox isRead />
-        <MessageBox />
-        <MessageBox />
-        <MessageBox />
-        <MessageBox />
-        <MessageBox />
-        <MessageBox />
-        <MessageBox />
-        <MessageBox />
-        <MessageBox />
-        <MessageBox />
-        <MessageBox />
-      </Body>
+      <CommonBody>
+        {data &&
+          data.alarms &&
+          data.alarms.map((alarm: Alarm, idx) => {
+            return <AlamBox alarm={alarm} key={'alarm_' + idx} />;
+          })}
+      </CommonBody>
       <Footer>
         <Text>모두 읽은 상태로 표시</Text>
       </Footer>
@@ -69,4 +59,4 @@ function MessageTabPresenter({ onClickNewMessage }: IProps) {
   );
 }
 
-export default MessageTabPresenter;
+export default AlarmTabPresenter;

@@ -11,7 +11,7 @@ const OkButtonDiv = styled.div<IDiv>`
 `;
 
 const REQUEST_FRIEND = gql`
-  mutation sendRequest($email: String!, $relation: String!) {
+  mutation requestFriend($email: String!, $relation: String!) {
     requestFriend(targetEmail: $email, relation: $relation)
   }
 `;

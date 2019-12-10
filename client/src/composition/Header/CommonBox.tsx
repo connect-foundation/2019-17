@@ -5,9 +5,11 @@ import { ReactNode } from 'react';
 const Container = styled.article`
   background-color: white;
   padding: 0.375rem 0.75rem;
-  border-bottom: 1px solid #dddfe2;
-  &:last-child {
+  &:not(:first-child) {
     border-top: 1px solid #dddfe2;
+  }
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
   }
 `;
 

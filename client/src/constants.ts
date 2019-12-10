@@ -5,3 +5,14 @@ export enum PAGE_PATHS {
   MAIN = '/',
   SEARCH = '/search'
 }
+
+export enum HEADER_TAB {
+  FRIENDS = 'friends',
+  MESSAGE = 'message',
+  ALARM = 'alarm'
+}
+
+export enum CHAT_ROOM {
+  NEW = 'new',
+  CHAT = 'chat'
+}
