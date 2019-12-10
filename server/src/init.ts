@@ -44,7 +44,6 @@ const appOptions: Options = {
           : socketCountWithEmail.set(email, 1);
         return { email };
       } catch (e) {
-        console.log(e);
         return webSocket.close();
       }
     },
