@@ -10,7 +10,8 @@ import {
   CHANGE_ALARM_READSTATE,
   CHANGE_ALL_ALARM_READSTATE,
   ALARM_NEW_COMMENT,
-  GET_NEW_ARALM
+  GET_NEW_ARALM,
+  ALARM_ISCHECKED_COUNT
 } from '../../schema/feed/query';
 import { parseResultRecords } from '../../utils/parseData';
 
@@ -250,6 +251,18 @@ const queryResolvers: QueryResolvers = {
     const [parsedAlarms] = parseResultRecords(result);
 
     return parsedAlarms.alarms;
+  },
+  alarmCount: async (_, __, { req }): Promise<number> => {
+    isAuthenticated(req);
+    const userEmail = req.email;
+
+    const result = await requestDB(ALARM_ISCHECKED_COUNT, {
+      userEmail
+    });
+
+    const [parsedAlarmCount] = parseResultRecords(result);
+
+    return Number(parsedAlarmCount.alarmCount);
   }
 };
 

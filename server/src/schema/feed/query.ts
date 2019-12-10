@@ -115,3 +115,9 @@ MATCH (searchUser:User)-[:FRIEND]-(friend:User), (c:Comment)
 WHERE searchUser.email = {userEmail} and ID(c)={feedId}
 MERGE (c)-[al:ALARM{isRead:false, isChecked:false}]->(friend)
 return ID(al) as alarmId`;
+
+export const ALARM_ISCHECKED_COUNT = `
+MATCH (u:User{email:{userEmail}})-[al:ALARM]-(f)
+WHERE al.isChecked = false and ( f:Comment OR f:Feed)
+optional match (f)<-[:AUTHOR]-(w:User)
+return count(distinct al) as alarmCount`;
