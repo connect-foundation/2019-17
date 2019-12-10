@@ -18,6 +18,7 @@ export const GET_ALARMS = gql`
       content
       isRead
       feedId
+      type
     }
   }
 `;
