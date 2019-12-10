@@ -1,14 +1,14 @@
-const sendFriendRequestByEmailQuery = `MATCH (a: User {email: {email}}), (b: User {email: {targetEmail}})
+const SEND_FRIEND_REQUEST_BY_EMAIL_QUERY = `MATCH (a: User {email: {email}}), (b: User {email: {targetEmail}})
 MERGE (a)-[r: REQUEST_FRIEND]->(b)`;
-const acceptFriendRequestByEmailQuery = `MATCH (a:User {email: {email}})-[r:REQUEST_FRIEND]-(b:User {email: {targetEmail}}) delete r
+const ACCEPT_FRIEND_REQUEST_BY_EMAIL_QUERY = `MATCH (a:User {email: {email}})-[r:REQUEST_FRIEND]-(b:User {email: {targetEmail}}) delete r
 merge (a)<-[r2:FRIEND]-(b)
 return a, r2, b`;
-const cancelFriendRequestByEmailQuery = `MATCH (a:User {email: {email}})-[r:REQUEST_FRIEND]-(b:User {email: {targetEmail}}) delete r`;
-const cancelFriendByEmailQuery = `MATCH (a:User {email: {email}})-[r:FRIEND]-(b:User {email: {targetEmail}}) delete r`;
+const CANCEL_FRIEND_REQUEST_BY_EMAIL_QUERY = `MATCH (a:User {email: {email}})-[r:REQUEST_FRIEND]-(b:User {email: {targetEmail}}) delete r`;
+const CANCEL_FRIEND_EMAIL_QUERY = `MATCH (a:User {email: {email}})-[r:FRIEND]-(b:User {email: {targetEmail}}) delete r`;
 
 export {
-  sendFriendRequestByEmailQuery,
-  acceptFriendRequestByEmailQuery,
-  cancelFriendRequestByEmailQuery,
-  cancelFriendByEmailQuery
+  SEND_FRIEND_REQUEST_BY_EMAIL_QUERY,
+  ACCEPT_FRIEND_REQUEST_BY_EMAIL_QUERY,
+  CANCEL_FRIEND_REQUEST_BY_EMAIL_QUERY,
+  CANCEL_FRIEND_EMAIL_QUERY
 };

@@ -7,11 +7,9 @@ type Friend {
 
 type Query {
   loginUser(email: String): Boolean
-  logoutUser(email: String): Boolean
   friends(email: String): [Friend!]!
 }
 
 type Subscription {
-  login: Friend!
-  logout: Friend!
+  updateUserState: Friend!
 }

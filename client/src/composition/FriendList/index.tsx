@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import { IFriend } from './friend.type';
 import User from '../../components/User';
-import { loginSubscription, logoutSubscription } from 'apollo/resolvers';
+import { updateUserState } from 'apollo/resolvers';
 
 const Wrapper = styled.div`
   right: 0;
@@ -33,23 +33,12 @@ const friends = gql`
 const FriendList: React.FC = () => {
   const { loading, data, subscribeToMore } = useQuery(friends);
   subscribeToMore({
-    document: loginSubscription,
+    document: updateUserState,
     updateQuery: (prev, { subscriptionData }) => {
       if (!subscriptionData.data) return prev;
-      const newUser = subscriptionData.data.login;
-      return Object.assign({}, prev, {
-        friends: [
-          newUser,
-          ...prev.friends.filter((e: any) => e.email !== newUser.email)
-        ]
-      });
-    }
-  });
-  subscribeToMore({
-    document: logoutSubscription,
-    updateQuery: (prev, { subscriptionData }) => {
-      if (!subscriptionData.data) return prev;
-      const newUser = subscriptionData.data.logout;
+      const {
+        data: { updateUserState: newUser }
+      } = subscriptionData;
       return Object.assign({}, prev, {
         friends: [
           newUser,
@@ -62,15 +51,19 @@ const FriendList: React.FC = () => {
     <Wrapper>
       <Top />
       {!loading &&
-        data.friends.map((e: IFriend) => (
-          <User
-            key={e.email}
-            email={e.email}
-            thumbnail={e.thumbnail ? e.thumbnail : undefined}
-            nickname={e.nickname}
-            status={e.status}
-          />
-        ))}
+        data &&
+        data.friends.map((user: IFriend) => {
+          const { email, thumbnail, nickname, status } = user;
+          return (
+            <User
+              key={email}
+              email={email}
+              thumbnail={thumbnail ? thumbnail : undefined}
+              nickname={nickname}
+              status={status}
+            />
+          );
+        })}
     </Wrapper>
   );
 };

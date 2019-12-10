@@ -34,8 +34,7 @@ const ProfileStatus = styled.div`
   padding-right: 12px;
 `;
 
-const On = styled.div`
-  background: rgb(66, 183, 42);
+const Status = styled.div`
   border-radius: 50%;
   display: inline-block;
   height: 6px;
@@ -43,13 +42,12 @@ const On = styled.div`
   width: 6px;
 `;
 
-const Off = styled.div`
+const On = styled(Status)`
+  background: rgb(66, 183, 42);
+`;
+
+const Off = styled(Status)`
   background: red;
-  border-radius: 50%;
-  display: inline-block;
-  height: 6px;
-  margin-left: 4px;
-  width: 6px;
 `;
 
 interface Iprops {

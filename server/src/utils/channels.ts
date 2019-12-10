@@ -1,2 +1,2 @@
-export const loginChannel = 'userOnlineSubscription';
-export const logoutChannel = 'userOfflineSubscription';
+export const LOGIN_CHANNEL = 'userOnlineSubscription';
+export const LOGOUT_CHANNEL = 'userOfflineSubscription';

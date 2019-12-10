@@ -10,20 +10,9 @@ export const loggedIn = gql`
   }
 `;
 
-export const loginSubscription = gql`
+export const updateUserState = gql`
   subscription {
-    login {
-      email
-      nickname
-      thumbnail
-      status
-    }
-  }
-`;
-
-export const logoutSubscription = gql`
-  subscription {
-    logout {
+    updateUserState {
       email
       nickname
       thumbnail

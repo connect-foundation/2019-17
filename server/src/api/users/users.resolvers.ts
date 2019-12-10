@@ -1,7 +1,10 @@
 import { withFilter } from 'graphql-subscriptions';
-import { loginChannel, logoutChannel } from '../../utils/channels';
+import { LOGIN_CHANNEL, LOGOUT_CHANNEL } from '../../utils/channels';
 import { requestDB } from '../../utils/requestDB';
-import { findFriendsQuery, checkFriendQuery } from '../../schema/user/query';
+import {
+  FIND_FRIENDS_QUERY,
+  CHECK_FRIEND_QUERY
+} from '../../schema/user/query';
 import { parseNodeResult, getNode } from '../../utils/parseDB';
 import { socketCountWithEmail } from '../../utils/socketManager';
 import { loginPublish } from '../../utils/pubsub';
@@ -14,45 +17,28 @@ export default {
       loginPublish(user);
     },
     friends: async (_, __, { req }) => {
-      const result = await requestDB(findFriendsQuery, {
+      const result = await requestDB(FIND_FRIENDS_QUERY, {
         email: req.email
       });
-      const friends = await parseNodeResult(result).map(e => {
-        e.status = socketCountWithEmail.has(e.email) ? 'online' : 'offline';
-        return e;
+      const friends = await parseNodeResult(result).map(user => {
+        const { email } = user;
+        user.status = socketCountWithEmail.has(email) ? 'online' : 'offline';
+        return user;
       });
       return friends;
     }
   },
   Subscription: {
-    login: {
+    updateUserState: {
       resolve: payload => {
         return payload;
       },
       subscribe: withFilter(
         (_, __, { pubsub }) => {
-          return pubsub.asyncIterator([loginChannel]);
+          return pubsub.asyncIterator([LOGIN_CHANNEL, LOGOUT_CHANNEL]);
         },
         async (payload, _, { email }) => {
-          const result = await requestDB(checkFriendQuery, {
-            email: payload.email,
-            friendEmail: email
-          });
-          const friend = await getNode(result);
-          return !!friend;
-        }
-      )
-    },
-    logout: {
-      resolve: payload => {
-        return payload;
-      },
-      subscribe: withFilter(
-        (_, __, { pubsub }) => {
-          return pubsub.asyncIterator([logoutChannel]);
-        },
-        async (payload, _, { email }) => {
-          const result = await requestDB(checkFriendQuery, {
+          const result = await requestDB(CHECK_FRIEND_QUERY, {
             email: payload.email,
             friendEmail: email
           });
