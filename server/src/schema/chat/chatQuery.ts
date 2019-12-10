@@ -52,3 +52,14 @@ RETURN COLLECT(distinct
 as chats
 LIMIT $limit;
 `;
+
+export const GET_CHATROOMS_QUERY = `
+MATCH (chatRoom:ChatRoom) <- [:JOIN] - (otherUser:User),
+      (chatRoom) <- [:SEND] - (chat:Chat) <- [:HAS] - (user:User)
+WITH chatRoom, otherUser, chat, user
+ORDER BY chat.createAt desc
+WHERE NOT(otherUser.email = $email) and chat.createAt < dateTime($cursor)
+RETURN otherUser, [LAST(COLLECT(distinct {content: chat.content, createAt: chat.createAt, 
+	  email: user.email, thumbnail: user.thumbnail, nickname: user.nickname, chatRoomId: ID(chatRoom)}))] as lastChat
+LIMIT $limit;
+`;

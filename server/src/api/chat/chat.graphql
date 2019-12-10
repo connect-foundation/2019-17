@@ -8,12 +8,8 @@ type Chat {
 }
 
 type ChatRoom {
-  user: User!
+  otherUser: User!
   lastChat: Chat!
-}
-
-type ChatRooms {
-  chatRooms: [ChatRoom]
 }
 
 type Mutation {
@@ -22,8 +18,6 @@ type Mutation {
 }
 
 type Query {
-  getChatsByChatRoom(
-    chatRoomId: Int!
-    cursor: String
-  ): [Chat]
+  getChatsByChatRoom(chatRoomId: Int!, cursor: String): [Chat]
+  getChatRooms(cursor: String): [ChatRoom]
 }
