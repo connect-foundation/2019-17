@@ -10,13 +10,12 @@ import {
   changeAllRequestReadStateByEmailQuery,
   countUnreadRequestByEmailQuery
 } from '../../schema/friend/query';
-// import { findUserWithEmailQuery } from '../../schema/user/query';
+import { findUserWithEmailQuery } from '../../schema/user/query';
 import isAuthenticated from '../../utils/isAuthenticated';
 import { parseResultRecords, gatherValuesByKey } from '../../utils/parseData';
 import { withFilter } from 'graphql-subscriptions';
 
-const FRD_ALARM_ADDED = 'FRD_ALARM_ADDED';
-const REC_ALARM_ADDED = 'REC_ALARM_ADDED';
+const REQUEST_ALARM_ADDED = 'REQUEST_ALARM_ADDED';
 const FRD_ALARM_NUM_CHANGED = 'FRD_ALARM_NUM_CHANGED';
 
 function getQueryByRelation(relation: string) {
@@ -30,12 +29,10 @@ function getQueryByRelation(relation: string) {
     return cancelFriendByEmailQuery;
   }
 }
-
-// async function getUserInfoByEmail(email: string) {
-//   const user = await requestDB(findUserWithEmailQuery, { email });
-//   return user[0].get(0).properties;
-// }
-
+async function getUserInfoByEmail(email: string) {
+  const user = await requestDB(findUserWithEmailQuery, { email });
+  return user[0].get(0).properties;
+}
 export default {
   Query: {
     requestAlarm: async (_, __, { req }) => {
@@ -84,7 +81,14 @@ export default {
       });
 
       if (relation === 'NONE') {
-        // const user = await getUserInfoByEmail(req.email);
+        const user = await getUserInfoByEmail(req.email);
+
+        pubsub.publish(REQUEST_ALARM_ADDED, {
+          requestAlarmAdded: {
+            ...user,
+            targetEmail
+          }
+        });
 
         pubsub.publish(FRD_ALARM_NUM_CHANGED, {
           friendAlarmNumChanged: {
@@ -118,17 +122,7 @@ export default {
       subscribe: withFilter(
         (_, __, { pubsub }) => {
           console.log('published');
-          return pubsub.asyncIterator(FRD_ALARM_ADDED);
-        },
-        async (payload, _, { email }) =>
-          payload.requestAlarmAdded.targetEmail === email
-      )
-    },
-    recommendAlarmAdded: {
-      subscribe: withFilter(
-        (_, __, { pubsub }) => {
-          console.log('published2');
-          return pubsub.asyncIterator(REC_ALARM_ADDED);
+          return pubsub.asyncIterator(REQUEST_ALARM_ADDED);
         },
         async (payload, _, { email }) =>
           payload.requestAlarmAdded.targetEmail === email

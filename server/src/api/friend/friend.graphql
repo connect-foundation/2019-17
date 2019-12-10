@@ -28,6 +28,5 @@ type Query {
 
 type Subscription {
   requestAlarmAdded: UserInfoWithTarget
-  recommendAlarmAdded: UserInfoWithTarget
   friendAlarmNumChanged: FriendAlarmNum
 }

@@ -33,7 +33,11 @@ const NewAlarmNumIcon = styled.span`
   padding: 1px 3px;
 `;
 
-function NewFriendAlarmNum() {
+interface IProps {
+  selected: boolean;
+}
+
+function NewFriendAlarmNum({ selected }: IProps) {
   const [newAlarmNum, setNewAlarmNum] = useState(0);
   const { subscribeToMore, loading, data } = useQuery(GET_ALARM_NUM);
 
