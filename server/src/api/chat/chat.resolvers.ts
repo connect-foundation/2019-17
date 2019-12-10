@@ -9,10 +9,14 @@ import createDBError from '../../errors/createDBError';
 import isAuthenticated from '../../utils/isAuthenticated';
 import {
   CREATE_CHAT_QUERY,
-  CHECK_CHAT_ROOM,
-  CREATE_CHAT_ROOM_QUERY
-} from '../../schema/chat/query';
+  CHECK_CHAT_ROOM_QUERY,
+  CREATE_CHAT_ROOM_QUERY,
+  GET_CHATS_QUERY
+} from '../../schema/chat/chatQuery';
 import { parseResultRecords } from '../../utils/parseData';
+
+const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
+const CHAT_LIMIT = 20;
 
 const Mutation: MutationResolvers = {
   createChatRoom: async (
@@ -23,12 +27,12 @@ const Mutation: MutationResolvers = {
     isAuthenticated(req);
     const { email } = req;
     try {
-      const isChatRoom = await requestDB(CHECK_CHAT_ROOM, {
+      const checkChatRoomResult = await requestDB(CHECK_CHAT_ROOM_QUERY, {
         userEmail1: email,
         userEmail2: userEmail
       });
-      const [parsedResult] = parseResultRecords(isChatRoom);
-      if (!parsedResult) {
+      const [isChatRoom] = parseResultRecords(checkChatRoomResult);
+      if (!isChatRoom) {
         const result = await requestDB(CREATE_CHAT_ROOM_QUERY, {
           from: email,
           to: userEmail,
@@ -37,7 +41,15 @@ const Mutation: MutationResolvers = {
         const chats: Chat[] = parseResultRecords(result)[0].chats;
         return chats;
       }
-      return null;
+      const chatResults = await requestDB(GET_CHATS_QUERY, {
+        userEmail1: email,
+        userEmail2: userEmail,
+        cursor: DEFAUT_MAX_DATE,
+        limit: CHAT_LIMIT
+      });
+      const parsedChatResults: Chat[] = parseResultRecords(chatResults)[0]
+        .chats;
+      return parsedChatResults;
     } catch (error) {
       const DBError = createDBError(error);
       throw new DBError();
