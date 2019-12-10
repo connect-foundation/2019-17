@@ -11,6 +11,7 @@ import {
   useHeaderTabDispatch
 } from 'stores/HeaderTabContext';
 import { HEADER_TAB } from '../../constants';
+import { useAlarmCountQuery } from 'react-components.d';
 
 const Container = styled.div`
   position: relative;
@@ -51,6 +52,7 @@ const AlarmIcon = styled(FaBell)<{ selected: boolean }>`
 function HeaderTab() {
   const headerTabState = useHeaderTabState();
   const headerTabDispatch = useHeaderTabDispatch();
+  const { data } = useAlarmCountQuery();
   return (
     <Container>
       <FriendsIcon
@@ -77,6 +79,7 @@ function HeaderTab() {
           headerTabDispatch({ type: 'CLICK_ALARM', key: HEADER_TAB.ALARM })
         }
       />
+      <p>{data && data.alarmCount}</p>
       <Tab left={'-160px'} selected={headerTabState.alarm}>
         <AlarmTab selected={headerTabState.alarm} />
       </Tab>

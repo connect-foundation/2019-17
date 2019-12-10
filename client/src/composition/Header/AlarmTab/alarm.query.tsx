@@ -53,3 +53,15 @@ export const CHANGE_READ_STATE = gql`
     changeFeedAlarmReadState(feedId: $feedId)
   }
 `;
+
+export const GET_CHECK_STATE_COUNT = gql`
+  query alarmCount {
+    alarmCount
+  }
+`;
+
+export const CHANGE_ALL_CHECK_STATE_COUNT = gql`
+  mutation changeAllFeedAlarmCheckState {
+    changeAllFeedAlarmCheckState
+  }
+`;
