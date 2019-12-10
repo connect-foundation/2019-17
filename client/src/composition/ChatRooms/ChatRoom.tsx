@@ -2,8 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import ChatHeader from './ChatHeader';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
-import gql from 'graphql-tag';
 import { useGetChatsByChatRoomIdQuery, useMeQuery } from 'react-components.d';
+import useInput from 'hooks/useInput';
+import ChatFooter from './ChatFooter';
 
 const Container = styled.div`
   width: 20rem;
@@ -14,23 +15,6 @@ const Container = styled.div`
   box-shadow: 0 2px 1px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(0, 0, 0, 0.1);
   margin-left: 1rem;
-`;
-
-const Footer = styled.form`
-  height: 3rem;
-  border-top: 1.5px solid rgba(0, 0, 0, 0.2);
-  padding: 0.5rem 0.25rem;
-  display: flex;
-  align-items: center;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  border: none;
-  font-size: 1rem;
-  &::placeholder {
-    font-size: 0.875rem;
-  }
 `;
 
 const ChatBody = styled.section`
@@ -74,21 +58,6 @@ const OtherContent = styled.span`
   padding: 0.5rem;
 `;
 
-export const GET_CHATS = gql`
-  query getChatsByChatRoomId($chatRoomId: Int!) {
-    getChatsByChatRoomId(chatRoomId: $chatRoomId) {
-      content
-      createAt {
-        minute
-      }
-      chatRoomId
-      nickname
-      thumbnail
-      email
-    }
-  }
-`;
-
 interface IProps {
   idx: number;
   nickname: string;
@@ -108,6 +77,7 @@ function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
     variables: { chatRoomId }
   });
   const { data: { me = null } = {}, loading: meLoading } = useMeQuery();
+
   return loading && meLoading ? (
     <div>loading...</div>
   ) : (
@@ -127,9 +97,7 @@ function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
             )
           )}
       </ChatBody>
-      <Footer>
-        <Input placeholder={'메세지를 입력하세요...'} maxLength={500} />
-      </Footer>
+      <ChatFooter chatRoomId={chatRoomId} />
     </Container>
   );
 }
