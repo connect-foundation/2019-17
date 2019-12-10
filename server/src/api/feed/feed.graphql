@@ -68,6 +68,7 @@ type Alarm {
   createdAt: Idate!
   isRead: Boolean!
   feedId: Int!
+  type: String!
 }
 
 type Query {

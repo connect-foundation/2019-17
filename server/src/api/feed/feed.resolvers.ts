@@ -223,6 +223,8 @@ const queryResolvers: QueryResolvers = {
       userEmail
     });
     const [parsedAlarms] = parseResultRecords(result);
+    console.log(parsedAlarms);
+    console.log('userEmail', userEmail);
 
     return parsedAlarms.alarms;
   }
