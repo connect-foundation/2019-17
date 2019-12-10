@@ -9,7 +9,14 @@ interface Iprops {
 }
 function AlarmTabContainer({ selected }: Iprops) {
   const headerTabCountDispatch = useHeaderTabCountDispatch();
-  const [changeAllCheckTrue] = useChangeAllFeedAlarmCheckStateMutation();
+  const [changeAllCheckTrue] = useChangeAllFeedAlarmCheckStateMutation({
+    update(cache) {
+      cache.writeQuery({
+        query: GET_CHECK_STATE_COUNT,
+        data: { alarmCount: 0 }
+      });
+    }
+  });
   useEffect(() => {
     if (selected) {
       changeAllCheckTrue();
