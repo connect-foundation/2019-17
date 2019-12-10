@@ -1,9 +1,9 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
-import UserCard from 'components/UserCard';
-import ButtonContainer from 'composition/Search/ButtonContainer';
+import ButtonContainer from 'composition/Header/FriendTab/ButtonContainer';
 import { useEffect } from 'react';
+import FriendBox from './FriendBox';
 
 const GET_REQ_ALARM = gql`
   query requestAlarm {
@@ -36,9 +36,7 @@ interface IrequestAlarm {
 }
 
 function FriendRequestContainer() {
-  const { subscribeToMore, data, loading, error }: any = useQuery(
-    GET_REQ_ALARM
-  );
+  const { subscribeToMore, data, loading }: any = useQuery(GET_REQ_ALARM);
 
   useEffect(() => {
     subscribeToMore({
@@ -54,16 +52,14 @@ function FriendRequestContainer() {
     });
   }, [subscribeToMore]);
 
-  if (loading) return <p>loading</p>;
-  if (error) return <p>{JSON.stringify(error)}</p>;
-
   return (
     <>
-      {data.requestAlarm.map(({ nickname, email, thumbnail }: IUser) => (
-        <UserCard nickname={nickname} key={email} imageUrl={thumbnail}>
-          <ButtonContainer email={email} initialRelation="REQUESTED_FROM" />
-        </UserCard>
-      ))}
+      {!loading &&
+        data.requestAlarm.map(({ nickname, email, thumbnail }: IUser) => (
+          <FriendBox nickname={nickname} key={email} imageUrl={thumbnail}>
+            <ButtonContainer email={email} />
+          </FriendBox>
+        ))}
     </>
   );
 }

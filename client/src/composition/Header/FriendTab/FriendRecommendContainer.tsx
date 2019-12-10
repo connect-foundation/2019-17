@@ -21,18 +21,16 @@ interface IUser {
 }
 
 function FriendRecommendContainer() {
-  const { data, loading, error }: any = useQuery(GET_REC_ALARM);
-
-  if (loading) return <p>loading</p>;
-  if (error) return <p>{JSON.stringify(error)}</p>;
+  const { data, loading }: any = useQuery(GET_REC_ALARM);
 
   return (
     <>
-      {data.recommendAlarm.map(({ nickname, email, thumbnail }: IUser) => (
-        <UserCard nickname={nickname} key={email} imageUrl={thumbnail}>
-          <ButtonContainer email={email} initialRelation="NONE" />
-        </UserCard>
-      ))}
+      {!loading &&
+        data.recommendAlarm.map(({ nickname, email, thumbnail }: IUser) => (
+          <UserCard nickname={nickname} key={email} imageUrl={thumbnail}>
+            <ButtonContainer email={email} initialRelation="NONE" />
+          </UserCard>
+        ))}
     </>
   );
 }
