@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import { useEffect } from 'react';
+import { useNewAlarmDispatch } from 'stores/NewAlarmContext';
+import { HEADER_TAB } from '../../constants';
+import { useRef } from 'react';
 
 const GET_ALARM_NUM = gql`
   query friendUnreadAlarmNum {
@@ -34,41 +36,50 @@ const NewAlarmNumIcon = styled.span`
   font-size: 10px;
 `;
 
-interface IProps {
-  selected: boolean;
-}
-
-function NewFriendAlarmNum({ selected }: IProps) {
-  const [newAlarmNum, setNewAlarmNum] = useState(0);
+function NewFriendAlarmNum() {
   const { subscribeToMore, loading, data } = useQuery(GET_ALARM_NUM);
+  const newAlarmDispatch = useNewAlarmDispatch();
+  const isCalled = useRef<boolean>(false);
 
   useEffect(() => {
     subscribeToMore({
       document: FRIEND_ALARM_NUM_CHANGED,
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
+
         const alarmDiff =
           subscriptionData.data.friendAlarmNumChanged.difference;
-        setNewAlarmNum(alarmDiff + prev.friendUnreadAlarmNum);
+        const nowAlarmNum = alarmDiff + prev.friendUnreadAlarmNum;
 
-        return Object.assign(
-          {},
-          {
-            friendUnreadAlarmNum: alarmDiff + prev.friendUnreadAlarmNum
-          }
-        );
+        if (nowAlarmNum * prev.friendUnreadAlarmNum <= 0) {
+          newAlarmDispatch({
+            type: 'NEW_FRIENDS',
+            key: HEADER_TAB.FRIENDS
+          });
+        }
+
+        return Object.assign({
+          friendUnreadAlarmNum: nowAlarmNum
+        });
       }
     });
-  }, [subscribeToMore]);
+  }, []);
 
   useEffect(() => {
-    if (data && data.friendUnreadAlarmNum)
-      setNewAlarmNum(data.friendUnreadAlarmNum);
+    if (!isCalled.current && data && data.friendUnreadAlarmNum) {
+      isCalled.current = true;
+      newAlarmDispatch({
+        type: 'NEW_FRIENDS',
+        key: HEADER_TAB.FRIENDS
+      });
+    }
   }, [data]);
+
+  if (loading || data.friendUnreadAlarmNum <= 0) return <></>;
 
   return (
     <NewAlarmNumContainer>
-      <NewAlarmNumIcon>{!loading && newAlarmNum}</NewAlarmNumIcon>
+      <NewAlarmNumIcon>{data.friendUnreadAlarmNum}</NewAlarmNumIcon>
     </NewAlarmNumContainer>
   );
 }

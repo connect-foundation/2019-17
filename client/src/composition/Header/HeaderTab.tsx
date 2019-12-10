@@ -12,6 +12,11 @@ import {
   useHeaderTabDispatch
 } from 'stores/HeaderTabContext';
 import { HEADER_TAB } from '../../constants';
+import { useNewAlarmState, useNewAlarmDispatch } from 'stores/NewAlarmContext';
+
+const RelativeDiv = styled.div`
+  position: relative;
+`;
 
 const Container = styled.div`
   position: relative;
@@ -34,10 +39,6 @@ const nonActive = css`
   color: #203257;
 `;
 
-const Relative = styled.div`
-  position: relative;
-`;
-
 const FriendsIcon = styled(FaUserFriends)<{ selected: boolean }>`
   ${cursor}
   ${props => (props.selected ? active : nonActive)}
@@ -56,20 +57,27 @@ const AlarmIcon = styled(FaBell)<{ selected: boolean }>`
 function HeaderTab() {
   const headerTabState = useHeaderTabState();
   const headerTabDispatch = useHeaderTabDispatch();
+  const newAlarmState = useNewAlarmState();
+  const newAlarmDispatch = useNewAlarmDispatch();
+
   return (
     <Container>
-      <Relative>
+      <RelativeDiv>
         <FriendsIcon
-          selected={headerTabState.friends}
-          onClick={() =>
+          selected={newAlarmState.friends || headerTabState.friends}
+          onClick={() => {
             headerTabDispatch({
               type: 'CLICK_FRIENDS',
               key: HEADER_TAB.FRIENDS
-            })
-          }
+            });
+            newAlarmDispatch({
+              type: 'NEW_FRIENDS',
+              key: HEADER_TAB.FRIENDS
+            });
+          }}
         />
-        <NewFriendAlarmNum selected={headerTabState.friends} />
-      </Relative>
+        <NewFriendAlarmNum />
+      </RelativeDiv>
       <Tab left={'-230px'} selected={headerTabState.friends}>
         <FriendsTab />
       </Tab>

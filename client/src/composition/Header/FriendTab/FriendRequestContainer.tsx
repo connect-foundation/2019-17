@@ -4,6 +4,7 @@ import gql from 'graphql-tag';
 import ButtonContainer from 'composition/Header/FriendTab/ButtonContainer';
 import { useEffect } from 'react';
 import FriendBox from './FriendBox';
+import uuid from 'uuid';
 
 const GET_REQ_ALARM = gql`
   query requestAlarm {
@@ -56,7 +57,7 @@ function FriendRequestContainer() {
     <>
       {!loading &&
         data.requestAlarm.map(({ nickname, email, thumbnail }: IUser) => (
-          <FriendBox nickname={nickname} key={email} imageUrl={thumbnail}>
+          <FriendBox nickname={nickname} key={uuid()} imageUrl={thumbnail}>
             <ButtonContainer email={email} />
           </FriendBox>
         ))}

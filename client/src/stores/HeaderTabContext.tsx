@@ -15,7 +15,7 @@ const initState = {
 
 type IHeaderTabState = {
   [key: string]: boolean;
-}
+};
 
 type Action =
   | { type: 'CLICK_FRIENDS'; key: string }
