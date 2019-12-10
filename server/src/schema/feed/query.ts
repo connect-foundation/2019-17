@@ -59,8 +59,7 @@ export const ALARM_NEW_FEED = `
 MATCH (searchUser:User)-[:FRIEND]-(friend:User), (f:Feed)
 WHERE searchUser.email = {userEmail} and ID(f)={feedId}
 MERGE (f)-[al:ALARM{isRead:false, isChecked:false}]->(friend)
-return searchUser,al,friend
-`;
+return ID(al) as alarmId`;
 
 export const DELETE_ALARM = `
 MATCH (f:Feed{ID:{feedId}})-[al:ALARM{isRead:true}]->(fr:User{email:{userEmail}})

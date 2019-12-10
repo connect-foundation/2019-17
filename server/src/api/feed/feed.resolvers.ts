@@ -91,6 +91,19 @@ const checkIsFriend = async (friendEmail, myEmail) => {
   return parsedResult.isFriend > 0;
 };
 
+const publishFeedAlarm = async (pubsub, alarmId, userEmail) => {
+  const registerdAlarm = await requestDB(GET_NEW_ARALM, {
+    alarmId: Number(alarmId),
+    userEmail
+  });
+
+  const [parsedRegisterdAlarm] = parseResultRecords(registerdAlarm);
+
+  pubsub.publish(NEW_ALARM, {
+    alarms: parsedRegisterdAlarm.alarms
+  });
+};
+
 const mutationResolvers: MutationResolvers = {
   enrollFeed: async (
     _,
@@ -111,10 +124,12 @@ const mutationResolvers: MutationResolvers = {
         publishingFeed(pubsub, feedId, email);
       }
 
-      await requestDB(ALARM_NEW_FEED, {
+      const registeredAlarmId = await requestDB(ALARM_NEW_FEED, {
         feedId,
         userEmail: email
       });
+      const [parsedRegisteredAlarmId] = parseResultRecords(registeredAlarmId);
+      publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, email);
 
       return true;
     } catch (error) {
@@ -159,19 +174,8 @@ const mutationResolvers: MutationResolvers = {
         feedId: Number(parsedResult.ID),
         userEmail
       });
-
       const [parsedRegisteredAlarmId] = parseResultRecords(registeredAlarmId);
-
-      const registerdAlarm = await requestDB(GET_NEW_ARALM, {
-        alarmId: Number(parsedRegisteredAlarmId.alarmId),
-        userEmail
-      });
-
-      const [parsedRegisterdAlarm] = parseResultRecords(registerdAlarm);
-
-      pubsub.publish(NEW_ALARM, {
-        alarms: parsedRegisterdAlarm.alarms
-      });
+      publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, userEmail);
 
       return true;
     } catch (error) {
@@ -283,7 +287,8 @@ export default {
           const myEmail = context.email;
           const friendEmail = payload.alarms[0].email;
           const isFriend = await checkIsFriend(friendEmail, myEmail);
-          if (isFriend || myEmail === friendEmail) {
+
+          if (isFriend) {
             return true;
           } else {
             return false;
