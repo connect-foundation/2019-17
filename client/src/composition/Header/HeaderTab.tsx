@@ -96,7 +96,7 @@ function HeaderTab() {
           headerTabDispatch({ type: 'CLICK_ALARM', key: HEADER_TAB.ALARM })
         }
       />
-      <p>{data && data.alarmCount}</p>
+
       <p>{headerTabCountState.alarmCount}</p>
       <Tab left={'-160px'} selected={headerTabState.alarm}>
         <AlarmTab selected={headerTabState.alarm} />

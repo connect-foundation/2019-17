@@ -20,7 +20,7 @@ type IHeaderTabCountState = {
 type Action =
   | { type: 'SET_INIT_ALARM_CNT'; key: IValue }
   | { type: 'ADD_ALARM_CNT'; key: IValue }
-  | { type: 'RESET' };
+  | { type: 'RESET_ALARM_CNT' };
 
 interface IValue {
   id: string;
@@ -35,15 +35,11 @@ const headerTabCountReducer = (
 ): IHeaderTabCountState => {
   switch (action.type) {
     case 'ADD_ALARM_CNT':
-      return { ...state, [action.key.id]: state.alarmCount + 1 };
+      return { ...state, [action.key.id]: state.alarmCount + action.key.value };
     case 'SET_INIT_ALARM_CNT':
-      console.log('test ', {
-        ...state,
-        [action.key.id]: state.alarmCount + action.key.value
-      });
       return { ...state, [action.key.id]: action.key.value };
-    case 'RESET':
-      return { ...initState };
+    case 'RESET_ALARM_CNT':
+      return { ...state, [HEADER_TAB_CNT.ALARM]: 0 };
     default:
       throw new Error('Unhandled action');
   }

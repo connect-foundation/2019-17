@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CommonHeader from '../CommonHeader';
 import CommonFooter from '../CommonFooter';
@@ -6,8 +6,7 @@ import CommonBody from '../CommonBody';
 
 import AlamBox from './AlarmBox';
 import { useGetAlarmsQuery, Alarm, useMeQuery } from 'react-components.d';
-import { SUBSCRIBE_ALARMS, GET_CHECK_STATE_COUNT } from './alarm.query';
-import client from 'apollo/ApolloClient';
+import { SUBSCRIBE_ALARMS } from './alarm.query';
 import { useHeaderTabCountDispatch } from 'stores/HeaderTabCountContext';
 
 const Container = styled.div`
@@ -40,14 +39,10 @@ const Footer = styled(CommonFooter)`
   padding: 0.25rem 0.5rem;
 `;
 
-function AlarmTabPresenter() {
+function AlarmTabPresenter({ selected }: { selected: boolean }) {
   const { data, subscribeToMore } = useGetAlarmsQuery();
   const { data: myInfo } = useMeQuery();
   const headerTabCountDispatch = useHeaderTabCountDispatch();
-
-  useEffect(() => {
-    return subscribeToNewFeeds();
-  }, []);
 
   const subscribeToNewFeeds = () => {
     return subscribeToMore({
@@ -68,25 +63,23 @@ function AlarmTabPresenter() {
           return prev;
         }
 
-        const { alarmCount }: any = client.cache.readQuery({
-          query: GET_CHECK_STATE_COUNT
-        });
+        if (!selected) {
+          headerTabCountDispatch({
+            type: 'ADD_ALARM_CNT',
+            key: { id: 'alarmCount', value: 1 }
+          });
+        }
 
-        client.cache.writeQuery({
-          query: GET_CHECK_STATE_COUNT,
-          data: { alarmCount: alarmCount + 1 }
-        });
-
-        headerTabCountDispatch({
-          type: 'ADD_ALARM_CNT',
-          key: { id: 'alarmCount', value: 1 }
-        });
         return Object.assign({}, prev, {
           alarms: [...subscribedAlarms.alarms, ...prev.alarms]
         });
       }
     });
   };
+
+  useEffect(() => {
+    return subscribeToNewFeeds();
+  }, [selected]);
 
   return (
     <Container>
