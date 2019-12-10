@@ -5,6 +5,11 @@ type UserInfoWithTarget {
   targetEmail: String
 }
 
+type FriendAlarmNum {
+  difference: Int
+  targetEmail: String
+}
+
 type FriendAlarm {
   requestedUser: [UserInfoWithTarget]
   friendRecommendation: [UserInfoWithTarget!]!
@@ -24,4 +29,5 @@ type Query {
 type Subscription {
   requestAlarmAdded: UserInfoWithTarget
   recommendAlarmAdded: UserInfoWithTarget
+  friendAlarmNumChanged: FriendAlarmNum
 }
