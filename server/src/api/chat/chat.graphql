@@ -20,3 +20,10 @@ type Mutation {
   createChatRoom(userEmail: String!, content: String!): [Chat]
   createChat(chatRoomId: Int!, content: String!): Boolean!
 }
+
+type Query {
+  getChatsByChatRoom(
+    chatRoomId: Int!
+    cursor: String
+  ): [Chat]
+}

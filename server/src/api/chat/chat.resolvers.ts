@@ -2,7 +2,9 @@ import {
   MutationResolvers,
   MutationCreateChatRoomArgs,
   Chat,
-  MutationCreateChatArgs
+  MutationCreateChatArgs,
+  QueryResolvers,
+  QueryGetChatsByChatRoomArgs
 } from '../../types';
 import { requestDB } from '../../utils/requestDB';
 import createDBError from '../../errors/createDBError';
@@ -11,7 +13,8 @@ import {
   CREATE_CHAT_QUERY,
   CHECK_CHAT_ROOM_QUERY,
   CREATE_CHAT_ROOM_QUERY,
-  GET_CHATS_QUERY
+  GET_CHATS_QUERY,
+  GET_CHATS_BY_CHAT_ROOM_ID_QUERY
 } from '../../schema/chat/chatQuery';
 import { parseResultRecords } from '../../utils/parseData';
 
@@ -23,7 +26,7 @@ const Mutation: MutationResolvers = {
     _,
     { userEmail, content }: MutationCreateChatRoomArgs,
     { req }
-  ): Promise<Chat[] | null> => {
+  ): Promise<Chat[]> => {
     isAuthenticated(req);
     const { email } = req;
     try {
@@ -72,6 +75,29 @@ const Mutation: MutationResolvers = {
   }
 };
 
+const Query: QueryResolvers = {
+  getChatsByChatRoom: async (
+    _,
+    { chatRoomId, cursor = DEFAUT_MAX_DATE }: QueryGetChatsByChatRoomArgs,
+    { req }
+  ): Promise<Chat[]> => {
+    isAuthenticated(req);
+    try {
+      const result = await requestDB(GET_CHATS_BY_CHAT_ROOM_ID_QUERY, {
+        chatRoomId,
+        cursor,
+        limit: CHAT_LIMIT
+      });
+      const chats: Chat[] = parseResultRecords(result)[0].chats;
+      return chats;
+    } catch (error) {
+      const DBError = createDBError(error);
+      throw new DBError();
+    }
+  }
+};
+
 export default {
+  Query,
   Mutation
 };
