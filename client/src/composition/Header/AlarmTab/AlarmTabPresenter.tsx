@@ -43,7 +43,7 @@ function AlarmTabPresenter() {
   const { data: myInfo } = useMeQuery();
 
   useEffect(() => {
-    subscribeToNewFeeds();
+    return subscribeToNewFeeds();
   }, []);
 
   const subscribeToNewFeeds = () => {
