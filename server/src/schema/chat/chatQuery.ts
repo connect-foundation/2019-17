@@ -59,7 +59,7 @@ MATCH (chatRoom:ChatRoom) <- [:JOIN] - (otherUser:User),
 WITH chatRoom, otherUser, chat, user
 ORDER BY chat.createAt desc
 WHERE NOT(otherUser.email = $email) and chat.createAt < dateTime($cursor)
-RETURN otherUser, [LAST(COLLECT(distinct {content: chat.content, createAt: chat.createAt, 
+RETURN otherUser, [HEAD(COLLECT(distinct {content: chat.content, createAt: chat.createAt, 
 	  email: user.email, thumbnail: user.thumbnail, nickname: user.nickname, chatRoomId: ID(chatRoom)}))] as lastChat
 LIMIT $limit;
 `;

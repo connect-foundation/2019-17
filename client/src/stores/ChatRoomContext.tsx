@@ -5,6 +5,9 @@ import { useContext } from 'react';
 
 interface IChatRoom {
   chatType: string;
+  chatRoomId?: number;
+  nickname?: string;
+  thumbnail?: string;
   otherUserEmail?: string;
 }
 

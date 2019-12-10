@@ -4,9 +4,9 @@ import {
   Chat,
   MutationCreateChatArgs,
   QueryResolvers,
-  QueryGetChatsByChatRoomArgs,
   QueryGetChatRoomsArgs,
-  ChatRoom
+  ChatRoom,
+  QueryGetChatsByChatRoomIdArgs
 } from '../../types';
 import { requestDB } from '../../utils/requestDB';
 import createDBError from '../../errors/createDBError';
@@ -79,9 +79,9 @@ const Mutation: MutationResolvers = {
 };
 
 const Query: QueryResolvers = {
-  getChatsByChatRoom: async (
+  getChatsByChatRoomId: async (
     _,
-    { chatRoomId, cursor = DEFAUT_MAX_DATE }: QueryGetChatsByChatRoomArgs,
+    { chatRoomId, cursor = DEFAUT_MAX_DATE }: QueryGetChatsByChatRoomIdArgs,
     { req }
   ): Promise<Chat[]> => {
     isAuthenticated(req);
