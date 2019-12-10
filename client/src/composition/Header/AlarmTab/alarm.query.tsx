@@ -17,6 +17,7 @@ export const GET_ALARMS = gql`
       email
       content
       isRead
+      isChecked
       feedId
       type
     }
