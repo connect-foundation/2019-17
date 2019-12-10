@@ -22,8 +22,8 @@ const FRIEND_ALARM_NUM_CHANGED = gql`
 const NewAlarmNumContainer = styled.span`
   display: flex;
   position: absolute;
-  right: 1px;
-  top: 2px;
+  top: -3px;
+  right: -8px;
 `;
 
 const NewAlarmNumIcon = styled.span`
@@ -31,6 +31,7 @@ const NewAlarmNumIcon = styled.span`
   border-radius: 2px;
   color: #fff;
   padding: 1px 3px;
+  font-size: 10px;
 `;
 
 interface IProps {

@@ -30,6 +30,10 @@ const nonActive = css`
   color: #203257;
 `;
 
+const Relative = styled.div`
+  position: relative;
+`;
+
 const FriendsIcon = styled(FaUserFriends)<{ selected: boolean }>`
   ${cursor}
   ${props => (props.selected ? active : nonActive)}
@@ -70,11 +74,13 @@ function HeaderTab() {
   };
   return (
     <Container>
-      <FriendsIcon
-        selected={tabState.friends}
-        onClick={clickIcon.bind(null, FRIENDS)}
-      />
-      <NewFriendAlarmNum selected={tabState.friends} />
+      <Relative>
+        <FriendsIcon
+          selected={tabState.friends}
+          onClick={clickIcon.bind(null, FRIENDS)}
+        />
+        <NewFriendAlarmNum selected={tabState.friends} />
+      </Relative>
       <Tab left={'-230px'} selected={tabState.friends}>
         <FriendsTab />
       </Tab>
