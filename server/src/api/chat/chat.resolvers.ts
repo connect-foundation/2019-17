@@ -17,12 +17,15 @@ import {
   CREATE_CHAT_ROOM_QUERY,
   GET_CHATS_QUERY,
   GET_CHATS_BY_CHAT_ROOM_ID_QUERY,
-  GET_CHATROOMS_QUERY
+  GET_CHATROOMS_QUERY,
+  GET_USERS_ON_CHAT_ROOM_QUERY
 } from '../../schema/chat/chatQuery';
 import { parseResultRecords } from '../../utils/parseData';
+import { withFilter } from 'graphql-subscriptions';
 
 const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
 const CHAT_LIMIT = 20;
+const CHAT_PUBSUB = 'chatPubsub';
 
 const Mutation: MutationResolvers = {
   createChatRoom: async (
@@ -64,12 +67,19 @@ const Mutation: MutationResolvers = {
   createChat: async (
     _,
     { chatRoomId, content }: MutationCreateChatArgs,
-    { req }
+    { req, pubsub }
   ): Promise<boolean> => {
     isAuthenticated(req);
     const { email } = req;
     try {
-      await requestDB(CREATE_CHAT_QUERY, { email, content, chatRoomId });
+      const result = await requestDB(CREATE_CHAT_QUERY, {
+        email,
+        content,
+        chatRoomId
+      });
+      const [chat]: Chat[] = parseResultRecords(result)[0].chat;
+      console.log(chat);
+      pubsub.publish(CHAT_PUBSUB, { getChat: chat });
       return true;
     } catch (error) {
       const DBError = createDBError(error);
@@ -123,7 +133,27 @@ const Query: QueryResolvers = {
   }
 };
 
+const Subscription = {
+  getChat: {
+    subscribe: withFilter(
+      (_, __, { pubsub }) => pubsub.asyncIterator(CHAT_PUBSUB),
+      async (payload, _, context) => {
+        const { email } = context;
+        const {
+          getChat: { chatRoomId }
+        } = payload;
+        const result = await requestDB(GET_USERS_ON_CHAT_ROOM_QUERY, {
+          chatRoomId
+        });
+        const users = parseResultRecords(result)[0].users;
+        return users.some(user => user.email === email);
+      }
+    )
+  }
+};
+
 export default {
   Query,
-  Mutation
+  Mutation,
+  Subscription
 };

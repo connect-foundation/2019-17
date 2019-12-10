@@ -21,23 +21,27 @@ const Input = styled.input`
 `;
 
 function ChatFooter({ chatRoomId }: { chatRoomId: number }) {
-  const { value: content, setValue } = useInput('');
+  const { value: content, onChange, setValue } = useInput('');
   const [createChatMutation] = useCreateChatMutation();
+  let overlapFlag = false;
   const onChatSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.keyCode === 13) {
-      console.log('submit');
+      if (overlapFlag || !content) return;
+      overlapFlag = true;
       createChatMutation({ variables: { chatRoomId, content } });
       setValue('');
+      overlapFlag = false;
     }
   };
+
   return (
     <Footer>
       <Input
         placeholder={'메세지를 입력하세요...'}
         maxLength={500}
         onKeyUp={onChatSubmit}
-        onChange={e => setValue(e.target.value)}
+        onChange={onChange}
         value={content}
       />
     </Footer>

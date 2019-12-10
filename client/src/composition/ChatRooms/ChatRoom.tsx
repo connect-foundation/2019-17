@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import ChatHeader from './ChatHeader';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 import { useGetChatsByChatRoomIdQuery, useMeQuery } from 'react-components.d';
-import useInput from 'hooks/useInput';
 import ChatFooter from './ChatFooter';
 
 const Container = styled.div`
