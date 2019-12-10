@@ -62,12 +62,12 @@ type IFeeds {
 
 type Alarm {
   thumbnail: String
-  email: String
+  email: String!
   content: String
-  writer: String
-  createdAt: Idate
-  isRead: Boolean
-  feedId: Int
+  writer: String!
+  createdAt: Idate!
+  isRead: Boolean!
+  feedId: Int!
 }
 
 type Query {
@@ -80,6 +80,8 @@ type Mutation {
   updateLike(feedId: Int, count: Int): Boolean
   enrollFeed(content: String!, files: [Upload]): Boolean!
   writeComment(content: String!, feedId: Int!): Boolean!
+  changeFeedAlarmReadState(feedId: Int!, isRead: Boolean): Int!
+  changeAllFeedAlarmReadState: Boolean!
 }
 
 type Subscription {
