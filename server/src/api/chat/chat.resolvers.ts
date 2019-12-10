@@ -8,8 +8,9 @@ import { requestDB } from '../../utils/requestDB';
 import createDBError from '../../errors/createDBError';
 import isAuthenticated from '../../utils/isAuthenticated';
 import {
-  CREATE_CHAT_ROOM_QUERY,
-  CREATE_CHAT_QUERY
+  CREATE_CHAT_QUERY,
+  CHECK_CHAT_ROOM,
+  CREATE_CHAT_ROOM_QUERY
 } from '../../schema/chat/query';
 import { parseResultRecords } from '../../utils/parseData';
 
@@ -18,18 +19,25 @@ const Mutation: MutationResolvers = {
     _,
     { userEmail, content }: MutationCreateChatRoomArgs,
     { req }
-  ): Promise<Chat[]> => {
+  ): Promise<Chat[] | null> => {
     isAuthenticated(req);
     const { email } = req;
     try {
-      const result = await requestDB(CREATE_CHAT_ROOM_QUERY, {
+      const isChatRoom = await requestDB(CHECK_CHAT_ROOM, {
         userEmail1: email,
-        userEmail2: userEmail,
-        content
+        userEmail2: userEmail
       });
-      const [parsedResult] = parseResultRecords(result);
-      const chats: Chat[] = parsedResult.chats;
-      return chats;
+      const [parsedResult] = parseResultRecords(isChatRoom);
+      if (!parsedResult) {
+        const result = await requestDB(CREATE_CHAT_ROOM_QUERY, {
+          from: email,
+          to: userEmail,
+          content
+        });
+        const chats: Chat[] = parseResultRecords(result)[0].chats;
+        return chats;
+      }
+      return null;
     } catch (error) {
       const DBError = createDBError(error);
       throw new DBError();
