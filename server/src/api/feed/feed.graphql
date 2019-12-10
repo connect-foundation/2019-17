@@ -67,6 +67,7 @@ type Alarm {
   writer: String!
   createdAt: Idate!
   isRead: Boolean!
+  isChecked: Boolean!
   feedId: Int!
   type: String!
 }

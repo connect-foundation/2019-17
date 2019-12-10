@@ -78,6 +78,7 @@ return collect(
     email:w.email, 
     thumbnail:w.thumbnail,
     isRead: al.isRead, 
+    isChecked: al.isChecked, 
     feedId:ID(f),
     type: head(labels(f)) })  as alarms 
 `;
@@ -93,6 +94,7 @@ return collect(
     email:w.email, 
     thumbnail:w.thumbnail,
     isRead: al.isRead, 
+    isChecked: al.isChecked, 
     feedId:ID(f),
     type: head(labels(f)) })  as alarms 
 `;
