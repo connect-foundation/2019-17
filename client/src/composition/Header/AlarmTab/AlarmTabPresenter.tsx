@@ -6,7 +6,9 @@ import CommonBody from '../CommonBody';
 
 import AlamBox from './AlarmBox';
 import { useGetAlarmsQuery, Alarm, useMeQuery } from 'react-components.d';
-import { SUBSCRIBE_ALARMS } from './alarm.query';
+import { SUBSCRIBE_ALARMS, GET_CHECK_STATE_COUNT } from './alarm.query';
+import client from 'apollo/ApolloClient';
+import { useHeaderTabCountDispatch } from 'stores/HeaderTabCountContext';
 
 const Container = styled.div`
   display: flex;
@@ -41,6 +43,7 @@ const Footer = styled(CommonFooter)`
 function AlarmTabPresenter() {
   const { data, subscribeToMore } = useGetAlarmsQuery();
   const { data: myInfo } = useMeQuery();
+  const headerTabCountDispatch = useHeaderTabCountDispatch();
 
   useEffect(() => {
     return subscribeToNewFeeds();
@@ -65,6 +68,19 @@ function AlarmTabPresenter() {
           return prev;
         }
 
+        const { alarmCount }: any = client.cache.readQuery({
+          query: GET_CHECK_STATE_COUNT
+        });
+
+        client.cache.writeQuery({
+          query: GET_CHECK_STATE_COUNT,
+          data: { alarmCount: alarmCount + 1 }
+        });
+
+        headerTabCountDispatch({
+          type: 'ADD_ALARM_CNT',
+          key: { id: 'alarmCount', value: 1 }
+        });
         return Object.assign({}, prev, {
           alarms: [...subscribedAlarms.alarms, ...prev.alarms]
         });
