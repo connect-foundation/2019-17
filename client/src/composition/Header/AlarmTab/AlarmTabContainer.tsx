@@ -4,7 +4,7 @@ interface Iprops {
   selected: boolean;
 }
 function AlarmTabContainer({ selected }: Iprops) {
-  return selected ? <MessageTabPresenter /> : <></>;
+  return <MessageTabPresenter />;
 }
 
 export default AlarmTabContainer;

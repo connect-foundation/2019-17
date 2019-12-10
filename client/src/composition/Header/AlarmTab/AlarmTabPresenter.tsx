@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import CommonHeader from '../CommonHeader';
 import CommonFooter from '../CommonFooter';
 import CommonBody from '../CommonBody';
 
 import AlamBox from './AlarmBox';
-import { useGetAlarmsQuery, Alarm } from 'react-components.d';
+import { useGetAlarmsQuery, Alarm, useMeQuery } from 'react-components.d';
+import { SUBSCRIBE_ALARMS } from './alarm.query';
 
 const Container = styled.div`
   display: flex;
@@ -38,7 +39,38 @@ const Footer = styled(CommonFooter)`
 `;
 
 function AlarmTabPresenter() {
-  const { data } = useGetAlarmsQuery();
+  const { data, subscribeToMore } = useGetAlarmsQuery();
+  const { data: myInfo } = useMeQuery();
+
+  useEffect(() => {
+    subscribeToNewFeeds();
+  }, []);
+
+  const subscribeToNewFeeds = () => {
+    return subscribeToMore({
+      document: SUBSCRIBE_ALARMS,
+      variables: {
+        userEmail: myInfo && myInfo.me && myInfo.me.email ? myInfo.me.email : ''
+      },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const { data: subscribedAlarms } = subscriptionData;
+
+        if (
+          !subscribedAlarms ||
+          !subscribedAlarms.alarms ||
+          !subscribedAlarms.alarms.length ||
+          !prev.alarms
+        ) {
+          return prev;
+        }
+
+        return Object.assign({}, prev, {
+          alarms: [...subscribedAlarms.alarms, ...prev.alarms]
+        });
+      }
+    });
+  };
 
   return (
     <Container>
