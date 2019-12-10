@@ -6,7 +6,8 @@ import {
   QueryResolvers,
   QueryGetChatRoomsArgs,
   ChatRoom,
-  QueryGetChatsByChatRoomIdArgs
+  QueryGetChatsByChatRoomIdArgs,
+  SubscriptionGetChatsByChatRoomIdArgs
 } from '../../types';
 import { requestDB } from '../../utils/requestDB';
 import createDBError from '../../errors/createDBError';
@@ -78,8 +79,7 @@ const Mutation: MutationResolvers = {
         chatRoomId
       });
       const [chat]: Chat[] = parseResultRecords(result)[0].chat;
-      console.log(chat);
-      pubsub.publish(CHAT_PUBSUB, { getChat: chat });
+      pubsub.publish(CHAT_PUBSUB + chatRoomId, { getChatsByChatRoomId: chat });
       return true;
     } catch (error) {
       const DBError = createDBError(error);
@@ -134,13 +134,15 @@ const Query: QueryResolvers = {
 };
 
 const Subscription = {
-  getChat: {
+  getChatsByChatRoomId: {
     subscribe: withFilter(
-      (_, __, { pubsub }) => pubsub.asyncIterator(CHAT_PUBSUB),
+      (_, { chatRoomId }: SubscriptionGetChatsByChatRoomIdArgs, { pubsub }) => {
+        return pubsub.asyncIterator(CHAT_PUBSUB + chatRoomId);
+      },
       async (payload, _, context) => {
         const { email } = context;
         const {
-          getChat: { chatRoomId }
+          getChatsByChatRoomId: { chatRoomId }
         } = payload;
         const result = await requestDB(GET_USERS_ON_CHAT_ROOM_QUERY, {
           chatRoomId

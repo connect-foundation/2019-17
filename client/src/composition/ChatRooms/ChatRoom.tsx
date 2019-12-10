@@ -4,6 +4,8 @@ import ChatHeader from './ChatHeader';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 import { useGetChatsByChatRoomIdQuery, useMeQuery } from 'react-components.d';
 import ChatFooter from './ChatFooter';
+import { useEffect } from 'react';
+import { GET_CHAT_SUBSCRIPTION } from './ChatRooms.query';
 
 const Container = styled.div`
   width: 20rem;
@@ -71,11 +73,34 @@ function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
   };
   const {
     data: { getChatsByChatRoomId = null } = {},
-    loading
+    loading,
+    subscribeToMore
   } = useGetChatsByChatRoomIdQuery({
     variables: { chatRoomId }
   });
   const { data: { me = null } = {}, loading: meLoading } = useMeQuery();
+
+  const subscribeToGetChat = () => {
+    return subscribeToMore({
+      document: GET_CHAT_SUBSCRIPTION,
+      variables: { chatRoomId },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const {
+          data: { getChatsByChatRoomId }
+        } = subscriptionData;
+        if (!prev.getChatsByChatRoomId || !getChatsByChatRoomId) return prev;
+        return Object.assign({}, prev, {
+          getChatsByChatRoomId: [
+            getChatsByChatRoomId,
+            ...prev.getChatsByChatRoomId
+          ]
+        });
+      }
+    });
+  };
+
+  useEffect(() => subscribeToGetChat());
 
   return loading && meLoading ? (
     <div>loading...</div>

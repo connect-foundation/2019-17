@@ -23,5 +23,5 @@ type Query {
 }
 
 type Subscription {
-  getChat(userEmail: String): Chat!
+  getChatsByChatRoomId(chatRoomId: Int!): Chat!
 }
