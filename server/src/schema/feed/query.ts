@@ -52,7 +52,8 @@ export const WRITE_COMMENT = `MATCH (f:Feed), (u:User{email:{userEmail} })
 WHERE ID(f) = {feedId} 
 CREATE (c:Comment {content: {content} ,createdAt: datetime()}) 
 CREATE (f)-[r:HAS]->(c)
-CREATE (u)-[wr:AUTHOR]->(c)`;
+CREATE (u)-[wr:AUTHOR]->(c)
+return ID(c) as ID`;
 
 export const ALARM_NEW_FEED = `
 MATCH (searchUser:User)-[:FRIEND]-(friend:User), (f:Feed)
@@ -91,3 +92,9 @@ export const CHANGE_ALL_ALARM_READSTATE = `
 MATCH p=(f:Feed)-[r:ALARM]->(u:User{email:{userEmail}}) 
 SET r.isRead = {isRead}
 RETURN p`;
+
+export const ALARM_NEW_COMMENT = `
+MATCH (searchUser:User)-[:FRIEND]-(friend:User), (c:Comment)
+WHERE searchUser.email = {userEmail} and ID(c)={feedId}
+MERGE (c)-[al:ALARM{isRead:false, isChecked:false}]->(friend)
+return searchUser,al,friend`;

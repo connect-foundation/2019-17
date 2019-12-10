@@ -8,7 +8,8 @@ import {
   ALARM_NEW_FEED,
   GET_FEED_ARALMS,
   CHANGE_ALARM_READSTATE,
-  CHANGE_ALL_ALARM_READSTATE
+  CHANGE_ALL_ALARM_READSTATE,
+  ALARM_NEW_COMMENT
 } from '../../schema/feed/query';
 import { parseResultRecords } from '../../utils/parseData';
 
@@ -146,10 +147,16 @@ const mutationResolvers: MutationResolvers = {
     const userEmail = req.email;
 
     try {
-      await requestDB(WRITE_COMMENT, {
+      const result = await requestDB(WRITE_COMMENT, {
         userEmail,
         feedId,
         content
+      });
+      const [parsedResult] = parseResultRecords(result);
+
+      await requestDB(ALARM_NEW_COMMENT, {
+        feedId: Number(parsedResult.ID),
+        userEmail
       });
 
       return true;
