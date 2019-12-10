@@ -66,7 +66,6 @@ export default {
         email: req.email
       });
 
-      console.log(countRes[0].get(0));
       return String(countRes[0].get(0));
     }
   },

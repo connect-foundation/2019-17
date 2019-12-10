@@ -1,5 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useState } from 'react';
+import { useQuery } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+
+const GET_ALARM_NUM = gql`
+  query friendUnreadAlarmNum {
+    friendUnreadAlarmNum
+  }
+`;
 
 const NewAlarmNumContainer = styled.span`
   display: flex;
@@ -16,9 +25,12 @@ const NewAlarmNumIcon = styled.span`
 `;
 
 function NewFriendAlarmNum() {
+  const [newAlarmNum, setNewAlarmNum] = useState(0);
+  const { loading, error, data } = useQuery(GET_ALARM_NUM);
+
   return (
     <NewAlarmNumContainer>
-      <NewAlarmNumIcon>1</NewAlarmNumIcon>
+      <NewAlarmNumIcon>{!loading && data.friendUnreadAlarmNum}</NewAlarmNumIcon>
     </NewAlarmNumContainer>
   );
 }

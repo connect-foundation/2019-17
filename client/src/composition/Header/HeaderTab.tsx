@@ -74,7 +74,7 @@ function HeaderTab() {
         selected={tabState.friends}
         onClick={clickIcon.bind(null, FRIENDS)}
       />
-      <NewFriendAlarmNum />
+      <NewFriendAlarmNum></NewFriendAlarmNum>
       <Tab left={'-230px'} selected={tabState.friends}>
         <FriendsTab />
       </Tab>
