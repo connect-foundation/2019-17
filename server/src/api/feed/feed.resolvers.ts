@@ -11,7 +11,8 @@ import {
   CHANGE_ALL_ALARM_READSTATE,
   ALARM_NEW_COMMENT,
   GET_NEW_ARALM,
-  ALARM_ISCHECKED_COUNT
+  ALARM_ISCHECKED_COUNT,
+  CHANGE_ALL_ALARM_CHECKSTATE
 } from '../../schema/feed/query';
 import { parseResultRecords } from '../../utils/parseData';
 
@@ -206,6 +207,21 @@ const mutationResolvers: MutationResolvers = {
       await requestDB(CHANGE_ALL_ALARM_READSTATE, {
         userEmail,
         isRead: true
+      });
+      return true;
+    } catch (error) {
+      const DBError = createDBError(error);
+      throw new DBError();
+    }
+  },
+  changeAllFeedAlarmCheckState: async (_, __, { req }): Promise<boolean> => {
+    isAuthenticated(req);
+    const userEmail = req.email;
+
+    try {
+      await requestDB(CHANGE_ALL_ALARM_CHECKSTATE, {
+        userEmail,
+        isCheckd: true
       });
       return true;
     } catch (error) {

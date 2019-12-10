@@ -121,3 +121,9 @@ MATCH (u:User{email:{userEmail}})-[al:ALARM]-(f)
 WHERE al.isChecked = false and ( f:Comment OR f:Feed)
 optional match (f)<-[:AUTHOR]-(w:User)
 return count(distinct al) as alarmCount`;
+
+export const CHANGE_ALL_ALARM_CHECKSTATE = `
+MATCH p=(f)-[r:ALARM]->(u:User{email:{userEmail}}) 
+WHERE f:Comment OR f:Feed 
+SET r.isChecked = {isCheckd}
+RETURN p`;

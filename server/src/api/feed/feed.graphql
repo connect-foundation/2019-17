@@ -85,6 +85,7 @@ type Mutation {
   writeComment(content: String!, feedId: Int!): Boolean!
   changeFeedAlarmReadState(feedId: Int!, isRead: Boolean): Int!
   changeAllFeedAlarmReadState: Boolean!
+  changeAllFeedAlarmCheckState: Boolean!
 }
 
 type Subscription {
