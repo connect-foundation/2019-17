@@ -174,6 +174,7 @@ const mutationResolvers: MutationResolvers = {
         feedId,
         isRead: true
       });
+
       return feedId;
     } catch (error) {
       const DBError = createDBError(error);

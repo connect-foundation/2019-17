@@ -83,13 +83,14 @@ return collect(
 `;
 
 export const CHANGE_ALARM_READSTATE = `
-MATCH p=(f:Feed)-[r:ALARM]->(u:User{email:{userEmail}}) 
-WHERE ID(f) = {feedId}
+MATCH p=(f)-[r:ALARM]->(u:User{email:{userEmail}}) 
+WHERE  ID(f) = {feedId} AND f:Comment OR f:Feed 
 SET r.isRead = {isRead}
 RETURN p`;
 
 export const CHANGE_ALL_ALARM_READSTATE = `
-MATCH p=(f:Feed)-[r:ALARM]->(u:User{email:{userEmail}}) 
+MATCH p=(f)-[r:ALARM]->(u:User{email:{userEmail}}) 
+WHERE f:Comment OR f:Feed 
 SET r.isRead = {isRead}
 RETURN p`;
 
