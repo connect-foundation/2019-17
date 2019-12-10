@@ -9,7 +9,8 @@ import {
   GET_FEED_ARALMS,
   CHANGE_ALARM_READSTATE,
   CHANGE_ALL_ALARM_READSTATE,
-  ALARM_NEW_COMMENT
+  ALARM_NEW_COMMENT,
+  GET_NEW_ARALM
 } from '../../schema/feed/query';
 import { parseResultRecords } from '../../utils/parseData';
 
@@ -141,7 +142,7 @@ const mutationResolvers: MutationResolvers = {
   writeComment: async (
     _,
     { feedId, content }: MutationWriteCommentArgs,
-    { req }
+    { req, pubsub }
   ): Promise<boolean> => {
     isAuthenticated(req);
     const userEmail = req.email;
@@ -154,9 +155,22 @@ const mutationResolvers: MutationResolvers = {
       });
       const [parsedResult] = parseResultRecords(result);
 
-      await requestDB(ALARM_NEW_COMMENT, {
+      const registeredAlarmId = await requestDB(ALARM_NEW_COMMENT, {
         feedId: Number(parsedResult.ID),
         userEmail
+      });
+
+      const [parsedRegisteredAlarmId] = parseResultRecords(registeredAlarmId);
+
+      const registerdAlarm = await requestDB(GET_NEW_ARALM, {
+        alarmId: Number(parsedRegisteredAlarmId.alarmId),
+        userEmail
+      });
+
+      const [parsedRegisterdAlarm] = parseResultRecords(registerdAlarm);
+
+      pubsub.publish(NEW_ALARM, {
+        alarms: parsedRegisterdAlarm.alarms
       });
 
       return true;
@@ -174,7 +188,6 @@ const mutationResolvers: MutationResolvers = {
         feedId,
         isRead: true
       });
-
       return feedId;
     } catch (error) {
       const DBError = createDBError(error);
@@ -231,14 +244,13 @@ const queryResolvers: QueryResolvers = {
       userEmail
     });
     const [parsedAlarms] = parseResultRecords(result);
-    console.log(parsedAlarms);
-    console.log('userEmail', userEmail);
 
     return parsedAlarms.alarms;
   }
 };
 
 const NEW_FEED = 'NEW_FEED_PUBSUB';
+const NEW_ALARM = 'NEW_ALARM_PUBSUB';
 
 export default {
   Query: queryResolvers,
@@ -254,6 +266,23 @@ export default {
           const friendEmail = payload.feeds.feedItems[0].searchUser.email;
           const isFriend = await checkIsFriend(friendEmail, myEmail);
 
+          if (isFriend || myEmail === friendEmail) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      )
+    },
+    alarms: {
+      subscribe: withFilter(
+        (_, __, { pubsub }) => {
+          return pubsub.asyncIterator(NEW_ALARM);
+        },
+        async (payload, _, context) => {
+          const myEmail = context.email;
+          const friendEmail = payload.alarms[0].email;
+          const isFriend = await checkIsFriend(friendEmail, myEmail);
           if (isFriend || myEmail === friendEmail) {
             return true;
           } else {

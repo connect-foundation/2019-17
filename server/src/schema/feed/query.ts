@@ -82,6 +82,21 @@ return collect(
     type: head(labels(f)) })  as alarms 
 `;
 
+export const GET_NEW_ARALM = `
+MATCH (u:User)-[al:ALARM]-(f)
+WHERE ID(al)={alarmId} AND (f:Comment OR f:Feed )
+optional match (f)<-[:AUTHOR]-(w:User)
+return collect(
+  distinct {createdAt : f.createdAt , 
+    content:f.content,
+    writer: w.nickname, 
+    email:w.email, 
+    thumbnail:w.thumbnail,
+    isRead: al.isRead, 
+    feedId:ID(f),
+    type: head(labels(f)) })  as alarms 
+`;
+
 export const CHANGE_ALARM_READSTATE = `
 MATCH p=(f)-[r:ALARM]->(u:User{email:{userEmail}}) 
 WHERE  ID(f) = {feedId} AND f:Comment OR f:Feed 
@@ -98,4 +113,4 @@ export const ALARM_NEW_COMMENT = `
 MATCH (searchUser:User)-[:FRIEND]-(friend:User), (c:Comment)
 WHERE searchUser.email = {userEmail} and ID(c)={feedId}
 MERGE (c)-[al:ALARM{isRead:false, isChecked:false}]->(friend)
-return searchUser,al,friend`;
+return ID(al) as alarmId`;
