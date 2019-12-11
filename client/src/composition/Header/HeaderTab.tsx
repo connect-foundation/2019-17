@@ -69,7 +69,7 @@ function HeaderTab() {
       });
     }
   }, [data]);
-
+  
   return (
     <Container>
       <FriendsIcon
