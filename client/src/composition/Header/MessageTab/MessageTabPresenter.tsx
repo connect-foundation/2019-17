@@ -56,8 +56,6 @@ function MessageTabPresenter({
         <Text onClick={onClickNewMessage}>새 메세지</Text>
       </Header>
       <Body>
-        {/* <MessageBox isRead />
-        <MessageBox /> */}
         {chatRooms &&
           chatRooms.map(({ otherUser, lastChat }: ChatRoom) => (
             <MessageBox

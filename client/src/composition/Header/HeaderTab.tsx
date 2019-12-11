@@ -56,7 +56,7 @@ function HeaderTab() {
       <FriendsIcon
         selected={headerTabState.friends}
         onClick={() =>
-          headerTabDispatch({ type: 'CLICK_FRIENDS', key: HEADER_TAB.FRIENDS })
+          headerTabDispatch({ type: 'CLICK_FRIENDS_TAB', key: HEADER_TAB.IS_ACTIVE_FRIENDS_TAB })
         }
       />
       <Tab left={'-230px'} selected={headerTabState.friends}>
@@ -65,7 +65,7 @@ function HeaderTab() {
       <MessageIcon
         selected={headerTabState.message}
         onClick={() =>
-          headerTabDispatch({ type: 'CLICK_MESSAGE', key: HEADER_TAB.MESSAGE })
+          headerTabDispatch({ type: 'CLICK_MESSAGE_TAB', key: HEADER_TAB.IS_ACTIVE_MESSAGE_TAB })
         }
       />
       <Tab selected={headerTabState.message}>
@@ -74,7 +74,7 @@ function HeaderTab() {
       <AlarmIcon
         selected={headerTabState.alarm}
         onClick={() =>
-          headerTabDispatch({ type: 'CLICK_ALARM', key: HEADER_TAB.ALARM })
+          headerTabDispatch({ type: 'CLICK_ALARM_TAB', key: HEADER_TAB.IS_ACTIVE_ALARM_TAB })
         }
       />
       <Tab left={'-160px'} selected={headerTabState.alarm}>
