@@ -1,18 +1,7 @@
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 import ButtonContainer from 'composition/Search/ButtonContainer';
 import FriendBox from './FriendBox';
-
-const GET_REC_ALARM = gql`
-  query recommendAlarm {
-    recommendAlarm {
-      nickname
-      email
-      thumbnail
-    }
-  }
-`;
+import { useRecommendAlarmQuery } from 'react-components.d';
 
 interface IUser {
   nickname: string;
@@ -21,7 +10,7 @@ interface IUser {
 }
 
 function FriendRecommendContainer() {
-  const { data, loading }: any = useQuery(GET_REC_ALARM);
+  const { data, loading }: any = useRecommendAlarmQuery();
 
   return (
     <>

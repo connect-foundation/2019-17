@@ -1,19 +1,12 @@
 import React, { useState } from 'react';
 import ActionButton from 'components/ActionButton';
-import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 import Button from 'components/Button';
 import styled from 'styled-components';
+import { useRequestFriendMutation } from 'react-components.d';
 
 const OkButtonDiv = styled.div<IDiv>`
   display: ${props => (props.isFriend ? 'none' : 'block')};
   margin-right: 10px;
-`;
-
-const REQUEST_FRIEND = gql`
-  mutation requestFriend($email: String!, $relation: String!) {
-    requestFriend(targetEmail: $email, relation: $relation)
-  }
 `;
 
 interface IProps {
@@ -26,7 +19,7 @@ interface IDiv {
 
 function ButtonContainer({ email }: IProps) {
   const [isFriend, setIsFriend] = useState(false);
-  const [requestFriend] = useMutation(REQUEST_FRIEND);
+  const [requestFriend] = useRequestFriendMutation();
 
   async function sendRequest(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();

@@ -12,8 +12,11 @@ import {
   useHeaderTabDispatch
 } from 'stores/HeaderTabContext';
 import { HEADER_TAB } from '../../constants';
-import { useNewAlarmState, useNewAlarmDispatch } from 'stores/NewAlarmContext';
-import { useAlarmCountQuery, useAlarmCountLazyQuery } from 'react-components.d';
+import {
+  useAlarmCountQuery,
+  useAlarmCountLazyQuery,
+  useFriendUnreadAlarmNumQuery
+} from 'react-components.d';
 import {
   useHeaderTabCountState,
   useHeaderTabCountDispatch
@@ -62,12 +65,11 @@ const AlarmIcon = styled(FaBell)<{ selected: boolean }>`
 function HeaderTab() {
   const headerTabState = useHeaderTabState();
   const headerTabDispatch = useHeaderTabDispatch();
-  const newAlarmState = useNewAlarmState();
-  const newAlarmDispatch = useNewAlarmDispatch();
 
   const headerTabCountState = useHeaderTabCountState();
   const headerTabCountDispatch = useHeaderTabCountDispatch();
   const { data } = useAlarmCountQuery();
+  const { data: friendCount } = useFriendUnreadAlarmNumQuery();
 
   useEffect(() => {
     if (data) {
@@ -78,23 +80,30 @@ function HeaderTab() {
     }
   }, [data]);
 
+  useEffect(() => {
+    if (friendCount) {
+      headerTabCountDispatch({
+        type: 'SET_INIT_FRIEND_CNT',
+        key: { id: 'friendCount', value: friendCount.friendUnreadAlarmNum }
+      });
+    }
+  }, [friendCount, data]);
+
   return (
     <Container>
       <RelativeDiv>
         <FriendsIcon
-          selected={newAlarmState.friends || headerTabState.friends}
+          selected={
+            headerTabCountState.friendCount > 0 || headerTabState.friends
+          }
           onClick={() => {
             headerTabDispatch({
               type: 'CLICK_FRIENDS',
               key: HEADER_TAB.FRIENDS
             });
-            newAlarmDispatch({
-              type: 'NEW_FRIENDS',
-              key: HEADER_TAB.FRIENDS
-            });
           }}
         />
-        <NewFriendAlarmNum />
+        <NewFriendAlarmNum selected={headerTabState.friends} />
       </RelativeDiv>
       <Tab left={'-230px'} selected={headerTabState.friends}>
         <FriendsTab />

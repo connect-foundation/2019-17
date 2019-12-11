@@ -1,30 +1,11 @@
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 import ButtonContainer from 'composition/Header/FriendTab/ButtonContainer';
 import { useEffect } from 'react';
 import FriendBox from './FriendBox';
+import { ALARM_SUBSCRIPTION } from './friend.query';
 import uuid from 'uuid';
-
-const GET_REQ_ALARM = gql`
-  query requestAlarm {
-    requestAlarm {
-      nickname
-      email
-      thumbnail
-    }
-  }
-`;
-
-const ALARM_SUBSCRIPTION = gql`
-  subscription requestAlarmAdded {
-    requestAlarmAdded {
-      nickname
-      email
-      thumbnail
-    }
-  }
-`;
+import { useRequestAlarmQuery } from 'react-components.d';
+import { useHeaderTabCountDispatch } from 'stores/HeaderTabCountContext';
 
 interface IUser {
   nickname: string;
@@ -37,7 +18,8 @@ interface IrequestAlarm {
 }
 
 function FriendRequestContainer() {
-  const { subscribeToMore, data, loading }: any = useQuery(GET_REQ_ALARM);
+  const { subscribeToMore, data, loading }: any = useRequestAlarmQuery();
+  const headerTabCountDispatch = useHeaderTabCountDispatch();
 
   useEffect(() => {
     subscribeToMore({
@@ -45,6 +27,11 @@ function FriendRequestContainer() {
       updateQuery: (prev: IrequestAlarm, { subscriptionData }: any) => {
         if (!subscriptionData.data) return prev;
         const newAlarmItem = subscriptionData.data.requestAlarmAdded;
+
+        headerTabCountDispatch({
+          type: 'ADD_FRIEND_CNT',
+          key: { id: 'friendCount', value: 1 }
+        });
 
         return Object.assign({}, prev, {
           requestAlarm: [newAlarmItem, ...prev.requestAlarm]

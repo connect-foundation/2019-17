@@ -8,7 +8,6 @@ import { useMeQuery } from 'react-components.d';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { LOGOUT } from 'cache/client.gql';
 import { HeaderAlarmProvider } from 'stores/HeaderTabContext';
-import { NewAlarmProvider } from 'stores/NewAlarmContext';
 import { HeaderAlarmCountProvider } from 'stores/HeaderTabCountContext';
 
 const HeaderWrapper = styled.div`
@@ -92,9 +91,7 @@ function Header() {
               <NicknameText>{(me && me.nickname) || ''}</NicknameText>
               <HeaderAlarmCountProvider>
                 <HeaderAlarmProvider>
-                  <NewAlarmProvider>
-                    <AlarmTab />
-                  </NewAlarmProvider>
+                  <AlarmTab />
                 </HeaderAlarmProvider>
               </HeaderAlarmCountProvider>
               <LogoutButton onClick={logout}>logout</LogoutButton>
