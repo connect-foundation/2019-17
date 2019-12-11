@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CommonHeader from '../CommonHeader';
 import CommonFooter from '../CommonFooter';
 import CommonBody from '../CommonBody';
 
 import AlamBox from './AlarmBox';
-import { useGetAlarmsQuery, Alarm } from 'react-components.d';
+import { useGetAlarmsQuery, Alarm, useMeQuery } from 'react-components.d';
+import { SUBSCRIBE_ALARMS } from './alarm.query';
+import { useHeaderTabCountDispatch } from 'stores/HeaderTabCountContext';
 
 const Container = styled.div`
   display: flex;
@@ -37,8 +39,47 @@ const Footer = styled(CommonFooter)`
   padding: 0.25rem 0.5rem;
 `;
 
-function AlarmTabPresenter() {
-  const { data } = useGetAlarmsQuery();
+function AlarmTabPresenter({ selected }: { selected: boolean }) {
+  const { data, subscribeToMore } = useGetAlarmsQuery();
+  const { data: myInfo } = useMeQuery();
+  const headerTabCountDispatch = useHeaderTabCountDispatch();
+
+  const subscribeToNewFeeds = () => {
+    return subscribeToMore({
+      document: SUBSCRIBE_ALARMS,
+      variables: {
+        userEmail: myInfo && myInfo.me && myInfo.me.email ? myInfo.me.email : ''
+      },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const { data: subscribedAlarms } = subscriptionData;
+
+        if (
+          !subscribedAlarms ||
+          !subscribedAlarms.alarms ||
+          !subscribedAlarms.alarms.length ||
+          !prev.alarms
+        ) {
+          return prev;
+        }
+
+        if (!selected) {
+          headerTabCountDispatch({
+            type: 'ADD_ALARM_CNT',
+            key: { id: 'alarmCount', value: 1 }
+          });
+        }
+
+        return Object.assign({}, prev, {
+          alarms: [...subscribedAlarms.alarms, ...prev.alarms]
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    return subscribeToNewFeeds();
+  }, [selected]);
 
   return (
     <Container>
