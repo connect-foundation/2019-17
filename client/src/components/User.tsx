@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Profile from './Profile';
 
 const ProfileDiv = styled.div`
@@ -34,7 +34,7 @@ const ProfileStatus = styled.div`
   padding-right: 12px;
 `;
 
-const Status = styled.div`
+const status = css`
   border-radius: 50%;
   display: inline-block;
   height: 6px;
@@ -42,11 +42,13 @@ const Status = styled.div`
   width: 6px;
 `;
 
-const On = styled(Status)`
+const On = styled.div`
+  ${status};
   background: rgb(66, 183, 42);
 `;
 
-const Off = styled(Status)`
+const Off = styled.div`
+  ${status};
   background: red;
 `;
 

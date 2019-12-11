@@ -25,14 +25,16 @@ const appOptions: Options = {
     path: SUBSCRIPTIONS,
     onConnect: (connectionParams, webSocket, context) => {
       console.log('connection');
+      const {
+        request: {
+          headers: { cookie }
+        }
+      } = context;
       try {
-        if (
-          !context.request.headers.cookie ||
-          context.request.headers.cookie.indexOf('token=') === -1
-        ) {
+        if (!cookie || cookie.indexOf('token=') === -1) {
           throw new Error('Have no token');
         }
-        const token = context.request.headers.cookie
+        const token = cookie
           .split(';')
           .filter(e => e.startsWith('token='))[0]
           .split('token=')[1];
