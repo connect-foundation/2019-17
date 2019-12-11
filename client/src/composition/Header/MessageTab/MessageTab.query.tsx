@@ -6,6 +6,7 @@ export const GET_CHATROOMS_QUERY = gql`
       otherUser {
         thumbnail
         nickname
+        email
       }
       lastChat {
         email
@@ -29,6 +30,7 @@ export const GET_CHATROOMS_SUBSCRIPTION = gql`
       otherUser {
         thumbnail
         nickname
+        email
       }
       lastChat {
         email
