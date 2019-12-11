@@ -59,6 +59,11 @@ AlamBox.defaultProps = {
   isRead: false
 };
 
+const ALARM_TYPE: { [key: string]: string } = {
+  Comment: '댓글',
+  Feed: '게시글'
+};
+
 const getAppliedReadAlarms = (alarms: Alarm[], data: any) => {
   return alarms.map((alarm: any) => {
     if (data && alarm.feedId === data.changeFeedAlarmReadState) {
@@ -82,7 +87,6 @@ function AlamBox({ alarm }: { alarm: Alarm; isRead: boolean }) {
 
       const test = getAppliedReadAlarms(alarms, data);
 
-      // 이게 없어도 반영이 되는데 왜그럴까요..? ㅠ 쿼리자체에 바로 수정해도 캐시가 적용이 되나요.. ㅠㅠ
       cache.writeQuery({
         query: GET_ALARMS,
         data: { alarms: test }
@@ -105,10 +109,11 @@ function AlamBox({ alarm }: { alarm: Alarm; isRead: boolean }) {
         />
         <TextContainer>
           <MessageText>
-            <BoldText>{alarm.writer}</BoldText> 님이 새로운 게시글을 올렸습니다.
+            <BoldText>{alarm.writer}</BoldText> 님이 새로운{' '}
+            {ALARM_TYPE[alarm.type]}을 올렸습니다.
           </MessageText>
           <MessageText>
-            <span> 새 게시글 </span>
+            <span>{ALARM_TYPE[alarm.type]} </span>
             <DateText>
               {alarm.createdAt.year}.{alarm.createdAt.month}.
               {alarm.createdAt.day}
