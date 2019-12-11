@@ -7,6 +7,7 @@ import ChatFooter from './ChatFooter';
 import { useEffect } from 'react';
 import { GET_CHAT_SUBSCRIPTION } from './ChatRooms.query';
 import Loader from 'components/Loader';
+import { useRef } from 'react';
 
 const Container = styled.div`
   width: 20rem;
@@ -69,6 +70,7 @@ interface IProps {
 
 function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
   const chatRoomDispatch = useChatRoomDispatch();
+  const chatBody = useRef(null);
 
   const onClose = () => {
     chatRoomDispatch({ type: 'DELETE_CHATROOM', idx });
@@ -107,7 +109,7 @@ function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
   return (
     <Container>
       <ChatHeader nickname={nickname} onClose={onClose} thumbnail={thumbnail} />
-      <ChatBody>
+      <ChatBody ref={chatBody}>
         {loading || meLoading ? (
           <Loader size={'20px'} />
         ) : (
@@ -125,7 +127,7 @@ function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
           )
         )}
       </ChatBody>
-      <ChatFooter chatRoomId={chatRoomId} />
+      <ChatFooter chatRoomId={chatRoomId} chatBody={chatBody} />
     </Container>
   );
 }

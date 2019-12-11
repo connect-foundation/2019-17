@@ -49,14 +49,14 @@ export const GET_CHATS_BY_CHAT_ROOM_ID_QUERY = `
 MATCH (c:ChatRoom) <- [:SEND] - (chat:Chat) <- [:HAS] - (u:User)
 WITH c, chat, u
 ORDER BY chat.createAt DESC 
+LIMIT $limit
 WHERE ID(c) = $chatRoomId and chat.createAt < datetime($cursor)
 RETURN COLLECT(distinct 
     { createAt: chat.createAt, content: chat.content, 
       thumbnail: u.thumbnail, email: u.email, nickname: u.nickname,
       chatRoomId: ID(c)
     })
-as chats
-LIMIT $limit;
+as chats;
 `;
 
 export const GET_CHATROOMS_QUERY = `
