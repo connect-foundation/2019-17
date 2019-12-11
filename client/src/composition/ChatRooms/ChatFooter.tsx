@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import useInput from 'hooks/useInput';
 import { useCreateChatMutation } from 'react-components.d';
@@ -22,6 +22,7 @@ const Input = styled.input`
 
 function ChatFooter({ chatRoomId }: { chatRoomId: number }) {
   const { value: content, onChange, setValue } = useInput('');
+  const contentCursor = useRef<HTMLInputElement>(null);
   const [createChatMutation] = useCreateChatMutation();
   let overlapFlag = false;
   const onChatSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -35,6 +36,14 @@ function ChatFooter({ chatRoomId }: { chatRoomId: number }) {
     }
   };
 
+  useEffect(() => {
+    if (contentCursor.current) {
+      const len = contentCursor.current.value.length;
+      contentCursor.current.focus();
+      contentCursor.current.setSelectionRange(len, len);
+    }
+  }, []);
+
   return (
     <Footer>
       <Input
@@ -43,6 +52,7 @@ function ChatFooter({ chatRoomId }: { chatRoomId: number }) {
         onKeyUp={onChatSubmit}
         onChange={onChange}
         value={content}
+        ref={contentCursor}
       />
     </Footer>
   );

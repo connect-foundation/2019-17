@@ -6,6 +6,7 @@ import { useGetChatsByChatRoomIdQuery, useMeQuery } from 'react-components.d';
 import ChatFooter from './ChatFooter';
 import { useEffect } from 'react';
 import { GET_CHAT_SUBSCRIPTION } from './ChatRooms.query';
+import { useRef } from 'react';
 
 const Container = styled.div`
   width: 20rem;
@@ -68,6 +69,7 @@ interface IProps {
 
 function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
   const chatRoomDispatch = useChatRoomDispatch();
+  
   const onClose = () => {
     chatRoomDispatch({ type: 'DELETE_CHATROOM', idx });
   };
@@ -78,6 +80,9 @@ function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
   } = useGetChatsByChatRoomIdQuery({
     variables: { chatRoomId }
   });
+
+  useEffect(() => subscribeToGetChat());
+
   const { data: { me = null } = {}, loading: meLoading } = useMeQuery();
   const subscribeToGetChat = () => {
     return subscribeToMore({
@@ -98,8 +103,6 @@ function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
       }
     });
   };
-
-  useEffect(() => subscribeToGetChat());
 
   return loading && meLoading ? (
     <div>loading...</div>
