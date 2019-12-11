@@ -103,10 +103,10 @@ function HeaderTab() {
             });
           }}
         />
-        <NewFriendAlarmNum selected={headerTabState.friends} />
+        <NewFriendAlarmNum />
       </RelativeDiv>
       <Tab left={'-230px'} selected={headerTabState.friends}>
-        <FriendsTab />
+        <FriendsTab selected={headerTabState.friends} />
       </Tab>
       <MessageIcon
         selected={headerTabState.message}

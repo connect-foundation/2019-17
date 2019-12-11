@@ -17,7 +17,7 @@ type FriendAlarm {
 
 type Mutation {
   requestFriend(targetEmail: String!, relation: String!): Boolean!
-  changeAllRequestReadState(targetEmail: String!): Boolean!
+  changeAllRequestReadState: Boolean!
 }
 
 type Query {

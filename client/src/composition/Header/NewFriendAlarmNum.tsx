@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useHeaderTabCountState } from 'stores/HeaderTabCountContext';
+import {
+  useHeaderTabCountState,
+} from 'stores/HeaderTabCountContext';
 
 const NewAlarmNumContainer = styled.span`
   display: flex;
@@ -17,15 +19,8 @@ const NewAlarmNumIcon = styled.span`
   font-size: 10px;
 `;
 
-interface IProps {
-  selected: boolean;
-}
-
-function NewFriendAlarmNum({ selected }: IProps) {
+function NewFriendAlarmNum() {
   const headerTabCountState = useHeaderTabCountState();
-
-  if (selected) {
-  }
 
   if (headerTabCountState.friendCount <= 0) return <></>;
 

@@ -3,10 +3,29 @@ import styled from 'styled-components';
 import FriendRequestContainer from './FriendRequestContainer';
 import FriendRecommendContainer from './FriendRecommendContainer';
 import FriendTabPresenter from './FriendTabPresenter';
+import { useHeaderTabCountDispatch } from 'stores/HeaderTabCountContext';
+import { useChangeAllRequestReadStateMutation } from 'react-components.d';
+import { useEffect } from 'react';
 
 const Header = styled.div``;
 
-function FriendsTab() {
+interface IProps {
+  selected: boolean;
+}
+
+function FriendsTab({ selected }: IProps) {
+  const headerTabCountDispatch = useHeaderTabCountDispatch();
+  const [changeReadState] = useChangeAllRequestReadStateMutation();
+
+  useEffect(() => {
+    if (selected) {
+      changeReadState();
+      headerTabCountDispatch({
+        type: 'RESET_FRIEND_CNT'
+      });
+    }
+  }, [selected]);
+
   return (
     <Header>
       <FriendTabPresenter text="친구 요청" />

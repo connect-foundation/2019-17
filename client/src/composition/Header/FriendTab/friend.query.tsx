@@ -41,3 +41,9 @@ export const GET_ALARM_NUM = gql`
     friendUnreadAlarmNum
   }
 `;
+
+export const CHANGE_READ_STATE = gql`
+  mutation changeAllRequestReadState {
+    changeAllRequestReadState
+  }
+`;

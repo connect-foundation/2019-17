@@ -11,7 +11,7 @@ where target.email <> {email} And not (u)-[]-(target)
 return target`;
 
 const changeAllRequestReadStateByEmailQuery = `
-MATCH (a: User)-[r: REQUEST_FRIEND]->(b: User {email})
+MATCH (a: User)-[r: REQUEST_FRIEND]->(b: User {email: {email}})
 SET r.isRead = true
 `;
 const countUnreadRequestByEmailQuery = `

@@ -47,6 +47,7 @@ const headerTabCountReducer = (
     case 'SET_INIT_ALARM_CNT':
       return { ...state, [action.key.id]: action.key.value };
     case 'RESET_FRIEND_CNT':
+      return { ...state, [HEADER_TAB_CNT.FRIEND]: 0 };
     case 'RESET_ALARM_CNT':
       return { ...state, [HEADER_TAB_CNT.ALARM]: 0 };
     default:
