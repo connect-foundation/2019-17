@@ -123,8 +123,7 @@ const Query: QueryResolvers = {
     try {
       const result = await requestDB(GET_CHATROOMS_QUERY, {
         email,
-        cursor,
-        limit: CHAT_LIMIT
+        cursor
       });
       const parsedResults = parseResultRecords(result);
       const chatRooms: ChatRoom[] = parsedResults.map(

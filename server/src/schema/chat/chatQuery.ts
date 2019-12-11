@@ -60,14 +60,17 @@ as chats;
 `;
 
 export const GET_CHATROOMS_QUERY = `
-MATCH (chatRoom:ChatRoom) <- [:JOIN] - (otherUser:User),
-      (chatRoom) <- [:SEND] - (chat:Chat) <- [:HAS] - (user:User)
-WITH chatRoom, otherUser, chat, user
+MATCH (chatRoom:ChatRoom) <- [:JOIN] - (:User {email: $email})
+WITH chatRoom
+MATCH (chatRoom) <- [:JOIN] - (otherUser:User)
+WHERE NOT(otherUser.email = $email)
+MATCH (chatRoom) <- [:SEND] - (chat:Chat) <- [:HAS] - (user:User)
+WITH chatRoom, chat, user, otherUser
 ORDER BY chat.createAt desc
-WHERE NOT(otherUser.email = $email) and chat.createAt < dateTime($cursor)
+WHERE chat.createAt < dateTime($cursor)
 RETURN otherUser, [HEAD(COLLECT(distinct {content: chat.content, createAt: chat.createAt, 
-	  email: user.email, thumbnail: user.thumbnail, nickname: user.nickname, chatRoomId: ID(chatRoom)}))] as lastChat
-LIMIT $limit;
+    email: user.email, thumbnail: user.thumbnail, nickname: user.nickname, chatRoomId: ID(chatRoom)}))]
+as lastChat
 `;
 
 export const GET_USERS_ON_CHAT_ROOM_QUERY = `
