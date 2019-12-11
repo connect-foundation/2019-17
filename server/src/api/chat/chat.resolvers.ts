@@ -27,6 +27,7 @@ import { withFilter } from 'graphql-subscriptions';
 const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
 const CHAT_LIMIT = 20;
 const CHAT_PUBSUB = 'chatPubsub';
+const MESSAGE_TAB = 'messageTab';
 
 const Mutation: MutationResolvers = {
   createChatRoom: async (
@@ -84,7 +85,17 @@ const Mutation: MutationResolvers = {
         chatRoomId
       });
       const [chat]: Chat[] = parseResultRecords(result)[0].chat;
-      pubsub.publish(CHAT_PUBSUB + chatRoomId, { getChatsByChatRoomId: chat });
+      pubsub.publish(CHAT_PUBSUB + chatRoomId, {
+        getChatsByChatRoomId: chat
+      });
+      const userResults = await requestDB(GET_USERS_ON_CHAT_ROOM_QUERY, {
+        chatRoomId
+      });
+      const { users } = parseResultRecords(userResults)[0];
+      const otherUser = users.find(user => user.email !== email);
+      pubsub.publish(MESSAGE_TAB, {
+        getChatRooms: { otherUser, lastChat: chat }
+      });
       return true;
     } catch (error) {
       const DBError = createDBError(error);
@@ -140,14 +151,29 @@ const Query: QueryResolvers = {
 const Subscription = {
   getChatsByChatRoomId: {
     subscribe: withFilter(
-      (_, { chatRoomId }: SubscriptionGetChatsByChatRoomIdArgs, { pubsub }) => {
-        return pubsub.asyncIterator(CHAT_PUBSUB + chatRoomId);
-      },
+      (_, { chatRoomId }: SubscriptionGetChatsByChatRoomIdArgs, { pubsub }) =>
+        pubsub.asyncIterator(CHAT_PUBSUB + chatRoomId),
       async (payload, _, context) => {
         const { email } = context;
         const {
           getChatsByChatRoomId: { chatRoomId }
         } = payload;
+        const result = await requestDB(GET_USERS_ON_CHAT_ROOM_QUERY, {
+          chatRoomId: parseInt(chatRoomId, 10)
+        });
+        const users = parseResultRecords(result)[0].users;
+        return users.some(user => user.email === email);
+      }
+    )
+  },
+  getChatRooms: {
+    subscribe: withFilter(
+      (_, __, { pubsub }) => pubsub.asyncIterator(MESSAGE_TAB),
+      async (payload, _, context) => {
+        const { email } = context;
+        const {
+          lastChat: { chatRoomId }
+        } = payload.getChatRooms;
         const result = await requestDB(GET_USERS_ON_CHAT_ROOM_QUERY, {
           chatRoomId: parseInt(chatRoomId, 10)
         });

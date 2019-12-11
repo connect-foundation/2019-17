@@ -4,8 +4,7 @@ import CommonFooter from 'composition/Header/CommonFooter';
 import useInput from 'hooks/useInput';
 import {
   useCreateChatRoomMutation,
-  useGetUserQuery,
-  useCreateChatMutation
+  useGetUserQuery
 } from 'react-components.d';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 import { CHAT_ROOM } from '../../constants';
@@ -39,7 +38,6 @@ function NewChatFooter({ userEmail, onClose }: IProps) {
     ''
   );
   const [createChatRoomMutation] = useCreateChatRoomMutation();
-  const [createChatMutation] = useCreateChatMutation();
   const { data: userInfo } = useGetUserQuery({
     variables: { email: userEmail }
   });
