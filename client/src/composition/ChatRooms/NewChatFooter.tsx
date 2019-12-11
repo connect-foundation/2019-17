@@ -44,10 +44,11 @@ function NewChatFooter({ userEmail, onClose }: IProps) {
     variables: { email: userEmail }
   });
   const chatRoomDispatch = useChatRoomDispatch();
-
+  let overlapFlag = false;
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!userInfo || !userInfo.getUser) return;
+    if (!userInfo || !userInfo.getUser || overlapFlag) return;
+    overlapFlag = true;
     if (userEmail) {
       const { data } = await createChatRoomMutation({
         variables: { userEmail, content: chat }
@@ -71,8 +72,10 @@ function NewChatFooter({ userEmail, onClose }: IProps) {
       }
       setChat('');
       onClose();
+      overlapFlag = false;
       return;
     }
+    overlapFlag = false;
     alert('유저를 선택해주세요');
   };
   return (
