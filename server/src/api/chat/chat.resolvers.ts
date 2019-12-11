@@ -41,8 +41,7 @@ const Mutation: MutationResolvers = {
         userEmail1: email,
         userEmail2: userEmail
       });
-      const [isChatRoom] = parseResultRecords(checkChatRoomResult);
-      if (!isChatRoom) {
+      if (!checkChatRoomResult.length) {
         const result = await requestDB(CREATE_CHAT_ROOM_QUERY, {
           from: email,
           to: userEmail,
@@ -51,6 +50,12 @@ const Mutation: MutationResolvers = {
         const chats: Chat[] = parseResultRecords(result)[0].chats;
         return chats;
       }
+      const [{ chatRoomId }] = parseResultRecords(checkChatRoomResult);
+      await requestDB(CREATE_CHAT_QUERY, {
+        email,
+        content,
+        chatRoomId: parseInt(chatRoomId, 10)
+      });
       const chatResults = await requestDB(GET_CHATS_QUERY, {
         userEmail1: email,
         userEmail2: userEmail,

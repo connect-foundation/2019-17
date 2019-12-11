@@ -27,7 +27,7 @@ export const CHECK_CHAT_ROOM_QUERY = `
 MATCH (c:ChatRoom) <- [:JOIN] - (user1:User),
       (c) <- [:JOIN] - (user2: User)
 WHERE user1.email = $userEmail1 and user2.email = $userEmail2
-RETURN c as chatRoom
+RETURN ID(c) as chatRoomId
 `;
 
 export const GET_CHATS_QUERY = `

@@ -10,6 +10,7 @@ type User {
 
 type Query {
   me: User!
+  getUser(email: String!): User
 }
 
 type Mutation {

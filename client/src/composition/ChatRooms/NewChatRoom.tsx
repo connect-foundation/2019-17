@@ -72,9 +72,14 @@ const Nickname = styled.span`
   margin-left: 0.5rem;
 `;
 
+interface IUserInfo {
+  email: string;
+  nickname: string;
+}
+
 function NewChatRoom({ idx }: { idx: number }) {
   const [nickname, setNickname] = useState('');
-  const [email, setEmail] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   const [getUsersQuery, { data }] = useGetUserNameLazyQuery({
     variables: { keyword: nickname }
   });
@@ -88,11 +93,12 @@ function NewChatRoom({ idx }: { idx: number }) {
       target: { value }
     } = e;
     setNickname(value);
+    setUserEmail('');
     getUsersQuery();
   };
 
-  const onClickUser = (email: string, nickname: string) => {
-    setEmail(email);
+  const onClickUser = ({ email, nickname }: IUserInfo) => {
+    setUserEmail(email);
     setNickname(nickname);
   };
   return (
@@ -108,14 +114,17 @@ function NewChatRoom({ idx }: { idx: number }) {
           <Text>받는 사람 : </Text>
           <Input onChange={onChangeNickname} value={nickname} />
         </NewFriends>
-        {data && data.searchUser.length > 0 ? (
+        {!userEmail && data && data.searchUser.length > 0 ? (
           <UserWrapper>
-            {data.searchUser.map(user => (
+            {data.searchUser.map(({ email, nickname, thumbnail }) => (
               <UserContainer
-                key={user.email}
-                onClick={onClickUser.bind(null, user.email, user.nickname)}>
-                <Profile imageUrl={user.thumbnail || undefined} size={'25px'} />
-                <Nickname>{user.nickname}</Nickname>
+                key={email}
+                onClick={onClickUser.bind(null, {
+                  email,
+                  nickname
+                })}>
+                <Profile imageUrl={thumbnail || undefined} size={'25px'} />
+                <Nickname>{nickname}</Nickname>
               </UserContainer>
             ))}
           </UserWrapper>
@@ -123,7 +132,7 @@ function NewChatRoom({ idx }: { idx: number }) {
           <></>
         )}
       </HeadContainer>
-      <NewChatFooter />
+      <NewChatFooter userEmail={userEmail} onClose={onClose} />
     </Container>
   );
 }
