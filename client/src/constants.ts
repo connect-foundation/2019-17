@@ -16,3 +16,9 @@ export enum CHAT_ROOM {
   NEW = 'new',
   CHAT = 'chat'
 }
+
+export enum HEADER_TAB_CNT {
+  FRIENDS = 'friendsCount',
+  MESSAGE = 'messageCount',
+  ALARM = 'alarmCount'
+}

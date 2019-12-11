@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import { FaBell, FaUserFriends } from 'react-icons/fa';
 import { AiFillMessage } from 'react-icons/ai';
@@ -13,6 +13,11 @@ import {
 } from 'stores/HeaderTabContext';
 import { HEADER_TAB } from '../../constants';
 import { useNewAlarmState, useNewAlarmDispatch } from 'stores/NewAlarmContext';
+import { useAlarmCountQuery, useAlarmCountLazyQuery } from 'react-components.d';
+import {
+  useHeaderTabCountState,
+  useHeaderTabCountDispatch
+} from 'stores/HeaderTabCountContext';
 
 const RelativeDiv = styled.div`
   position: relative;
@@ -60,6 +65,19 @@ function HeaderTab() {
   const newAlarmState = useNewAlarmState();
   const newAlarmDispatch = useNewAlarmDispatch();
 
+  const headerTabCountState = useHeaderTabCountState();
+  const headerTabCountDispatch = useHeaderTabCountDispatch();
+  const { data } = useAlarmCountQuery();
+
+  useEffect(() => {
+    if (data) {
+      headerTabCountDispatch({
+        type: 'SET_INIT_ALARM_CNT',
+        key: { id: 'alarmCount', value: data.alarmCount }
+      });
+    }
+  }, [data]);
+
   return (
     <Container>
       <RelativeDiv>
@@ -96,6 +114,8 @@ function HeaderTab() {
           headerTabDispatch({ type: 'CLICK_ALARM', key: HEADER_TAB.ALARM })
         }
       />
+
+      <p>{headerTabCountState.alarmCount}</p>
       <Tab left={'-160px'} selected={headerTabState.alarm}>
         <AlarmTab selected={headerTabState.alarm} />
       </Tab>

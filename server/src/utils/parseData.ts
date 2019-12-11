@@ -55,7 +55,10 @@ export const parseResultRecords = records => {
       if (toString.call(item) === '[object Object]') {
         let node = item.get(i);
         let nodeKey = item.keys[i];
-        if (node instanceof neo4j.types.Node) {
+        if (
+          node instanceof neo4j.types.Node ||
+          node instanceof neo4j.types.Relationship
+        ) {
           let temp = {};
           temp[nodeKey] = datetransform(node.properties);
           arr = { ...arr, ...temp };
