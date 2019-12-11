@@ -47,10 +47,11 @@ function FriendRequestContainer() {
             alarm => alarm.email === newAlarmItem.email
           );
 
-          prev.requestAlarm.splice(idx, 1);
-
           return Object.assign({}, prev, {
-            requestAlarm: [...prev.requestAlarm]
+            requestAlarm: [
+              ...prev.requestAlarm.slice(idx + 1),
+              ...prev.requestAlarm.slice(0, idx - 1)
+            ]
           });
         }
       }
