@@ -67,13 +67,16 @@ type Alarm {
   writer: String!
   createdAt: Idate!
   isRead: Boolean!
+  isChecked: Boolean!
   feedId: Int!
+  type: String!
 }
 
 type Query {
   pageInfo: PageInfo
   feeds(first: Int, cursor: String): IFeeds
   alarms: [Alarm]
+  alarmCount: Int!
 }
 
 type Mutation {
@@ -82,10 +85,12 @@ type Mutation {
   writeComment(content: String!, feedId: Int!): Boolean!
   changeFeedAlarmReadState(feedId: Int!, isRead: Boolean): Int!
   changeAllFeedAlarmReadState: Boolean!
+  changeAllFeedAlarmCheckState: Boolean!
 }
 
 type Subscription {
   feeds(userEmail: String): ISubsFeeds
+  alarms(userEmail: String!): [Alarm]
 }
 
 type ISubsFeeds {
