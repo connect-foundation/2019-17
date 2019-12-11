@@ -82,9 +82,9 @@ function SearchBox() {
 
   return (
     <Container>
-      <Link to="/">
+      <a href="/">
         <Logo size={'23px'} />
-      </Link>
+      </a>
       <form onSubmit={checkInput} ref={wrapperRef}>
         <SearchBoxInput
           onSubmit={checkInput}

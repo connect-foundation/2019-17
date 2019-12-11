@@ -11,7 +11,7 @@ import { parseNodeResult } from '../../utils/parseDB';
 import { encodeJWT } from '../../utils/jwt';
 import SameEmailError from '../../errors/EmailAlreadyExistsError';
 import {
-  findUserWithEmailQuery,
+  FIND_USER_WITH_EMAIL_QUERY,
   GET_USER_BY_EMAIL_QUERY
 } from '../../schema/user/query';
 import isAuthenticated from '../../utils/isAuthenticated';
@@ -20,7 +20,7 @@ import createDBError from '../../errors/createDBError';
 import { parseResultRecords } from '../../utils/parseData';
 
 const checkIsEmailExist = async (email): Promise<void> => {
-  const sameUsers = await requestDB(findUserWithEmailQuery, { email });
+  const sameUsers = await requestDB(FIND_USER_WITH_EMAIL_QUERY, { email });
 
   if (parseNodeResult(sameUsers).length) {
     throw new SameEmailError();

@@ -1,6 +1,25 @@
+import gql from 'graphql-tag';
+
 export interface IArgs {
   content: string;
 }
+
+export const loggedIn = gql`
+  query publishUser {
+    loginUser
+  }
+`;
+
+export const updateUserState = gql`
+  subscription {
+    updateUserState {
+      email
+      nickname
+      thumbnail
+      status
+    }
+  }
+`;
 
 export const resolvers = {
   Query: {
