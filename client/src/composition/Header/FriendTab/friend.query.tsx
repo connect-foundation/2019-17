@@ -32,6 +32,7 @@ export const ALARM_SUBSCRIPTION = gql`
       nickname
       email
       thumbnail
+      action
     }
   }
 `;

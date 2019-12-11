@@ -16,7 +16,6 @@ import { parseResultRecords, gatherValuesByKey } from '../../utils/parseData';
 import { withFilter } from 'graphql-subscriptions';
 
 const REQUEST_ALARM_ADDED = 'REQUEST_ALARM_ADDED';
-const FRD_ALARM_NUM_CHANGED = 'FRD_ALARM_NUM_CHANGED';
 
 function getQueryByRelation(relation: string) {
   if (relation === 'NONE') {
@@ -86,21 +85,18 @@ export default {
         pubsub.publish(REQUEST_ALARM_ADDED, {
           requestAlarmAdded: {
             ...user,
-            targetEmail
-          }
-        });
-
-        pubsub.publish(FRD_ALARM_NUM_CHANGED, {
-          friendAlarmNumChanged: {
             targetEmail,
-            difference: 1
+            action: 'ADDED'
           }
         });
       } else if (relation === 'REQUEST') {
-        pubsub.publish(FRD_ALARM_NUM_CHANGED, {
-          friendAlarmNumChanged: {
+        const user = await getUserInfoByEmail(req.email);
+
+        pubsub.publish(REQUEST_ALARM_ADDED, {
+          requestAlarmAdded: {
+            ...user,
             targetEmail,
-            difference: -1
+            action: 'DELETED'
           }
         });
       }
@@ -126,16 +122,6 @@ export default {
         },
         async (payload, _, { email }) =>
           payload.requestAlarmAdded.targetEmail === email
-      )
-    },
-    friendAlarmNumChanged: {
-      subscribe: withFilter(
-        (_, __, { pubsub }) => {
-          console.log('published3');
-          return pubsub.asyncIterator(FRD_ALARM_NUM_CHANGED);
-        },
-        async (payload, _, { email }) =>
-          payload.friendAlarmNumChanged.targetEmail === email
       )
     }
   }

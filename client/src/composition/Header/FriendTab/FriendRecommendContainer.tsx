@@ -1,7 +1,6 @@
 import React from 'react';
 import ButtonContainer from 'composition/Search/ButtonContainer';
 import FriendBox from './FriendBox';
-import { useRecommendAlarmQuery } from 'react-components.d';
 
 interface IUser {
   nickname: string;
@@ -9,13 +8,15 @@ interface IUser {
   thumbnail: string;
 }
 
-function FriendRecommendContainer() {
-  const { data, loading }: any = useRecommendAlarmQuery();
+interface IProps {
+  recommendAlarm: [IUser];
+}
 
+function FriendRecommendContainer({ recommendAlarm }: IProps) {
   return (
     <>
-      {!loading &&
-        data.recommendAlarm.map(({ nickname, email, thumbnail }: IUser) => (
+      {recommendAlarm &&
+        recommendAlarm.map(({ nickname, email, thumbnail }: IUser) => (
           <FriendBox nickname={nickname} key={email} imageUrl={thumbnail}>
             <ButtonContainer email={email} initialRelation="NONE" />
           </FriendBox>

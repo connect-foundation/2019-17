@@ -28,14 +28,31 @@ function FriendRequestContainer() {
         if (!subscriptionData.data) return prev;
         const newAlarmItem = subscriptionData.data.requestAlarmAdded;
 
-        headerTabCountDispatch({
-          type: 'ADD_FRIEND_CNT',
-          key: { id: 'friendCount', value: 1 }
-        });
+        if (newAlarmItem.action === 'ADDED') {
+          headerTabCountDispatch({
+            type: 'ADD_FRIEND_CNT',
+            key: { id: 'friendCount', value: 1 }
+          });
 
-        return Object.assign({}, prev, {
-          requestAlarm: [newAlarmItem, ...prev.requestAlarm]
-        });
+          return Object.assign({}, prev, {
+            requestAlarm: [newAlarmItem, ...prev.requestAlarm]
+          });
+        } else {
+          headerTabCountDispatch({
+            type: 'ADD_FRIEND_CNT',
+            key: { id: 'friendCount', value: -1 }
+          });
+
+          const idx = prev.requestAlarm.findIndex(
+            alarm => alarm.email === newAlarmItem.email
+          );
+
+          prev.requestAlarm.splice(idx, 1);
+
+          return Object.assign({}, prev, {
+            requestAlarm: [...prev.requestAlarm]
+          });
+        }
       }
     });
   }, [subscribeToMore]);
