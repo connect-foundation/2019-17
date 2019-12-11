@@ -79,7 +79,6 @@ function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
     variables: { chatRoomId }
   });
   const { data: { me = null } = {}, loading: meLoading } = useMeQuery();
-
   const subscribeToGetChat = () => {
     return subscribeToMore({
       document: GET_CHAT_SUBSCRIPTION,

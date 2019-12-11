@@ -72,6 +72,6 @@ LIMIT $limit;
 
 export const GET_USERS_ON_CHAT_ROOM_QUERY = `
 MATCH (c:ChatRoom) <- [:JOIN] - (u:User)
-WHERE ID(c) = 999951
+WHERE ID(c) = {chatRoomId}
 RETURN COLLECT(distinct u) as users;
 `;

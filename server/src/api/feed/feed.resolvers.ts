@@ -8,7 +8,11 @@ import {
   ALARM_NEW_FEED,
   GET_FEED_ARALMS,
   CHANGE_ALARM_READSTATE,
-  CHANGE_ALL_ALARM_READSTATE
+  CHANGE_ALL_ALARM_READSTATE,
+  ALARM_NEW_COMMENT,
+  GET_NEW_ARALM,
+  ALARM_ISCHECKED_COUNT,
+  CHANGE_ALL_ALARM_CHECKSTATE
 } from '../../schema/feed/query';
 import { parseResultRecords } from '../../utils/parseData';
 
@@ -89,6 +93,19 @@ const checkIsFriend = async (friendEmail, myEmail) => {
   return parsedResult.isFriend > 0;
 };
 
+const publishFeedAlarm = async (pubsub, alarmId, userEmail) => {
+  const registerdAlarm = await requestDB(GET_NEW_ARALM, {
+    alarmId: Number(alarmId),
+    userEmail
+  });
+
+  const [parsedRegisterdAlarm] = parseResultRecords(registerdAlarm);
+
+  pubsub.publish(NEW_ALARM, {
+    alarms: parsedRegisterdAlarm.alarms
+  });
+};
+
 const mutationResolvers: MutationResolvers = {
   enrollFeed: async (
     _,
@@ -109,10 +126,12 @@ const mutationResolvers: MutationResolvers = {
         publishingFeed(pubsub, feedId, email);
       }
 
-      await requestDB(ALARM_NEW_FEED, {
+      const registeredAlarmId = await requestDB(ALARM_NEW_FEED, {
         feedId,
         userEmail: email
       });
+      const [parsedRegisteredAlarmId] = parseResultRecords(registeredAlarmId);
+      publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, email);
 
       return true;
     } catch (error) {
@@ -140,17 +159,25 @@ const mutationResolvers: MutationResolvers = {
   writeComment: async (
     _,
     { feedId, content }: MutationWriteCommentArgs,
-    { req }
+    { req, pubsub }
   ): Promise<boolean> => {
     isAuthenticated(req);
     const userEmail = req.email;
 
     try {
-      await requestDB(WRITE_COMMENT, {
+      const result = await requestDB(WRITE_COMMENT, {
         userEmail,
         feedId,
         content
       });
+      const [parsedResult] = parseResultRecords(result);
+
+      const registeredAlarmId = await requestDB(ALARM_NEW_COMMENT, {
+        feedId: Number(parsedResult.ID),
+        userEmail
+      });
+      const [parsedRegisteredAlarmId] = parseResultRecords(registeredAlarmId);
+      publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, userEmail);
 
       return true;
     } catch (error) {
@@ -180,6 +207,21 @@ const mutationResolvers: MutationResolvers = {
       await requestDB(CHANGE_ALL_ALARM_READSTATE, {
         userEmail,
         isRead: true
+      });
+      return true;
+    } catch (error) {
+      const DBError = createDBError(error);
+      throw new DBError();
+    }
+  },
+  changeAllFeedAlarmCheckState: async (_, __, { req }): Promise<boolean> => {
+    isAuthenticated(req);
+    const userEmail = req.email;
+
+    try {
+      await requestDB(CHANGE_ALL_ALARM_CHECKSTATE, {
+        userEmail,
+        isCheckd: true
       });
       return true;
     } catch (error) {
@@ -225,10 +267,23 @@ const queryResolvers: QueryResolvers = {
     const [parsedAlarms] = parseResultRecords(result);
 
     return parsedAlarms.alarms;
+  },
+  alarmCount: async (_, __, { req }): Promise<number> => {
+    isAuthenticated(req);
+    const userEmail = req.email;
+
+    const result = await requestDB(ALARM_ISCHECKED_COUNT, {
+      userEmail
+    });
+
+    const [parsedAlarmCount] = parseResultRecords(result);
+
+    return Number(parsedAlarmCount.alarmCount);
   }
 };
 
 const NEW_FEED = 'NEW_FEED_PUBSUB';
+const NEW_ALARM = 'NEW_ALARM_PUBSUB';
 
 export default {
   Query: queryResolvers,
@@ -245,6 +300,24 @@ export default {
           const isFriend = await checkIsFriend(friendEmail, myEmail);
 
           if (isFriend || myEmail === friendEmail) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      )
+    },
+    alarms: {
+      subscribe: withFilter(
+        (_, __, { pubsub }) => {
+          return pubsub.asyncIterator(NEW_ALARM);
+        },
+        async (payload, _, context) => {
+          const myEmail = context.email;
+          const friendEmail = payload.alarms[0].email;
+          const isFriend = await checkIsFriend(friendEmail, myEmail);
+
+          if (isFriend) {
             return true;
           } else {
             return false;

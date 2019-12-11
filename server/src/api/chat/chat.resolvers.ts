@@ -145,7 +145,7 @@ const Subscription = {
           getChatsByChatRoomId: { chatRoomId }
         } = payload;
         const result = await requestDB(GET_USERS_ON_CHAT_ROOM_QUERY, {
-          chatRoomId
+          chatRoomId: parseInt(chatRoomId, 10)
         });
         const users = parseResultRecords(result)[0].users;
         return users.some(user => user.email === email);

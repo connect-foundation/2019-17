@@ -15,7 +15,7 @@ const initState = {
 
 type IHeaderTabState = {
   [key: string]: boolean;
-}
+};
 
 type Action =
   | { type: 'CLICK_FRIENDS_TAB'; key: string }
@@ -52,7 +52,7 @@ const HeaderTabDispatchContext = createContext<IHeaderTabDispatch | undefined>(
   undefined
 );
 
-export function HeaderAlarmProvider({ children }: { children: ReactNode }) {
+export function HeaderTabProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(headerTabReducer, initState);
   return (
     <HeaderTabDispatchContext.Provider value={dispatch}>
