@@ -28,7 +28,8 @@ const SearchBoxInput = styled.input`
 `;
 
 const SearchButton = styled.button`
-  background-color: ${props => (props.color === 'none' ? '#4080FF' : '#f5f6f7')}
+  background-color: ${props =>
+    props.color === 'none' ? '#4080FF' : '#f5f6f7'};
   cursor: pointer;
   border-radius: 0 2px 2px 0;
   bottom: 0;
