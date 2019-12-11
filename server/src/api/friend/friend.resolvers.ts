@@ -1,22 +1,22 @@
 import { MutationRequestFriendArgs } from '../../types';
 import { requestDB } from '../../utils/requestDB';
 import {
-  sendFriendRequestByEmailQuery,
-  acceptFriendRequestByEmailQuery,
-  cancelFriendRequestByEmailQuery,
-  cancelFriendByEmailQuery
+  SEND_FRIEND_REQUEST_BY_EMAIL_QUERY,
+  ACCEPT_FRIEND_REQUEST_BY_EMAIL_QUERY,
+  CANCEL_FRIEND_REQUEST_BY_EMAIL_QUERY,
+  CANCEL_FRIEND_EMAIL_QUERY
 } from '../../schema/friend/query';
 import isAuthenticated from '../../utils/isAuthenticated';
 
 function getQueryByRelation(relation: string) {
   if (relation === 'NONE') {
-    return sendFriendRequestByEmailQuery;
+    return SEND_FRIEND_REQUEST_BY_EMAIL_QUERY;
   } else if (relation === 'REQUEST') {
-    return cancelFriendRequestByEmailQuery;
+    return CANCEL_FRIEND_REQUEST_BY_EMAIL_QUERY;
   } else if (relation === 'REQUESTED_FROM') {
-    return acceptFriendRequestByEmailQuery;
+    return ACCEPT_FRIEND_REQUEST_BY_EMAIL_QUERY;
   } else {
-    return cancelFriendByEmailQuery;
+    return CANCEL_FRIEND_EMAIL_QUERY;
   }
 }
 

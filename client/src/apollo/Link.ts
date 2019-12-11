@@ -17,7 +17,7 @@ const uploadLink = createUploadLink({
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://${config.serverHost}`,
+  uri: `ws://${config.serverHost}/subscriptions`,
   options: {
     reconnect: true
   }

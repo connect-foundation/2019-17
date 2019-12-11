@@ -64,7 +64,7 @@ const NicknameText = styled.button`
   font-size: 0.875rem;
 `;
 
-function Header() {
+const Header: React.FC = () => {
   const { data: { me = null } = {} } = useMeQuery();
   const [logoutLazyQuery] = useLazyQuery(LOGOUT);
   const logout = (e: React.MouseEvent<HTMLButtonElement>): void => {
@@ -101,6 +101,6 @@ function Header() {
       </HeaderWrapper>
     </>
   );
-}
+};
 
 export default Header;
