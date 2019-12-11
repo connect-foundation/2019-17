@@ -26,12 +26,18 @@ const ChatRoomDispatch = createContext<IChatRoomDispatch | undefined>(
   undefined
 );
 
+const existChatRoom = ({ state, chatRoomId }: any): any =>
+  state.some((chatRoom: IChatRoom) => chatRoom.chatRoomId === chatRoomId);
+
 const ChatRoomReducer = (
   state: IChatRoomState,
   action: Action
 ): IChatRoomState => {
   switch (action.type) {
     case 'CREATE_CHATROOM':
+      if (existChatRoom({ state, chatRoomId: action.chatRoom.chatRoomId })) {
+        return state;
+      }
       return [...state, action.chatRoom];
     case 'DELETE_CHATROOM':
       return state.filter((_, idx) => idx !== action.idx);

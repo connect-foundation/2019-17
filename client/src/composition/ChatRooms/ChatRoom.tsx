@@ -6,7 +6,6 @@ import { useGetChatsByChatRoomIdQuery, useMeQuery } from 'react-components.d';
 import ChatFooter from './ChatFooter';
 import { useEffect } from 'react';
 import { GET_CHAT_SUBSCRIPTION } from './ChatRooms.query';
-import { useRef } from 'react';
 import Loader from 'components/Loader';
 
 const Container = styled.div`
