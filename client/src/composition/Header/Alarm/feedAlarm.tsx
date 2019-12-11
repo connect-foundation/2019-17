@@ -8,7 +8,6 @@ const FeedAlarm = () => {
     }
   });
 
-  console.log(data);
   return (
     <>
       <div>feed alarms : </div>
