@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { FaCheck } from 'react-icons/fa';
 import Profile from 'components/Profile';
 import CommonBox from '../CommonBox';
 import { useHeaderTabDispatch } from 'stores/HeaderTabContext';
@@ -39,7 +40,8 @@ const Nickname = styled.span`
 `;
 
 const MessageText = styled.span`
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   margin-top: 0.25rem;
   font-size: 0.75rem;
   color: ${props => props.theme.colors.textColor};
@@ -56,11 +58,36 @@ const Dot = styled.span<{ isRead: boolean }>`
   border: ${props => (props.isRead ? '2px' : '4px')} solid rgba(0, 0, 0, 0.3);
 `;
 
+const CheckIcon = styled(FaCheck)`
+  margin-right: 0.5rem;
+  color: rgba(0, 0, 0, 0.4);
+`;
+
 interface IProps {
   isRead: boolean;
+  nickname: string;
+  content: string;
+  month: number;
+  day: number;
+  otherUserEmail: string;
+  userEmail: string;
+  chatRoomId: number;
+  lastChatUserEmail: string;
+  thumbnail?: string;
 }
 
-function MessageBox({ isRead }: IProps) {
+function MessageBox({
+  nickname,
+  chatRoomId,
+  otherUserEmail,
+  lastChatUserEmail,
+  content,
+  month,
+  day,
+  thumbnail,
+  userEmail,
+  isRead
+}: IProps) {
   const headerTabDispatch = useHeaderTabDispatch();
   const chatRoomDispatch = useChatRoomDispatch();
 
@@ -70,21 +97,29 @@ function MessageBox({ isRead }: IProps) {
       type: 'CREATE_CHATROOM',
       chatRoom: {
         chatType: CHAT_ROOM.CHAT,
-        otherUserEmail: 'kyujong93@gmail.com'
+        otherUserEmail,
+        nickname,
+        thumbnail,
+        chatRoomId
       }
     });
   };
   return (
-    <Container isRead={isRead} onClick={onClick}>
+    <Container
+      isRead={userEmail === lastChatUserEmail || isRead}
+      onClick={onClick}>
       <Column>
-        <Profile size={'45px'} />
+        <Profile size={'45px'} imageUrl={thumbnail} />
         <TextContainer>
-          <Nickname>이규종</Nickname>
-          <MessageText>안녕하세요</MessageText>
+          <Nickname>{nickname}</Nickname>
+          <MessageText>
+            {userEmail === lastChatUserEmail ? <CheckIcon /> : <></>}
+            {content}
+          </MessageText>
         </TextContainer>
       </Column>
       <Column>
-        <DateText>4월 20일</DateText>
+        <DateText>{`${month}월 ${day}일`}</DateText>
         <Dot isRead={isRead} />
       </Column>
     </Container>

@@ -15,6 +15,12 @@ export const CREATE_CHAT_QUERY = `
 MATCH (c:ChatRoom) WHERE ID(c) = $chatRoomId
 MATCH (u:User {email: $email})
 CREATE (c) <- [:SEND] - (m:Chat {content: $content, createAt: datetime()}) <- [:HAS] - (u)
+RETURN COLLECT(distinct 
+  { createAt: m.createAt, content: m.content, 
+    thumbnail: u.thumbnail, email: u.email, nickname: u.nickname,
+    chatRoomId: ID(c)
+  })
+as chat
 `;
 
 export const CHECK_CHAT_ROOM_QUERY = `
@@ -59,7 +65,13 @@ MATCH (chatRoom:ChatRoom) <- [:JOIN] - (otherUser:User),
 WITH chatRoom, otherUser, chat, user
 ORDER BY chat.createAt desc
 WHERE NOT(otherUser.email = $email) and chat.createAt < dateTime($cursor)
-RETURN otherUser, [LAST(COLLECT(distinct {content: chat.content, createAt: chat.createAt, 
+RETURN otherUser, [HEAD(COLLECT(distinct {content: chat.content, createAt: chat.createAt, 
 	  email: user.email, thumbnail: user.thumbnail, nickname: user.nickname, chatRoomId: ID(chatRoom)}))] as lastChat
 LIMIT $limit;
+`;
+
+export const GET_USERS_ON_CHAT_ROOM_QUERY = `
+MATCH (c:ChatRoom) <- [:JOIN] - (u:User)
+WHERE ID(c) = {chatRoomId}
+RETURN COLLECT(distinct u) as users;
 `;

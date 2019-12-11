@@ -2,6 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import ChatHeader from './ChatHeader';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
+import { useGetChatsByChatRoomIdQuery, useMeQuery } from 'react-components.d';
+import ChatFooter from './ChatFooter';
+import { useEffect } from 'react';
+import { GET_CHAT_SUBSCRIPTION } from './ChatRooms.query';
 
 const Container = styled.div`
   width: 20rem;
@@ -14,25 +18,8 @@ const Container = styled.div`
   margin-left: 1rem;
 `;
 
-const Footer = styled.form`
-  height: 3rem;
-  border-top: 1.5px solid rgba(0, 0, 0, 0.2);
-  padding: 0.5rem 0.25rem;
-  display: flex;
-  align-items: center;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  border: none;
-  font-size: 1rem;
-  &::placeholder {
-    font-size: 0.875rem;
-  }
-`;
-
 const ChatBody = styled.section`
-  max-height: 17rem;
+  height: 17rem;
   overflow: scroll;
   display: flex;
   flex-direction: column-reverse;
@@ -72,52 +59,68 @@ const OtherContent = styled.span`
   padding: 0.5rem;
 `;
 
-function ChatRoom({ idx }: { idx: number }) {
+interface IProps {
+  idx: number;
+  nickname: string;
+  thumbnail: string;
+  chatRoomId: number;
+}
+
+function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
   const chatRoomDispatch = useChatRoomDispatch();
   const onClose = () => {
     chatRoomDispatch({ type: 'DELETE_CHATROOM', idx });
   };
-  return (
+  const {
+    data: { getChatsByChatRoomId = null } = {},
+    loading,
+    subscribeToMore
+  } = useGetChatsByChatRoomIdQuery({
+    variables: { chatRoomId }
+  });
+  const { data: { me = null } = {}, loading: meLoading } = useMeQuery();
+  const subscribeToGetChat = () => {
+    return subscribeToMore({
+      document: GET_CHAT_SUBSCRIPTION,
+      variables: { chatRoomId },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const {
+          data: { getChatsByChatRoomId }
+        } = subscriptionData;
+        if (!prev.getChatsByChatRoomId || !getChatsByChatRoomId) return prev;
+        return Object.assign({}, prev, {
+          getChatsByChatRoomId: [
+            getChatsByChatRoomId,
+            ...prev.getChatsByChatRoomId
+          ]
+        });
+      }
+    });
+  };
+
+  useEffect(() => subscribeToGetChat());
+
+  return loading && meLoading ? (
+    <div>loading...</div>
+  ) : (
     <Container>
-      <ChatHeader nickname={'규종'} onClose={onClose} />
+      <ChatHeader nickname={nickname} onClose={onClose} thumbnail={thumbnail} />
       <ChatBody>
-        <MyChat>
-          <MyChatContent>안녕하세요?</MyChatContent>
-        </MyChat>
-        <OtherChat>
-          <OtherContent>
-            네??
-            왜요~~?어라ㅣ어라ㅣ어린ㅇ;ㅁ링렁니렁니렁나러이러이ㅏ러이ㅓㄹ얼이ㅏ
-          </OtherContent>
-        </OtherChat>
-        <OtherChat>
-          <OtherContent>네?? 왜요~~?</OtherContent>
-        </OtherChat>
-        <OtherChat>
-          <OtherContent>네?? 왜요~~?</OtherContent>
-        </OtherChat>
-        <OtherChat>
-          <OtherContent>네?? 왜요~~?</OtherContent>
-        </OtherChat>
-        <OtherChat>
-          <OtherContent>네?? 왜요~~?</OtherContent>
-        </OtherChat>
-        <OtherChat>
-          <OtherContent>네?? 왜요~~?</OtherContent>
-        </OtherChat>
-        <OtherChat>
-          <OtherContent>네?? 왜요~~?</OtherContent>
-        </OtherChat>
-        <OtherChat>
-          <OtherContent>네?? 왜요~~?</OtherContent>
-        </OtherChat>
-        <MyChat>
-          <MyChatContent>저기요?</MyChatContent>
-        </MyChat>
+        {getChatsByChatRoomId &&
+          getChatsByChatRoomId.map(({ email, content }: any, idx) =>
+            me && email === me.email ? (
+              <MyChat key={content + idx}>
+                <MyChatContent>{content}</MyChatContent>
+              </MyChat>
+            ) : (
+              <OtherChat key={content + idx}>
+                <OtherContent>{content}</OtherContent>
+              </OtherChat>
+            )
+          )}
       </ChatBody>
-      <Footer>
-        <Input placeholder={'메세지를 입력하세요...'} maxLength={500} />
-      </Footer>
+      <ChatFooter chatRoomId={chatRoomId} />
     </Container>
   );
 }

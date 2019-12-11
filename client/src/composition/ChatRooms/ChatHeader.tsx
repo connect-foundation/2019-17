@@ -35,14 +35,21 @@ interface IProps {
   nickname: string;
   btncolor: string;
   isProfile: boolean;
+  thumbnail?: string;
   onClose?: (e: React.MouseEvent<SVGElement>) => void;
 }
 
-function ChatHeader({ nickname, isProfile, btncolor, onClose }: IProps) {
+function ChatHeader({
+  nickname,
+  isProfile,
+  btncolor,
+  onClose,
+  thumbnail
+}: IProps) {
   return (
     <Header>
       <ProfileContainer>
-        {isProfile && <Profile size={'35px'} />}
+        {isProfile && <Profile size={'35px'} imageUrl={thumbnail} />}
         <Nickname>{nickname}</Nickname>
       </ProfileContainer>
       <CloseButton btncolor={btncolor} onClick={onClose} />

@@ -18,6 +18,10 @@ type Mutation {
 }
 
 type Query {
-  getChatsByChatRoom(chatRoomId: Int!, cursor: String): [Chat]
+  getChatsByChatRoomId(chatRoomId: Int!, cursor: String): [Chat]
   getChatRooms(cursor: String): [ChatRoom]
+}
+
+type Subscription {
+  getChatsByChatRoomId(chatRoomId: Int!): Chat!
 }

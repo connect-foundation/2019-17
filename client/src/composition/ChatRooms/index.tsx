@@ -24,7 +24,20 @@ function ChatRooms() {
           case CHAT_ROOM.NEW:
             return <NewChatRoom key={idx} idx={idx} />;
           case CHAT_ROOM.CHAT:
-            return <ChatRoom key={chatRoom.otherUserEmail} idx={idx} />;
+            return (
+              <ChatRoom
+                key={
+                  chatRoom.otherUserEmail ? chatRoom.otherUserEmail + idx : idx
+                }
+                idx={idx}
+                nickname={chatRoom.nickname || ''}
+                thumbnail={
+                  chatRoom.thumbnail ||
+                  process.env.PUBLIC_URL + '/images/profile.png'
+                }
+                chatRoomId={chatRoom.chatRoomId || 0}
+              />
+            );
           default:
             return null;
         }
