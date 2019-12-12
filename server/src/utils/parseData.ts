@@ -96,3 +96,17 @@ export const parseResultRecords = records => {
 
   return result;
 };
+
+/**
+ *
+ * @param parsedRecords
+ * @param key
+ *
+ * parsedResultRecords를 거친 다음 key에서 value만 뽑은 배열을 만들기 위한 함수
+ */
+export const gatherValuesByKey = (parsedRecords, key) => {
+  return parsedRecords.reduce((values, record) => {
+    values.push(record[key]);
+    return values;
+  }, []);
+};

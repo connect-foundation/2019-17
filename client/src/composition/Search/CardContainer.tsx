@@ -17,12 +17,12 @@ const SEARCH_USER = gql`
   }
 `;
 
-interface IKey {
-  [key: string]: string;
+interface ILocation {
+  search: string;
 }
 
 interface IProps {
-  location: IKey;
+  location: ILocation;
 }
 
 interface IUser {
@@ -32,8 +32,31 @@ interface IUser {
   relation: string;
 }
 
-function CardContainer({ location }: IProps) {
+function getNotFoundCard(keyword: string) {
+  return (
+    <UserCard
+      nickname={`${keyword}에 대한 검색 결과가 없습니다`}
+      imageUrl={
+        process.env.PUBLIC_URL + '/images/search_notfound.png'
+      }></UserCard>
+  );
+}
+
+function getErrorCard() {
+  return (
+    <UserCard
+      nickname="데이터를 가져오는데 에러가 발생하였습니다!"
+      imageUrl={DEFAULT.SEARCH_NOT_FOUND}></UserCard>
+  );
+}
+
+function checkUrlAndGetKeyword(location: ILocation): string {
   const keyword = queryString.parse(location.search.slice(1))[`keyword`];
+  return String(keyword);
+}
+
+function CardContainer({ location }: IProps) {
+  const keyword = checkUrlAndGetKeyword(location);
   const { loading, error, data } = useQuery(SEARCH_USER, {
     variables: {
       keyword
@@ -41,18 +64,8 @@ function CardContainer({ location }: IProps) {
   });
 
   if (loading) return <></>;
-  if (error)
-    return (
-      <UserCard
-        nickname="데이터를 가져오는데 에러가 발생하였습니다!"
-        imageUrl={DEFAULT.SEARCH_NOT_FOUND}></UserCard>
-    );
-  if (data.searchUser.length === 0)
-    return (
-      <UserCard
-        nickname={`${keyword}에 대한 검색 결과가 없습니다`}
-        imageUrl={DEFAULT.SEARCH_NOT_FOUND}></UserCard>
-    );
+  if (error) return getErrorCard();
+  if (data.searchUser.length === 0) return getNotFoundCard(keyword);
 
   return (
     <>
