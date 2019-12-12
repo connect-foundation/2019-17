@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { ReactNode } from 'react';
 
@@ -35,6 +35,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  color: black;
 `;
 const CloseModal = styled.p`
   color: white;
@@ -48,22 +49,22 @@ interface IProps {
   imageChildren?: ReactNode;
   className?: string;
   onClick?: () => void;
+  isOpen: boolean;
+  closeModal: () => void;
 }
 
 function Commonmodal({
   onClick,
   textChildren,
   imageChildren,
-  className
+  className,
+  isOpen,
+  closeModal
 }: IProps) {
-  const [isOpen, setIsOpen] = useState(true);
-  const closeModal = () => {
-    setIsOpen(false);
-  };
   return isOpen ? (
     <Wrapper>
-      <ModalBackgroud>
-        <CloseModal onClick={closeModal}>X</CloseModal>
+      <ModalBackgroud onClick={closeModal}>
+        <CloseModal>X</CloseModal>
       </ModalBackgroud>
 
       <ModalFrame onClick={onClick} className={className}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { FaBell, FaUserFriends } from 'react-icons/fa';
 import { AiFillMessage } from 'react-icons/ai';
@@ -11,7 +11,7 @@ import {
   useHeaderTabDispatch
 } from 'stores/HeaderTabContext';
 import { HEADER_TAB } from '../../constants';
-import { useAlarmCountQuery, useAlarmCountLazyQuery } from 'react-components.d';
+import { useAlarmCountQuery } from 'react-components.d';
 import {
   useHeaderTabCountState,
   useHeaderTabCountDispatch

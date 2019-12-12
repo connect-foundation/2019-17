@@ -35,7 +35,8 @@ import {
   QueryFeedsArgs,
   MutationWriteCommentArgs,
   Alarm,
-  QueryFeedArgs
+  QueryFeedArgs,
+  IFeed
 } from '../../types';
 
 const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
@@ -281,7 +282,7 @@ const queryResolvers: QueryResolvers = {
 
     return Number(parsedAlarmCount.alarmCount);
   },
-  feed: async (_, { feedId }: QueryFeedArgs, { req }): Promise<any> => {
+  feed: async (_, { feedId }: QueryFeedArgs, { req }): Promise<IFeed> => {
     isAuthenticated(req);
     const userEmail = req.email;
 
