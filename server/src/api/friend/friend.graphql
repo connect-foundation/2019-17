@@ -1,0 +1,29 @@
+type FriendAlarmUser {
+  nickname: String!
+  thumbnail: String
+  email: String!
+  targetEmail: String
+  action: String
+}
+
+type FriendAlarmNum {
+  difference: Int
+  targetEmail: String
+}
+
+type Mutation {
+  requestFriend(targetEmail: String!, relation: String!): Boolean!
+  rejectFriendRequest(targetEmail: String!): Boolean!
+  changeAllRequestReadState: Boolean!
+}
+
+type Query {
+  requestAlarm: [FriendAlarmUser]
+  recommendAlarm: [FriendAlarmUser]
+  friendUnreadAlarmNum: Int!
+}
+
+type Subscription {
+  requestAlarmAdded: FriendAlarmUser
+  friendAlarmNumChanged: FriendAlarmNum
+}
