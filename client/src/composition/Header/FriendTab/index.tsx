@@ -4,10 +4,7 @@ import FriendRequestContainer from './FriendRequestContainer';
 import FriendRecommendContainer from './FriendRecommendContainer';
 import FriendTabPresenter from './FriendTabPresenter';
 import { useHeaderTabCountDispatch } from 'stores/HeaderTabCountContext';
-import {
-  useChangeAllRequestReadStateMutation,
-  useRecommendAlarmQuery
-} from 'react-components.d';
+import { useChangeAllRequestReadStateMutation } from 'react-components.d';
 import { useEffect } from 'react';
 
 const Header = styled.div``;
@@ -16,7 +13,7 @@ interface IProps {
   selected: boolean;
 }
 
-function FriendsTab({ selected }: IProps) {
+function FriendTab({ selected }: IProps) {
   const headerTabCountDispatch = useHeaderTabCountDispatch();
   const [changeReadState] = useChangeAllRequestReadStateMutation();
 
@@ -39,4 +36,4 @@ function FriendsTab({ selected }: IProps) {
   );
 }
 
-export default FriendsTab;
+export default FriendTab;

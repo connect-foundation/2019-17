@@ -7,7 +7,7 @@ export enum PAGE_PATHS {
 }
 
 export enum HEADER_TAB {
-  FRIENDS = 'friends',
+  FRIEND = 'friend',
   MESSAGE = 'message',
   ALARM = 'alarm'
 }

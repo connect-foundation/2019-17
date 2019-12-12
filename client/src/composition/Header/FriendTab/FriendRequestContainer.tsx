@@ -3,36 +3,28 @@ import ButtonContainer from 'composition/Header/FriendTab/ButtonContainer';
 import { useEffect } from 'react';
 import FriendBox from './FriendBox';
 import { ALARM_SUBSCRIPTION, GET_REC_ALARM } from './friend.query';
-import uuid from 'uuid';
-import { useRequestAlarmQuery } from 'react-components.d';
+import { useRequestAlarmQuery, UserInfoWithTarget } from 'react-components.d';
 import { useHeaderTabCountDispatch } from 'stores/HeaderTabCountContext';
 import client from 'apollo/ApolloClient';
+import { immutableSplice } from 'utils/immutable';
+import { IRequestAlarm, ISubscription } from 'schema/Header/friendTab';
 
-interface IUser {
-  nickname: string;
-  email: string;
-  thumbnail: string;
-  action: string;
-}
+function removeDuplicationFromRecommendList(newAlarmItem: UserInfoWithTarget) {
+  const recommendAlarm = client.readQuery({ query: GET_REC_ALARM })
+    .recommendAlarm;
 
-interface IRequestAlarm {
-  requestAlarm: [IUser];
-}
+  const idx = recommendAlarm.findIndex(
+    (alarm: UserInfoWithTarget) => alarm.email === newAlarmItem.email
+  );
 
-interface ISubscription {
-  subscriptionData: IData;
-}
-
-interface IData {
-  data: IReqAdded;
-}
-
-interface IReqAdded {
-  requestAlarmAdded: IUser;
-}
-
-function immutableSplice<T>(idx: number, arr: [T]) {
-  return [...arr.slice(idx + 1), ...arr.slice(0, idx - 1)];
+  if (idx !== -1) {
+    client.writeQuery({
+      query: GET_REC_ALARM,
+      data: {
+        recommendAlarm: immutableSplice(idx, recommendAlarm)
+      }
+    });
+  }
 }
 
 function FriendRequestContainer() {
@@ -56,21 +48,7 @@ function FriendRequestContainer() {
             key: { id: 'friendCount', value: 1 }
           });
 
-          const recommendAlarm = client.readQuery({ query: GET_REC_ALARM })
-            .recommendAlarm;
-
-          const idx = recommendAlarm.findIndex(
-            (alarm: IUser) => alarm.email === newAlarmItem.email
-          );
-
-          if (idx !== -1) {
-            client.writeQuery({
-              query: GET_REC_ALARM,
-              data: {
-                recommendAlarm: immutableSplice(idx, recommendAlarm)
-              }
-            });
-          }
+          removeDuplicationFromRecommendList(newAlarmItem);
 
           return Object.assign({}, prev, {
             requestAlarm: [newAlarmItem, ...prev.requestAlarm]
@@ -96,11 +74,13 @@ function FriendRequestContainer() {
   return (
     <>
       {!loading &&
-        data.requestAlarm.map(({ nickname, email, thumbnail }: IUser) => (
-          <FriendBox nickname={nickname} key={uuid()} imageUrl={thumbnail}>
-            <ButtonContainer email={email} />
-          </FriendBox>
-        ))}
+        data.requestAlarm.map(
+          ({ nickname, email, thumbnail }: UserInfoWithTarget) => (
+            <FriendBox nickname={nickname} key={email} imageUrl={thumbnail}>
+              <ButtonContainer email={email} />
+            </FriendBox>
+          )
+        )}
     </>
   );
 }

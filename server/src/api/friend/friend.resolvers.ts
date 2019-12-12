@@ -7,32 +7,32 @@ import {
   cancelFriendByEmailQuery,
   findUserByRequestRelation,
   findUserByNoRelation,
-  changeAllRequestReadStateByEmailQuery,
-  countUnreadRequestByEmailQuery,
   rejectFriendRequestByEmailQuery
 } from '../../schema/friend/query';
 import { findUserWithEmailQuery } from '../../schema/user/query';
 import isAuthenticated from '../../utils/isAuthenticated';
 import { parseResultRecords, gatherValuesByKey } from '../../utils/parseData';
-import { withFilter } from 'graphql-subscriptions';
 
 const REQUEST_ALARM_ADDED = 'REQUEST_ALARM_ADDED';
 
 function getQueryByRelation(relation: string) {
-  if (relation === 'NONE') {
-    return sendFriendRequestByEmailQuery;
-  } else if (relation === 'REQUEST') {
-    return cancelFriendRequestByEmailQuery;
-  } else if (relation === 'REQUESTED_FROM') {
-    return acceptFriendRequestByEmailQuery;
-  } else {
-    return cancelFriendByEmailQuery;
+  switch (relation) {
+    case 'NONE':
+      return sendFriendRequestByEmailQuery;
+    case 'REQUEST':
+      return cancelFriendRequestByEmailQuery;
+    case 'REQUESTED_FROM':
+      return acceptFriendRequestByEmailQuery;
+    default:
+      return cancelFriendByEmailQuery;
   }
 }
+
 async function getUserInfoByEmail(email: string) {
   const user = await requestDB(findUserWithEmailQuery, { email });
   return user[0].get(0).properties;
 }
+
 export default {
   Query: {
     requestAlarm: async (_, __, { req }) => {
@@ -56,17 +56,9 @@ export default {
       const parsedRec = parseResultRecords(recUsers);
 
       return gatherValuesByKey(parsedRec, 'target');
-    },
-    friendUnreadAlarmNum: async (_, __, { req }) => {
-      isAuthenticated(req);
-
-      const countRes = await requestDB(countUnreadRequestByEmailQuery, {
-        email: req.email
-      });
-
-      return String(countRes[0].get(0));
     }
   },
+
   Mutation: {
     requestFriend: async (
       _,
@@ -104,6 +96,7 @@ export default {
 
       return true;
     },
+
     rejectFriendRequest: async (_, { targetEmail }, { req, pubsub }) => {
       isAuthenticated(req);
 
@@ -122,27 +115,6 @@ export default {
       });
 
       return true;
-    },
-    changeAllRequestReadState: async (_, __, { req }) => {
-      isAuthenticated(req);
-
-      await requestDB(changeAllRequestReadStateByEmailQuery, {
-        email: req.email
-      });
-
-      return true;
-    }
-  },
-  Subscription: {
-    requestAlarmAdded: {
-      subscribe: withFilter(
-        (_, __, { pubsub }) => {
-          console.log('published');
-          return pubsub.asyncIterator(REQUEST_ALARM_ADDED);
-        },
-        async (payload, _, { email }) =>
-          payload.requestAlarmAdded.targetEmail === email
-      )
     }
   }
 };

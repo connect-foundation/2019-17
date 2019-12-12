@@ -37,7 +37,7 @@ const ProfileNameDiv = styled.div`
 
 interface IProps {
   children?: ReactNode;
-  imageUrl: string;
+  imageUrl: string | null;
   nickname: string;
 }
 

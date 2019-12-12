@@ -4,9 +4,9 @@ import { FaBell, FaUserFriends } from 'react-icons/fa';
 import { AiFillMessage } from 'react-icons/ai';
 import Tab from './Tab';
 import MessageTab from './MessageTab';
-import FriendsTab from './FriendTab';
+import FriendTab from './FriendTab';
 import AlarmTab from './AlarmTab';
-import NewFriendAlarmNum from './NewFriendAlarmNum';
+import NewFriendAlarmNum from './FriendTab/NewFriendAlarmNum';
 import {
   useHeaderTabState,
   useHeaderTabDispatch
@@ -14,7 +14,6 @@ import {
 import { HEADER_TAB } from '../../constants';
 import {
   useAlarmCountQuery,
-  useAlarmCountLazyQuery,
   useFriendUnreadAlarmNumQuery
 } from 'react-components.d';
 import {
@@ -47,7 +46,7 @@ const nonActive = css`
   color: #203257;
 `;
 
-const FriendsIcon = styled(FaUserFriends)<{ selected: boolean }>`
+const FriendIcon = styled(FaUserFriends)<{ selected: boolean }>`
   ${cursor}
   ${props => (props.selected ? active : nonActive)}
 `;
@@ -92,21 +91,21 @@ function HeaderTab() {
   return (
     <Container>
       <RelativeDiv>
-        <FriendsIcon
+        <FriendIcon
           selected={
-            headerTabCountState.friendCount > 0 || headerTabState.friends
+            headerTabCountState.friendCount > 0 || headerTabState.friend
           }
           onClick={() => {
             headerTabDispatch({
-              type: 'CLICK_FRIENDS',
-              key: HEADER_TAB.FRIENDS
+              type: 'CLICK_FRIEND',
+              key: HEADER_TAB.FRIEND
             });
           }}
         />
         <NewFriendAlarmNum />
       </RelativeDiv>
-      <Tab left={'-230px'} selected={headerTabState.friends}>
-        <FriendsTab selected={headerTabState.friends} />
+      <Tab left={'-230px'} selected={headerTabState.friend}>
+        <FriendTab selected={headerTabState.friend} />
       </Tab>
       <MessageIcon
         selected={headerTabState.message}
