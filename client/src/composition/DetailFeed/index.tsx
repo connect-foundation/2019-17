@@ -19,14 +19,13 @@ const DetailFeed = ({ isOpen, feedId, closeModal }: Iprops) => {
     variables: { feedId: feedId && Number(feedId) }
   });
 
-  const valuecheck = () => {
+  const getTextFeed = () => {
     const feed = data && data.feed;
     return (
       feed &&
       feed.feed &&
       feed.feed.createdAt && (
         <ModalFeed
-          key={getDate(feed.feed.createdAt).toISOString()}
           content={feed.feed.content}
           feedinfo={feed}
           createdAt={getDate(feed.feed.createdAt).toISOString()}
@@ -38,7 +37,7 @@ const DetailFeed = ({ isOpen, feedId, closeModal }: Iprops) => {
   return (
     <CommonModal
       isOpen={isOpen}
-      textChildren={valuecheck()}
+      textChildren={getTextFeed()}
       imageChildren={<></>}
       closeModal={closeModal}
     />
