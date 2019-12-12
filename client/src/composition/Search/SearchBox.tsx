@@ -6,6 +6,7 @@ import BoostBookLogo from 'components/Icon/BoostBookLogo';
 import { MutableRefObject } from 'react';
 import { ReactNode } from 'react';
 import { useOutsideReset } from 'hooks/useOutsideReset';
+import AutoCompleteContainer from './AutoCompleteContainer';
 
 const Container = styled.div`
   display: flex;
@@ -94,6 +95,7 @@ function SearchBox() {
               color={btnColor ? 'white' : 'gray'}></SearchButtonIcon>
           </SearchButton>
         </ConditionalLink>
+        <AutoCompleteContainer keyword={keyword} setKeyword={setKeyword} />
       </form>
     </Container>
   );
