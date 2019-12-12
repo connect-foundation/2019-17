@@ -24,7 +24,6 @@ const appOptions: Options = {
   subscriptions: {
     path: SUBSCRIPTIONS,
     onConnect: (connectionParams, webSocket, context) => {
-      console.log('connection');
       const {
         request: {
           headers: { cookie }
@@ -50,7 +49,6 @@ const appOptions: Options = {
       }
     },
     onDisconnect: async (webSocket, context) => {
-      console.log('disconnection');
       const email = emailWithSocket.get(webSocket);
       const currentCount = socketCountWithEmail.get(email);
       if (currentCount === 1) {

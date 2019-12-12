@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import useInput from 'hooks/useInput';
 import { useCreateChatMutation } from 'react-components.d';
 
-const Footer = styled.div`
+const Footer = styled.form`
   height: 3rem;
   border-top: 1.5px solid rgba(0, 0, 0, 0.2);
   padding: 0.5rem 0.25rem;
@@ -20,29 +20,47 @@ const Input = styled.input`
   }
 `;
 
-function ChatFooter({ chatRoomId }: { chatRoomId: number }) {
+const scrollDown = (chatBody: any) => {
+  chatBody.current.scrollTop = chatBody.current.scrollHeight;
+};
+
+function ChatFooter({
+  chatRoomId,
+  chatBody
+}: {
+  chatRoomId: number;
+  chatBody: any;
+}) {
   const { value: content, onChange, setValue } = useInput('');
+  const contentCursor = useRef<HTMLInputElement>(null);
   const [createChatMutation] = useCreateChatMutation();
   let overlapFlag = false;
-  const onChatSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const onChatSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (e.keyCode === 13) {
-      if (overlapFlag || !content) return;
-      overlapFlag = true;
-      createChatMutation({ variables: { chatRoomId, content } });
-      setValue('');
-      overlapFlag = false;
-    }
+    if (overlapFlag || !content) return;
+    overlapFlag = true;
+    createChatMutation({ variables: { chatRoomId, content } });
+    setValue('');
+    overlapFlag = false;
+    scrollDown(chatBody);
   };
 
+  useEffect(() => {
+    if (contentCursor.current) {
+      const len = contentCursor.current.value.length;
+      contentCursor.current.focus();
+      contentCursor.current.setSelectionRange(len, len);
+    }
+  }, []);
+
   return (
-    <Footer>
+    <Footer onSubmit={onChatSubmit}>
       <Input
         placeholder={'메세지를 입력하세요...'}
         maxLength={500}
-        onKeyUp={onChatSubmit}
         onChange={onChange}
         value={content}
+        ref={contentCursor}
       />
     </Footer>
   );

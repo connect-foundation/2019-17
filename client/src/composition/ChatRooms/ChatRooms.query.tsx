@@ -29,3 +29,20 @@ export const GET_CHAT_SUBSCRIPTION = gql`
     }
   }
 `;
+
+export const CREATE_CHAT_ROOM_MUTATION = gql`
+  mutation createChatRoom($userEmail: String!, $content: String!) {
+    createChatRoom(userEmail: $userEmail, content: $content) {
+      chatRoomId
+    }
+  }
+`;
+
+export const GET_USER_BY_EMAIL_QUERY = gql`
+  query getUser($email: String!) {
+    getUser(email: $email) {
+      nickname
+      thumbnail
+    }
+  }
+`;

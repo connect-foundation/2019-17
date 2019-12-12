@@ -3,15 +3,21 @@ import {
   MutationSignUpArgs,
   User,
   MutationResolvers,
-  QueryResolvers
+  QueryResolvers,
+  QueryGetUserArgs
 } from '../../types';
 import { requestDB } from '../../utils/requestDB';
 import { parseNodeResult } from '../../utils/parseDB';
 import { encodeJWT } from '../../utils/jwt';
 import SameEmailError from '../../errors/EmailAlreadyExistsError';
-import { FIND_USER_WITH_EMAIL_QUERY } from '../../schema/user/query';
+import {
+  FIND_USER_WITH_EMAIL_QUERY,
+  GET_USER_BY_EMAIL_QUERY
+} from '../../schema/user/query';
 import isAuthenticated from '../../utils/isAuthenticated';
 import { findUserWithEmail } from '../../schema/user/user';
+import createDBError from '../../errors/createDBError';
+import { parseResultRecords } from '../../utils/parseData';
 
 const checkIsEmailExist = async (email): Promise<void> => {
   const sameUsers = await requestDB(FIND_USER_WITH_EMAIL_QUERY, { email });
@@ -66,6 +72,17 @@ const Query: QueryResolvers = {
       return user;
     }
     throw Error('유저 정보를 찾을 수 없습니다.');
+  },
+  getUser: async (_, { email }: QueryGetUserArgs, { req }): Promise<User> => {
+    isAuthenticated(req);
+    try {
+      const result = await requestDB(GET_USER_BY_EMAIL_QUERY, { email });
+      const [parsedResults] = parseResultRecords(result);
+      return parsedResults.user || null;
+    } catch (error) {
+      const DBError = createDBError(error);
+      throw new DBError();
+    }
   }
 };
 

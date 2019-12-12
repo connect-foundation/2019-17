@@ -6,6 +6,8 @@ import { useGetChatsByChatRoomIdQuery, useMeQuery } from 'react-components.d';
 import ChatFooter from './ChatFooter';
 import { useEffect } from 'react';
 import { GET_CHAT_SUBSCRIPTION } from './ChatRooms.query';
+import Loader from 'components/Loader';
+import { useRef } from 'react';
 
 const Container = styled.div`
   width: 20rem;
@@ -68,6 +70,8 @@ interface IProps {
 
 function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
   const chatRoomDispatch = useChatRoomDispatch();
+  const chatBody = useRef(null);
+
   const onClose = () => {
     chatRoomDispatch({ type: 'DELETE_CHATROOM', idx });
   };
@@ -78,6 +82,9 @@ function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
   } = useGetChatsByChatRoomIdQuery({
     variables: { chatRoomId }
   });
+
+  useEffect(() => subscribeToGetChat());
+
   const { data: { me = null } = {}, loading: meLoading } = useMeQuery();
   const subscribeToGetChat = () => {
     return subscribeToMore({
@@ -99,15 +106,14 @@ function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
     });
   };
 
-  useEffect(() => subscribeToGetChat());
-
-  return loading && meLoading ? (
-    <div>loading...</div>
-  ) : (
+  return (
     <Container>
       <ChatHeader nickname={nickname} onClose={onClose} thumbnail={thumbnail} />
-      <ChatBody>
-        {getChatsByChatRoomId &&
+      <ChatBody ref={chatBody}>
+        {loading || meLoading ? (
+          <Loader size={'20px'} />
+        ) : (
+          getChatsByChatRoomId &&
           getChatsByChatRoomId.map(({ email, content }: any, idx) =>
             me && email === me.email ? (
               <MyChat key={content + idx}>
@@ -118,9 +124,10 @@ function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
                 <OtherContent>{content}</OtherContent>
               </OtherChat>
             )
-          )}
+          )
+        )}
       </ChatBody>
-      <ChatFooter chatRoomId={chatRoomId} />
+      <ChatFooter chatRoomId={chatRoomId} chatBody={chatBody} />
     </Container>
   );
 }
