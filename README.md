@@ -38,7 +38,7 @@ Connect boost camper
 - [x] 댓글
 - [x] 현재 접속자 확인 기능 
 - [x] 친구추가 
-- [ ] 활동알람
+- [x] 활동알람
 - [ ] 1:1 메신저
 
 <div style="width:500px;height:10px"></div>
