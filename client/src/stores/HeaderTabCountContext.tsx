@@ -8,7 +8,7 @@ import React, {
 import { HEADER_TAB_CNT } from '../constants';
 
 const initState = {
-  [HEADER_TAB_CNT.FRIENDS]: 0,
+  [HEADER_TAB_CNT.FRIEND]: 0,
   [HEADER_TAB_CNT.MESSAGE]: 0,
   [HEADER_TAB_CNT.ALARM]: 0
 };
@@ -20,7 +20,10 @@ type IHeaderTabCountState = {
 type Action =
   | { type: 'SET_INIT_ALARM_CNT'; key: IValue }
   | { type: 'ADD_ALARM_CNT'; key: IValue }
-  | { type: 'RESET_ALARM_CNT' };
+  | { type: 'RESET_ALARM_CNT' }
+  | { type: 'SET_INIT_FRIEND_CNT'; key: IValue }
+  | { type: 'ADD_FRIEND_CNT'; key: IValue }
+  | { type: 'RESET_FRIEND_CNT' };
 
 interface IValue {
   id: string;
@@ -34,10 +37,17 @@ const headerTabCountReducer = (
   action: Action
 ): IHeaderTabCountState => {
   switch (action.type) {
+    case 'ADD_FRIEND_CNT':
     case 'ADD_ALARM_CNT':
-      return { ...state, [action.key.id]: state.alarmCount + action.key.value };
+      return {
+        ...state,
+        [action.key.id]: state[action.key.id] + action.key.value
+      };
+    case 'SET_INIT_FRIEND_CNT':
     case 'SET_INIT_ALARM_CNT':
       return { ...state, [action.key.id]: action.key.value };
+    case 'RESET_FRIEND_CNT':
+      return { ...state, [HEADER_TAB_CNT.FRIEND]: 0 };
     case 'RESET_ALARM_CNT':
       return { ...state, [HEADER_TAB_CNT.ALARM]: 0 };
     default:

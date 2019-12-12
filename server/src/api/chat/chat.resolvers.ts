@@ -155,6 +155,7 @@ const Query: QueryResolvers = {
         cursor
       });
       const parsedResults = parseResultRecords(result);
+      if (parsedResults[0].otherUser.length === 0) return [];
       const chatRooms: ChatRoom[] = parsedResults.map(
         ({ otherUser, lastChat }) => ({ otherUser, lastChat: lastChat[0] })
       );

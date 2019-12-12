@@ -8,7 +8,7 @@ import React, {
 import { HEADER_TAB } from '../constants';
 
 const initState = {
-  [HEADER_TAB.IS_ACTIVE_FRIENDS_TAB]: false,
+  [HEADER_TAB.IS_ACTIVE_FRIEND_TAB]: false,
   [HEADER_TAB.IS_ACTIVE_MESSAGE_TAB]: false,
   [HEADER_TAB.IS_ACTIVE_ALARM_TAB]: false
 };
@@ -18,7 +18,7 @@ type IHeaderTabState = {
 };
 
 type Action =
-  | { type: 'CLICK_FRIENDS_TAB'; key: string }
+  | { type: 'CLICK_FRIEND_TAB'; key: string }
   | { type: 'CLICK_MESSAGE_TAB'; key: string }
   | { type: 'CLICK_ALARM_TAB'; key: string }
   | { type: 'INITSTATE' };
@@ -30,7 +30,7 @@ const headerTabReducer = (
   action: Action
 ): IHeaderTabState => {
   switch (action.type) {
-    case 'CLICK_FRIENDS_TAB':
+    case 'CLICK_FRIEND_TAB':
     case 'CLICK_ALARM_TAB':
     case 'CLICK_MESSAGE_TAB':
       if (state[action.key]) {
