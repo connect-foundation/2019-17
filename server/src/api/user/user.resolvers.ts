@@ -73,12 +73,16 @@ const Query: QueryResolvers = {
     }
     throw Error('유저 정보를 찾을 수 없습니다.');
   },
-  getUser: async (_, { email }: QueryGetUserArgs, { req }): Promise<User> => {
+  getUser: async (
+    _,
+    { email }: QueryGetUserArgs,
+    { req }
+  ): Promise<User | null> => {
     isAuthenticated(req);
     try {
       const result = await requestDB(GET_USER_BY_EMAIL_QUERY, { email });
       const [parsedResults] = parseResultRecords(result);
-      return parsedResults.user || null;
+      return parsedResults ? parsedResults.user : null;
     } catch (error) {
       const DBError = createDBError(error);
       throw new DBError();
