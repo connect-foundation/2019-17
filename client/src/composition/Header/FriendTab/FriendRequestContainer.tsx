@@ -3,18 +3,18 @@ import ButtonContainer from 'composition/Header/FriendTab/ButtonContainer';
 import { useEffect } from 'react';
 import FriendBox from './FriendBox';
 import { ALARM_SUBSCRIPTION, GET_REC_ALARM } from './friend.query';
-import { useRequestAlarmQuery, UserInfoWithTarget } from 'react-components.d';
+import { useRequestAlarmQuery, FriendAlarmUser } from 'react-components.d';
 import { useHeaderTabCountDispatch } from 'stores/HeaderTabCountContext';
 import client from 'apollo/ApolloClient';
 import { immutableSplice } from 'utils/immutable';
 import { IRequestAlarm, ISubscription } from 'schema/Header/friendTab';
 
-function removeDuplicationFromRecommendList(newAlarmItem: UserInfoWithTarget) {
+function removeDuplicationFromRecommendList(newAlarmItem: FriendAlarmUser) {
   const recommendAlarm = client.readQuery({ query: GET_REC_ALARM })
     .recommendAlarm;
 
   const idx = recommendAlarm.findIndex(
-    (alarm: UserInfoWithTarget) => alarm.email === newAlarmItem.email
+    (alarm: FriendAlarmUser) => alarm.email === newAlarmItem.email
   );
 
   if (idx !== -1) {
@@ -75,7 +75,7 @@ function FriendRequestContainer() {
     <>
       {!loading &&
         data.requestAlarm.map(
-          ({ nickname, email, thumbnail }: UserInfoWithTarget) => (
+          ({ nickname, email, thumbnail }: FriendAlarmUser) => (
             <FriendBox nickname={nickname} key={email} imageUrl={thumbnail}>
               <ButtonContainer email={email} />
             </FriendBox>

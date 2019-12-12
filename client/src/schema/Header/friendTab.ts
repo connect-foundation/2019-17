@@ -1,7 +1,7 @@
-import { UserInfoWithTarget } from 'react-components.d';
+import { FriendAlarmUser } from 'react-components.d';
 
 export interface IRequestAlarm {
-  requestAlarm: [UserInfoWithTarget];
+  requestAlarm: [FriendAlarmUser];
 }
 
 export interface ISubscription {
@@ -13,5 +13,5 @@ interface IData {
 }
 
 interface IReqAdded {
-  requestAlarmAdded: UserInfoWithTarget;
+  requestAlarmAdded: FriendAlarmUser;
 }

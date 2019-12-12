@@ -1,4 +1,4 @@
-type UserInfoWithTarget {
+type FriendAlarmUser {
   nickname: String!
   thumbnail: String
   email: String!
@@ -18,12 +18,12 @@ type Mutation {
 }
 
 type Query {
-  requestAlarm: [UserInfoWithTarget]
-  recommendAlarm: [UserInfoWithTarget]
+  requestAlarm: [FriendAlarmUser]
+  recommendAlarm: [FriendAlarmUser]
   friendUnreadAlarmNum: Int!
 }
 
 type Subscription {
-  requestAlarmAdded: UserInfoWithTarget
+  requestAlarmAdded: FriendAlarmUser
   friendAlarmNumChanged: FriendAlarmNum
 }
