@@ -55,10 +55,10 @@ const headerTabCountReducer = (
   }
 };
 
-const HeaderTabStateContext = createContext<IHeaderTabCountState | undefined>(
-  undefined
-);
-const HeaderTabDispatchContext = createContext<
+const HeaderAlarmCounterStateContext = createContext<
+  IHeaderTabCountState | undefined
+>(undefined);
+const HeaderAlarmCounterDispatchContext = createContext<
   IHeaderTabCountDispatch | undefined
 >(undefined);
 
@@ -69,16 +69,16 @@ export function HeaderAlarmCountProvider({
 }) {
   const [state, dispatch] = useReducer(headerTabCountReducer, initState);
   return (
-    <HeaderTabDispatchContext.Provider value={dispatch}>
-      <HeaderTabStateContext.Provider value={state}>
+    <HeaderAlarmCounterDispatchContext.Provider value={dispatch}>
+      <HeaderAlarmCounterStateContext.Provider value={state}>
         {children}
-      </HeaderTabStateContext.Provider>
-    </HeaderTabDispatchContext.Provider>
+      </HeaderAlarmCounterStateContext.Provider>
+    </HeaderAlarmCounterDispatchContext.Provider>
   );
 }
 
 export const useHeaderTabCountState = () => {
-  const state = useContext(HeaderTabStateContext);
+  const state = useContext(HeaderAlarmCounterStateContext);
   if (!state) {
     throw new Error('cannot find Header Tab Count Provider');
   }
@@ -86,7 +86,7 @@ export const useHeaderTabCountState = () => {
 };
 
 export const useHeaderTabCountDispatch = () => {
-  const dispatch = useContext(HeaderTabDispatchContext);
+  const dispatch = useContext(HeaderAlarmCounterDispatchContext);
   if (!dispatch) {
     throw new Error('cannot find Header Tab Count Provider');
   }

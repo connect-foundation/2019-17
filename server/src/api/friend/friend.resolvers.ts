@@ -1,15 +1,15 @@
 import { MutationRequestFriendArgs } from '../../types';
 import { requestDB } from '../../utils/requestDB';
 import {
-  sendFriendRequestByEmailQuery,
-  acceptFriendRequestByEmailQuery,
-  cancelFriendRequestByEmailQuery,
-  cancelFriendByEmailQuery,
-  findUserByRequestRelation,
-  findUserByNoRelation,
-  rejectFriendRequestByEmailQuery
+  SEND_FRIEND_REQUEST_BY_EMAIL,
+  ACCEPT_FRIEND_REQUEST_BY_EMAIL,
+  CANCEL_FRIEND_REQUEST_BY_EMAIL,
+  CANCEL_FRIEND_BY_EMAIL,
+  FIND_USER_BY_REQUEST_RELATION,
+  FIND_USER_BY_NO_RELATION,
+  REJECT_FRIEND_REQUEST_BY_EMAIL
 } from '../../schema/friend/query';
-import { findUserWithEmailQuery } from '../../schema/user/query';
+import { FIND_USER_WITH_EMAIL_QUERY } from '../../schema/user/query';
 import isAuthenticated from '../../utils/isAuthenticated';
 import { parseResultRecords, gatherValuesByKey } from '../../utils/parseData';
 
@@ -18,18 +18,18 @@ const REQUEST_ALARM_ADDED = 'REQUEST_ALARM_ADDED';
 function getQueryByRelation(relation: string) {
   switch (relation) {
     case 'NONE':
-      return sendFriendRequestByEmailQuery;
+      return SEND_FRIEND_REQUEST_BY_EMAIL;
     case 'REQUEST':
-      return cancelFriendRequestByEmailQuery;
+      return CANCEL_FRIEND_REQUEST_BY_EMAIL;
     case 'REQUESTED_FROM':
-      return acceptFriendRequestByEmailQuery;
+      return ACCEPT_FRIEND_REQUEST_BY_EMAIL;
     default:
-      return cancelFriendByEmailQuery;
+      return CANCEL_FRIEND_BY_EMAIL;
   }
 }
 
 async function getUserInfoByEmail(email: string) {
-  const user = await requestDB(findUserWithEmailQuery, { email });
+  const user = await requestDB(FIND_USER_WITH_EMAIL_QUERY, { email });
   return user[0].get(0).properties;
 }
 
@@ -38,7 +38,7 @@ export default {
     requestAlarm: async (_, __, { req }) => {
       isAuthenticated(req);
 
-      const reqUsers = await requestDB(findUserByRequestRelation, {
+      const reqUsers = await requestDB(FIND_USER_BY_REQUEST_RELATION, {
         email: req.email
       });
 
@@ -49,7 +49,7 @@ export default {
     recommendAlarm: async (_, __, { req }) => {
       isAuthenticated(req);
 
-      const recUsers = await requestDB(findUserByNoRelation, {
+      const recUsers = await requestDB(FIND_USER_BY_NO_RELATION, {
         email: req.email
       });
 
@@ -100,7 +100,7 @@ export default {
     rejectFriendRequest: async (_, { targetEmail }, { req, pubsub }) => {
       isAuthenticated(req);
 
-      await requestDB(rejectFriendRequestByEmailQuery, {
+      await requestDB(REJECT_FRIEND_REQUEST_BY_EMAIL, {
         email: req.email,
         targetEmail
       });

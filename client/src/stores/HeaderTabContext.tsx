@@ -52,7 +52,7 @@ const HeaderTabDispatchContext = createContext<IHeaderTabDispatch | undefined>(
   undefined
 );
 
-export function HeaderAlarmProvider({ children }: { children: ReactNode }) {
+export function HeaderTabProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(headerTabReducer, initState);
   return (
     <HeaderTabDispatchContext.Provider value={dispatch}>

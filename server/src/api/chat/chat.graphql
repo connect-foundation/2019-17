@@ -8,15 +8,20 @@ type Chat {
 }
 
 type ChatRoom {
-  users: [User]!
+  otherUser: User!
   lastChat: Chat!
 }
 
-type ChatRooms {
-  chatRooms: [ChatRoom]
+type Mutation {
+  createChatRoom(userEmail: String!, content: String!): [Chat]
+  createChat(chatRoomId: Int!, content: String!): Boolean!
 }
 
-type Mutation {
-  createChatRoom(userEmail: String!, content: String!): [Chat]!
-  createChat(chatRoomId: Int!, content: String!): Boolean!
+type Query {
+  getChatsByChatRoomId(chatRoomId: Int!, cursor: String): [Chat]
+  getChatRooms(cursor: String): [ChatRoom]
+}
+
+type Subscription {
+  getChatsByChatRoomId(chatRoomId: Int!): Chat!
 }

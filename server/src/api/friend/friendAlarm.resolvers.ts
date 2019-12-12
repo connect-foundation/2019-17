@@ -1,7 +1,7 @@
 import { requestDB } from '../../utils/requestDB';
 import {
-  changeAllRequestReadStateByEmailQuery,
-  countUnreadRequestByEmailQuery
+  CHANGE_ALL_REQUEST_READ_STATE_BY_EMAIL,
+  COUNT_UNREAD_REQUEST_BY_EMAIL
 } from '../../schema/friend/query';
 import isAuthenticated from '../../utils/isAuthenticated';
 import { withFilter } from 'graphql-subscriptions';
@@ -13,7 +13,7 @@ export default {
     friendUnreadAlarmNum: async (_, __, { req }) => {
       isAuthenticated(req);
 
-      const countRes = await requestDB(countUnreadRequestByEmailQuery, {
+      const countRes = await requestDB(COUNT_UNREAD_REQUEST_BY_EMAIL, {
         email: req.email
       });
 
@@ -25,7 +25,7 @@ export default {
     changeAllRequestReadState: async (_, __, { req }) => {
       isAuthenticated(req);
 
-      await requestDB(changeAllRequestReadStateByEmailQuery, {
+      await requestDB(CHANGE_ALL_REQUEST_READ_STATE_BY_EMAIL, {
         email: req.email
       });
 

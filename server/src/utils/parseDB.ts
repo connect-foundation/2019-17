@@ -10,4 +10,8 @@ const parseNodeResult = result => {
   return returnArr;
 };
 
-export { parseNodeResult };
+const getNode = result => {
+  return result[0].get(0).properties;
+};
+
+export { parseNodeResult, getNode };

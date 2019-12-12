@@ -4,6 +4,7 @@ import CommonHeader from '../CommonHeader';
 import CommonFooter from '../CommonFooter';
 import CommonBody from '../CommonBody';
 import MessageBox from './MessageBox';
+import { ChatRoom } from 'react-components.d';
 
 const Container = styled.div`
   display: flex;
@@ -39,9 +40,15 @@ const Body = styled(CommonBody)``;
 
 interface IProps {
   onClickNewMessage: (e: React.MouseEvent<HTMLSpanElement>) => void;
+  chatRooms: any;
+  userEmail: string;
 }
 
-function MessageTabPresenter({ onClickNewMessage }: IProps) {
+function MessageTabPresenter({
+  onClickNewMessage,
+  chatRooms,
+  userEmail
+}: IProps) {
   return (
     <Container>
       <Header>
@@ -49,18 +56,21 @@ function MessageTabPresenter({ onClickNewMessage }: IProps) {
         <Text onClick={onClickNewMessage}>새 메세지</Text>
       </Header>
       <Body>
-        <MessageBox isRead />
-        <MessageBox />
-        <MessageBox />
-        <MessageBox />
-        <MessageBox />
-        <MessageBox />
-        <MessageBox />
-        <MessageBox />
-        <MessageBox />
-        <MessageBox />
-        <MessageBox />
-        <MessageBox />
+        {chatRooms &&
+          chatRooms.map(({ otherUser, lastChat }: ChatRoom) => (
+            <MessageBox
+              key={otherUser.email + otherUser.nickname}
+              nickname={otherUser.nickname}
+              otherUserEmail={otherUser.email}
+              lastChatUserEmail={lastChat.email}
+              month={lastChat.createAt.month || new Date().getMonth() + 1}
+              day={lastChat.createAt.day || new Date().getDay()}
+              content={lastChat.content}
+              thumbnail={otherUser.thumbnail || undefined}
+              userEmail={userEmail}
+              chatRoomId={lastChat.chatRoomId}
+            />
+          ))}
       </Body>
       <Footer>
         <Text>모두 읽은 상태로 표시</Text>

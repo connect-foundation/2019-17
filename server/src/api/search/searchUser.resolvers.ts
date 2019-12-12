@@ -1,6 +1,6 @@
 import { QuerySearchUserArgs, UserInfo } from '../../types';
 import { requestDB } from '../../utils/requestDB';
-import { findUserAndRelationByNicknameWithoutMeQuery } from '../../schema/user/query';
+import { FIND_USER_AND_RELATION_BY_NICKNAME_WITHOUT_ME_QUERY } from '../../schema/user/query';
 import { parseResultRecords } from '../../utils/parseData';
 import isAuthenticated from '../../utils/isAuthenticated';
 import WrongKeywordError from '../../errors/WrongKeywordError';
@@ -18,7 +18,7 @@ export default {
       isAuthenticated(req);
 
       const allUser = await requestDB(
-        findUserAndRelationByNicknameWithoutMeQuery,
+        FIND_USER_AND_RELATION_BY_NICKNAME_WITHOUT_ME_QUERY,
         {
           nickname: `.*${keyword}.*`,
           email: req.email

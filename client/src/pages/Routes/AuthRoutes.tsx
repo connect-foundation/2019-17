@@ -7,6 +7,8 @@ import Main from '../Main';
 import MyPage from '../MyPage';
 import NoMatch from '../NoMatch';
 import Search from '../Search';
+import { useQuery } from '@apollo/react-hooks';
+import { loggedIn } from 'apollo/resolvers';
 import { ChatRoomProvider } from 'stores/ChatRoomContext';
 
 const Container = styled.div`
@@ -15,6 +17,7 @@ const Container = styled.div`
 `;
 
 const AuthRoutes: React.FC = () => {
+  useQuery(loggedIn);
   return (
     <ChatRoomProvider>
       <Header />
