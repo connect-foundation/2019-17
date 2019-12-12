@@ -11,11 +11,6 @@ type FriendAlarmNum {
   targetEmail: String
 }
 
-type FriendAlarm {
-  requestedUser: [UserInfoWithTarget]
-  friendRecommendation: [UserInfoWithTarget!]!
-}
-
 type Mutation {
   requestFriend(targetEmail: String!, relation: String!): Boolean!
   rejectFriendRequest(targetEmail: String!): Boolean!
