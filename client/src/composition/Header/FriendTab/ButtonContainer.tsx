@@ -36,7 +36,6 @@ function ButtonContainer({ email }: IProps) {
     e.preventDefault();
 
     rejectFriend({ variables: { email } });
-    // setIsFriend(true);
   }
 
   return (

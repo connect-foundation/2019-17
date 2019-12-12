@@ -19,7 +19,6 @@ interface IProps {
 function FriendsTab({ selected }: IProps) {
   const headerTabCountDispatch = useHeaderTabCountDispatch();
   const [changeReadState] = useChangeAllRequestReadStateMutation();
-  const { data, loading }: any = useRecommendAlarmQuery();
 
   useEffect(() => {
     if (selected) {
@@ -35,9 +34,7 @@ function FriendsTab({ selected }: IProps) {
       <FriendTabPresenter text="친구 요청" />
       <FriendRequestContainer />
       <FriendTabPresenter text="알 수도 있는 사람" />
-      <FriendRecommendContainer
-        recommendAlarm={loading ? undefined : data.recommendAlarm}
-      />
+      <FriendRecommendContainer />
     </Header>
   );
 }
