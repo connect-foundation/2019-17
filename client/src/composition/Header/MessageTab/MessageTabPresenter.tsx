@@ -69,7 +69,6 @@ function MessageTabPresenter({
         <Text onClick={onClickNewMessage}>새 메세지</Text>
       </Header>
       <Body>
-        {console.log('chatRooms', chatRooms)}
         {chatRooms &&
           chatRooms.length > 0 &&
           chatRooms.map(({ otherUser, lastChat }: ChatRoom) => {
