@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import ActionButton from 'components/ActionButton';
 import Button from 'components/Button';
 import styled from 'styled-components';
-import { useRequestFriendMutation } from 'react-components.d';
+import {
+  useRequestFriendMutation,
+  useRejectFriendRequestMutation
+} from 'react-components.d';
 
 const OkButtonDiv = styled.div<IDiv>`
   display: ${props => (props.isFriend ? 'none' : 'block')};
@@ -19,13 +22,21 @@ interface IDiv {
 
 function ButtonContainer({ email }: IProps) {
   const [isFriend, setIsFriend] = useState(false);
-  const [requestFriend] = useRequestFriendMutation();
+  const [acceptFriend] = useRequestFriendMutation();
+  const [rejectFriend] = useRejectFriendRequestMutation();
 
-  async function sendRequest(e: React.MouseEvent<HTMLButtonElement>) {
+  function sendRequest(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
-    requestFriend({ variables: { email, relation: 'REQUESTED_FROM' } });
+    acceptFriend({ variables: { email, relation: 'REQUESTED_FROM' } });
     setIsFriend(true);
+  }
+
+  function rejectRequest(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+
+    rejectFriend({ variables: { email } });
+    // setIsFriend(true);
   }
 
   return (
@@ -33,7 +44,9 @@ function ButtonContainer({ email }: IProps) {
       <OkButtonDiv isFriend={isFriend}>
         <Button text="확인" onClick={sendRequest} size="small"></Button>
       </OkButtonDiv>
-      <ActionButton text={isFriend ? '친구' : '삭제'}></ActionButton>
+      <ActionButton
+        text={isFriend ? '친구' : '삭제'}
+        onClick={rejectRequest}></ActionButton>
     </>
   );
 }

@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-export const REQUEST_FRIEND = gql`
+export const ACCEPT_FRIEND = gql`
   mutation requestFriend($email: String!, $relation: String!) {
     requestFriend(targetEmail: $email, relation: $relation)
   }
@@ -46,5 +46,11 @@ export const GET_ALARM_NUM = gql`
 export const CHANGE_READ_STATE = gql`
   mutation changeAllRequestReadState {
     changeAllRequestReadState
+  }
+`;
+
+export const REJECT_REQUEST = gql`
+  mutation rejectFriendRequest($email: String!) {
+    rejectFriendRequest(targetEmail: $email)
   }
 `;

@@ -8,7 +8,8 @@ import {
   findUserByRequestRelation,
   findUserByNoRelation,
   changeAllRequestReadStateByEmailQuery,
-  countUnreadRequestByEmailQuery
+  countUnreadRequestByEmailQuery,
+  rejectFriendRequestByEmailQuery
 } from '../../schema/friend/query';
 import { findUserWithEmailQuery } from '../../schema/user/query';
 import isAuthenticated from '../../utils/isAuthenticated';
@@ -100,6 +101,25 @@ export default {
           }
         });
       }
+
+      return true;
+    },
+    rejectFriendRequest: async (_, { targetEmail }, { req, pubsub }) => {
+      isAuthenticated(req);
+
+      await requestDB(rejectFriendRequestByEmailQuery, {
+        email: req.email,
+        targetEmail
+      });
+
+      pubsub.publish(REQUEST_ALARM_ADDED, {
+        requestAlarmAdded: {
+          nickname: 'deletedUser',
+          email: targetEmail,
+          targetEmail: req.email,
+          action: 'DELETED'
+        }
+      });
 
       return true;
     },
