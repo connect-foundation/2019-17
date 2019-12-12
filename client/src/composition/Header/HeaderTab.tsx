@@ -68,17 +68,17 @@ function HeaderTab() {
 
   const headerTabCountState = useHeaderTabCountState();
   const headerTabCountDispatch = useHeaderTabCountDispatch();
-  const { data } = useAlarmCountQuery();
+  const { data: alarmCount } = useAlarmCountQuery();
   const { data: friendCount } = useFriendUnreadAlarmNumQuery();
 
   useEffect(() => {
-    if (data) {
+    if (alarmCount) {
       headerTabCountDispatch({
         type: 'SET_INIT_ALARM_CNT',
-        key: { id: 'alarmCount', value: data.alarmCount }
+        key: { id: 'alarmCount', value: alarmCount.alarmCount }
       });
     }
-  }, [data]);
+  }, [alarmCount]);
 
   useEffect(() => {
     if (friendCount) {
@@ -87,7 +87,7 @@ function HeaderTab() {
         key: { id: 'friendCount', value: friendCount.friendUnreadAlarmNum }
       });
     }
-  }, [friendCount, data]);
+  }, [friendCount]);
 
   const wrapperRef = useOutsideReset(() => {
     headerTabDispatch({
