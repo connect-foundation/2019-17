@@ -1,13 +1,22 @@
 import gql from 'graphql-tag';
 
 export const GET_CHATS = gql`
-  query getChatsByChatRoomId($chatRoomId: Int!) {
-    getChatsByChatRoomId(chatRoomId: $chatRoomId) {
+  query getChatsByChatRoomId($chatRoomId: Int!, $cursor: String) {
+    getChatsByChatRoomId(chatRoomId: $chatRoomId, cursor: $cursor) {
       content
       chatRoomId
       nickname
       thumbnail
       email
+      createAt {
+        year
+        month
+        day
+        hour
+        minute
+        second
+        nanosecond
+      }
     }
   }
 `;
