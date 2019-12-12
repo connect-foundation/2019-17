@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { FaBell, FaUserFriends } from 'react-icons/fa';
 import { AiFillMessage } from 'react-icons/ai';
@@ -100,39 +100,45 @@ function HeaderTab() {
       <RelativeDiv>
         <FriendIcon
           selected={
-            headerTabCountState.friendCount > 0 || headerTabState.friend
+            headerTabCountState.friendCount > 0 ||
+            headerTabState.isActiveFriendTab
           }
           onClick={() => {
             headerTabDispatch({
-              type: 'CLICK_FRIEND',
-              key: HEADER_TAB.FRIEND
+              type: 'CLICK_FRIEND_TAB',
+              key: HEADER_TAB.IS_ACTIVE_FRIEND_TAB
             });
           }}
         />
         <NewFriendAlarmNum />
       </RelativeDiv>
-      <Tab left={'-230px'} selected={headerTabState.friend}>
-        <FriendTab selected={headerTabState.friend} />
+      <Tab left={'-230px'} selected={headerTabState.isActiveFriendTab}>
+        <FriendTab selected={headerTabState.isActiveFriendTab} />
       </Tab>
       <MessageIcon
-        selected={headerTabState.message}
+        selected={headerTabState.isActiveMessageTab}
         onClick={() =>
-          headerTabDispatch({ type: 'CLICK_MESSAGE', key: HEADER_TAB.MESSAGE })
+          headerTabDispatch({
+            type: 'CLICK_MESSAGE_TAB',
+            key: HEADER_TAB.IS_ACTIVE_MESSAGE_TAB
+          })
         }
       />
-      <Tab selected={headerTabState.message}>
+      <Tab selected={headerTabState.isActiveMessageTab}>
         <MessageTab />
       </Tab>
       <AlarmIcon
-        selected={headerTabState.alarm}
+        selected={headerTabState.isActiveAlarmTab}
         onClick={() =>
-          headerTabDispatch({ type: 'CLICK_ALARM', key: HEADER_TAB.ALARM })
+          headerTabDispatch({
+            type: 'CLICK_ALARM_TAB',
+            key: HEADER_TAB.IS_ACTIVE_ALARM_TAB
+          })
         }
       />
-
       <p>{headerTabCountState.alarmCount}</p>
-      <Tab left={'-160px'} selected={headerTabState.alarm}>
-        <AlarmTab selected={headerTabState.alarm} />
+      <Tab left={'-160px'} selected={headerTabState.isActiveAlarmTab}>
+        <AlarmTab selected={headerTabState.isActiveAlarmTab} />
       </Tab>
     </Container>
   );

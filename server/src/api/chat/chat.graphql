@@ -8,7 +8,7 @@ type Chat {
 }
 
 type ChatRoom {
-  otherUser: User!
+  otherUser: [User]!
   lastChat: Chat!
 }
 
@@ -24,4 +24,5 @@ type Query {
 
 type Subscription {
   getChatsByChatRoomId(chatRoomId: Int!): Chat!
+  getChatRooms: ChatRoom
 }

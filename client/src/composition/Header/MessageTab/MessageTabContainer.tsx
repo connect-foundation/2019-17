@@ -1,33 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import MessageTabPresenter from './MessageTabPresenter';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 import { useHeaderTabDispatch } from 'stores/HeaderTabContext';
 import { CHAT_ROOM } from '../../../constants';
-import gql from 'graphql-tag';
 import { useGetChatRoomsQuery, useMeQuery } from 'react-components.d';
-
-export const GET_CHATROOMS_QUERY = gql`
-  query getChatRooms {
-    getChatRooms {
-      otherUser {
-        thumbnail
-        nickname
-      }
-      lastChat {
-        email
-        chatRoomId
-        content
-        createAt {
-          year
-          month
-          day
-          hour
-          minute
-        }
-      }
-    }
-  }
-`;
+import { GET_CHATROOMS_SUBSCRIPTION } from './MessageTab.query';
 
 function MessageTabContainer() {
   const chatRoomDispatch = useChatRoomDispatch();
@@ -40,7 +17,34 @@ function MessageTabContainer() {
     });
   };
   const { data: { me = null } = {} } = useMeQuery();
-  const { data: { getChatRooms = null } = {} } = useGetChatRoomsQuery();
+  const {
+    data: { getChatRooms = null } = {},
+    subscribeToMore
+  } = useGetChatRoomsQuery();
+
+  const subscribeToChatRoom = () => {
+    return subscribeToMore({
+      document: GET_CHATROOMS_SUBSCRIPTION,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const {
+          data: { getChatRooms }
+        } = subscriptionData;
+        if (!prev.getChatRooms || !getChatRooms) return prev;
+        const {
+          lastChat: { chatRoomId }
+        } = getChatRooms as any;
+        const prevChatRooms = prev.getChatRooms.filter(
+          chatRoom => chatRoom && chatRoom.lastChat.chatRoomId !== chatRoomId
+        );
+        return Object.assign({}, prev, {
+          getChatRooms: [getChatRooms, ...prevChatRooms]
+        });
+      }
+    });
+  };
+
+  useEffect(() => subscribeToChatRoom());
 
   return (
     <MessageTabPresenter

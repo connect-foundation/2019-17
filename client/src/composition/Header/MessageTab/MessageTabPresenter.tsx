@@ -52,25 +52,45 @@ function MessageTabPresenter({
   return (
     <Container>
       <Header>
-        <RecentText>최근 (12)</RecentText>
+        <RecentText>
+          최근 (
+          {chatRooms && chatRooms.length
+            ? chatRooms.reduce(
+                (acc: number, { lastChat }: ChatRoom): number => {
+                  return lastChat && lastChat.email !== userEmail
+                    ? acc + 1
+                    : acc;
+                },
+                0
+              )
+            : 0}
+          )
+        </RecentText>
         <Text onClick={onClickNewMessage}>새 메세지</Text>
       </Header>
       <Body>
         {chatRooms &&
-          chatRooms.map(({ otherUser, lastChat }: ChatRoom) => (
-            <MessageBox
-              key={otherUser.email + otherUser.nickname}
-              nickname={otherUser.nickname}
-              otherUserEmail={otherUser.email}
-              lastChatUserEmail={lastChat.email}
-              month={lastChat.createAt.month || new Date().getMonth() + 1}
-              day={lastChat.createAt.day || new Date().getDay()}
-              content={lastChat.content}
-              thumbnail={otherUser.thumbnail || undefined}
-              userEmail={userEmail}
-              chatRoomId={lastChat.chatRoomId}
-            />
-          ))}
+          chatRooms.map(({ otherUser, lastChat }: ChatRoom) => {
+            const other = otherUser.filter(
+              user => user && user.email !== userEmail
+            )[0];
+            return (
+              other && (
+                <MessageBox
+                  key={other.email + other.nickname}
+                  nickname={other.nickname}
+                  otherUserEmail={other.email}
+                  lastChatUserEmail={lastChat.email}
+                  month={lastChat.createAt.month || new Date().getMonth() + 1}
+                  day={lastChat.createAt.day || new Date().getDay()}
+                  content={lastChat.content}
+                  thumbnail={other.thumbnail || undefined}
+                  userEmail={userEmail}
+                  chatRoomId={lastChat.chatRoomId}
+                />
+              )
+            );
+          })}
       </Body>
       <Footer>
         <Text>모두 읽은 상태로 표시</Text>

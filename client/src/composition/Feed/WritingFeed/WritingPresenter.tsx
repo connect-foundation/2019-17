@@ -49,7 +49,7 @@ const ContentRow = styled.div`
     border-bottom: 1px solid ${props => props.theme.colors.borderColor};
   }
   padding: 5px 0px;
-  overflow-x: scroll;
+  overflow-x: auto;
 `;
 
 const ContentWrapper = styled.div`

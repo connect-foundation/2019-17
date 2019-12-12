@@ -2,10 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import ChatHeader from './ChatHeader';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
-import { useGetChatsByChatRoomIdQuery, useMeQuery } from 'react-components.d';
+import {
+  useGetChatsByChatRoomIdQuery,
+  useMeQuery,
+  Chat
+} from 'react-components.d';
 import ChatFooter from './ChatFooter';
 import { useEffect } from 'react';
 import { GET_CHAT_SUBSCRIPTION } from './ChatRooms.query';
+import Loader from 'components/Loader';
+import { useRef } from 'react';
+import useIntersect from 'hooks/useIntersectObserver';
+import { objToDate, dateToISO } from 'utils/dateUtil';
 
 const Container = styled.div`
   width: 20rem;
@@ -59,6 +67,11 @@ const OtherContent = styled.span`
   padding: 0.5rem;
 `;
 
+const LoadContainer = styled.div`
+  width: 100%;
+  height: 5px;
+`;
+
 interface IProps {
   idx: number;
   nickname: string;
@@ -68,16 +81,45 @@ interface IProps {
 
 function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
   const chatRoomDispatch = useChatRoomDispatch();
-  const onClose = () => {
-    chatRoomDispatch({ type: 'DELETE_CHATROOM', idx });
-  };
+  const chatBody = useRef(null);
   const {
     data: { getChatsByChatRoomId = null } = {},
     loading,
-    subscribeToMore
+    subscribeToMore,
+    fetchMore
   } = useGetChatsByChatRoomIdQuery({
-    variables: { chatRoomId }
+    variables: { chatRoomId, cursor: '9999-12-31T09:29:26.050Z' }
   });
+
+  const fetchMoreChats = async () => {
+    const lastChat: Chat | null =
+      getChatsByChatRoomId &&
+      getChatsByChatRoomId[getChatsByChatRoomId.length - 1];
+    const cursor = lastChat
+      ? dateToISO(objToDate(lastChat.createAt))
+      : '9999-12-31T09:29:26.050Z';
+
+    await fetchMore({
+      variables: { chatRoomId, cursor },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        const { getChatsByChatRoomId: chats } = fetchMoreResult;
+        if (!prev.getChatsByChatRoomId || !chats || chats.length == 0) {
+          return prev;
+        }
+        return Object.assign({}, prev, {
+          getChatsByChatRoomId: [...prev.getChatsByChatRoomId, ...chats]
+        });
+      }
+    });
+  };
+  const [_, setRef] = useIntersect(fetchMoreChats, () => {}, {});
+  const onClose = () => {
+    chatRoomDispatch({ type: 'DELETE_CHATROOM', idx });
+  };
+
+  useEffect(() => subscribeToGetChat(), []);
+
   const { data: { me = null } = {}, loading: meLoading } = useMeQuery();
   const subscribeToGetChat = () => {
     return subscribeToMore({
@@ -99,28 +141,31 @@ function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
     });
   };
 
-  useEffect(() => subscribeToGetChat());
-
-  return loading && meLoading ? (
-    <div>loading...</div>
-  ) : (
+  return (
     <Container>
       <ChatHeader nickname={nickname} onClose={onClose} thumbnail={thumbnail} />
-      <ChatBody>
-        {getChatsByChatRoomId &&
-          getChatsByChatRoomId.map(({ email, content }: any, idx) =>
-            me && email === me.email ? (
-              <MyChat key={content + idx}>
-                <MyChatContent>{content}</MyChatContent>
-              </MyChat>
-            ) : (
-              <OtherChat key={content + idx}>
-                <OtherContent>{content}</OtherContent>
-              </OtherChat>
-            )
-          )}
+      <ChatBody ref={chatBody}>
+        {loading || meLoading ? (
+          <Loader size={'20px'} />
+        ) : (
+          <>
+            {getChatsByChatRoomId &&
+              getChatsByChatRoomId.map(({ email, content }: Chat, idx) =>
+                me && email === me.email ? (
+                  <MyChat key={content + idx}>
+                    <MyChatContent>{content}</MyChatContent>
+                  </MyChat>
+                ) : (
+                  <OtherChat key={content + idx}>
+                    <OtherContent>{content}</OtherContent>
+                  </OtherChat>
+                )
+              )}
+            <LoadContainer ref={setRef as any} />
+          </>
+        )}
       </ChatBody>
-      <ChatFooter chatRoomId={chatRoomId} />
+      <ChatFooter chatRoomId={chatRoomId} chatBody={chatBody} />
     </Container>
   );
 }
