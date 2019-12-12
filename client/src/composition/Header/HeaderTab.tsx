@@ -20,6 +20,7 @@ import {
   useHeaderTabCountState,
   useHeaderTabCountDispatch
 } from 'stores/HeaderTabCountContext';
+import { useOutsideReset } from 'hooks/useOutsideReset';
 
 const RelativeDiv = styled.div`
   position: relative;
@@ -88,8 +89,14 @@ function HeaderTab() {
     }
   }, [friendCount, data]);
 
+  const wrapperRef = useOutsideReset(() => {
+    headerTabDispatch({
+      type: 'INITSTATE'
+    });
+  });
+
   return (
-    <Container>
+    <Container ref={wrapperRef}>
       <RelativeDiv>
         <FriendIcon
           selected={

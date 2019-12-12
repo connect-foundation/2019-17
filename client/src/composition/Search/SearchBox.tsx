@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import SearchButtonIcon from 'components/Icon/SearchButtonIcon';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-
-import { useEffect } from 'react';
-import { useRef } from 'react';
 import BoostBookLogo from 'components/Icon/BoostBookLogo';
+import { MutableRefObject } from 'react';
+import { ReactNode } from 'react';
+import { useOutsideReset } from 'hooks/useOutsideReset';
 
 const Container = styled.div`
   display: flex;
@@ -40,33 +40,23 @@ const Logo = styled(BoostBookLogo)`
   margin-right: 10px;
 `;
 
+interface IProps {
+  children: ReactNode;
+}
+
 function SearchBox() {
   const [keyword, setKeyword] = useState('');
   const [btnColor, setBtnColor] = useState(false);
-  const wrapperRef = useRef(null);
-  useOutsideReset(wrapperRef);
+  const wrapperRef: MutableRefObject<null> = useOutsideReset(() => {
+    setBtnColor(false);
+  });
 
-  const ConditionalLink = ({ children }: any) =>
+  const ConditionalLink = ({ children }: IProps) =>
     keyword ? (
       <Link to={`/search?keyword=${keyword}`}>{children}</Link>
     ) : (
       <>{children}</>
     );
-
-  function useOutsideReset(ref: any) {
-    function handleClickOutside(event: any) {
-      if (ref.current && !ref.current.contains(event.target)) {
-        setBtnColor(false);
-      }
-    }
-
-    useEffect(() => {
-      document.addEventListener('mousedown', handleClickOutside);
-
-      return () =>
-        document.removeEventListener('mousedown', handleClickOutside);
-    });
-  }
 
   function checkInput(event: any) {
     event.preventDefault();
