@@ -44,7 +44,7 @@ export default {
 
       const parsedReq = parseResultRecords(reqUsers);
 
-      return gatherValuesByKey(parsedReq, 'u');
+      return gatherValuesByKey(parsedReq, 'user');
     },
     recommendAlarm: async (_, __, { req }) => {
       isAuthenticated(req);
