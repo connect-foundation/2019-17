@@ -4,6 +4,7 @@ import { useQuery } from '@apollo/react-hooks';
 import UserCard from 'components/UserCard';
 import queryString from 'querystring';
 import ButtonContainer from './ButtonContainer';
+import { DEFAULT } from '../../constants';
 
 const SEARCH_USER = gql`
   query getUserName($keyword: String!) {
@@ -44,17 +45,13 @@ function CardContainer({ location }: IProps) {
     return (
       <UserCard
         nickname="데이터를 가져오는데 에러가 발생하였습니다!"
-        imageUrl={
-          process.env.PUBLIC_URL + '/images/search_notfound.png'
-        }></UserCard>
+        imageUrl={DEFAULT.SEARCH_NOT_FOUND}></UserCard>
     );
   if (data.searchUser.length === 0)
     return (
       <UserCard
         nickname={`${keyword}에 대한 검색 결과가 없습니다`}
-        imageUrl={
-          process.env.PUBLIC_URL + '/images/search_notfound.png'
-        }></UserCard>
+        imageUrl={DEFAULT.SEARCH_NOT_FOUND}></UserCard>
     );
 
   return (

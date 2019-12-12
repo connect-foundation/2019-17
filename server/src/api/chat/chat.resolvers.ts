@@ -30,7 +30,7 @@ const MESSAGE_TAB = 'messageTab';
 
 const publishToMessageTab = async ({ pubsub, chatRoomId, chat }) => {
   const userResults = await requestDB(GET_USERS_ON_CHAT_ROOM_QUERY, {
-    chatRoomId
+    chatRoomId: parseInt(chatRoomId, 10)
   });
   const { users } = parseResultRecords(userResults)[0];
   pubsub.publish(MESSAGE_TAB, {
