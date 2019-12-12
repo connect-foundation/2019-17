@@ -75,6 +75,7 @@ type Alarm {
 type Query {
   pageInfo: PageInfo
   feeds(first: Int, cursor: String): IFeeds
+  userFeeds(first: Int, cursor: String, email: String!): IFeeds
   alarms: [Alarm]
   alarmCount: Int!
 }

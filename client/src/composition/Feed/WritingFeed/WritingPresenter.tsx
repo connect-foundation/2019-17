@@ -14,7 +14,6 @@ const Form = styled.form`
   width: 32rem;
   min-height: 150px;
   margin-bottom: 10px;
-  margin-top: 10px;
   box-sizing: border-box;
   border: 1px solid ${props => props.theme.colors.borderColor};
 `;
@@ -49,7 +48,7 @@ const ContentRow = styled.div`
     border-bottom: 1px solid ${props => props.theme.colors.borderColor};
   }
   padding: 5px 0px;
-  overflow-x: scroll;
+  overflow-x: auto;
 `;
 
 const ContentWrapper = styled.div`

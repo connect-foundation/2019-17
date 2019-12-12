@@ -10,17 +10,6 @@ export const loggedIn = gql`
   }
 `;
 
-export const updateUserState = gql`
-  subscription {
-    updateUserState {
-      email
-      nickname
-      thumbnail
-      status
-    }
-  }
-`;
-
 export const resolvers = {
   Query: {
     login: (_: any, __: any, { cache }: { cache: any }) => {

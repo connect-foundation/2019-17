@@ -4,7 +4,7 @@ import useIntersect from 'hooks/useIntersectObserver';
 import styled from 'styled-components';
 import WritingFeed from './WritingFeed';
 import NewFeedAlarm from './NewFeedAlarm';
-import { useGetfeedsQuery, useMeQuery } from 'react-components.d';
+import { useGetUserFeedsQuery, useMeQuery } from 'react-components.d';
 import { getDate } from '../../utils/dateUtil';
 import { FEEDS_SUBSCRIPTION } from './feed.query';
 
@@ -16,15 +16,24 @@ const LoadCheckContainer = styled.div`
 
 const OFFSET = 4;
 const ALARM_LIMIT = 0;
-const FeedList = () => {
+
+interface IProps {
+  email: string;
+}
+
+const UserFeedList = ({ email }: IProps) => {
   const [, setRef] = useIntersect(fetchMoreFeed, () => {}, {});
   const [, setTopRef] = useIntersect(feedAlarmOff, feedAlarmOn, {});
 
   const [feedAlarm, setFeedAlarm] = useState(0);
   const [AlarmMessage, setAlarmMessage] = useState('');
   const { data: myInfo } = useMeQuery();
-  const { data, fetchMore, subscribeToMore } = useGetfeedsQuery({
-    variables: { first: OFFSET, currentCursor: '9999-12-31T09:29:26.050Z' }
+  const { data, fetchMore, subscribeToMore } = useGetUserFeedsQuery({
+    variables: {
+      first: OFFSET,
+      currentCursor: '9999-12-31T09:29:26.050Z',
+      email
+    }
   });
 
   const scrollTop = () => {
@@ -164,4 +173,4 @@ const FeedList = () => {
   );
 };
 
-export default FeedList;
+export default UserFeedList;

@@ -1,13 +1,16 @@
 type Friend {
-  nickname: String
   thumbnail: String
+  nickname: String!
   email: String!
   status: String!
 }
 
 type Query {
-  loginUser(email: String): Boolean
-  friends(email: String): [Friend!]!
+  loginUser: Boolean
+  friends: [Friend!]!
+  userWithEmail(email: String!): User
+  friendsWithUserEmail(email: String!): [User]!
+  findRelation(email: String!): String!
 }
 
 type Subscription {
