@@ -52,7 +52,20 @@ function MessageTabPresenter({
   return (
     <Container>
       <Header>
-        <RecentText>최근 (12)</RecentText>
+        <RecentText>
+          최근 (
+          {chatRooms && chatRooms.length
+            ? chatRooms.reduce(
+                (acc: number, { lastChat }: ChatRoom): number => {
+                  return lastChat && lastChat.email !== userEmail
+                    ? acc + 1
+                    : acc;
+                },
+                0
+              )
+            : 0}
+          )
+        </RecentText>
         <Text onClick={onClickNewMessage}>새 메세지</Text>
       </Header>
       <Body>

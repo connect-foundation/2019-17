@@ -150,7 +150,7 @@ function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
         ) : (
           <>
             {getChatsByChatRoomId &&
-              getChatsByChatRoomId.map(({ email, content }: any, idx) =>
+              getChatsByChatRoomId.map(({ email, content }: Chat, idx) =>
                 me && email === me.email ? (
                   <MyChat key={content + idx}>
                     <MyChatContent>{content}</MyChatContent>

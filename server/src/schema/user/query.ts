@@ -17,8 +17,3 @@ UNION ALL
 MATCH (user:User {email: {email}})-[r:FRIEND]-(target: User)
 WHERE target.nickname=~ {nickname} AND target.email <> {email} 
 RETURN "FRIEND" as type, target`;
-
-export const GET_USER_BY_EMAIL_QUERY = `
-MATCH (u:User {email: $email})
-RETURN u as user;
-`;

@@ -57,7 +57,6 @@ function NewChatFooter({ userEmail, onClose }: IProps) {
         const {
           getUser: { thumbnail, nickname }
         } = userInfo;
-        console.log(chat);
         chatRoomDispatch({
           type: 'CREATE_CHATROOM',
           chatRoom: {

@@ -34,7 +34,7 @@ function MessageTabContainer() {
         const {
           lastChat: { chatRoomId }
         } = getChatRooms as any;
-        const prevChatRooms: any = prev.getChatRooms.filter(
+        const prevChatRooms = prev.getChatRooms.filter(
           chatRoom => chatRoom && chatRoom.lastChat.chatRoomId !== chatRoomId
         );
         return Object.assign({}, prev, {

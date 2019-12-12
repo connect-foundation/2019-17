@@ -135,13 +135,7 @@ const Query: QueryResolvers = {
         cursor,
         limit: CHAT_LIMIT
       });
-      console.log({
-        chatRoomId,
-        cursor,
-        limit: CHAT_LIMIT
-      });
       const chats: Chat[] = parseResultRecords(result)[0].chats;
-      console.log(chats.length);
       return chats;
     } catch (error) {
       const DBError = createDBError(error);

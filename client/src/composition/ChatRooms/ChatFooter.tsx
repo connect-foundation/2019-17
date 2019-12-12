@@ -29,7 +29,7 @@ function ChatFooter({
   chatBody
 }: {
   chatRoomId: number;
-  chatBody: any;
+  chatBody: React.MutableRefObject<null>;
 }) {
   const { value: content, onChange, setValue } = useInput('');
   const contentCursor = useRef<HTMLInputElement>(null);
