@@ -77,6 +77,7 @@ type Query {
   feeds(first: Int, cursor: String): IFeeds
   alarms: [Alarm]
   alarmCount: Int!
+  feed(feedId: Int!): IFeed!
 }
 
 type Mutation {

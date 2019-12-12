@@ -13,31 +13,33 @@ import {
   GET_NEW_ARALM,
   ALARM_ISCHECKED_COUNT,
   CHANGE_ALL_ALARM_CHECKSTATE
-} from '../../schema/feed/query';
-import { parseResultRecords } from '../../utils/parseData';
+} from "../../schema/feed/query";
+import { parseResultRecords } from "../../utils/parseData";
 
-import uploadToObjStorage from '../../middleware/uploadToObjStorage';
-import { requestDB } from '../../utils/requestDB';
+import uploadToObjStorage from "../../middleware/uploadToObjStorage";
+import { requestDB } from "../../utils/requestDB";
 import {
   WRITING_FEED_QUERY,
   createImageNodeAndRelation
-} from '../../schema/feed/query';
+} from "../../schema/feed/query";
 
-import createDBError from '../../errors/createDBError';
+import createDBError from "../../errors/createDBError";
 
-import { dateToISO, objToDate } from '../../utils/dateutil';
-import { withFilter } from 'graphql-subscriptions';
-import isAuthenticated from '../../utils/isAuthenticated';
+import { dateToISO, objToDate } from "../../utils/dateutil";
+import { withFilter } from "graphql-subscriptions";
+import isAuthenticated from "../../utils/isAuthenticated";
 import {
   MutationResolvers,
   MutationEnrollFeedArgs,
   QueryResolvers,
   QueryFeedsArgs,
   MutationWriteCommentArgs,
-  Alarm
-} from '../../types';
+  Alarm,
+  QueryFeedArgs,
+  IFeed
+} from "../../types";
 
-const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
+const DEFAULT_MAX_DATE = "9999-12-31T09:29:26.050Z";
 
 const getUpdateLikeQuery = count => {
   if (count > 0) {
@@ -60,7 +62,7 @@ const createImages = async (pubsub, email, feedId, files) => {
       acc += createImageNodeAndRelation(idx, Location);
       return acc;
     }, matchQuery);
-    REGISTER_IMAGE += ' RETURN f';
+    REGISTER_IMAGE += " RETURN f";
     await requestDB(REGISTER_IMAGE, { feedId });
     publishingFeed(pubsub, feedId, email);
   } catch (error) {
@@ -71,13 +73,13 @@ const createImages = async (pubsub, email, feedId, files) => {
 const publishingFeed = async (pubsub, feedId, email) => {
   const registerdFeed = await requestDB(GET_NEW_FEED, {
     feedId,
-    useremail: email
+    userEmail: email
   });
 
   const parsedRegisterdFeed = parseResultRecords(registerdFeed);
   pubsub.publish(NEW_FEED, {
     feeds: {
-      cursor: '',
+      cursor: "",
       feedItems: parsedRegisterdFeed
     }
   });
@@ -234,7 +236,7 @@ const mutationResolvers: MutationResolvers = {
 const queryResolvers: QueryResolvers = {
   feeds: async (
     _,
-    { first, cursor = DEFAUT_MAX_DATE }: QueryFeedsArgs,
+    { first, cursor = DEFAULT_MAX_DATE }: QueryFeedsArgs,
     { req }
   ): Promise<any> => {
     isAuthenticated(req);
@@ -279,11 +281,23 @@ const queryResolvers: QueryResolvers = {
     const [parsedAlarmCount] = parseResultRecords(result);
 
     return Number(parsedAlarmCount.alarmCount);
+  },
+  feed: async (_, { feedId }: QueryFeedArgs, { req }): Promise<IFeed> => {
+    isAuthenticated(req);
+    const userEmail = req.email;
+
+    const feed = await requestDB(GET_NEW_FEED, {
+      feedId,
+      userEmail
+    });
+    const [parsedFeed] = parseResultRecords(feed);
+
+    return parsedFeed;
   }
 };
 
-const NEW_FEED = 'NEW_FEED_PUBSUB';
-const NEW_ALARM = 'NEW_ALARM_PUBSUB';
+const NEW_FEED = "NEW_FEED_PUBSUB";
+const NEW_ALARM = "NEW_ALARM_PUBSUB";
 
 export default {
   Query: queryResolvers,

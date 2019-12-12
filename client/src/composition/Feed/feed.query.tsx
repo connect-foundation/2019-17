@@ -49,6 +49,52 @@ export const GET_FEEDS = gql`
   }
 `;
 
+export const GET_FEED = gql`
+  query getfeed($feedId: Int!) {
+    feed(feedId: $feedId) {
+      searchUser {
+        nickname
+        hometown
+        thumbnail
+        residence
+        email
+      }
+      feed {
+        createdAt {
+          year
+          month
+          day
+          hour
+          minute
+          second
+          nanosecond
+        }
+        content
+      }
+      feedId
+      totallikes
+      hasLiked
+      imglist {
+        url
+      }
+      comments {
+        createdAt {
+          year
+          month
+          day
+          hour
+          minute
+          second
+          nanosecond
+        }
+        content
+        nickname
+        thumbnail
+      }
+    }
+  }
+`;
+
 export const FEEDS_SUBSCRIPTION = gql`
   subscription subscribeFeed($userEmail: String!) {
     feeds(userEmail: $userEmail) {

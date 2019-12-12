@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import Feed from './Feed';
-import useIntersect from 'hooks/useIntersectObserver';
-import styled from 'styled-components';
-import WritingFeed from './WritingFeed';
-import NewFeedAlarm from './NewFeedAlarm';
-import { useGetfeedsQuery, useMeQuery } from 'react-components.d';
-import { getDate } from '../../utils/dateUtil';
-import { FEEDS_SUBSCRIPTION } from './feed.query';
-import Loader from 'components/Loader';
+import React, { useState } from "react";
+import Feed from "./Feed";
+import useIntersect from "hooks/useIntersectObserver";
+import styled from "styled-components";
+import WritingFeed from "./WritingFeed";
+import NewFeedAlarm from "./NewFeedAlarm";
+import { useGetfeedsQuery, useMeQuery } from "react-components.d";
+import { getDate } from "../../utils/dateUtil";
+import { FEEDS_SUBSCRIPTION } from "./feed.query";
+import Loader from "components/Loader";
 
 const LoadCheckContainer = styled.div`
   height: 50px;
@@ -27,37 +27,37 @@ const FeedList = () => {
   const [__, setTopRef] = useIntersect(feedAlarmOff, feedAlarmOn, {});
 
   const [feedAlarm, setFeedAlarm] = useState(0);
-  const [AlarmMessage, setAlarmMessage] = useState('');
+  const [AlarmMessage, setAlarmMessage] = useState("");
   const { data: myInfo } = useMeQuery();
   const { data, fetchMore, subscribeToMore, loading } = useGetfeedsQuery({
-    variables: { first: OFFSET, currentCursor: '9999-12-31T09:29:26.050Z' }
+    variables: { first: OFFSET, currentCursor: "9999-12-31T09:29:26.050Z" }
   });
 
   const scrollTop = () => {
     window.scroll({
       top: 0,
       left: 0,
-      behavior: 'smooth'
+      behavior: "smooth"
     });
   };
 
   async function feedAlarmOn() {
     if (feedAlarm > ALARM_LIMIT) {
-      setAlarmMessage('새 피드 ' + feedAlarm + '개');
+      setAlarmMessage("새 피드 " + feedAlarm + "개");
     } else {
-      setAlarmMessage('');
+      setAlarmMessage("");
     }
   }
   async function feedAlarmOff() {
     setFeedAlarm(0);
-    setAlarmMessage('');
+    setAlarmMessage("");
   }
 
   async function fetchMoreFeed() {
     await fetchMore({
       variables: {
         first: OFFSET,
-        currentCursor: data && data.feeds ? data.feeds.cursor : ''
+        currentCursor: data && data.feeds ? data.feeds.cursor : ""
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (
@@ -81,7 +81,7 @@ const FeedList = () => {
           feeds: {
             cursor: newCursor,
             feedItems: [...prev.feeds.feedItems, ...feedItems],
-            __typename: 'IFeeds'
+            __typename: "IFeeds"
           }
         });
       }
@@ -92,7 +92,7 @@ const FeedList = () => {
     return subscribeToMore({
       document: FEEDS_SUBSCRIPTION,
       variables: {
-        userEmail: myInfo && myInfo.me && myInfo.me.email ? myInfo.me.email : ''
+        userEmail: myInfo && myInfo.me && myInfo.me.email ? myInfo.me.email : ""
       },
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
@@ -121,13 +121,13 @@ const FeedList = () => {
           feeds: {
             cursor: prev.feeds.cursor,
             feedItems: [...feedItems, ...prev.feeds.feedItems],
-            __typename: 'IFeeds'
+            __typename: "IFeeds"
           }
         });
       }
     });
   };
-  
+
   return loading ? (
     <LoadContainer>
       <Loader />
@@ -147,24 +147,25 @@ const FeedList = () => {
       </div>
 
       {data && data.feeds && data.feeds.feedItems
-        ? data.feeds.feedItems.map((feed, idx) => {
-            return feed && feed.feed && feed.feed.createdAt ? (
+        ? data.feeds.feedItems.map((feedItem, idx) => {
+            return feedItem && feedItem.feed && feedItem.feed.createdAt ? (
               <Feed
-                key={getDate(feed.feed.createdAt).toISOString() + idx}
-                content={feed.feed.content}
-                feedinfo={feed}
-                createdAt={getDate(feed.feed.createdAt).toISOString()}
+                key={getDate(feedItem.feed.createdAt).toISOString() + idx}
+                content={feedItem.feed.content}
+                feedinfo={feedItem}
+                createdAt={getDate(feedItem.feed.createdAt).toISOString()}
               />
             ) : (
               <></>
             );
           })
-        : 'no data'}
+        : "no data"}
 
       {data ? (
         <LoadCheckContainer
           onClick={fetchMoreFeed}
-          ref={setRef as any}></LoadCheckContainer>
+          ref={setRef as any}
+        ></LoadCheckContainer>
       ) : (
         <></>
       )}
