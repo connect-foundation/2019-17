@@ -66,7 +66,8 @@ infra: actions
 <div style="width:500px;height:10px"></div>
 
 ### DB 스키마
-![image](https://user-images.githubusercontent.com/19178129/70308828-7a350700-184f-11ea-82d9-86b4eedb3b63.png)
+
+![schema](https://i.imgur.com/CAIsosI.png)
 
 
 ### 📘 Usage for dev
