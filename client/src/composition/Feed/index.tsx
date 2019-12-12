@@ -127,7 +127,7 @@ const FeedList = () => {
       }
     });
   };
-
+  
   return loading ? (
     <LoadContainer>
       <Loader />

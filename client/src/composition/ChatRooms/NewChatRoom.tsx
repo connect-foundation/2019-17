@@ -80,7 +80,7 @@ interface IUserInfo {
 function NewChatRoom({ idx }: { idx: number }) {
   const [nickname, setNickname] = useState('');
   const [userEmail, setUserEmail] = useState('');
-  const [getUsersQuery, { data }] = useGetUserNameLazyQuery({
+  const [getUserQuery, { data }] = useGetUserNameLazyQuery({
     variables: { keyword: nickname }
   });
   const chatRoomDispatch = useChatRoomDispatch();
@@ -94,7 +94,7 @@ function NewChatRoom({ idx }: { idx: number }) {
     } = e;
     setNickname(value);
     setUserEmail('');
-    getUsersQuery();
+    getUserQuery();
   };
 
   const onClickUser = ({ email, nickname }: IUserInfo) => {

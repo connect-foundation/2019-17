@@ -2,11 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import CommonFooter from 'composition/Header/CommonFooter';
 import useInput from 'hooks/useInput';
-import {
-  useCreateChatRoomMutation,
-  useGetUserQuery,
-  useCreateChatMutation
-} from 'react-components.d';
+import { useCreateChatRoomMutation, useGetUserQuery } from 'react-components.d';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 import { CHAT_ROOM } from '../../constants';
 
@@ -39,7 +35,6 @@ function NewChatFooter({ userEmail, onClose }: IProps) {
     ''
   );
   const [createChatRoomMutation] = useCreateChatRoomMutation();
-  const [createChatMutation] = useCreateChatMutation();
   const { data: userInfo } = useGetUserQuery({
     variables: { email: userEmail }
   });
@@ -47,6 +42,10 @@ function NewChatFooter({ userEmail, onClose }: IProps) {
   let overlapFlag = false;
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!userEmail) {
+      alert('유저를 선택해주세요');
+      return;
+    }
     if (!userInfo || !userInfo.getUser || overlapFlag) return;
     overlapFlag = true;
     if (userEmail) {
@@ -76,7 +75,6 @@ function NewChatFooter({ userEmail, onClose }: IProps) {
       return;
     }
     overlapFlag = false;
-    alert('유저를 선택해주세요');
   };
   return (
     <ChatFooter>
