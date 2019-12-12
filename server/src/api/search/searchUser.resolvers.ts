@@ -6,7 +6,7 @@ import isAuthenticated from '../../utils/isAuthenticated';
 import WrongKeywordError from '../../errors/WrongKeywordError';
 
 function checkKeyword(keyword: string) {
-  if (!keyword.length) {
+  if (!keyword.length || keyword === '?' || keyword.match(/^\\/)) {
     throw new WrongKeywordError();
   }
 }

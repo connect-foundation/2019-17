@@ -44,7 +44,9 @@ interface IProps {
 function AutoCompleteContainer({ keyword, setKeyword }: IProps) {
   const [getUserQuery, { data }] = useGetUserNameLazyQuery();
 
-  useEffect(() => getUserQuery({ variables: { keyword } }), [keyword]);
+  useEffect(() => {
+    if (keyword.length) getUserQuery({ variables: { keyword } });
+  }, [keyword]);
 
   return (
     <>
