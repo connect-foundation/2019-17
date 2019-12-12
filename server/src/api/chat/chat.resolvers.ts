@@ -16,7 +16,6 @@ import {
   CREATE_CHAT_QUERY,
   CHECK_CHAT_ROOM_QUERY,
   CREATE_CHAT_ROOM_QUERY,
-  GET_CHATS_QUERY,
   GET_CHATS_BY_CHAT_ROOM_ID_QUERY,
   GET_CHATROOMS_QUERY,
   GET_USERS_ON_CHAT_ROOM_QUERY
@@ -27,12 +26,32 @@ import { withFilter } from 'graphql-subscriptions';
 const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
 const CHAT_LIMIT = 20;
 const CHAT_PUBSUB = 'chatPubsub';
+const MESSAGE_TAB = 'messageTab';
+
+const publishToMessageTab = async ({ pubsub, chatRoomId, chat }) => {
+  const userResults = await requestDB(GET_USERS_ON_CHAT_ROOM_QUERY, {
+    chatRoomId
+  });
+  const { users } = parseResultRecords(userResults)[0];
+  pubsub.publish(MESSAGE_TAB, {
+    getChatRooms: { otherUser: users, lastChat: chat }
+  });
+};
+
+const filterChatRoomUser = async ({ chatRoomId, email }) => {
+  const result = await requestDB(GET_USERS_ON_CHAT_ROOM_QUERY, {
+    chatRoomId: parseInt(chatRoomId, 10)
+  });
+  const users = parseResultRecords(result)[0].users;
+
+  return users.some(user => user.email === email);
+};
 
 const Mutation: MutationResolvers = {
   createChatRoom: async (
     _,
     { userEmail, content }: MutationCreateChatRoomArgs,
-    { req }
+    { req, pubsub }
   ): Promise<Chat[]> => {
     isAuthenticated(req);
     const { email } = req;
@@ -41,25 +60,37 @@ const Mutation: MutationResolvers = {
         userEmail1: email,
         userEmail2: userEmail
       });
-      const [isChatRoom] = parseResultRecords(checkChatRoomResult);
-      if (!isChatRoom) {
+      if (checkChatRoomResult.length === 0) {
         const result = await requestDB(CREATE_CHAT_ROOM_QUERY, {
           from: email,
           to: userEmail,
           content
         });
         const chats: Chat[] = parseResultRecords(result)[0].chats;
+        const chat: Chat = chats[0];
+        publishToMessageTab({
+          pubsub,
+          chatRoomId: chat.chatRoomId,
+          chat
+        });
         return chats;
       }
-      const chatResults = await requestDB(GET_CHATS_QUERY, {
-        userEmail1: email,
-        userEmail2: userEmail,
-        cursor: DEFAUT_MAX_DATE,
-        limit: CHAT_LIMIT
+      const [{ chatRoomId }] = parseResultRecords(checkChatRoomResult);
+      const result = await requestDB(CREATE_CHAT_QUERY, {
+        email,
+        content,
+        chatRoomId: parseInt(chatRoomId, 10)
       });
-      const parsedChatResults: Chat[] = parseResultRecords(chatResults)[0]
-        .chats;
-      return parsedChatResults;
+      const chats: Chat[] = parseResultRecords(result)[0].chat;
+      pubsub.publish(CHAT_PUBSUB + chatRoomId, {
+        getChatsByChatRoomId: chats[0]
+      });
+      publishToMessageTab({
+        pubsub,
+        chatRoomId: parseInt(chatRoomId, 10),
+        chat: chats[0]
+      });
+      return chats;
     } catch (error) {
       const DBError = createDBError(error);
       throw new DBError();
@@ -79,7 +110,10 @@ const Mutation: MutationResolvers = {
         chatRoomId
       });
       const [chat]: Chat[] = parseResultRecords(result)[0].chat;
-      pubsub.publish(CHAT_PUBSUB + chatRoomId, { getChatsByChatRoomId: chat });
+      pubsub.publish(CHAT_PUBSUB + chatRoomId, {
+        getChatsByChatRoomId: chat
+      });
+      publishToMessageTab({ pubsub, chatRoomId, chat });
       return true;
     } catch (error) {
       const DBError = createDBError(error);
@@ -118,10 +152,10 @@ const Query: QueryResolvers = {
     try {
       const result = await requestDB(GET_CHATROOMS_QUERY, {
         email,
-        cursor,
-        limit: CHAT_LIMIT
+        cursor
       });
       const parsedResults = parseResultRecords(result);
+      if (parsedResults[0].otherUser.length === 0) return [];
       const chatRooms: ChatRoom[] = parsedResults.map(
         ({ otherUser, lastChat }) => ({ otherUser, lastChat: lastChat[0] })
       );
@@ -136,19 +170,26 @@ const Query: QueryResolvers = {
 const Subscription = {
   getChatsByChatRoomId: {
     subscribe: withFilter(
-      (_, { chatRoomId }: SubscriptionGetChatsByChatRoomIdArgs, { pubsub }) => {
-        return pubsub.asyncIterator(CHAT_PUBSUB + chatRoomId);
-      },
+      (_, { chatRoomId }: SubscriptionGetChatsByChatRoomIdArgs, { pubsub }) =>
+        pubsub.asyncIterator(CHAT_PUBSUB + chatRoomId),
       async (payload, _, context) => {
         const { email } = context;
         const {
           getChatsByChatRoomId: { chatRoomId }
         } = payload;
-        const result = await requestDB(GET_USERS_ON_CHAT_ROOM_QUERY, {
-          chatRoomId: parseInt(chatRoomId, 10)
-        });
-        const users = parseResultRecords(result)[0].users;
-        return users.some(user => user.email === email);
+        return filterChatRoomUser({ chatRoomId, email });
+      }
+    )
+  },
+  getChatRooms: {
+    subscribe: withFilter(
+      (_, __, { pubsub }) => pubsub.asyncIterator(MESSAGE_TAB),
+      async (payload, _, context) => {
+        const { email } = context;
+        const {
+          lastChat: { chatRoomId }
+        } = payload.getChatRooms;
+        return filterChatRoomUser({ chatRoomId, email });
       }
     )
   }
