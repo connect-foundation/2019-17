@@ -55,7 +55,7 @@ export const objToDate = (date: Idate) => {
     date.year,
     date.month - 1,
     date.day,
-    date.hour,
+    date.hour + 9,
     date.minute,
     date.second,
     Number(date.nanosecond.substring(0, 3))
@@ -77,3 +77,5 @@ export const ISOtoDate = (isostr: any) => {
     parts[5]
   );
 };
+
+export const reformDate = () => {};

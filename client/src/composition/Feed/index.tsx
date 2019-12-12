@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import WritingFeed from './WritingFeed';
 import NewFeedAlarm from './NewFeedAlarm';
 import { useGetfeedsQuery, useMeQuery } from 'react-components.d';
-import { getDate } from '../../utils/dateUtil';
+import { dateToISO, objToDate } from '../../utils/dateUtil';
 import { FEEDS_SUBSCRIPTION } from './feed.query';
 import Loader from 'components/Loader';
 
@@ -127,7 +127,7 @@ const FeedList = () => {
       }
     });
   };
-  
+
   return loading ? (
     <LoadContainer>
       <Loader />
@@ -150,10 +150,10 @@ const FeedList = () => {
         ? data.feeds.feedItems.map((feed, idx) => {
             return feed && feed.feed && feed.feed.createdAt ? (
               <Feed
-                key={getDate(feed.feed.createdAt).toISOString() + idx}
+                key={dateToISO(objToDate(feed.feed.createdAt)) + idx}
                 content={feed.feed.content}
                 feedinfo={feed}
-                createdAt={getDate(feed.feed.createdAt).toISOString()}
+                createdAt={dateToISO(objToDate(feed.feed.createdAt))}
               />
             ) : (
               <></>
