@@ -41,8 +41,6 @@ import {
   IFeed
 } from '../../types';
 
-const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
-
 const getUpdateLikeQuery = count => {
   if (count > 0) {
     return UPDATE_LIKE;
@@ -135,7 +133,8 @@ const mutationResolvers: MutationResolvers = {
         userEmail: email
       });
       const [parsedRegisteredAlarmId] = parseResultRecords(registeredAlarmId);
-      publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, email);
+      if (parsedRegisteredAlarmId)
+        publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, email);
 
       return true;
     } catch (error) {
@@ -181,7 +180,8 @@ const mutationResolvers: MutationResolvers = {
         userEmail
       });
       const [parsedRegisteredAlarmId] = parseResultRecords(registeredAlarmId);
-      publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, userEmail);
+      if (parsedRegisteredAlarmId)
+        publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, userEmail);
 
       return true;
     } catch (error) {
@@ -238,7 +238,7 @@ const mutationResolvers: MutationResolvers = {
 const queryResolvers: QueryResolvers = {
   feeds: async (
     _,
-    { first, cursor = DEFAUT_MAX_DATE }: QueryFeedsArgs,
+    { first, cursor }: QueryFeedsArgs,
     { req }
   ): Promise<any> => {
     isAuthenticated(req);
@@ -251,6 +251,13 @@ const queryResolvers: QueryResolvers = {
     });
 
     const feeds = parseResultRecords(result);
+
+    if (feeds.length === 0) {
+      return {
+        cursor: '',
+        feedItems: feeds
+      };
+    }
     const lastFeed = feeds[feeds.length - 1];
     const cursorDate = lastFeed && lastFeed.feed && lastFeed.feed.createdAt;
     const cursorDateType = objToDate(cursorDate);
