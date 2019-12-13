@@ -30,21 +30,29 @@ function MessageTabContainer() {
         const {
           data: { getChatRooms }
         } = subscriptionData;
-        if (!prev.getChatRooms || !getChatRooms) return prev;
-        const {
-          lastChat: { chatRoomId }
-        } = getChatRooms as any;
-        const prevChatRooms = prev.getChatRooms.filter(
-          chatRoom => chatRoom && chatRoom.lastChat.chatRoomId !== chatRoomId
-        );
-        return Object.assign({}, prev, {
-          getChatRooms: [getChatRooms, ...prevChatRooms]
-        });
+        
+        if (prev && prev.getChatRooms && getChatRooms) {
+          const {
+            lastChat: { chatRoomId }
+          } = getChatRooms as any;
+          const prevChatRooms = prev.getChatRooms.filter(
+            chatRoom => chatRoom && chatRoom.lastChat.chatRoomId !== chatRoomId
+          );
+          return Object.assign({}, prev, {
+            getChatRooms: [getChatRooms, ...prevChatRooms]
+          });
+        }
+        if (!prev || !prev.getChatRooms && getChatRooms) {
+          return Object.assign({}, prev, {
+            getChatRooms: [getChatRooms]
+          });
+        }
+        return prev;
       }
     });
   };
 
-  useEffect(() => subscribeToChatRoom());
+  useEffect(() => subscribeToChatRoom(), []);
 
   return (
     <MessageTabPresenter

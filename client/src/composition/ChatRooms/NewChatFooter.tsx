@@ -4,7 +4,7 @@ import CommonFooter from 'composition/Header/CommonFooter';
 import useInput from 'hooks/useInput';
 import { useCreateChatRoomMutation, useGetUserQuery } from 'react-components.d';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
-import { CHAT_ROOM } from '../../constants';
+import { CHAT_ROOM, DEFAULT } from '../../constants';
 
 const ChatFooter = styled(CommonFooter)``;
 
@@ -63,8 +63,7 @@ function NewChatFooter({ userEmail, onClose }: IProps) {
             chatType: CHAT_ROOM.CHAT,
             otherUserEmail: userEmail,
             nickname,
-            thumbnail:
-              thumbnail || process.env.PUBLIC_URL + '/images/profile.png',
+            thumbnail: thumbnail || DEFAULT.PROFILE,
             chatRoomId: chat.chatRoomId
           }
         });
