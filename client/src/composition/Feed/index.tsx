@@ -4,6 +4,7 @@ import useIntersect from 'hooks/useIntersectObserver';
 import styled from 'styled-components';
 import WritingFeed from './WritingFeed';
 import NewFeedAlarm from './NewFeedAlarm';
+import NoFeed from './NoFeed';
 import { useGetfeedsQuery, useMeQuery } from 'react-components.d';
 import { dateToISO, objToDate } from '../../utils/dateUtil';
 import { FEEDS_SUBSCRIPTION } from './feed.query';
@@ -169,7 +170,7 @@ const FeedList = () => {
         <></>
       )}
 
-      <div>is End</div>
+      <NoFeed></NoFeed>
     </>
   );
 };
