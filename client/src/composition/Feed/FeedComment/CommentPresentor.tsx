@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Profile from 'components/Profile';
 import { Comment } from 'react-components.d';
+import { DEFAULT } from '../../../constants';
 
 const CommentLine = styled.div`
   margin: 0.25rem 0;
@@ -41,9 +42,7 @@ const CommentText = styled.div`
 
 // 역할 :
 const CommentPresentor = ({ comment }: { comment: Comment }) => {
-  const thumbnail =
-    (comment && comment.thumbnail) ||
-    process.env.PUBLIC_URL + '/images/profile.jpg';
+  const thumbnail = (comment && comment.thumbnail) || DEFAULT.PROFILE;
   return (
     <CommentLine>
       <Profile imageUrl={thumbnail} alt={'profile image'} size="32px" />
