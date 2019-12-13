@@ -9,6 +9,7 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import { LOGOUT } from 'cache/client.gql';
 import { HeaderTabProvider } from 'stores/HeaderTabContext';
 import { HeaderAlarmCountProvider } from 'stores/HeaderTabCountContext';
+import { DEFAULT } from '../../constants';
 
 const HeaderWrapper = styled.div`
   height: 40px;
@@ -82,10 +83,7 @@ const Header: React.FC = () => {
             </ItemColumn>
             <ItemColumn>
               <HeaderProfile
-                imageUrl={
-                  (me && me.thumbnail) ||
-                  process.env.PUBLIC_URL + '/images/profile.jpg'
-                }
+                imageUrl={(me && me.thumbnail) || DEFAULT.PROFILE}
                 size={'25px'}
               />
               <NicknameText>{(me && me.nickname) || ''}</NicknameText>

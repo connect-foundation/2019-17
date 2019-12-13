@@ -9,6 +9,7 @@ import {
 import useInput, { IUseInput } from 'hooks/useInput';
 import Profile from 'components/Profile';
 import Button from 'components/Button';
+import { DEFAULT } from '../../../constants';
 
 const CommentForm = styled.div`
   position: relative;
@@ -72,8 +73,7 @@ const WriteCommentPresentor = ({
         content: comment,
         createdAt: null,
         nickname: (me && me.nickname) || '',
-        thumbnail:
-          (me && me.thumbnail) || process.env.PUBLIC_URL + '/images/profile.jpg'
+        thumbnail: (me && me.thumbnail) || DEFAULT.PROFILE
       };
       const mergedComments = [...myComments, newComment];
       setComment(mergedComments);
@@ -83,9 +83,7 @@ const WriteCommentPresentor = ({
   return (
     <CommentForm>
       <Profile
-        imageUrl={
-          (me && me.thumbnail) || process.env.PUBLIC_URL + '/images/profile.jpg'
-        }
+        imageUrl={(me && me.thumbnail) || DEFAULT.PROFILE}
         alt={'profile image'}
         size="32px"
       />
