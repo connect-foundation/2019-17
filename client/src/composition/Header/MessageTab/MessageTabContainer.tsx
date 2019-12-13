@@ -52,7 +52,7 @@ function MessageTabContainer() {
     });
   };
 
-  useEffect(() => subscribeToChatRoom());
+  useEffect(() => subscribeToChatRoom(), []);
 
   return (
     <MessageTabPresenter
