@@ -15,7 +15,7 @@ import {
 
 const validateName = (inputName: string): boolean => {
   // 숫자로 시작안됨, 영어한글숫자가능 공백불가능, 닉네임 최소 길이 4자
-  const validateKey = /^[^0-9][가-힣a-zA-Z0-9_]{3,16}$/;
+  const validateKey = /^[^0-9][가-힣a-zA-Z0-9_]{1,16}$/;
   const result = validateKey.test(inputName);
   return result;
 };

@@ -67,6 +67,7 @@ function Feed({ content, createdAt, feedinfo, feedSize }: Iprops) {
             hasLiked={hasLiked}
             setHasLiked={setHasLiked}
             feedId={feedinfo.feedId}
+            commentCount={feedinfo.comments ? feedinfo.comments.length : 0}
           />
         </FeedContentDiv>
 
