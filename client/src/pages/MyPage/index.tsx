@@ -4,7 +4,7 @@ import ButtonContainer from 'composition/Search/ButtonContainer';
 
 import { useParams } from 'react-router-dom';
 import Profile from 'components/Profile';
-import UserFeedsContainer from 'composition/Feed/UserFeedsContainer';
+import UserFeedsContainer from './UserFeedsContainer';
 import FriendsIcon from 'components/Icon/FriendsIcon';
 import FriendsTable from 'composition/FriendList/tables';
 import { PAGE_PATHS } from '../../constants';
