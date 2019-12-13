@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import Feed from './Feed';
+import Feed from 'composition/Feed/Feed';
 import useIntersect from 'hooks/useIntersectObserver';
 import styled from 'styled-components';
-import WritingFeed from './WritingFeed';
-import NewFeedAlarm from './NewFeedAlarm';
-import NoFeed from './NoFeed';
-import { useGetfeedsQuery, useMeQuery } from 'react-components.d';
+import WritingFeed from 'composition/Feed/WritingFeed';
+import NewFeedAlarm from 'composition/Feed/NewFeedAlarm';
+import { useGetUserFeedsQuery, useMeQuery } from 'react-components.d';
 import { getDate } from 'utils/dateUtil';
-import { FEEDS_SUBSCRIPTION } from './feed.query';
-import Loader from 'components/Loader';
+import { FEEDS_SUBSCRIPTION } from 'composition/Feed/feed.query';
 
 const LoadCheckContainer = styled.div`
   height: 50px;
@@ -16,24 +14,28 @@ const LoadCheckContainer = styled.div`
   top: -50px;
 `;
 
-const LoadContainer = styled.div`
-  width: 100%;
-  height: 10rem;
-`;
-
 const OFFSET = 4;
 const ALARM_LIMIT = 0;
-const FeedList = () => {
+
+interface IProps {
+  email: string;
+}
+
+const UserFeedList = ({ email }: IProps) => {
   const [, setRef] = useIntersect(fetchMoreFeed, () => {}, {});
   const [, setTopRef] = useIntersect(feedAlarmOff, feedAlarmOn, {});
 
   const [feedAlarm, setFeedAlarm] = useState(0);
   const [AlarmMessage, setAlarmMessage] = useState('');
   const { data: myInfo } = useMeQuery();
-  const { data, fetchMore, subscribeToMore, loading } = useGetfeedsQuery({
-    variables: { first: OFFSET, currentCursor: '9999-12-31T09:29:26.050Z' }
+  const { data, fetchMore, subscribeToMore } = useGetUserFeedsQuery({
+    variables: {
+      first: OFFSET,
+      currentCursor: '9999-12-31T09:29:26.050Z',
+      email
+    }
   });
-
+  const myEmail = (myInfo && myInfo.me && myInfo.me.email) || '';
   const scrollTop = () => {
     window.scroll({
       top: 0,
@@ -66,23 +68,21 @@ const FeedList = () => {
           !fetchMoreResult.feeds ||
           !fetchMoreResult.feeds.feedItems ||
           !prev.feeds ||
-          !prev.feeds.feedItems ||
-          !fetchMoreResult.feeds.feedItems.length
+          !prev.feeds.feedItems
         ) {
           return prev;
         }
 
+        if (!fetchMoreResult.feeds.feedItems.length) {
+          return prev;
+        }
         const {
           feeds: { feedItems, cursor: newCursor }
         } = fetchMoreResult;
-        let finalCursor = newCursor;
 
-        if (newCursor === prev.feeds.cursor) {
-          finalCursor = '';
-        }
         return Object.assign({}, prev, {
           feeds: {
-            cursor: finalCursor,
+            cursor: newCursor,
             feedItems: [...prev.feeds.feedItems, ...feedItems],
             __typename: 'IFeeds'
           }
@@ -95,7 +95,7 @@ const FeedList = () => {
     return subscribeToMore({
       document: FEEDS_SUBSCRIPTION,
       variables: {
-        userEmail: myInfo && myInfo.me && myInfo.me.email ? myInfo.me.email : ''
+        userEmail: myEmail
       },
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
@@ -106,9 +106,12 @@ const FeedList = () => {
           !newFeeds.feeds ||
           !newFeeds.feeds.feedItems ||
           !prev.feeds ||
-          !prev.feeds.feedItems ||
-          !newFeeds.feeds.feedItems.length
+          !prev.feeds.feedItems
         ) {
+          return prev;
+        }
+
+        if (!newFeeds.feeds.feedItems.length) {
           return prev;
         }
 
@@ -116,6 +119,7 @@ const FeedList = () => {
           feeds: { feedItems }
         } = newFeeds;
 
+        setFeedAlarm(props => props + 1);
         return Object.assign({}, prev, {
           feeds: {
             cursor: prev.feeds.cursor,
@@ -127,15 +131,13 @@ const FeedList = () => {
     });
   };
 
-  return loading ? (
-    <LoadContainer>
-      <Loader />
-    </LoadContainer>
-  ) : (
+  return (
     <>
-      <div ref={setTopRef as any}>
-        <WritingFeed />
-      </div>
+      {myEmail === email && (
+        <div ref={setTopRef as any}>
+          <WritingFeed />
+        </div>
+      )}
 
       <div>
         <NewFeedAlarm
@@ -160,7 +162,7 @@ const FeedList = () => {
           })
         : 'no data'}
 
-      {data && data.feeds && data.feeds.cursor ? (
+      {data ? (
         <LoadCheckContainer
           onClick={fetchMoreFeed}
           ref={setRef as any}></LoadCheckContainer>
@@ -168,9 +170,9 @@ const FeedList = () => {
         <></>
       )}
 
-      <NoFeed></NoFeed>
+      <div>is End</div>
     </>
   );
 };
 
-export default FeedList;
+export default UserFeedList;

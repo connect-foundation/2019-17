@@ -12,7 +12,8 @@ import {
   ALARM_NEW_COMMENT,
   GET_NEW_ARALM,
   ALARM_ISCHECKED_COUNT,
-  CHANGE_ALL_ALARM_CHECKSTATE
+  CHANGE_ALL_ALARM_CHECKSTATE,
+  MATCH_USER_FEEDS
 } from '../../schema/feed/query';
 import { parseResultRecords } from '../../utils/parseData';
 
@@ -35,6 +36,7 @@ import {
   QueryFeedsArgs,
   MutationWriteCommentArgs,
   Alarm,
+  QueryUserFeedsArgs,
   QueryFeedArgs,
   IFeed
 } from '../../types';
@@ -257,7 +259,29 @@ const queryResolvers: QueryResolvers = {
       };
     }
     const lastFeed = feeds[feeds.length - 1];
-    const cursorDate = lastFeed.feed.createdAt;
+    const cursorDate = lastFeed && lastFeed.feed && lastFeed.feed.createdAt;
+    const cursorDateType = objToDate(cursorDate);
+    const dateDBISOString = dateToISO(cursorDateType);
+
+    const ret = {
+      cursor: dateDBISOString,
+      feedItems: feeds
+    };
+    return ret;
+  },
+  userFeeds: async (
+    _,
+    { first, cursor, email: useremail }: QueryUserFeedsArgs
+  ): Promise<any> => {
+    const result = await requestDB(MATCH_USER_FEEDS, {
+      cursor,
+      first,
+      useremail
+    });
+
+    const feeds = parseResultRecords(result);
+    const lastFeed = feeds[feeds.length - 1];
+    const cursorDate = lastFeed && lastFeed.feed && lastFeed.feed.createdAt;
     const cursorDateType = objToDate(cursorDate);
     const dateDBISOString = dateToISO(cursorDateType);
 

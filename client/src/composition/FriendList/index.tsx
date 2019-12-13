@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import { IFriend } from './friend.type';
-import User from '../../components/User';
-import { updateUserState } from 'apollo/resolvers';
+import User from 'components/User';
+import { useQuery } from '@apollo/react-hooks';
 
 const Wrapper = styled.div`
   right: 0;
@@ -13,13 +12,14 @@ const Wrapper = styled.div`
   width: 205px;
   position: fixed;
   z-index: 300;
+  border-left: 1px solid #ccc;
 `;
 
 const Top = styled.div`
   height: 43px;
 `;
 
-const friends = gql`
+export const GET_FRIENDS_STATUS = gql`
   query getFriends {
     friends {
       email
@@ -30,10 +30,21 @@ const friends = gql`
   }
 `;
 
+export const UPDATE_USER_STATE = gql`
+  subscription updateUserState {
+    updateUserState {
+      email
+      nickname
+      thumbnail
+      status
+    }
+  }
+`;
+
 const FriendList: React.FC = () => {
-  const { loading, data, subscribeToMore } = useQuery(friends);
+  const { loading, data, subscribeToMore } = useQuery(GET_FRIENDS_STATUS);
   subscribeToMore({
-    document: updateUserState,
+    document: UPDATE_USER_STATE,
     updateQuery: (prev, { subscriptionData }) => {
       if (!subscriptionData.data) return prev;
       const {
@@ -52,8 +63,7 @@ const FriendList: React.FC = () => {
       <Top />
       {!loading &&
         data &&
-        data.friends.map((user: IFriend) => {
-          const { email, thumbnail, nickname, status } = user;
+        data.friends.map(({ email, thumbnail, nickname, status }: IFriend) => {
           return (
             <User
               key={email}

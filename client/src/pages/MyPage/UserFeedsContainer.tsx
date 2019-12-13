@@ -1,5 +1,5 @@
 import React from 'react';
-import FeedList from './index';
+import UserFeeds from './UserFeeds';
 import styled from 'styled-components';
 
 const CenterContainer = styled.div`
@@ -7,12 +7,16 @@ const CenterContainer = styled.div`
   float: left;
 `;
 
-const FeedContainer = () => {
+interface IProps {
+  email: string;
+}
+
+const UserFeedsContainer = ({ email }: IProps) => {
   return (
     <CenterContainer>
-      <FeedList />
+      <UserFeeds email={email} />
     </CenterContainer>
   );
 };
 
-export default FeedContainer;
+export default UserFeedsContainer;

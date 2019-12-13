@@ -14,7 +14,7 @@ import Loader from 'components/Loader';
 import { useRef } from 'react';
 import useIntersect from 'hooks/useIntersectObserver';
 import { objToDate, dateToISO } from 'utils/dateUtil';
-import { DEFAULT } from '../../constants';
+import { DEFAULT } from 'Constants';
 
 const Container = styled.div`
   width: 20rem;

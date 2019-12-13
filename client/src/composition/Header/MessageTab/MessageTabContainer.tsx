@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import MessageTabPresenter from './MessageTabPresenter';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 import { useHeaderTabDispatch } from 'stores/HeaderTabContext';
-import { CHAT_ROOM } from '../../../constants';
+import { CHAT_ROOM } from 'Constants';
 import { useGetChatRoomsQuery, useMeQuery } from 'react-components.d';
 import { GET_CHATROOMS_SUBSCRIPTION } from './MessageTab.query';
 
@@ -30,7 +30,7 @@ function MessageTabContainer() {
         const {
           data: { getChatRooms }
         } = subscriptionData;
-        
+
         if (prev && prev.getChatRooms && getChatRooms) {
           const {
             lastChat: { chatRoomId }
@@ -42,7 +42,7 @@ function MessageTabContainer() {
             getChatRooms: [getChatRooms, ...prevChatRooms]
           });
         }
-        if (!prev || !prev.getChatRooms && getChatRooms) {
+        if (!prev || (!prev.getChatRooms && getChatRooms)) {
           return Object.assign({}, prev, {
             getChatRooms: [getChatRooms]
           });
