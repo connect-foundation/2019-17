@@ -81,7 +81,6 @@ interface IProps {
 }
 
 function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
-  console.log('thumbnail', thumbnail);
   const chatRoomDispatch = useChatRoomDispatch();
   const chatBody = useRef(null);
   const {
@@ -121,7 +120,7 @@ function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
     chatRoomDispatch({ type: 'DELETE_CHATROOM', idx });
   };
 
-  useEffect(() => subscribeToGetChat());
+  useEffect(() => subscribeToGetChat(), []);
 
   const { data: { me = null } = {}, loading: meLoading } = useMeQuery();
   const subscribeToGetChat = () => {

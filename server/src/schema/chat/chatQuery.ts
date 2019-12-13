@@ -46,16 +46,15 @@ as chats;
 `;
 
 export const GET_CHATROOMS_QUERY = `
-MATCH (chatRoom:ChatRoom) <- [:JOIN] - (:User {email: $email})
-WITH chatRoom
-MATCH (chatRoom) <- [:JOIN] - (otherUser:User)
-MATCH (chatRoom) <- [:SEND] - (chat:Chat) <- [:HAS] - (user:User)
-WITH chatRoom, chat, user, otherUser
+MATCH (chatRoom:ChatRoom) <- [:JOIN] - (me:User {email: $email})
+optional MATCH (chatRoom) <- [:JOIN] - (otherUser:User) where otherUser.email <> $email
+optional MATCH (chatRoom) <- [:SEND] - (chat:Chat) <- [:HAS] - (user:User)
+WITH chatRoom, chat, me, otherUser, user, collect(distinct [me, otherUser]) as test
 ORDER BY chat.createAt desc
-WHERE chat.createAt < dateTime($cursor)
-RETURN COLLECT(distinct otherUser) as otherUser, [HEAD(COLLECT(distinct {content: chat.content, createAt: chat.createAt, 
-    email: user.email, thumbnail: user.thumbnail, nickname: user.nickname, chatRoomId: ID(chatRoom)}))]
-as lastChat
+WHERE chat.createAt < datetime($cursor)
+unwind test as users
+return chatRoom, [head(collect(distinct {content: chat.content, createAt: chat.createAt, 
+    email: user.email, thumbnail: user.thumbnail, nickname: user.nickname, chatRoomId: ID(chatRoom)}))] as lastChat, users
 `;
 
 export const GET_USERS_ON_CHAT_ROOM_QUERY = `

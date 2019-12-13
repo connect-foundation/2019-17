@@ -136,7 +136,6 @@ const mutationResolvers: MutationResolvers = {
 
       return true;
     } catch (error) {
-      console.log(error);
       const DBError = createDBError(error);
       throw new DBError();
     }
