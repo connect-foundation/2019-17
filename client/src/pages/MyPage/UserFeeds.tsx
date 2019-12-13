@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import Feed from './Feed';
+import Feed from 'composition/Feed/Feed';
 import useIntersect from 'hooks/useIntersectObserver';
 import styled from 'styled-components';
-import WritingFeed from './WritingFeed';
-import NewFeedAlarm from './NewFeedAlarm';
+import WritingFeed from 'composition/Feed/WritingFeed';
+import NewFeedAlarm from 'composition/Feed/NewFeedAlarm';
 import { useGetUserFeedsQuery, useMeQuery } from 'react-components.d';
-import { getDate } from '../../utils/dateUtil';
-import { FEEDS_SUBSCRIPTION } from './feed.query';
+import { getDate } from 'utils/dateUtil';
+import { FEEDS_SUBSCRIPTION } from 'composition/Feed/feed.query';
 
 const LoadCheckContainer = styled.div`
   height: 50px;

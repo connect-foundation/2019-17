@@ -21,24 +21,26 @@ function groupByThree([a, b, c, ...rest]: any[]): any[] {
   return [[a, b, c]].concat(groupByThree(rest));
 }
 
-const FriendsTable: React.FC<IProps> = props => {
-  if (!props.children || !props.children.length) return <></>;
-  const groups = groupByThree(props.children);
+const FriendsTable: React.FC<IProps> = ({ children }) => {
+  if (!children || !children.length) return <></>;
+  const groups = groupByThree(children);
   return (
     <Div>
       <table>
         <tbody>
           {groups.map((row, index) => (
             <tr key={index}>
-              {row.map((user: IUser, subIndex: number) => (
-                <td key={subIndex}>
-                  <FriendProfile
-                    thumbnail={user.thumbnail}
-                    nickname={user.nickname}
-                    email={user.email}
-                  />
-                </td>
-              ))}
+              {row.map(
+                ({ thumbnail, nickname, email }: IUser, subIndex: number) => (
+                  <td key={subIndex}>
+                    <FriendProfile
+                      thumbnail={thumbnail}
+                      nickname={nickname}
+                      email={email}
+                    />
+                  </td>
+                )
+              )}
             </tr>
           ))}
         </tbody>

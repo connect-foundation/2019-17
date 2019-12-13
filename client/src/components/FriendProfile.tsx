@@ -20,19 +20,19 @@ interface IProps {
   email: string;
 }
 
-const FriendProfile: React.FC<IProps> = props => {
+const FriendProfile: React.FC<IProps> = ({ email, thumbnail, nickname }) => {
   return (
     <>
-      <Link to={`/myPage/${props.email}`}>
+      <Link to={`/myPage/${email}`}>
         <Image
           src={
-            props.thumbnail
-              ? props.thumbnail
+            thumbnail
+              ? thumbnail
               : process.env.PUBLIC_URL + '/images/profile.jpg'
           }
-          alt={props.email}
+          alt={email}
         />
-        <Name>{props.nickname}</Name>
+        <Name>{nickname}</Name>
       </Link>
     </>
   );

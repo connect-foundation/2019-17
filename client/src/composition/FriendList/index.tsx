@@ -63,8 +63,7 @@ const FriendList: React.FC = () => {
       <Top />
       {!loading &&
         data &&
-        data.friends.map((user: IFriend) => {
-          const { email, thumbnail, nickname, status } = user;
+        data.friends.map(({ email, thumbnail, nickname, status }: IFriend) => {
           return (
             <User
               key={email}
