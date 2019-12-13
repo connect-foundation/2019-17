@@ -271,7 +271,7 @@ const queryResolvers: QueryResolvers = {
   },
   userFeeds: async (
     _,
-    { first, cursor = DEFAUT_MAX_DATE, email: useremail }: QueryUserFeedsArgs
+    { first, cursor, email: useremail }: QueryUserFeedsArgs
   ): Promise<any> => {
     const result = await requestDB(MATCH_USER_FEEDS, {
       cursor,

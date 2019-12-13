@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { DEFAULT } from '../constants';
 
 const Image = styled.img<{ size: string }>`
   width: ${props => props.size};
@@ -21,7 +22,7 @@ function Profile({ imageUrl, size, alt, className }: IProps) {
 Profile.defaultProps = {
   size: '40px',
   alt: 'profile image',
-  imageUrl: process.env.PUBLIC_URL + '/images/profile.jpg'
+  imageUrl: DEFAULT.PROFILE
 };
 
 export default Profile;

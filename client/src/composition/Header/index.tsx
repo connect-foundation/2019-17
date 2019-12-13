@@ -9,7 +9,7 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import { LOGOUT } from 'cache/client.gql';
 import { HeaderTabProvider } from 'stores/HeaderTabContext';
 import { HeaderAlarmCountProvider } from 'stores/HeaderTabCountContext';
-import { PAGE_PATHS } from 'Constants';
+import { PAGE_PATHS, DEFAULT } from 'Constants';
 import { Link } from 'react-router-dom';
 
 const HeaderWrapper = styled.div`
@@ -92,10 +92,7 @@ const Header: React.FC = () => {
             <ItemColumn>
               <MyPageButton to={PAGE_PATHS.MY_PAGE + `/` + email}>
                 <HeaderProfile
-                  imageUrl={
-                    (me && me.thumbnail) ||
-                    process.env.PUBLIC_URL + '/images/profile.jpg'
-                  }
+                  imageUrl={(me && me.thumbnail) || DEFAULT.PROFILE}
                   size={'25px'}
                 />
                 <NicknameText>{(me && me.nickname) || ''}</NicknameText>
