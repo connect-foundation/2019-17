@@ -36,7 +36,9 @@ import {
   QueryFeedsArgs,
   MutationWriteCommentArgs,
   Alarm,
-  QueryUserFeedsArgs
+  QueryUserFeedsArgs,
+  QueryFeedArgs,
+  IFeed
 } from '../../types';
 
 const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
@@ -73,7 +75,7 @@ const createImages = async (pubsub, email, feedId, files) => {
 const publishingFeed = async (pubsub, feedId, email) => {
   const registerdFeed = await requestDB(GET_NEW_FEED, {
     feedId,
-    useremail: email
+    userEmail: email
   });
 
   const parsedRegisterdFeed = parseResultRecords(registerdFeed);
@@ -303,6 +305,18 @@ const queryResolvers: QueryResolvers = {
     const [parsedAlarmCount] = parseResultRecords(result);
 
     return Number(parsedAlarmCount.alarmCount);
+  },
+  feed: async (_, { feedId }: QueryFeedArgs, { req }): Promise<IFeed> => {
+    isAuthenticated(req);
+    const userEmail = req.email;
+
+    const feed = await requestDB(GET_NEW_FEED, {
+      feedId,
+      userEmail
+    });
+    const [parsedFeed] = parseResultRecords(feed);
+
+    return parsedFeed;
   }
 };
 

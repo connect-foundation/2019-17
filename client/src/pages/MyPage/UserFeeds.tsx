@@ -35,7 +35,7 @@ const UserFeedList = ({ email }: IProps) => {
       email
     }
   });
-
+  const myEmail = (myInfo && myInfo.me && myInfo.me.email) || '';
   const scrollTop = () => {
     window.scroll({
       top: 0,
@@ -95,7 +95,7 @@ const UserFeedList = ({ email }: IProps) => {
     return subscribeToMore({
       document: FEEDS_SUBSCRIPTION,
       variables: {
-        userEmail: myInfo && myInfo.me && myInfo.me.email ? myInfo.me.email : ''
+        userEmail: myEmail
       },
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
@@ -133,9 +133,11 @@ const UserFeedList = ({ email }: IProps) => {
 
   return (
     <>
-      <div ref={setTopRef as any}>
-        <WritingFeed />
-      </div>
+      {myEmail === email && (
+        <div ref={setTopRef as any}>
+          <WritingFeed />
+        </div>
+      )}
 
       <div>
         <NewFeedAlarm

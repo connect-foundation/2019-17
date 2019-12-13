@@ -14,6 +14,7 @@ import Loader from 'components/Loader';
 import { useRef } from 'react';
 import useIntersect from 'hooks/useIntersectObserver';
 import { objToDate, dateToISO } from 'utils/dateUtil';
+import { DEFAULT } from 'Constants';
 
 const Container = styled.div`
   width: 20rem;
@@ -28,7 +29,7 @@ const Container = styled.div`
 
 const ChatBody = styled.section`
   height: 17rem;
-  overflow: scroll;
+  overflow: auto;
   display: flex;
   flex-direction: column-reverse;
   justify-content: flex-start;
@@ -104,7 +105,7 @@ function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         const { getChatsByChatRoomId: chats } = fetchMoreResult;
-        if (!prev.getChatsByChatRoomId || !chats || chats.length == 0) {
+        if (!prev.getChatsByChatRoomId || !chats || chats.length === 0) {
           return prev;
         }
         return Object.assign({}, prev, {
@@ -113,12 +114,13 @@ function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
       }
     });
   };
+  // @ts-ignore
   const [_, setRef] = useIntersect(fetchMoreChats, () => {}, {});
   const onClose = () => {
     chatRoomDispatch({ type: 'DELETE_CHATROOM', idx });
   };
 
-  useEffect(() => subscribeToGetChat(), []);
+  useEffect(() => subscribeToGetChat());
 
   const { data: { me = null } = {}, loading: meLoading } = useMeQuery();
   const subscribeToGetChat = () => {
@@ -143,7 +145,11 @@ function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
 
   return (
     <Container>
-      <ChatHeader nickname={nickname} onClose={onClose} thumbnail={thumbnail} />
+      <ChatHeader
+        nickname={nickname}
+        onClose={onClose}
+        thumbnail={thumbnail || DEFAULT.PROFILE}
+      />
       <ChatBody ref={chatBody}>
         {loading || meLoading ? (
           <Loader size={'20px'} />

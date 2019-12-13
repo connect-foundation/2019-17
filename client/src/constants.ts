@@ -22,3 +22,8 @@ export enum HEADER_TAB_CNT {
   MESSAGE = 'messageCount',
   ALARM = 'alarmCount'
 }
+
+export const DEFAULT = {
+  PROFILE: process.env.PUBLIC_URL + '/images/profile.png',
+  SEARCH_NOT_FOUND: process.env.PUBLIC_URL + '/images/search_notfound.png'
+}

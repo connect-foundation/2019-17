@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import ChatRoom from './ChatRoom';
 import NewChatRoom from './NewChatRoom';
 import { useChatRoomState } from 'stores/ChatRoomContext';
-import { CHAT_ROOM } from 'Constants';
+import { CHAT_ROOM, DEFAULT } from 'Constants';
 
 const Container = styled.div`
   position: fixed;
@@ -31,10 +31,7 @@ function ChatRooms() {
                 }
                 idx={idx}
                 nickname={chatRoom.nickname || ''}
-                thumbnail={
-                  chatRoom.thumbnail ||
-                  process.env.PUBLIC_URL + '/images/profile.png'
-                }
+                thumbnail={chatRoom.thumbnail || DEFAULT.PROFILE}
                 chatRoomId={chatRoom.chatRoomId || 0}
               />
             );

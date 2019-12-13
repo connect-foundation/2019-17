@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Dispatch, SetStateAction } from 'react';
 import styled, { css } from 'styled-components';
 import Profile from 'components/Profile';
 import { Alarm, useChangeFeedAlarmReadStateMutation } from 'react-components.d';
@@ -74,7 +74,15 @@ const getAppliedReadAlarms = (alarms: Alarm[], data: any) => {
   });
 };
 
-function AlamBox({ alarm }: { alarm: Alarm; isRead: boolean }) {
+interface Iprops {
+  alarm: Alarm;
+  setModalState: Dispatch<SetStateAction<IModalState>>;
+}
+interface IModalState {
+  isOpen: boolean;
+  feedId: number;
+}
+function AlamBox({ alarm, setModalState }: Iprops) {
   const [readState, setReadState] = useState(
     alarm && alarm.isRead ? alarm.isRead : false
   );
@@ -97,6 +105,11 @@ function AlamBox({ alarm }: { alarm: Alarm; isRead: boolean }) {
   const onClickFold = () => {
     setReadState(true);
     changeRedState({ variables: { feedId: Number(alarm.feedId) } });
+    ModalOn();
+  };
+
+  const ModalOn = () => {
+    setModalState({ isOpen: true, feedId: Number(alarm.feedId) });
   };
   return (
     <Container isRead={readState} onClick={onClickFold}>
