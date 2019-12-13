@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import ActionButton from 'components/ActionButton';
 import gql from 'graphql-tag';
 import { useGetUserInfoWithEmailQuery } from 'react-components.d';
+import ChatRooms from 'composition/ChatRooms';
 
 export const USERINFO_With_EMAIL = gql`
   query getUserInfoWithEmail($email: String!) {
@@ -375,6 +376,7 @@ const MyPage: React.FC<IProps> = props => {
           <UserFeedsContainer email={userEmail} />
         </RightDiv>
       </TimelineBody>
+      <ChatRooms />
     </ContentArea>
   );
 };
