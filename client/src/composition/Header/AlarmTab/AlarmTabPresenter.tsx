@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CommonHeader from '../CommonHeader';
 import CommonFooter from '../CommonFooter';
 import CommonBody from '../CommonBody';
-
+import DetailFeed from '../../DetailFeed';
 import AlamBox from './AlarmBox';
 import { useGetAlarmsQuery, Alarm, useMeQuery } from 'react-components.d';
 import { SUBSCRIBE_ALARMS } from './alarm.query';
@@ -43,7 +43,10 @@ function AlarmTabPresenter({ selected }: { selected: boolean }) {
   const { data, subscribeToMore } = useGetAlarmsQuery();
   const { data: myInfo } = useMeQuery();
   const headerTabCountDispatch = useHeaderTabCountDispatch();
-
+  const [modalState, setModalState] = useState({ isOpen: false, feedId: 0 });
+  const closeModal = () => {
+    setModalState({ isOpen: false, feedId: 0 });
+  };
   const subscribeToNewFeeds = () => {
     return subscribeToMore({
       document: SUBSCRIBE_ALARMS,
@@ -92,12 +95,26 @@ function AlarmTabPresenter({ selected }: { selected: boolean }) {
         {data &&
           data.alarms &&
           data.alarms.map((alarm: Alarm, idx) => {
-            return <AlamBox alarm={alarm} key={'alarm_' + idx} />;
+            return (
+              <AlamBox
+                alarm={alarm}
+                key={'alarm_' + idx}
+                setModalState={setModalState}
+              />
+            );
           })}
       </CommonBody>
       <Footer>
         <Text>모두 읽은 상태로 표시</Text>
       </Footer>
+
+      {modalState.isOpen && modalState.feedId > 0 && (
+        <DetailFeed
+          isOpen={modalState.isOpen}
+          feedId={modalState.feedId}
+          closeModal={closeModal}
+        />
+      )}
     </Container>
   );
 }

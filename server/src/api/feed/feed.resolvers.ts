@@ -34,10 +34,10 @@ import {
   QueryResolvers,
   QueryFeedsArgs,
   MutationWriteCommentArgs,
-  Alarm
+  Alarm,
+  QueryFeedArgs,
+  IFeed
 } from '../../types';
-
-const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
 
 const getUpdateLikeQuery = count => {
   if (count > 0) {
@@ -71,7 +71,7 @@ const createImages = async (pubsub, email, feedId, files) => {
 const publishingFeed = async (pubsub, feedId, email) => {
   const registerdFeed = await requestDB(GET_NEW_FEED, {
     feedId,
-    useremail: email
+    userEmail: email
   });
 
   const parsedRegisterdFeed = parseResultRecords(registerdFeed);
@@ -131,7 +131,8 @@ const mutationResolvers: MutationResolvers = {
         userEmail: email
       });
       const [parsedRegisteredAlarmId] = parseResultRecords(registeredAlarmId);
-      publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, email);
+      if (parsedRegisteredAlarmId)
+        publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, email);
 
       return true;
     } catch (error) {
@@ -177,7 +178,8 @@ const mutationResolvers: MutationResolvers = {
         userEmail
       });
       const [parsedRegisteredAlarmId] = parseResultRecords(registeredAlarmId);
-      publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, userEmail);
+      if (parsedRegisteredAlarmId)
+        publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, userEmail);
 
       return true;
     } catch (error) {
@@ -234,7 +236,7 @@ const mutationResolvers: MutationResolvers = {
 const queryResolvers: QueryResolvers = {
   feeds: async (
     _,
-    { first, cursor = DEFAUT_MAX_DATE }: QueryFeedsArgs,
+    { first, cursor }: QueryFeedsArgs,
     { req }
   ): Promise<any> => {
     isAuthenticated(req);
@@ -247,6 +249,13 @@ const queryResolvers: QueryResolvers = {
     });
 
     const feeds = parseResultRecords(result);
+
+    if (feeds.length === 0) {
+      return {
+        cursor: '',
+        feedItems: feeds
+      };
+    }
     const lastFeed = feeds[feeds.length - 1];
     const cursorDate = lastFeed.feed.createdAt;
     const cursorDateType = objToDate(cursorDate);
@@ -279,6 +288,18 @@ const queryResolvers: QueryResolvers = {
     const [parsedAlarmCount] = parseResultRecords(result);
 
     return Number(parsedAlarmCount.alarmCount);
+  },
+  feed: async (_, { feedId }: QueryFeedArgs, { req }): Promise<IFeed> => {
+    isAuthenticated(req);
+    const userEmail = req.email;
+
+    const feed = await requestDB(GET_NEW_FEED, {
+      feedId,
+      userEmail
+    });
+    const [parsedFeed] = parseResultRecords(feed);
+
+    return parsedFeed;
   }
 };
 

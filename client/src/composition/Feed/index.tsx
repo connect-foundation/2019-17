@@ -4,20 +4,15 @@ import useIntersect from 'hooks/useIntersectObserver';
 import styled from 'styled-components';
 import WritingFeed from './WritingFeed';
 import NewFeedAlarm from './NewFeedAlarm';
+import NoFeed from './NoFeed';
 import { useGetfeedsQuery, useMeQuery } from 'react-components.d';
 import { getDate } from '../../utils/dateUtil';
 import { FEEDS_SUBSCRIPTION } from './feed.query';
-import Loader from 'components/Loader';
 
 const LoadCheckContainer = styled.div`
   height: 50px;
   position: relative;
   top: -50px;
-`;
-
-const LoadContainer = styled.div`
-  width: 100%;
-  height: 10rem;
 `;
 
 const OFFSET = 4;
@@ -29,7 +24,7 @@ const FeedList = () => {
   const [feedAlarm, setFeedAlarm] = useState(0);
   const [AlarmMessage, setAlarmMessage] = useState('');
   const { data: myInfo } = useMeQuery();
-  const { data, fetchMore, subscribeToMore, loading } = useGetfeedsQuery({
+  const { data, fetchMore, subscribeToMore } = useGetfeedsQuery({
     variables: { first: OFFSET, currentCursor: '9999-12-31T09:29:26.050Z' }
   });
 
@@ -65,21 +60,23 @@ const FeedList = () => {
           !fetchMoreResult.feeds ||
           !fetchMoreResult.feeds.feedItems ||
           !prev.feeds ||
-          !prev.feeds.feedItems
+          !prev.feeds.feedItems ||
+          !fetchMoreResult.feeds.feedItems.length
         ) {
           return prev;
         }
 
-        if (!fetchMoreResult.feeds.feedItems.length) {
-          return prev;
-        }
         const {
           feeds: { feedItems, cursor: newCursor }
         } = fetchMoreResult;
+        let finalCursor = newCursor;
 
+        if (newCursor === prev.feeds.cursor) {
+          finalCursor = '';
+        }
         return Object.assign({}, prev, {
           feeds: {
-            cursor: newCursor,
+            cursor: finalCursor,
             feedItems: [...prev.feeds.feedItems, ...feedItems],
             __typename: 'IFeeds'
           }
@@ -103,12 +100,9 @@ const FeedList = () => {
           !newFeeds.feeds ||
           !newFeeds.feeds.feedItems ||
           !prev.feeds ||
-          !prev.feeds.feedItems
+          !prev.feeds.feedItems ||
+          !newFeeds.feeds.feedItems.length
         ) {
-          return prev;
-        }
-
-        if (!newFeeds.feeds.feedItems.length) {
           return prev;
         }
 
@@ -116,7 +110,6 @@ const FeedList = () => {
           feeds: { feedItems }
         } = newFeeds;
 
-        setFeedAlarm(props => props + 1);
         return Object.assign({}, prev, {
           feeds: {
             cursor: prev.feeds.cursor,
@@ -128,11 +121,7 @@ const FeedList = () => {
     });
   };
 
-  return loading ? (
-    <LoadContainer>
-      <Loader />
-    </LoadContainer>
-  ) : (
+  return (
     <>
       <div ref={setTopRef as any}>
         <WritingFeed />
@@ -161,7 +150,7 @@ const FeedList = () => {
           })
         : 'no data'}
 
-      {data ? (
+      {data && data.feeds && data.feeds.cursor ? (
         <LoadCheckContainer
           onClick={fetchMoreFeed}
           ref={setRef as any}></LoadCheckContainer>
@@ -169,7 +158,7 @@ const FeedList = () => {
         <></>
       )}
 
-      <div>is End</div>
+      <NoFeed></NoFeed>
     </>
   );
 };

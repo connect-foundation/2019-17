@@ -6,11 +6,11 @@ import FeedFooter from './FeedFooter';
 import CommentContainer from './FeedComment';
 import { IFeed } from 'react-components.d';
 
-const FeedDiv = styled.div`
+const FeedDiv = styled.div<{ feedSize: string }>`
   ${props => props.theme.borders.feedBorder};
   background-color: #fff;
   margin-bottom: 10px;
-  width: 32rem;
+  width: ${props => props.feedSize};
 `;
 
 const FeedContentDiv = styled.div`
@@ -32,9 +32,10 @@ interface Iprops {
   content: string | null | undefined;
   createdAt: string;
   feedinfo: IFeed;
+  feedSize: string;
 }
 
-function Feed({ content, createdAt, feedinfo }: Iprops) {
+function Feed({ content, createdAt, feedinfo, feedSize }: Iprops) {
   const [likeCnt, setLikeCnt] = useState<number>(0);
   const [hasLiked, setHasLiked] = useState<boolean>(false);
 
@@ -50,7 +51,7 @@ function Feed({ content, createdAt, feedinfo }: Iprops) {
   if (!feedinfo || !feedinfo.searchUser) return <></>;
   return (
     <>
-      <FeedDiv>
+      <FeedDiv feedSize={feedSize}>
         <FeedContentDiv className="mainbox">
           <FeedEditDiv></FeedEditDiv>
           <FeedHeader
@@ -68,6 +69,7 @@ function Feed({ content, createdAt, feedinfo }: Iprops) {
             hasLiked={hasLiked}
             setHasLiked={setHasLiked}
             feedId={feedinfo.feedId}
+            commentCount={feedinfo.comments ? feedinfo.comments.length : 0}
           />
         </FeedContentDiv>
 
@@ -79,5 +81,9 @@ function Feed({ content, createdAt, feedinfo }: Iprops) {
     </>
   );
 }
+
+Feed.defaultProps = {
+  feedSize: '32rem'
+};
 
 export default Feed;

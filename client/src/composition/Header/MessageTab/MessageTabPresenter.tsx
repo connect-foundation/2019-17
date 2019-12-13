@@ -70,6 +70,7 @@ function MessageTabPresenter({
       </Header>
       <Body>
         {chatRooms &&
+          chatRooms.length > 0 &&
           chatRooms.map(({ otherUser, lastChat }: ChatRoom) => {
             const other = otherUser.filter(
               user => user && user.email !== userEmail
