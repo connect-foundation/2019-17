@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import ChatRoom from './ChatRoom';
 import NewChatRoom from './NewChatRoom';
 import { useChatRoomState } from 'stores/ChatRoomContext';
-import { CHAT_ROOM, DEFAULT } from 'constant
+import { CHAT_ROOM, DEFAULT } from 'constant';
 
 const Container = styled.div`
   position: fixed;
