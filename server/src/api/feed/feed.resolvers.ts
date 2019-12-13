@@ -37,8 +37,6 @@ import {
   Alarm
 } from '../../types';
 
-const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
-
 const getUpdateLikeQuery = count => {
   if (count > 0) {
     return UPDATE_LIKE;
@@ -236,7 +234,7 @@ const mutationResolvers: MutationResolvers = {
 const queryResolvers: QueryResolvers = {
   feeds: async (
     _,
-    { first, cursor = DEFAUT_MAX_DATE }: QueryFeedsArgs,
+    { first, cursor }: QueryFeedsArgs,
     { req }
   ): Promise<any> => {
     isAuthenticated(req);
