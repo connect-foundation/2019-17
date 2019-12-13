@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import gql from 'graphql-tag';
 import { IFriend } from './friend.type';
-import User from '../../components/User';
+import User from 'components/User';
 import { useQuery } from '@apollo/react-hooks';
 
 const Wrapper = styled.div`

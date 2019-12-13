@@ -52,6 +52,7 @@ function Feed({ content, createdAt, feedinfo }: Iprops) {
         <FeedContentDiv className="mainbox">
           <FeedEditDiv></FeedEditDiv>
           <FeedHeader
+            email={feedinfo.searchUser.email}
             thumbnail={
               feedinfo.searchUser.thumbnail ||
               process.env.PUBLIC_URL + '/images/profile.jpg'

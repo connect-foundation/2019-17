@@ -4,7 +4,7 @@ import CommonFooter from 'composition/Header/CommonFooter';
 import useInput from 'hooks/useInput';
 import { useCreateChatRoomMutation, useGetUserQuery } from 'react-components.d';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
-import { CHAT_ROOM } from '../../constants';
+import { CHAT_ROOM } from 'Constants';
 
 const ChatFooter = styled(CommonFooter)``;
 

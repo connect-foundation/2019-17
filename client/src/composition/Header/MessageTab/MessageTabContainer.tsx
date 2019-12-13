@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import MessageTabPresenter from './MessageTabPresenter';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 import { useHeaderTabDispatch } from 'stores/HeaderTabContext';
-import { CHAT_ROOM } from '../../../constants';
+import { CHAT_ROOM } from 'Constants';
 import { useGetChatRoomsQuery, useMeQuery } from 'react-components.d';
 import { GET_CHATROOMS_SUBSCRIPTION } from './MessageTab.query';
 

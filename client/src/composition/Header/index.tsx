@@ -9,7 +9,7 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import { LOGOUT } from 'cache/client.gql';
 import { HeaderTabProvider } from 'stores/HeaderTabContext';
 import { HeaderAlarmCountProvider } from 'stores/HeaderTabCountContext';
-import { PAGE_PATHS } from '../../constants';
+import { PAGE_PATHS } from 'Constants';
 import { Link } from 'react-router-dom';
 
 const HeaderWrapper = styled.div`

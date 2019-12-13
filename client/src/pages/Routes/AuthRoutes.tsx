@@ -1,12 +1,12 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
-import { PAGE_PATHS } from '../../constants';
+import { PAGE_PATHS } from 'Constants';
 import Header from 'composition/Header';
-import Main from '../Main';
-import MyPage from '../MyPage';
-import NoMatch from '../NoMatch';
-import Search from '../Search';
+import Main from 'pages/Main';
+import MyPage from 'pages/MyPage';
+import NoMatch from 'pages/NoMatch';
+import Search from 'pages/Search';
 import { useQuery } from '@apollo/react-hooks';
 import { loggedIn } from 'apollo/resolvers';
 import { ChatRoomProvider } from 'stores/ChatRoomContext';

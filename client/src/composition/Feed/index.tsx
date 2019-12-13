@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import WritingFeed from './WritingFeed';
 import NewFeedAlarm from './NewFeedAlarm';
 import { useGetfeedsQuery, useMeQuery } from 'react-components.d';
-import { getDate } from '../../utils/dateUtil';
+import { getDate } from 'utils/dateUtil';
 import { FEEDS_SUBSCRIPTION } from './feed.query';
 import Loader from 'components/Loader';
 
@@ -127,7 +127,7 @@ const FeedList = () => {
       }
     });
   };
-  
+
   return loading ? (
     <LoadContainer>
       <Loader />

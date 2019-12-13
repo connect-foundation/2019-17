@@ -7,7 +7,7 @@ import Profile from 'components/Profile';
 import UserFeedsContainer from './UserFeedsContainer';
 import FriendsIcon from 'components/Icon/FriendsIcon';
 import FriendsTable from 'composition/FriendList/tables';
-import { PAGE_PATHS } from '../../constants';
+import { PAGE_PATHS } from 'Constants';
 import { Link } from 'react-router-dom';
 import ActionButton from 'components/ActionButton';
 import gql from 'graphql-tag';
