@@ -131,7 +131,8 @@ const mutationResolvers: MutationResolvers = {
         userEmail: email
       });
       const [parsedRegisteredAlarmId] = parseResultRecords(registeredAlarmId);
-      publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, email);
+      if (parsedRegisteredAlarmId)
+        publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, email);
 
       return true;
     } catch (error) {
@@ -177,7 +178,8 @@ const mutationResolvers: MutationResolvers = {
         userEmail
       });
       const [parsedRegisteredAlarmId] = parseResultRecords(registeredAlarmId);
-      publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, userEmail);
+      if (parsedRegisteredAlarmId)
+        publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, userEmail);
 
       return true;
     } catch (error) {
