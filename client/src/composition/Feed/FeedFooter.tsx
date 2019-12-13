@@ -71,6 +71,7 @@ interface Iprops {
   hasLiked: boolean;
   setHasLiked: any;
   feedId: number | null | undefined;
+  commentCount: number;
 }
 
 const SEND_LIKE = gql`
@@ -84,7 +85,8 @@ const FeedFooter = ({
   setLikeCnt,
   hasLiked,
   setHasLiked,
-  feedId
+  feedId,
+  commentCount
 }: Iprops) => {
   const [updateLike] = useMutation(SEND_LIKE);
 
@@ -110,7 +112,7 @@ const FeedFooter = ({
         </LikeShowDiv>
 
         <ActionStateDiv>
-          <span>댓글 2개 </span> <span> 공유 5회</span>
+          <span>댓글 {commentCount}개 </span>
         </ActionStateDiv>
       </FeedActionDiv>
       <ActionbtnDiv>
