@@ -31,6 +31,8 @@ const useIntersect = (
       observer.observe(ref);
     }
     return () => observer && observer.disconnect();
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref, option.root, option.threshold, option.rootMargin, checkIntersect]);
   return [ref, setRef];
 };

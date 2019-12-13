@@ -79,6 +79,8 @@ function AlarmTabPresenter({ selected }: { selected: boolean }) {
 
   useEffect(() => {
     return subscribeToNewFeeds();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
   return (

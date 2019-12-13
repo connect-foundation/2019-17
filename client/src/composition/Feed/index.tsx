@@ -23,8 +23,8 @@ const LoadContainer = styled.div`
 const OFFSET = 4;
 const ALARM_LIMIT = 0;
 const FeedList = () => {
-  const [_, setRef] = useIntersect(fetchMoreFeed, () => {}, {});
-  const [__, setTopRef] = useIntersect(feedAlarmOff, feedAlarmOn, {});
+  const [, setRef] = useIntersect(fetchMoreFeed, () => {}, {});
+  const [, setTopRef] = useIntersect(feedAlarmOff, feedAlarmOn, {});
 
   const [feedAlarm, setFeedAlarm] = useState(0);
   const [AlarmMessage, setAlarmMessage] = useState('');
@@ -127,7 +127,7 @@ const FeedList = () => {
       }
     });
   };
-  
+
   return loading ? (
     <LoadContainer>
       <Loader />

@@ -43,6 +43,8 @@ function Feed({ content, createdAt, feedinfo }: Iprops) {
       setLikeCnt(feedinfo.totallikes);
       setHasLiked(feedinfo.hasLiked ? true : false);
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!feedinfo || !feedinfo.searchUser) return <></>;

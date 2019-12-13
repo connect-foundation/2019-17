@@ -24,6 +24,8 @@ function FriendTab({ selected }: IProps) {
         type: 'RESET_FRIEND_CNT'
       });
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
   return (

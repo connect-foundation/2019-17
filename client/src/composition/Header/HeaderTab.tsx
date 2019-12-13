@@ -78,6 +78,8 @@ function HeaderTab() {
         key: { id: 'alarmCount', value: alarmCount.alarmCount }
       });
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [alarmCount]);
 
   useEffect(() => {
@@ -87,6 +89,8 @@ function HeaderTab() {
         key: { id: 'friendCount', value: friendCount.friendUnreadAlarmNum }
       });
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [friendCount]);
 
   const wrapperRef = useOutsideReset(() => {

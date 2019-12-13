@@ -46,6 +46,8 @@ function AutoCompleteContainer({ keyword, setKeyword }: IProps) {
 
   useEffect(() => {
     if (keyword.length) getUserQuery({ variables: { keyword } });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [keyword]);
 
   return (

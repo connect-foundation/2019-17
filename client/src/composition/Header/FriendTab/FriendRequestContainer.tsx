@@ -69,6 +69,8 @@ function FriendRequestContainer() {
         }
       }
     });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subscribeToMore]);
 
   return (

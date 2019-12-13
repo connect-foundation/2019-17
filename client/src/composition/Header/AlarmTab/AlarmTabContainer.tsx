@@ -16,6 +16,8 @@ function AlarmTabContainer({ selected }: Iprops) {
         type: 'RESET_ALARM_CNT'
       });
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
   return <MessageTabPresenter selected={selected} />;
 }
