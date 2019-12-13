@@ -1,21 +1,30 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { FaBell, FaUserFriends } from 'react-icons/fa';
 import { AiFillMessage } from 'react-icons/ai';
 import Tab from './Tab';
 import MessageTab from './MessageTab';
-import FriendsTab from './FriendsTab';
+import FriendTab from './FriendTab';
 import AlarmTab from './AlarmTab';
+import NewFriendAlarmNum from './FriendTab/NewFriendAlarmNum';
 import {
   useHeaderTabState,
   useHeaderTabDispatch
 } from 'stores/HeaderTabContext';
 import { HEADER_TAB } from '../../constants';
-import { useAlarmCountQuery, useAlarmCountLazyQuery } from 'react-components.d';
+import {
+  useAlarmCountQuery,
+  useFriendUnreadAlarmNumQuery
+} from 'react-components.d';
 import {
   useHeaderTabCountState,
   useHeaderTabCountDispatch
 } from 'stores/HeaderTabCountContext';
+import { useOutsideReset } from 'hooks/useOutsideReset';
+
+const RelativeDiv = styled.div`
+  position: relative;
+`;
 
 const Container = styled.div`
   position: relative;
@@ -38,7 +47,7 @@ const nonActive = css`
   color: #203257;
 `;
 
-const FriendsIcon = styled(FaUserFriends)<{ selected: boolean }>`
+const FriendIcon = styled(FaUserFriends)<{ selected: boolean }>`
   ${cursor}
   ${props => (props.selected ? active : nonActive)}
 `;
@@ -59,47 +68,77 @@ function HeaderTab() {
 
   const headerTabCountState = useHeaderTabCountState();
   const headerTabCountDispatch = useHeaderTabCountDispatch();
-  const { data } = useAlarmCountQuery();
+  const { data: alarmCount } = useAlarmCountQuery();
+  const { data: friendCount } = useFriendUnreadAlarmNumQuery();
 
   useEffect(() => {
-    if (data) {
+    if (alarmCount) {
       headerTabCountDispatch({
         type: 'SET_INIT_ALARM_CNT',
-        key: { id: 'alarmCount', value: data.alarmCount }
+        key: { id: 'alarmCount', value: alarmCount.alarmCount }
       });
     }
-  }, [data]);
+  }, [alarmCount]);
+
+  useEffect(() => {
+    if (friendCount) {
+      headerTabCountDispatch({
+        type: 'SET_INIT_FRIEND_CNT',
+        key: { id: 'friendCount', value: friendCount.friendUnreadAlarmNum }
+      });
+    }
+  }, [friendCount]);
+
+  const wrapperRef = useOutsideReset(() => {
+    headerTabDispatch({
+      type: 'INITSTATE'
+    });
+  });
 
   return (
-    <Container>
-      <FriendsIcon
-        selected={headerTabState.friends}
-        onClick={() =>
-          headerTabDispatch({ type: 'CLICK_FRIENDS', key: HEADER_TAB.FRIENDS })
-        }
-      />
-      <Tab left={'-230px'} selected={headerTabState.friends}>
-        <FriendsTab />
+    <Container ref={wrapperRef}>
+      <RelativeDiv>
+        <FriendIcon
+          selected={
+            headerTabCountState.friendCount > 0 ||
+            headerTabState.isActiveFriendTab
+          }
+          onClick={() => {
+            headerTabDispatch({
+              type: 'CLICK_FRIEND_TAB',
+              key: HEADER_TAB.IS_ACTIVE_FRIEND_TAB
+            });
+          }}
+        />
+        <NewFriendAlarmNum />
+      </RelativeDiv>
+      <Tab left={'-230px'} selected={headerTabState.isActiveFriendTab}>
+        <FriendTab selected={headerTabState.isActiveFriendTab} />
       </Tab>
       <MessageIcon
-        selected={headerTabState.message}
+        selected={headerTabState.isActiveMessageTab}
         onClick={() =>
-          headerTabDispatch({ type: 'CLICK_MESSAGE', key: HEADER_TAB.MESSAGE })
+          headerTabDispatch({
+            type: 'CLICK_MESSAGE_TAB',
+            key: HEADER_TAB.IS_ACTIVE_MESSAGE_TAB
+          })
         }
       />
-      <Tab selected={headerTabState.message}>
+      <Tab selected={headerTabState.isActiveMessageTab}>
         <MessageTab />
       </Tab>
       <AlarmIcon
-        selected={headerTabState.alarm}
+        selected={headerTabState.isActiveAlarmTab}
         onClick={() =>
-          headerTabDispatch({ type: 'CLICK_ALARM', key: HEADER_TAB.ALARM })
+          headerTabDispatch({
+            type: 'CLICK_ALARM_TAB',
+            key: HEADER_TAB.IS_ACTIVE_ALARM_TAB
+          })
         }
       />
-
       <p>{headerTabCountState.alarmCount}</p>
-      <Tab left={'-160px'} selected={headerTabState.alarm}>
-        <AlarmTab selected={headerTabState.alarm} />
+      <Tab left={'-160px'} selected={headerTabState.isActiveAlarmTab}>
+        <AlarmTab selected={headerTabState.isActiveAlarmTab} />
       </Tab>
     </Container>
   );

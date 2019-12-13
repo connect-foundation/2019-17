@@ -7,9 +7,9 @@ export enum PAGE_PATHS {
 }
 
 export enum HEADER_TAB {
-  FRIENDS = 'friends',
-  MESSAGE = 'message',
-  ALARM = 'alarm'
+  IS_ACTIVE_FRIEND_TAB = 'isActiveFriendTab',
+  IS_ACTIVE_MESSAGE_TAB = 'isActiveMessageTab',
+  IS_ACTIVE_ALARM_TAB = 'isActiveAlarmTab'
 }
 
 export enum CHAT_ROOM {
@@ -18,7 +18,7 @@ export enum CHAT_ROOM {
 }
 
 export enum HEADER_TAB_CNT {
-  FRIENDS = 'friendsCount',
+  FRIEND = 'friendCount',
   MESSAGE = 'messageCount',
   ALARM = 'alarmCount'
 }

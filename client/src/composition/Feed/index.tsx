@@ -7,11 +7,17 @@ import NewFeedAlarm from './NewFeedAlarm';
 import { useGetfeedsQuery, useMeQuery } from 'react-components.d';
 import { getDate } from '../../utils/dateUtil';
 import { FEEDS_SUBSCRIPTION } from './feed.query';
+import Loader from 'components/Loader';
 
 const LoadCheckContainer = styled.div`
   height: 50px;
   position: relative;
   top: -50px;
+`;
+
+const LoadContainer = styled.div`
+  width: 100%;
+  height: 10rem;
 `;
 
 const OFFSET = 4;
@@ -23,7 +29,7 @@ const FeedList = () => {
   const [feedAlarm, setFeedAlarm] = useState(0);
   const [AlarmMessage, setAlarmMessage] = useState('');
   const { data: myInfo } = useMeQuery();
-  const { data, fetchMore, subscribeToMore } = useGetfeedsQuery({
+  const { data, fetchMore, subscribeToMore, loading } = useGetfeedsQuery({
     variables: { first: OFFSET, currentCursor: '9999-12-31T09:29:26.050Z' }
   });
 
@@ -121,8 +127,12 @@ const FeedList = () => {
       }
     });
   };
-
-  return (
+  
+  return loading ? (
+    <LoadContainer>
+      <Loader />
+    </LoadContainer>
+  ) : (
     <>
       <div ref={setTopRef as any}>
         <WritingFeed />
