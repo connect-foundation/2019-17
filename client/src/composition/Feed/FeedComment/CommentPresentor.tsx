@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Profile from 'components/Profile';
 import { Comment } from 'react-components.d';
-import { DEFAULT } from 'Constants';
+import { DEFAULT } from 'constant
 
 const CommentLine = styled.div`
   margin: 0.25rem 0;

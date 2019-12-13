@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { PAGE_PATHS } from 'Constants';
+import { PAGE_PATHS } from 'constant';
 import SignIn from 'pages/SignIn';
 import SignUp from 'pages/SignUp';
 import NoMatch from 'pages/NoMatch';

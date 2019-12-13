@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/react-hooks';
 import UserCard from 'components/UserCard';
 import queryString from 'querystring';
 import ButtonContainer from './ButtonContainer';
-import { DEFAULT } from 'Constants';
+import { DEFAULT } from 'constant';
 
 const SEARCH_USER = gql`
   query getUserName($keyword: String!) {

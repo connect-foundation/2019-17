@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
-import { PAGE_PATHS } from 'Constants';
+import { PAGE_PATHS } from 'constant';
 import Header from 'composition/Header';
 import Main from 'pages/Main';
 import MyPage from 'pages/MyPage';

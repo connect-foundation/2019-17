@@ -5,7 +5,7 @@ import React, {
   Dispatch,
   useContext
 } from 'react';
-import { HEADER_TAB_CNT } from 'Constants';
+import { HEADER_TAB_CNT } from 'constant';
 
 const initState = {
   [HEADER_TAB_CNT.FRIEND]: 0,

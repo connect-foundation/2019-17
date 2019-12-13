@@ -11,7 +11,7 @@ import {
   useHeaderTabState,
   useHeaderTabDispatch
 } from 'stores/HeaderTabContext';
-import { HEADER_TAB } from 'Constants';
+import { HEADER_TAB } from 'constant
 import {
   useAlarmCountQuery,
   useFriendUnreadAlarmNumQuery
