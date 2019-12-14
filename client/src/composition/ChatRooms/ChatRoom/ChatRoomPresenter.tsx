@@ -102,11 +102,11 @@ function ChatRoomPresenter({
               getChatsByChatRoomId.map(
                 ({ email, content }: Chat, idx: number) =>
                   me && email === me.email ? (
-                    <MyChat key={content + idx}>
+                    <MyChat key={new Date().toISOString() + idx}>
                       <MyChatContent>{content}</MyChatContent>
                     </MyChat>
                   ) : (
-                    <OtherChat key={content + idx}>
+                    <OtherChat key={new Date().toISOString() + idx}>
                       <OtherContent>{content}</OtherContent>
                     </OtherChat>
                   )

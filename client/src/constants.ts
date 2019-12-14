@@ -27,3 +27,5 @@ export const DEFAULT = {
   PROFILE: process.env.PUBLIC_URL + '/images/profile.jpg',
   SEARCH_NOT_FOUND: process.env.PUBLIC_URL + '/images/search_notfound.png'
 };
+
+export const MAX_DATE = '9999-12-31T09:29:26.050Z'

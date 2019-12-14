@@ -8,6 +8,7 @@ import NoFeed from './NoFeed';
 import { useGetfeedsQuery, useMeQuery } from 'react-components.d';
 import { getDate } from '../../utils/dateUtil';
 import { FEEDS_SUBSCRIPTION } from './feed.query';
+import { MAX_DATE } from '../../constants';
 
 const LoadCheckContainer = styled.div`
   height: 50px;
@@ -17,7 +18,7 @@ const LoadCheckContainer = styled.div`
 
 const OFFSET = 4;
 const ALARM_LIMIT = 0;
-const FeedList = () => {
+const FeedList: React.FC = () => {
   const [_, setRef] = useIntersect(fetchMoreFeed, () => {}, {});
   const [__, setTopRef] = useIntersect(feedAlarmOff, feedAlarmOn, {});
 
@@ -25,7 +26,7 @@ const FeedList = () => {
   const [AlarmMessage, setAlarmMessage] = useState('');
   const { data: myInfo } = useMeQuery();
   const { data, fetchMore, subscribeToMore } = useGetfeedsQuery({
-    variables: { first: OFFSET, currentCursor: '9999-12-31T09:29:26.050Z' }
+    variables: { first: OFFSET, currentCursor: MAX_DATE }
   });
 
   const scrollTop = () => {

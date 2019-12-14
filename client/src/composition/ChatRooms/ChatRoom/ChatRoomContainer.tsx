@@ -6,9 +6,10 @@ import {
 } from 'react-components.d';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 import { GET_CHAT_SUBSCRIPTION } from '../ChatRooms.query';
-import { dateToISO, objToDate } from 'utils/dateUtil';
+import { getDate } from 'utils/dateUtil';
 import ChatRoomPresenter from './ChatRoomPresenter';
 import useIntersect from 'hooks/useIntersectObserver';
+import { MAX_DATE } from '../../../constants';
 
 interface IProps {
   idx: number;
@@ -16,6 +17,8 @@ interface IProps {
   thumbnail: string;
   chatRoomId: number;
 }
+
+const CHAT_UNIT = 20;
 
 function ChatRoomContainer({ idx, chatRoomId, nickname, thumbnail }: IProps) {
   const chatRoomDispatch = useChatRoomDispatch();
@@ -26,7 +29,7 @@ function ChatRoomContainer({ idx, chatRoomId, nickname, thumbnail }: IProps) {
     subscribeToMore,
     fetchMore
   } = useGetChatsByChatRoomIdQuery({
-    variables: { chatRoomId, cursor: '9999-12-31T09:29:26.050Z' }
+    variables: { chatRoomId, cursor: MAX_DATE }
   });
 
   const fetchMoreChats = async () => {
@@ -34,7 +37,7 @@ function ChatRoomContainer({ idx, chatRoomId, nickname, thumbnail }: IProps) {
       getChatsByChatRoomId &&
       getChatsByChatRoomId[getChatsByChatRoomId.length - 1];
     const cursor = lastChat
-      ? dateToISO(objToDate(lastChat.createAt))
+      ? getDate(lastChat.createAt).toISOString()
       : '9999-12-31T09:29:26.050Z';
 
     await fetchMore({
@@ -42,7 +45,12 @@ function ChatRoomContainer({ idx, chatRoomId, nickname, thumbnail }: IProps) {
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         const { getChatsByChatRoomId: chats } = fetchMoreResult;
-        if (!prev.getChatsByChatRoomId || !chats || chats.length === 0) {
+        if (
+          !prev.getChatsByChatRoomId ||
+          !chats ||
+          chats.length === 0 ||
+          cursor === MAX_DATE
+        ) {
           return prev;
         }
         return Object.assign({}, prev, {
