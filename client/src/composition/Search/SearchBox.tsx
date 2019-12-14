@@ -7,11 +7,13 @@ import { MutableRefObject } from 'react';
 import { ReactNode } from 'react';
 import { useOutsideReset } from 'hooks/useOutsideReset';
 import AutoCompleteContainer from './AutoCompleteContainer';
+import { useGetUserNameLazyQuery } from 'react-components.d';
 
 const Container = styled.div`
   display: flex;
   width: 500px;
   align-items: center;
+  position: relative;
 `;
 
 const SearchBoxInput = styled.input`
@@ -49,6 +51,9 @@ interface IProps {
 function SearchBox() {
   const [keyword, setKeyword] = useState('');
   const [btnColor, setBtnColor] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [getUserQuery, { data }] = useGetUserNameLazyQuery();
+
   const wrapperRef: MutableRefObject<null> = useOutsideReset(() => {
     setBtnColor(false);
   });
@@ -72,32 +77,43 @@ function SearchBox() {
   }
 
   return (
-    <Container>
-      <a href="/">
-        <Logo size={'23px'} />
-      </a>
-      <form onSubmit={checkInput} ref={wrapperRef}>
-        <SearchBoxInput
-          onSubmit={checkInput}
-          type="text"
-          placeholder="검색"
-          value={keyword}
-          onChange={e => setKeyword(e.target.value)}
-          onFocus={() => setBtnColor(true)}
-        />
-        <ConditionalLink>
-          <SearchButton
-            type="submit"
-            color={btnColor ? 'none' : 'blue'}
+    <>
+      <Container>
+        <a href="/">
+          <Logo size={'23px'} />
+        </a>
+        <form onSubmit={checkInput} ref={wrapperRef}>
+          <SearchBoxInput
             onSubmit={checkInput}
-            onClick={() => setBtnColor(true)}>
-            <SearchButtonIcon
-              color={btnColor ? 'white' : 'gray'}></SearchButtonIcon>
-          </SearchButton>
-        </ConditionalLink>
-        <AutoCompleteContainer keyword={keyword} setKeyword={setKeyword} />
-      </form>
-    </Container>
+            type="text"
+            placeholder="검색"
+            value={keyword}
+            onChange={e => {
+              setKeyword(e.target.value);
+              setVisible(true);
+              getUserQuery({ variables: { keyword: e.target.value } });
+            }}
+            onFocus={() => setBtnColor(true)}
+          />
+          <ConditionalLink>
+            <SearchButton
+              type="submit"
+              color={btnColor ? 'none' : 'blue'}
+              onSubmit={checkInput}
+              onClick={() => setBtnColor(true)}>
+              <SearchButtonIcon
+                color={btnColor ? 'white' : 'gray'}></SearchButtonIcon>
+            </SearchButton>
+          </ConditionalLink>
+        </form>
+        <AutoCompleteContainer
+          setKeyword={setKeyword}
+          data={data}
+          setVisible={setVisible}
+          visible={visible}
+        />
+      </Container>
+    </>
   );
 }
 

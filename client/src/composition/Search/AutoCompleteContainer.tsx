@@ -1,16 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useGetUserNameLazyQuery } from 'react-components.d';
+import { IUser } from 'react-components.d';
 import Profile from 'components/Profile';
-import { useEffect } from 'react';
 
 const UserWrapper = styled.div`
   position: absolute;
   width: 400px;
   color: black;
   background-color: white;
-  top: 32px;
-  left: 59px;
+  top: 25px;
+  left: 33px;
   max-height: 10rem;
   overflow: auto;
   display: flex;
@@ -37,25 +36,29 @@ const Nickname = styled.span`
 `;
 
 interface IProps {
-  keyword: string;
   setKeyword: (keyword: string) => void;
+  visible: boolean;
+  setVisible: (visible: boolean) => void;
+  data: any;
 }
 
-function AutoCompleteContainer({ keyword, setKeyword }: IProps) {
-  const [getUserQuery, { data }] = useGetUserNameLazyQuery();
-
-  useEffect(() => {
-    if (keyword.length) getUserQuery({ variables: { keyword } });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [keyword]);
-
+function AutoCompleteContainer({
+  setVisible,
+  setKeyword,
+  visible,
+  data
+}: IProps) {
   return (
     <>
-      {keyword && data && data.searchUser.length > 0 ? (
+      {visible && data && data.searchUser.length ? (
         <UserWrapper>
-          {data.searchUser.map(({ email, nickname, thumbnail }) => (
-            <UserContainer key={email} onClick={() => setKeyword(nickname)}>
+          {data.searchUser.map(({ email, nickname, thumbnail }: IUser) => (
+            <UserContainer
+              key={email || ''}
+              onClick={() => {
+                setKeyword(nickname || '');
+                setVisible(false);
+              }}>
               <Profile imageUrl={thumbnail || undefined} size={'25px'} />
               <Nickname>{nickname}</Nickname>
             </UserContainer>
