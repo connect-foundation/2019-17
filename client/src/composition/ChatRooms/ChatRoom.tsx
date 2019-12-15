@@ -116,7 +116,7 @@ function ChatRoom({ idx, chatRoomId, nickname, thumbnail }: IProps) {
     });
   };
   // @ts-ignore
-  const [_, setRef] = useIntersect(fetchMoreChats, () => {}, {});
+  const [, setRef] = useIntersect(fetchMoreChats, () => {}, {});
   const onClose = () => {
     chatRoomDispatch({ type: 'DELETE_CHATROOM', idx });
   };
