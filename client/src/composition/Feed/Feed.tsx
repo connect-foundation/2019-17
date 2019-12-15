@@ -5,7 +5,7 @@ import FeedBody from './FeedBody';
 import FeedFooter from './FeedFooter';
 import CommentContainer from './FeedComment';
 import { IFeed } from 'react-components.d';
-import { DEFAULT } from '../../constants';
+import { DEFAULT } from 'Constants';
 
 const FeedDiv = styled.div<{ feedSize: string }>`
   ${props => props.theme.borders.feedBorder};
@@ -56,10 +56,8 @@ function Feed({ content, createdAt, feedinfo, feedSize }: Iprops) {
         <FeedContentDiv className="mainbox">
           <FeedEditDiv></FeedEditDiv>
           <FeedHeader
-            thumbnail={
-              feedinfo.searchUser.thumbnail ||
-              DEFAULT.PROFILE
-            }
+            email={feedinfo.searchUser.email}
+            thumbnail={feedinfo.searchUser.thumbnail || DEFAULT.PROFILE}
             nickName={feedinfo.searchUser.nickname}
             createdAt={createdAt}
           />

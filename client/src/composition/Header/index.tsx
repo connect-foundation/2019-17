@@ -9,7 +9,8 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import { LOGOUT } from 'cache/client.gql';
 import { HeaderTabProvider } from 'stores/HeaderTabContext';
 import { HeaderAlarmCountProvider } from 'stores/HeaderTabCountContext';
-import { DEFAULT } from '../../constants';
+import { PAGE_PATHS, DEFAULT } from 'Constants';
+import { Link } from 'react-router-dom';
 
 const HeaderWrapper = styled.div`
   height: 40px;
@@ -65,6 +66,12 @@ const NicknameText = styled.button`
   font-size: 0.875rem;
 `;
 
+const MyPageButton = styled(Link)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const Header: React.FC = () => {
   const { data: { me = null } = {} } = useMeQuery();
   const [logoutLazyQuery] = useLazyQuery(LOGOUT);
@@ -72,6 +79,7 @@ const Header: React.FC = () => {
     logoutLazyQuery();
     window.location.href = '/';
   };
+  const email = (me && me.email) || '';
   return (
     <>
       <HelmetTitle message={'main'} />
@@ -82,11 +90,13 @@ const Header: React.FC = () => {
               <SearchBox />
             </ItemColumn>
             <ItemColumn>
-              <HeaderProfile
-                imageUrl={(me && me.thumbnail) || DEFAULT.PROFILE}
-                size={'25px'}
-              />
-              <NicknameText>{(me && me.nickname) || ''}</NicknameText>
+              <MyPageButton to={PAGE_PATHS.MY_PAGE + `/` + email}>
+                <HeaderProfile
+                  imageUrl={(me && me.thumbnail) || DEFAULT.PROFILE}
+                  size={'25px'}
+                />
+                <NicknameText>{(me && me.nickname) || ''}</NicknameText>
+              </MyPageButton>
               <HeaderAlarmCountProvider>
                 <HeaderTabProvider>
                   <AlarmTab />

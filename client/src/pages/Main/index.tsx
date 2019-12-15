@@ -1,13 +1,18 @@
 import React from 'react';
 import ChatRooms from 'composition/ChatRooms';
 import FeedContainer from 'composition/Feed/FeedContainer';
-import FriendList from 'composition/FriendList';
+import styled from 'styled-components';
+
+const MainContainer = styled.div`
+  margin-top: 10px;
+`;
 
 const Main: React.FC = () => {
   return (
     <>
-      <FeedContainer />
-      <FriendList />
+      <MainContainer>
+        <FeedContainer />
+      </MainContainer>
       <ChatRooms />
     </>
   );

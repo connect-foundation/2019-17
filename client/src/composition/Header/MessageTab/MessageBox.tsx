@@ -4,7 +4,7 @@ import { FaCheck } from 'react-icons/fa';
 import Profile from 'components/Profile';
 import CommonBox from '../CommonBox';
 import { useHeaderTabDispatch } from 'stores/HeaderTabContext';
-import { CHAT_ROOM } from '../../../constants';
+import { CHAT_ROOM } from 'Constants';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 
 const Container = styled(CommonBox)<{ isRead: boolean; onClick: () => void }>`

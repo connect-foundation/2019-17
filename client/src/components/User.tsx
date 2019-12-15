@@ -9,6 +9,7 @@ const ProfileDiv = styled.div`
   margin: 4px 0 0 0;
   position: relative;
   white-space: nowrap;
+  padding-left: 8px;
 `;
 
 const ProfileImgBox = styled.div`

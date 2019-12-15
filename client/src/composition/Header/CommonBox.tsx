@@ -9,7 +9,7 @@ const Container = styled.article`
     border-top: 1px solid #dddfe2;
   }
   &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: #ecfffa;
   }
 `;
 

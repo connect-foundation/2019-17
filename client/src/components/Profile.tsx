@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DEFAULT } from '../constants';
+import { DEFAULT } from 'Constants';
 
 const Image = styled.img<{ size: string }>`
   width: ${props => props.size};

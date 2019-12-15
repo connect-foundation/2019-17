@@ -1,6 +1,6 @@
 import React from 'react';
-import AuthRoutes from '../Routes/AuthRoutes';
-import NonAuthRoutes from '../Routes/NonAuthRoutes';
+import AuthRoutes from 'pages/Routes/AuthRoutes';
+import NonAuthRoutes from 'pages/Routes/NonAuthRoutes';
 import { login, getIsLoggedIn } from 'cache/client.gql';
 import { useQuery } from '@apollo/react-hooks';
 
