@@ -76,6 +76,16 @@ function SearchBox() {
     return false;
   }
 
+  function inputOnChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const {
+      target: { value }
+    } = e;
+
+    setKeyword(value);
+    setVisible(true);
+    getUserQuery({ variables: { keyword: value } });
+  }
+
   return (
     <>
       <Container>
@@ -88,11 +98,7 @@ function SearchBox() {
             type="text"
             placeholder="검색"
             value={keyword}
-            onChange={e => {
-              setKeyword(e.target.value);
-              setVisible(true);
-              getUserQuery({ variables: { keyword: e.target.value } });
-            }}
+            onChange={inputOnChange}
             onFocus={() => setBtnColor(true)}
           />
           <ConditionalLink>
