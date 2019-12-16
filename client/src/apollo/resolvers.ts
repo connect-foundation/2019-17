@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-
+import { WRITING_FEED_CONTENT } from 'Constants';
 export interface IArgs {
   content: string;
 }
@@ -28,7 +28,7 @@ export const resolvers = {
   },
   Mutation: {
     enrollWritingFeed: (_: any, { content }: IArgs, __: any) => {
-      localStorage.setItem('writingFeedContent', content);
+      localStorage.setItem(WRITING_FEED_CONTENT, content);
     }
   }
 };

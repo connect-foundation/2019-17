@@ -27,3 +27,5 @@ export const DEFAULT = {
   PROFILE: process.env.PUBLIC_URL + '/images/profile.jpg',
   SEARCH_NOT_FOUND: process.env.PUBLIC_URL + '/images/search_notfound.png'
 };
+
+export const WRITING_FEED_CONTENT = 'writingFeedContent';
