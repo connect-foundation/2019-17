@@ -41,6 +41,8 @@ const Logo = styled(BoostBookLogo)`
   margin-right: 10px;
 `;
 
+const Home = styled.a``;
+
 interface IProps {
   children: ReactNode;
 }
@@ -72,9 +74,9 @@ function SearchBox() {
 
   return (
     <Container>
-      <a href="/">
+      <Home href="/">
         <Logo size={'23px'} />
-      </a>
+      </Home>
       <form onSubmit={checkInput} ref={wrapperRef}>
         <SearchBoxInput
           onSubmit={checkInput}

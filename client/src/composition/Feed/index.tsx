@@ -8,7 +8,7 @@ import NoFeed from './NoFeed';
 import { useGetfeedsQuery, useMeQuery } from 'react-components.d';
 import { getDate } from 'utils/dateUtil';
 import { FEEDS_SUBSCRIPTION } from './feed.query';
-import { MAX_DATE } from '../../constants';
+import { MAX_DATE } from '../../Constants';
 import Loader from 'components/Loader';
 
 const LoadCheckContainer = styled.div`
@@ -26,8 +26,8 @@ const OFFSET = 4;
 const ALARM_LIMIT = 0;
 
 const FeedList: React.FC = () => {
-  const [_, setRef] = useIntersect(fetchMoreFeed, () => {}, {});
-  const [__, setTopRef] = useIntersect(feedAlarmOff, feedAlarmOn, {});
+  const [, setRef] = useIntersect(fetchMoreFeed, () => {}, {});
+  const [, setTopRef] = useIntersect(feedAlarmOff, feedAlarmOn, {});
 
   const [feedAlarm, setFeedAlarm] = useState(0);
   const [AlarmMessage, setAlarmMessage] = useState('');

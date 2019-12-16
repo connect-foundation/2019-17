@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Profile from 'components/Profile';
-import { PAGE_PATHS } from 'Constants';
+import { PAGE_PATHS, DEFAULT } from 'Constants';
 import { Link } from 'react-router-dom';
 
 const ProfileDiv = styled.div`
@@ -9,16 +9,12 @@ const ProfileDiv = styled.div`
   padding-bottom: 0.5rem;
 `;
 
-const ProfileImgBox = styled.a`
+const ProfileImgBox = styled(Link)`
   display: inline-block;
   float: left;
   padding-right: 0.5rem;
   cursor: pointer;
 `;
-
-interface ITest {
-  size: string;
-}
 
 const ProfileNameDiv = styled.div`
   margin-bottom: 0.25rem;
@@ -44,24 +40,20 @@ interface Iprops {
 }
 
 const FeedHeader = ({ createdAt, thumbnail, nickName, email }: Iprops) => {
-  const Thumbnail = thumbnail || process.env.PUBLIC_URL + '/images/profile.jpg';
+  const Thumbnail = thumbnail || DEFAULT.PROFILE;
 
   return (
-    <>
-      <div>
-        <ProfileImgBox>
-          <Link to={PAGE_PATHS.MY_PAGE + '/' + email}>
-            <Profile imageUrl={Thumbnail} alt={'profile image'} size="40px" />
-          </Link>
-        </ProfileImgBox>
-        <ProfileDiv>
-          <Link to={PAGE_PATHS.MY_PAGE + '/' + email}>
-            <ProfileNameDiv>{nickName}</ProfileNameDiv>
-          </Link>
-          <ProfileDateDiv>{createdAt} </ProfileDateDiv>
-        </ProfileDiv>
-      </div>
-    </>
+    <div>
+      <ProfileImgBox to={PAGE_PATHS.MY_PAGE + '/' + email}>
+        <Profile imageUrl={Thumbnail} alt={'profile image'} size="40px" />
+      </ProfileImgBox>
+      <ProfileDiv>
+        <Link to={PAGE_PATHS.MY_PAGE + '/' + email}>
+          <ProfileNameDiv>{nickName}</ProfileNameDiv>
+        </Link>
+        <ProfileDateDiv>{createdAt} </ProfileDateDiv>
+      </ProfileDiv>
+    </div>
   );
 };
 

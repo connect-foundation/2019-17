@@ -9,7 +9,7 @@ import { GET_CHAT_SUBSCRIPTION } from '../ChatRooms.query';
 import { getDate } from 'utils/dateUtil';
 import ChatRoomPresenter from './ChatRoomPresenter';
 import useIntersect from 'hooks/useIntersectObserver';
-import { MAX_DATE } from '../../../constants';
+import { MAX_DATE } from '../../../Constants';
 
 interface IProps {
   idx: number;
@@ -58,12 +58,16 @@ function ChatRoomContainer({ idx, chatRoomId, nickname, thumbnail }: IProps) {
     });
   };
   // @ts-ignore
-  const [_, setRef] = useIntersect(fetchMoreChats, () => {}, {});
+  const [, setRef] = useIntersect(fetchMoreChats, () => {}, {});
   const onClose = () => {
     chatRoomDispatch({ type: 'DELETE_CHATROOM', idx });
   };
 
-  useEffect(() => subscribeToGetChat(), []);
+  useEffect(
+    () => subscribeToGetChat(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   const { data: { me = null } = {}, loading: meLoading } = useMeQuery();
   const subscribeToGetChat = () => {

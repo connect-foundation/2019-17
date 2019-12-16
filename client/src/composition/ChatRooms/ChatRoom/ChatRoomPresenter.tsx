@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DEFAULT } from '../../../constants';
+import { DEFAULT } from '../../../Constants';
 import ChatHeader from '../ChatHeader';
 import Loader from 'components/Loader';
 import ChatFooter from '../ChatFooter';
