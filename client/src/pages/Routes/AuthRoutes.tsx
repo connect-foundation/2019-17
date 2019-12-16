@@ -33,7 +33,7 @@ const AuthRoutes: React.FC = () => {
           <Route exact path={PAGE_PATHS.MAIN} component={Main} />
           <Redirect from={PAGE_PATHS.SIGNUP} to={PAGE_PATHS.MAIN} />
           <Redirect from={PAGE_PATHS.SIGNIN} to={PAGE_PATHS.MAIN} />
-          <Route path={PAGE_PATHS.MY_PAGE + '/:email'} component={MyPage} />
+          <Route path={PAGE_PATHS.MY_PAGE_BY_EMAIL} component={MyPage} />
           <Route path={PAGE_PATHS.SEARCH} component={Search} />
           <Route component={NoMatch} />
         </Switch>

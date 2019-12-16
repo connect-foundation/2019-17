@@ -4,6 +4,7 @@ export enum PAGE_PATHS {
   SIGNUP = '/signup',
   SIGNIN = '/signin',
   MY_PAGE = '/mypage',
+  MY_PAGE_BY_EMAIL = '/mypage/:email',
   MAIN = '/',
   SEARCH = '/search'
 }

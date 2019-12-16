@@ -62,11 +62,9 @@ function ButtonContainer({ email, initialRelation }: IProps) {
   }
 
   return (
-    <>
-      <ActionButton
-        text={getReleationText(relation)}
-        onClick={sendRequest}></ActionButton>
-    </>
+    <ActionButton
+      text={getReleationText(relation)}
+      onClick={sendRequest}></ActionButton>
   );
 }
 
