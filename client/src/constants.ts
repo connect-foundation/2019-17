@@ -1,3 +1,5 @@
+import config from 'utils/config';
+
 export enum PAGE_PATHS {
   SIGNUP = '/signup',
   SIGNIN = '/signin',
@@ -29,3 +31,9 @@ export const DEFAULT = {
 };
 
 export const WRITING_FEED_CONTENT = 'writingFeedContent';
+
+export const HTTP_SERVER_URI = `http://${config.serverHost}/graphql`;
+
+export const UPLOAD_SERVER_URI = `http://${config.serverHost}/graphql`;
+
+export const WEB_SOCKET_URI = `ws://${config.serverHost}/subscriptions`;

@@ -4,20 +4,20 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { createUploadLink } from 'apollo-upload-client';
 import { getMainDefinition } from 'apollo-utilities';
 import { DocumentNode } from 'graphql';
-import config from 'utils/config';
+import { HTTP_SERVER_URI, UPLOAD_SERVER_URI, WEB_SOCKET_URI } from 'Constants';
 
 const httpLink = new HttpLink({
-  uri: `http://${config.serverHost}/graphql`,
+  uri: HTTP_SERVER_URI,
   credentials: 'include'
 });
 
 const uploadLink = createUploadLink({
-  uri: `http://${config.serverHost}/graphql`,
+  uri: UPLOAD_SERVER_URI,
   credentials: 'include'
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://${config.serverHost}/subscriptions`,
+  uri: WEB_SOCKET_URI,
   options: {
     reconnect: true
   }
@@ -31,8 +31,7 @@ const checkSubscription = ({ query }: { query: DocumentNode }): boolean => {
   );
 };
 
-const checkFile = (value: any) => {
-  const { variables } = value;
+const checkFile = ({ variables }: any) => {
   if (variables.file) {
     return (
       (typeof File !== 'undefined' && variables.file instanceof File) ||
@@ -40,7 +39,7 @@ const checkFile = (value: any) => {
     );
   } else if (variables.files && variables.files.length) {
     return variables.files.every(
-      (file: any) =>
+      (file: File | Blob) =>
         (typeof File !== 'undefined' && file instanceof File) ||
         (typeof Blob !== 'undefined' && file instanceof Blob)
     );
