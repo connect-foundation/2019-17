@@ -1,9 +1,9 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { PAGE_PATHS } from '../../constants';
-import SignIn from '../SignIn';
-import SignUp from '../SignUp';
-import NoMatch from '../NoMatch';
+import { PAGE_PATHS } from 'Constants';
+import SignIn from 'pages/SignIn';
+import SignUp from 'pages/SignUp';
+import NoMatch from 'pages/NoMatch';
 
 const NonAuthRoutes: React.FC = () => {
   return (

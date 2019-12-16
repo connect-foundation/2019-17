@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import Profile from './Profile';
-import { DEFAULT } from '../constants';
+import { DEFAULT } from 'Constants';
 
 const CardDiv = styled.div`
   ${props => props.theme.borders.feedBorder};
@@ -51,9 +51,7 @@ function UserCard({ imageUrl, nickname, children }: IProps) {
       <CardContentDiv className="mainbox">
         <ProfileImgBox>
           <Profile
-            imageUrl={
-              imageUrl || DEFAULT.PROFILE
-            }
+            imageUrl={imageUrl || DEFAULT.PROFILE}
             alt={'profile image'}
             size="72px"
           />

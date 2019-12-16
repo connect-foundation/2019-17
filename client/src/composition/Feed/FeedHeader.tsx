@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import Profile from 'components/Profile';
+import { PAGE_PATHS } from 'Constants';
+import { Link } from 'react-router-dom';
 
 const ProfileDiv = styled.div`
   display: inline-block;
@@ -24,6 +26,9 @@ const ProfileNameDiv = styled.div`
   font-weight: bold;
   font-size: 0.875rem;
   color: ${props => props.theme.colors.fontMainBlue};
+  :hover {
+    text-decoration: underline;
+  }
 `;
 
 const ProfileDateDiv = styled.span`
@@ -32,22 +37,27 @@ const ProfileDateDiv = styled.span`
 `;
 
 interface Iprops {
+  email: string | null | undefined;
   createdAt: string;
   thumbnail?: string | null;
   nickName: string | null | undefined;
 }
 
-const FeedHeader = ({ createdAt, thumbnail, nickName }: Iprops) => {
+const FeedHeader = ({ createdAt, thumbnail, nickName, email }: Iprops) => {
   const Thumbnail = thumbnail || process.env.PUBLIC_URL + '/images/profile.jpg';
 
   return (
     <>
       <div>
         <ProfileImgBox>
-          <Profile imageUrl={Thumbnail} alt={'profile image'} size="40px" />
+          <Link to={PAGE_PATHS.MY_PAGE + '/' + email}>
+            <Profile imageUrl={Thumbnail} alt={'profile image'} size="40px" />
+          </Link>
         </ProfileImgBox>
         <ProfileDiv>
-          <ProfileNameDiv>{nickName}</ProfileNameDiv>
+          <Link to={PAGE_PATHS.MY_PAGE + '/' + email}>
+            <ProfileNameDiv>{nickName}</ProfileNameDiv>
+          </Link>
           <ProfileDateDiv>{createdAt} </ProfileDateDiv>
         </ProfileDiv>
       </div>

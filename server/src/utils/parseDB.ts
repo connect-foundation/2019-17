@@ -14,4 +14,8 @@ const getNode = result => {
   return result[0].get(0).properties;
 };
 
-export { parseNodeResult, getNode };
+const getFirstKeyValue = result => {
+  return result[0].get(0);
+};
+
+export { parseNodeResult, getNode, getFirstKeyValue };

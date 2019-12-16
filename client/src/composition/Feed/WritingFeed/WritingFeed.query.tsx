@@ -12,6 +12,8 @@ export const ME_QUERY = gql`
       thumbnail
       email
       nickname
+      residence
+      hometown
     }
   }
 `;
