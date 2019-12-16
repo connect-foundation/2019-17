@@ -321,6 +321,7 @@ const queryResolvers: QueryResolvers = {
       feedId,
       userEmail
     });
+
     const [parsedFeed] = parseResultRecords(feed);
 
     return parsedFeed;
