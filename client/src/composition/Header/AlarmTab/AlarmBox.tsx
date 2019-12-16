@@ -62,10 +62,9 @@ const ALARM_TYPE: { [key: string]: string } = {
 };
 
 const getAppliedReadAlarms = (alarms: Alarm[], data: any) => {
-  return alarms.map((alarm: any) => {
+  return alarms.map((alarm: Alarm) => {
     if (data && alarm.feedId === data.changeFeedAlarmReadState) {
       alarm.isRead = true;
-      return alarm;
     }
     return alarm;
   });
