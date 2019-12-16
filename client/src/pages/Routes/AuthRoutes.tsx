@@ -1,20 +1,26 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import gql from 'graphql-tag';
 import styled from 'styled-components';
+import { useQuery } from '@apollo/react-hooks';
 import { PAGE_PATHS } from 'Constants';
 import Header from 'composition/Header';
 import Main from 'pages/Main';
 import MyPage from 'pages/MyPage';
 import NoMatch from 'pages/NoMatch';
 import Search from 'pages/Search';
-import { useQuery } from '@apollo/react-hooks';
-import { loggedIn } from 'apollo/resolvers';
 import { ChatRoomProvider } from 'stores/ChatRoomContext';
 import FriendList from 'composition/FriendList';
 
 const Container = styled.div`
   margin: 0 auto;
   width: 900px;
+`;
+
+export const loggedIn = gql`
+  query publishUser {
+    loginUser
+  }
 `;
 
 const AuthRoutes: React.FC = () => {
