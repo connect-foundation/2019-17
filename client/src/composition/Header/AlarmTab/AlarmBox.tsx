@@ -89,11 +89,11 @@ function AlamBox({ alarm, setModalState }: Iprops) {
         query: GET_ALARMS
       });
 
-      const test = getAppliedReadAlarms(alarms, data);
+      const filteredAlarms = getAppliedReadAlarms(alarms, data);
 
       cache.writeQuery({
         query: GET_ALARMS,
-        data: { alarms: test }
+        data: { alarms: filteredAlarms }
       });
     }
   });
