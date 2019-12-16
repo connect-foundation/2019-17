@@ -1,11 +1,12 @@
-import { useEffect } from 'react';
 import React from 'react';
 import styled from 'styled-components';
+
 interface Props {
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
   onEffect: () => void | (() => void);
   data: string;
 }
+
 const NoFeedGuide = styled.div`
   border: 1px solid #dadde1;
   display: inline-block;

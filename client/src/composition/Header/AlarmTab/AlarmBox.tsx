@@ -4,7 +4,6 @@ import Profile from 'components/Profile';
 import { Alarm, useChangeFeedAlarmReadStateMutation } from 'react-components.d';
 import CommonBox from '../CommonBox';
 import { GET_ALARMS } from './alarm.query';
-import DetailFeed from '../../DetailFeed';
 
 const cursor = css`
   cursor: pointer;

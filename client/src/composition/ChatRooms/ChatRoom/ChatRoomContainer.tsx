@@ -18,8 +18,6 @@ interface IProps {
   chatRoomId: number;
 }
 
-const CHAT_UNIT = 20;
-
 function ChatRoomContainer({ idx, chatRoomId, nickname, thumbnail }: IProps) {
   const chatRoomDispatch = useChatRoomDispatch();
   const chatBody = useRef(null);

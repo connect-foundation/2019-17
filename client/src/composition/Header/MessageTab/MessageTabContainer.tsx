@@ -30,7 +30,7 @@ function MessageTabContainer() {
         const {
           data: { getChatRooms }
         } = subscriptionData;
-        
+
         if (prev && prev.getChatRooms && getChatRooms) {
           const {
             lastChat: { chatRoomId }
@@ -42,7 +42,7 @@ function MessageTabContainer() {
             getChatRooms: [getChatRooms, ...prevChatRooms]
           });
         }
-        if (!prev || !prev.getChatRooms && getChatRooms) {
+        if (!prev || (!prev.getChatRooms && getChatRooms)) {
           return Object.assign({}, prev, {
             getChatRooms: [getChatRooms]
           });
