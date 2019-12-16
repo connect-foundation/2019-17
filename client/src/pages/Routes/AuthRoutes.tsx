@@ -2,7 +2,6 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
-import { useQuery } from '@apollo/react-hooks';
 import { PAGE_PATHS } from 'Constants';
 import Header from 'composition/Header';
 import Main from 'pages/Main';
@@ -11,20 +10,21 @@ import NoMatch from 'pages/NoMatch';
 import Search from 'pages/Search';
 import { ChatRoomProvider } from 'stores/ChatRoomContext';
 import FriendList from 'composition/FriendList';
+import { usePublishLoginStateQuery } from 'react-components.d';
 
 const Container = styled.div`
   margin: 0 auto;
   width: 900px;
 `;
 
-export const loggedIn = gql`
-  query publishUser {
+export const PUBLISH_LOGIN_STATE = gql`
+  query publishLoginState {
     loginUser
   }
 `;
 
 const AuthRoutes: React.FC = () => {
-  useQuery(loggedIn);
+  usePublishLoginStateQuery();
   return (
     <ChatRoomProvider>
       <Header />

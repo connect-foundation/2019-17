@@ -1,17 +1,13 @@
 import React from 'react';
-import { ButtonSVG } from 'style/feed';
 import styled from 'styled-components';
+import { ButtonSVG } from 'style/feed';
 
 const ButtonSVGWithFloat = styled(ButtonSVG)`
   float: left;
   fill: ${props => props.color};
 `;
 
-interface IProps {
-  color: string;
-}
-
-function SearchButtonIcon({ color }: IProps) {
+function SearchButtonIcon({ color }: { color: string }) {
   return (
     <ButtonSVGWithFloat
       color={color}
