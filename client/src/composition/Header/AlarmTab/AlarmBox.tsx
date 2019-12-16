@@ -5,11 +5,8 @@ import { Alarm, useChangeFeedAlarmReadStateMutation } from 'react-components.d';
 import CommonBox from '../CommonBox';
 import { GET_ALARMS } from './alarm.query';
 
-const cursor = css`
-  cursor: pointer;
-`;
 const BoldText = styled.span`
-  ${cursor}
+  cursor: pointer;
   font-weight: 600;
 `;
 
