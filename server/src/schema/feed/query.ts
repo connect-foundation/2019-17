@@ -37,14 +37,16 @@ MATCH (u:User)-[r:LIKE]->(f:Feed)
 WHERE u.email = {useremail} AND ID(f) = {feedId}
 delete r`;
 
-export const GET_NEW_FEED = `MATCH (searchUser:User)-[:AUTHOR]->(feed:Feed)
+export const GET_NEW_FEED = `
+MATCH (searchUser:User)-[:AUTHOR]->(feed:Feed)
 OPTIONAL MATCH (likeUser:User)-[like:LIKE]->(feed)
-OPTIONAL MATCH (feed)-[:HAS]->(com:Comment)
+OPTIONAL MATCH (feed)-[:HAS]->(com:Comment)<-[:AUTHOR]-(w:User)
 OPTIONAL MATCH (feed)<-[:HAS]-(img:Image)
-WITH searchUser, feed, COLLECT(DISTINCT likeUser) AS cp , COLLECT(com) as comments, COLLECT(DISTINCT img) as imgs
+WITH searchUser, feed, COLLECT(DISTINCT likeUser) AS cp , com , COLLECT(DISTINCT img) as imgs, w
 where ID(feed) = {feedId}
 RETURN searchUser , feed,  ID(feed) as feedId , length(cp) AS totallikes, imgs as imglist,
-length(filter(x IN cp WHERE x.email= {userEmail} )) AS hasLiked, comments
+length(filter(x IN cp WHERE x.email= {userEmail} )) AS hasLiked, 
+case when  com is not null then COLLECT(DISTINCT {content:com.content , createdAt:com.createdAt ,nickname:w.nickname , thumbnail: w.thumbnail}) else [] end as comments
 order by feed.createdAt desc
 `;
 
@@ -81,19 +83,20 @@ delete al
 return f, al,fr`;
 
 export const GET_FEED_ARALMS = `
-MATCH (u:User{email:{userEmail}})-[al:ALARM]-(f)
-WHERE f:Comment OR f:Feed
-optional match (f)<-[:AUTHOR]-(w:User)
-return collect(
-  distinct {createdAt : f.createdAt , 
-    content:f.content,
-    writer: w.nickname, 
-    email:w.email, 
-    thumbnail:w.thumbnail,
-    isRead: al.isRead, 
-    isChecked: al.isChecked, 
-    feedId:ID(f),
-    type: head(labels(f)) })  as alarms 
+    MATCH (u:User{email:{userEmail}})-[al:ALARM]-(f)
+    WHERE f:Comment OR f:Feed
+    optional match (f)<-[:AUTHOR]-(w:User) 
+    optional match (f)--(test:Feed)
+    return collect(
+      distinct {createdAt : f.createdAt , 
+        content:f.content,
+        writer: w.nickname, 
+        email:w.email, 
+        thumbnail:w.thumbnail,
+        isRead: al.isRead, 
+        isChecked: al.isChecked, 
+        feedId: case head(labels(f)) when 'Comment' then ID(test) else ID(f) end ,
+        type: head(labels(f)) })  as alarms
 `;
 
 export const GET_NEW_ARALM = `
