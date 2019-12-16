@@ -1,12 +1,12 @@
 import gql from 'graphql-tag';
 
-export const login = gql`
+export const LOGIN = gql`
   query IsUserLoggedIn {
     login @client
   }
 `;
 
-export const getIsLoggedIn = gql`
+export const GET_IS_LOGGED_IN = gql`
   {
     isLoggedIn @client
   }

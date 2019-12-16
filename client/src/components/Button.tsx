@@ -49,6 +49,7 @@ const SButton = styled.button<IProps>`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  font-weight: 500;
   ${sizeStyles};
 `;
 

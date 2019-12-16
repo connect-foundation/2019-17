@@ -6,7 +6,7 @@ import AlarmTab from './HeaderTab';
 import Profile from 'components/Profile';
 import { useMeQuery } from 'react-components.d';
 import { useLazyQuery } from '@apollo/react-hooks';
-import { LOGOUT } from 'cache/client.gql';
+import { LOGOUT } from 'cache/auth.query';
 import { HeaderTabProvider } from 'stores/HeaderTabContext';
 import { HeaderAlarmCountProvider } from 'stores/HeaderTabCountContext';
 import { PAGE_PATHS, DEFAULT } from 'Constants';

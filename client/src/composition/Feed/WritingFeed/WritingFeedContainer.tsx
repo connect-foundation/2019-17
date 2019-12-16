@@ -3,19 +3,16 @@ import WritingFeedPresenter from './WritingPresenter';
 import { Scalars, useMeQuery, useEnrollFeedMutation } from 'react-components.d';
 import { Maybe } from 'react-components.d';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import {
-  enrollWritingFeedData,
-  getWritingFeedData
-} from 'cache/writingFeed.gql';
+import { ENROLL_WRITING_FEED, GET_WRITING_FEED } from 'cache/writingFeed.query';
 import { useEffect } from 'react';
 
 const FEED_MAX_LENGTH = 1500;
 
 function WritingFeedContainer() {
   const { data: { writingFeedContent = null } = {} } = useQuery(
-    getWritingFeedData
+    GET_WRITING_FEED
   );
-  const [writingFeedDataMutation] = useMutation(enrollWritingFeedData);
+  const [writingFeedDataMutation] = useMutation(ENROLL_WRITING_FEED);
   const [fileId, setFileId] = useState(0);
   const [files, setFiles] = useState<Maybe<Scalars['Upload']>[]>([]);
   const [content, setContent] = useState(writingFeedContent || '');
@@ -85,7 +82,7 @@ function WritingFeedContainer() {
       if (contentCursor.current) contentCursor.current.focus();
       return;
     }
-    if(content.length >= FEED_MAX_LENGTH) {
+    if (content.length >= FEED_MAX_LENGTH) {
       alert(`피드 글자수 제한(${FEED_MAX_LENGTH}자)`);
       return;
     }

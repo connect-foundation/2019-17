@@ -1,25 +1,15 @@
-import gql from 'graphql-tag';
+import { WRITING_FEED_CONTENT } from 'Constants';
 
-export interface IArgs {
-  content: string;
-}
-
-export const loggedIn = gql`
-  query publishUser {
-    loginUser
-  }
-`;
-
-export const resolvers = {
+export default {
   Query: {
-    login: (_: any, __: any, { cache }: { cache: any }) => {
+    login: (_, __, { cache }: { cache }) => {
       cache.writeData({
         data: {
-          isLoggedIn: document.cookie.indexOf('token') !== -1 ? true : false
+          isLoggedIn: document.cookie.indexOf('token') !== -1
         }
       });
     },
-    logout: (_: any, __: any, { cache }: { cache: any }) => {
+    logout: (_, __, { cache }: { cache }) => {
       const date = new Date();
       const expires = `token=; expires=${date.toUTCString()};`;
       document.cookie = expires;
@@ -27,8 +17,8 @@ export const resolvers = {
     }
   },
   Mutation: {
-    enrollWritingFeed: (_: any, { content }: IArgs, __: any) => {
-      localStorage.setItem('writingFeedContent', content);
+    enrollWritingFeed: (_, { content }: { content: string }) => {
+      localStorage.setItem(WRITING_FEED_CONTENT, content);
     }
   }
 };

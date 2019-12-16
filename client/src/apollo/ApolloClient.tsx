@@ -1,11 +1,11 @@
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-boost';
 import link from './Link';
-import { resolvers } from './resolvers';
-import { typeDefs } from './typeDefs';
+import resolvers from './resolvers';
+import typeDefs from './typeDefs';
+import { WRITING_FEED_CONTENT } from 'Constants';
 
 const cache = new InMemoryCache();
-
 const client = new ApolloClient({
   cache,
   link,
@@ -15,7 +15,7 @@ const client = new ApolloClient({
 
 cache.writeData({
   data: {
-    writingFeedContent: localStorage.getItem('writingFeedContent') || ''
+    writingFeedContent: localStorage.getItem(WRITING_FEED_CONTENT) || ''
   }
 });
 

@@ -23,17 +23,21 @@ const opacity = keyframes`
 `;
 
 const LoadingIcon = styled(BoostBookLogo)<{ size: string }>`
-  font-size: ${props => props.size};
-  font-weight: 600;
+  width: ${props => props.size};
+  height: ${props => props.size};
   animation: ${opacity} 0.3s linear infinite forwards;
 `;
 
-function Loader({ size = '50px' }: { size?: string }) {
+function Loader({ size }: { size: string }) {
   return (
     <Container>
       <LoadingIcon size={size} />
     </Container>
   );
 }
+
+Loader.defaultProps = {
+  size: '50px'
+};
 
 export default Loader;

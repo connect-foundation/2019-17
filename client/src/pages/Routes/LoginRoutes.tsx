@@ -1,14 +1,14 @@
 import React from 'react';
 import AuthRoutes from 'pages/Routes/AuthRoutes';
 import NonAuthRoutes from 'pages/Routes/NonAuthRoutes';
-import { login, getIsLoggedIn } from 'cache/client.gql';
+import { LOGIN, GET_IS_LOGGED_IN } from 'cache/auth.query';
 import { useQuery } from '@apollo/react-hooks';
 
 const LoginRoutes = () => {
-  useQuery(login, {
+  useQuery(LOGIN, {
     pollInterval: 2000
   });
-  const { data, loading } = useQuery(getIsLoggedIn, {
+  const { data, loading } = useQuery(GET_IS_LOGGED_IN, {
     fetchPolicy: 'network-only'
   });
   if (loading) return <></>;

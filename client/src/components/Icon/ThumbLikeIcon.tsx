@@ -1,10 +1,7 @@
 import React from 'react';
 import { ButtonSVG } from 'style/feed';
 
-interface Iprops {
-  hasLiked?: boolean;
-}
-function ThumbLikeIcon({ hasLiked }: Iprops) {
+function ThumbLikeIcon({ hasLiked }: { hasLiked?: boolean }) {
   return (
     <ButtonSVG
       xmlns="http://www.w3.org/2000/svg"
