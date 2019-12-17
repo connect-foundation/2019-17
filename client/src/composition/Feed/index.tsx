@@ -80,6 +80,7 @@ const FeedList = () => {
         if (newCursor === prev.feeds.cursor) {
           finalCursor = '';
         }
+
         return Object.assign({}, prev, {
           feeds: {
             cursor: finalCursor,
@@ -116,6 +117,8 @@ const FeedList = () => {
           feeds: { feedItems }
         } = newFeeds;
 
+        setFeedAlarm(props => props + 1);
+
         return Object.assign({}, prev, {
           feeds: {
             cursor: prev.feeds.cursor,
@@ -127,13 +130,17 @@ const FeedList = () => {
     });
   };
 
-  if (!data || !data.feeds || !data.feeds.feedItems) return <></>;
+  if (loading) {
+    return (
+      <LoadContainer>
+        <Loader />
+      </LoadContainer>
+    );
+  }
 
-  return loading ? (
-    <LoadContainer>
-      <Loader />
-    </LoadContainer>
-  ) : (
+  if (!data || !data.feeds || !data.feeds.feedItems) return <>ERROR</>;
+
+  return (
     <>
       <div ref={setTopRef as any}>
         <WritingFeed />
@@ -160,12 +167,10 @@ const FeedList = () => {
         );
       })}
 
-      {data && data.feeds && data.feeds.cursor ? (
+      {data.feeds.cursor && (
         <LoadCheckContainer
           onClick={fetchMoreFeed}
           ref={setRef as any}></LoadCheckContainer>
-      ) : (
-        <></>
       )}
 
       <NoFeed></NoFeed>
