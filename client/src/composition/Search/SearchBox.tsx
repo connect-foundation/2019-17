@@ -1,6 +1,6 @@
 import React, { useState, MutableRefObject, ReactNode } from 'react';
-import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 import SearchButtonIcon from 'components/Icon/SearchButtonIcon';
 import BoostBookLogo from 'components/Icon/BoostBookLogo';
 import { useOutsideReset } from 'hooks/useOutsideReset';

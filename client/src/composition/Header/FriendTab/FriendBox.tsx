@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import Profile from 'components/Profile';
+import { DEFAULT } from 'Constants';
 
 const CardDiv = styled.div`
   ${props => props.theme.borders.feedBorder};
@@ -37,22 +38,16 @@ const ProfileNameDiv = styled.div`
 
 interface IProps {
   children?: ReactNode;
-  imageUrl: string | null;
+  imageUrl?: string;
   nickname: string;
 }
 
 function FriendBox({ imageUrl, nickname, children }: IProps) {
   return (
     <CardDiv>
-      <CardContentDiv className="mainbox">
+      <CardContentDiv>
         <ProfileImgBox>
-          <Profile
-            imageUrl={
-              imageUrl || process.env.PUBLIC_URL + '/images/profile.jpg'
-            }
-            alt={'profile image'}
-            size="48px"
-          />
+          <Profile imageUrl={imageUrl} alt={'profile image'} size="48px" />
         </ProfileImgBox>
         <ProfileDiv>
           <ProfileNameDiv>{nickname}</ProfileNameDiv>
@@ -64,7 +59,7 @@ function FriendBox({ imageUrl, nickname, children }: IProps) {
 }
 
 FriendBox.defaultProps = {
-  imageUrl: process.env.PUBLIC_URL + '/images/profile.jpg'
+  imageUrl: DEFAULT.PROFILE
 };
 
 export default FriendBox;
