@@ -127,6 +127,8 @@ const FeedList = () => {
     });
   };
 
+  if (!data || !data.feeds || !data.feeds.feedItems) return <></>;
+
   return loading ? (
     <LoadContainer>
       <Loader />
@@ -145,20 +147,18 @@ const FeedList = () => {
         />
       </div>
 
-      {data && data.feeds && data.feeds.feedItems
-        ? data.feeds.feedItems.map((feed, idx) => {
-            return feed && feed.feed && feed.feed.createdAt ? (
-              <Feed
-                key={getDate(feed.feed.createdAt).toISOString() + idx}
-                content={feed.feed.content}
-                feedinfo={feed}
-                createdAt={getDate(feed.feed.createdAt).toISOString()}
-              />
-            ) : (
-              <></>
-            );
-          })
-        : 'no data'}
+      {data.feeds.feedItems.map((feed, idx) => {
+        return feed && feed.feed && feed.feed.createdAt ? (
+          <Feed
+            key={getDate(feed.feed.createdAt).toISOString() + idx}
+            content={feed.feed.content}
+            feedinfo={feed}
+            createdAt={getDate(feed.feed.createdAt).toISOString()}
+          />
+        ) : (
+          <></>
+        );
+      })}
 
       {data && data.feeds && data.feeds.cursor ? (
         <LoadCheckContainer
