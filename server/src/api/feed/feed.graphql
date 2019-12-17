@@ -5,11 +5,6 @@ type PageInfo {
   hasNextPage: Boolean
 }
 
-type tempFeed {
-  createdAt: Idate
-  content: String!
-}
-
 type Idate {
   year: Int
   month: Int
@@ -20,14 +15,6 @@ type Idate {
   nanosecond: String
   timeZoneOffsetSeconds: Int
   timeZoneId: String
-}
-
-type IUser {
-  nickname: String
-  hometown: String
-  thumbnail: String
-  residence: String
-  email: String
 }
 
 type Content {
@@ -47,7 +34,7 @@ type Image {
 }
 
 type IFeed {
-  searchUser: IUser
+  searchUser: User
   feed: Content
   feedId: Int
   totallikes: Int
