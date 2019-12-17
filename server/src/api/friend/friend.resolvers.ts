@@ -11,7 +11,7 @@ import {
 } from '../../schema/friend/query';
 import { FIND_USER_WITH_EMAIL_QUERY } from '../../schema/user/query';
 import isAuthenticated from '../../utils/isAuthenticated';
-import { parseResultRecords, gatherValuesByKey } from '../../utils/parseData';
+import { parseResultRecords } from '../../utils/parseData';
 
 const REQUEST_ALARM_ADDED = 'REQUEST_ALARM_ADDED';
 
@@ -44,7 +44,7 @@ export default {
 
       const parsedReq = parseResultRecords(reqUsers);
 
-      return gatherValuesByKey(parsedReq, 'user');
+      return parsedReq[0].user;
     },
     recommendAlarm: async (_, __, { req }) => {
       isAuthenticated(req);
@@ -55,7 +55,7 @@ export default {
 
       const parsedRec = parseResultRecords(recUsers);
 
-      return gatherValuesByKey(parsedRec, 'target');
+      return parsedRec[0].target;
     }
   },
 
