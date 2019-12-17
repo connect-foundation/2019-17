@@ -42,6 +42,7 @@
     "dotenv": "^8.2.0",
     "graphql": "^14.5.8",
     "lodash": "^4.17.15",
+    "moment": "^2.24.0",
     "polished": "^3.4.2",
     "prop-types": "^15.7.2",
     "react": "^16.11.0",
