@@ -1,7 +1,7 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { GraphQLServer } from 'graphql-yoga';
-import { pubsub } from './utils/pubsub';
+import pubsub from './utils/pubsub';
 import helmet from 'helmet';
 import logger from 'morgan';
 import config from './utils/config';
