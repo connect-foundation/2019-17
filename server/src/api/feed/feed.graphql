@@ -56,8 +56,8 @@ type IFeed {
   comments: [Comment]
 }
 type IFeeds {
-  cursor: String
-  feedItems: [IFeed]
+  cursor: String!
+  feedItems: [IFeed]!
 }
 
 type Alarm {
@@ -74,7 +74,7 @@ type Alarm {
 
 type Query {
   pageInfo: PageInfo
-  feeds(first: Int, cursor: String): IFeeds
+  feeds(first: Int, cursor: String): IFeeds!
   userFeeds(first: Int, cursor: String, email: String!): IFeeds
   alarms: [Alarm]
   alarmCount: Int!
