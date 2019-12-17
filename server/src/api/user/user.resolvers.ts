@@ -8,13 +8,13 @@ import {
 } from '../../types';
 import { requestDB } from '../../utils/requestDB';
 import { parseNodeResult } from '../../utils/parseDB';
+import { parseResultRecords } from '../../utils/parseData';
+import isAuthenticated from '../../utils/isAuthenticated';
 import { encodeJWT } from '../../utils/jwt';
 import SameEmailError from '../../errors/EmailAlreadyExistsError';
 import { FIND_USER_WITH_EMAIL_QUERY } from '../../schema/user/query';
-import isAuthenticated from '../../utils/isAuthenticated';
 import { findUserWithEmail } from '../../schema/user/user';
 import createDBError from '../../errors/createDBError';
-import { parseResultRecords } from '../../utils/parseData';
 
 const checkIsEmailExist = async (email): Promise<void> => {
   const sameUsers = await requestDB(FIND_USER_WITH_EMAIL_QUERY, { email });

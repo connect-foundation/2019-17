@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { UserInfo } from 'react-components.d';
+import { UserWithRelation } from 'react-components.d';
 import Profile from 'components/Profile';
 
 const UserWrapper = styled.div`
@@ -52,7 +52,7 @@ function AutoCompleteContainer({
     <>
       {visible && data && data.searchUser.length ? (
         <UserWrapper>
-          {data.searchUser.map(({ email, nickname, thumbnail }: UserInfo) => (
+          {data.searchUser.map(({ email, nickname, thumbnail }: UserWithRelation) => (
             <UserContainer
               key={email}
               onClick={() => {

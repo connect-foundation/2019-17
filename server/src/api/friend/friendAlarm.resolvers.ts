@@ -1,10 +1,10 @@
+import { withFilter } from 'graphql-subscriptions';
 import { requestDB } from '../../utils/requestDB';
 import {
   CHANGE_ALL_REQUEST_READ_STATE_BY_EMAIL,
   COUNT_UNREAD_REQUEST_BY_EMAIL
 } from '../../schema/friend/query';
 import isAuthenticated from '../../utils/isAuthenticated';
-import { withFilter } from 'graphql-subscriptions';
 
 const REQUEST_ALARM_ADDED = 'REQUEST_ALARM_ADDED';
 
