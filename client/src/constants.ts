@@ -1,7 +1,10 @@
+import config from 'utils/config';
+
 export enum PAGE_PATHS {
   SIGNUP = '/signup',
   SIGNIN = '/signin',
   MY_PAGE = '/mypage',
+  MY_PAGE_BY_EMAIL = '/mypage/:email',
   MAIN = '/',
   SEARCH = '/search'
 }
@@ -25,7 +28,16 @@ export enum HEADER_TAB_CNT {
 
 export const DEFAULT = {
   PROFILE: process.env.PUBLIC_URL + '/images/profile.jpg',
-  SEARCH_NOT_FOUND: process.env.PUBLIC_URL + '/images/search_notfound.png'
+  SEARCH_NOT_FOUND: process.env.PUBLIC_URL + '/images/search_notfound.png',
+  LOGO_WHITE: process.env.PUBLIC_URL + '/images/boostbook_logo_white.png'
 };
 
 export const MAX_DATE = '9999-12-31T09:29:26.050Z'
+
+export const WRITING_FEED_CONTENT = 'writingFeedContent';
+
+export const HTTP_SERVER_URI = `http://${config.serverHost}/graphql`;
+
+export const UPLOAD_SERVER_URI = `http://${config.serverHost}/graphql`;
+
+export const WEB_SOCKET_URI = `ws://${config.serverHost}/subscriptions`;

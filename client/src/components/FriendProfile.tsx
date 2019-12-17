@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { DEFAULT, PAGE_PATHS } from 'Constants';
 
 const SIZE = '101px';
 
@@ -15,27 +16,22 @@ const Name = styled.div`
 `;
 
 interface IProps {
-  thumbnail: string | undefined;
+  thumbnail?: string;
   nickname: string;
   email: string;
 }
 
-const FriendProfile: React.FC<IProps> = ({ email, thumbnail, nickname }) => {
+function FriendProfile({ email, thumbnail, nickname }: IProps) {
   return (
-    <>
-      <Link to={`/myPage/${email}`}>
-        <Image
-          src={
-            thumbnail
-              ? thumbnail
-              : process.env.PUBLIC_URL + '/images/profile.jpg'
-          }
-          alt={email}
-        />
-        <Name>{nickname}</Name>
-      </Link>
-    </>
+    <Link to={`${PAGE_PATHS.MY_PAGE}/${email}`}>
+      <Image src={thumbnail} alt={email} />
+      <Name>{nickname}</Name>
+    </Link>
   );
+}
+
+FriendProfile.defaultProps = {
+  thumbnail: DEFAULT.PROFILE
 };
 
 export default FriendProfile;

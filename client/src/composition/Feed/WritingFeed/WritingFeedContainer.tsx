@@ -1,14 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import _ from 'lodash';
 import WritingFeedPresenter from './WritingPresenter';
 import { Scalars, useMeQuery, useEnrollFeedMutation } from 'react-components.d';
 import { Maybe } from 'react-components.d';
-import {
-  enrollWritingFeedData,
-  getWritingFeedData
-} from 'cache/writingFeed.gql';
-import { useEffect } from 'react';
+import { ENROLL_WRITING_FEED, GET_WRITING_FEED } from 'cache/writingFeed.query';
 import { DEFAULT } from 'Constants';
 
 const FEED_MAX_LENGTH = 1500;
@@ -16,9 +12,9 @@ const IMAGE_VALID_EXTENSION = /image\/(jpg|jpeg|png|gif|bmp)$/;
 
 function WritingFeedContainer() {
   const { data: { writingFeedContent = null } = {} } = useQuery(
-    getWritingFeedData
+    GET_WRITING_FEED
   );
-  const [writingFeedDataMutation] = useMutation(enrollWritingFeedData);
+  const [writingFeedDataMutation] = useMutation(ENROLL_WRITING_FEED);
   const [fileId, setFileId] = useState(0);
   const [files, setFiles] = useState<Maybe<Scalars['Upload']>[]>([]);
   const [content, setContent] = useState(writingFeedContent || '');

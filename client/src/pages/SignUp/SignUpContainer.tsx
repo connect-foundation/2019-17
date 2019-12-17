@@ -15,7 +15,7 @@ const validateName = (inputName: string): boolean => {
   return result;
 };
 
-const SIGN_UP_MUTATION = gql`
+export const SIGN_UP_MUTATION = gql`
   mutation signUp(
     $nickname: String!
     $hometown: String!

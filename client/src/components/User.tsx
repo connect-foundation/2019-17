@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Profile from './Profile';
 
 const ProfileDiv = styled.div`
@@ -35,39 +35,32 @@ const ProfileStatus = styled.div`
   padding-right: 12px;
 `;
 
-const status = css`
+const Status = styled.div<{ status: boolean }>`
   border-radius: 50%;
   display: inline-block;
   height: 6px;
   margin-left: 4px;
   width: 6px;
+  background: ${props => (props.status ? 'rgb(66, 183, 42)' : 'red')};
 `;
 
-const On = styled.div`
-  ${status};
-  background: rgb(66, 183, 42);
-`;
-
-const Off = styled.div`
-  ${status};
-  background: red;
-`;
-
-interface Iprops {
+interface IProps {
   email: string;
-  thumbnail: string | undefined;
+  thumbnail?: string;
   nickname: string;
   status: string;
 }
 
-const User = ({ email, thumbnail, nickname, status }: Iprops) => {
+const User = ({ email, thumbnail, nickname, status }: IProps) => {
   return (
     <ProfileDiv>
       <ProfileImgBox>
         <Profile imageUrl={thumbnail} alt={email} size="30px" />
       </ProfileImgBox>
       <ProfileName>{nickname}</ProfileName>
-      <ProfileStatus>{status === 'online' ? <On /> : <Off />}</ProfileStatus>
+      <ProfileStatus>
+        <Status status={status === 'online'} />
+      </ProfileStatus>
     </ProfileDiv>
   );
 };
