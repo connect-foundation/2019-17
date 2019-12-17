@@ -84,7 +84,6 @@ export default {
           return pubsub.asyncIterator([LOGIN_CHANNEL, LOGOUT_CHANNEL]);
         },
         async (payload, _, { email }) => {
-          
           const result = await requestDB(CHECK_FRIEND_QUERY, {
             email: payload.email,
             friendEmail: email

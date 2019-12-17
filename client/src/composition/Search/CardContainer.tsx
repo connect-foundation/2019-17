@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import queryString from 'querystring';
-import { UserInfo } from 'react-components.d';
+import { UserWithRelation } from 'react-components.d';
 import { DEFAULT } from 'Constants';
 import UserCard from 'components/UserCard';
 import ButtonContainer from './ButtonContainer';
@@ -60,7 +60,7 @@ function CardContainer({ location }: IProps) {
   return (
     <>
       {data.searchUser.map(
-        ({ nickname, email, thumbnail, relation }: UserInfo) => (
+        ({ nickname, email, thumbnail, relation }: UserWithRelation) => (
           <UserCard
             nickname={nickname}
             key={email}
