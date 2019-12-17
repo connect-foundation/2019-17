@@ -21,14 +21,18 @@ const DetailFeed = ({ isOpen, feedId, closeModal }: Iprops) => {
 
   const getTextFeed = () => {
     const feed = data && data.feed;
+    if (!data || !data.feed || !data.feed.feed) {
+      return;
+    }
+    const { createdAt, content } = data.feed.feed;
+
     return (
       feed &&
-      feed.feed &&
-      feed.feed.createdAt && (
+      createdAt && (
         <ModalFeed
-          content={feed.feed.content}
+          content={content}
           feedinfo={feed}
-          createdAt={getDate(feed.feed.createdAt).toISOString()}
+          createdAt={getDate(createdAt).toISOString()}
           feedSize={'30rem'}
         />
       )

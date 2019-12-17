@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { User } from 'react-components.d';
-import { DEFAULT } from 'Constants';
+import { DEFAULT, PAGE_PATHS } from 'Constants';
 
 const SIZE = '101px';
 
@@ -16,19 +16,17 @@ const Name = styled.div`
   line-height: 16px;
 `;
 
-const FriendProfile: React.FC<User> = ({
-  email,
-  thumbnail: thumbnailSrc,
-  nickname
-}: User) => {
+function FriendProfile({ email, thumbnail, nickname }: User) {
   return (
-    <>
-      <Link to={`/myPage/${email}`}>
-        <Image src={thumbnailSrc || DEFAULT.PROFILE} alt={email} />
-        <Name>{nickname}</Name>
-      </Link>
-    </>
+    <Link to={`${PAGE_PATHS.MY_PAGE}/${email}`}>
+      <Image src={thumbnail || undefined} alt={email} />
+      <Name>{nickname}</Name>
+    </Link>
   );
+}
+
+FriendProfile.defaultProps = {
+  thumbnail: DEFAULT.PROFILE
 };
 
 export default FriendProfile;

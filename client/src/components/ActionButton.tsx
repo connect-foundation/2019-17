@@ -11,7 +11,7 @@ const SButton = styled.button<IProps>`
   align-items: center;
   border: ${theme.borders.borderStyle};
   border-radius: 2px;
-  font-weight: bold;
+  font-weight: 500;
   padding: 0 8px;
   cursor: pointer;
 `;

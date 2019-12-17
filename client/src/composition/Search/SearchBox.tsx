@@ -6,6 +6,7 @@ import BoostBookLogo from 'components/Icon/BoostBookLogo';
 import { MutableRefObject } from 'react';
 import { ReactNode } from 'react';
 import { useOutsideReset } from 'hooks/useOutsideReset';
+import { PAGE_PATHS } from 'Constants';
 
 const Container = styled.div`
   display: flex;
@@ -72,7 +73,7 @@ function SearchBox() {
 
   return (
     <Container>
-      <a href="/">
+      <a href={PAGE_PATHS.MAIN}>
         <Logo size={'23px'} />
       </a>
       <form onSubmit={checkInput} ref={wrapperRef}>

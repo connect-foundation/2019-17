@@ -3,15 +3,17 @@ import styled from 'styled-components';
 import FriendProfile from 'components/FriendProfile';
 import { GetUserInfoWithEmailQuery, User } from 'react-components.d';
 
+type Friends = GetUserInfoWithEmailQuery['friends'];
+
 const Wrapper = styled.div`
   padding: 0 5px 4px 5px;
 `;
 
 interface IProps {
-  children?: GetUserInfoWithEmailQuery['friends'];
+  children?: Friends;
 }
 
-function groupByThree([a, b, c, ...rest]: any[]): any[] {
+function groupByThree([a, b, c, ...rest]: Friends): Friends[] {
   if (!rest.length) return [[a, b, c].filter(x => x)];
   return [[a, b, c]].concat(groupByThree(rest));
 }

@@ -303,8 +303,8 @@ const queryResolvers: QueryResolvers = {
     const result = await requestDB(GET_FEED_ARALMS, {
       userEmail
     });
-    const [parsedAlarms] = parseResultRecords(result);
 
+    const [parsedAlarms] = parseResultRecords(result);
     return parsedAlarms.alarms;
   },
   alarmCount: async (_, __, { req }): Promise<number> => {
@@ -327,6 +327,7 @@ const queryResolvers: QueryResolvers = {
       feedId,
       userEmail
     });
+
     const [parsedFeed] = parseResultRecords(feed);
 
     return parsedFeed;

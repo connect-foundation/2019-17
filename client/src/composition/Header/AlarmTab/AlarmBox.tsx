@@ -5,11 +5,8 @@ import { Alarm, useChangeFeedAlarmReadStateMutation } from 'react-components.d';
 import CommonBox from '../CommonBox';
 import { GET_ALARMS } from './alarm.query';
 
-const cursor = css`
-  cursor: pointer;
-`;
 const BoldText = styled.span`
-  ${cursor}
+  cursor: pointer;
   font-weight: 600;
 `;
 
@@ -65,10 +62,9 @@ const ALARM_TYPE: { [key: string]: string } = {
 };
 
 const getAppliedReadAlarms = (alarms: Alarm[], data: any) => {
-  return alarms.map((alarm: any) => {
+  return alarms.map((alarm: Alarm) => {
     if (data && alarm.feedId === data.changeFeedAlarmReadState) {
       alarm.isRead = true;
-      return alarm;
     }
     return alarm;
   });
@@ -87,24 +83,24 @@ function AlamBox({ alarm, setModalState }: Iprops) {
     alarm && alarm.isRead ? alarm.isRead : false
   );
 
-  const [changeRedState] = useChangeFeedAlarmReadStateMutation({
+  const [changeReadState] = useChangeFeedAlarmReadStateMutation({
     update(cache, { data }) {
       const { alarms }: any = cache.readQuery({
         query: GET_ALARMS
       });
 
-      const test = getAppliedReadAlarms(alarms, data);
+      const filteredAlarms = getAppliedReadAlarms(alarms, data);
 
       cache.writeQuery({
         query: GET_ALARMS,
-        data: { alarms: test }
+        data: { alarms: filteredAlarms }
       });
     }
   });
 
   const onClickFold = () => {
     setReadState(true);
-    changeRedState({ variables: { feedId: Number(alarm.feedId) } });
+    changeReadState({ variables: { feedId: Number(alarm.feedId) } });
     ModalOn();
   };
 

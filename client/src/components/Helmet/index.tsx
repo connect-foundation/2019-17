@@ -1,14 +1,13 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 
-interface IProps {
-  message: string;
-}
-
-function HelmetTitle({ message }: IProps) {
+const SUBJECT = 'BoostBook';
+function HelmetTitle({ message }: { message: string }) {
   return (
     <Helmet>
-      <title>{message} | BoostBook</title>
+      <title>
+        {message} | {SUBJECT}
+      </title>
     </Helmet>
   );
 }
