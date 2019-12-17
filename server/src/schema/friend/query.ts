@@ -7,10 +7,10 @@ export const CANCEL_FRIEND_REQUEST_BY_EMAIL = `MATCH (a:User {email: {email}})-[
 export const CANCEL_FRIEND_BY_EMAIL = `MATCH (a:User {email: {email}})-[r:FRIEND]-(b:User {email: {targetEmail}}) delete r`;
 export const REJECT_FRIEND_REQUEST_BY_EMAIL = `MATCH (a:User {email: {email}})<-[r:REQUEST_FRIEND]-(b:User {email: {targetEmail}}) delete r`;
 
-export const FIND_USER_BY_REQUEST_RELATION = `MATCH(: User {email: {email}})<-[r:REQUEST_FRIEND]-(user: User) return user`;
+export const FIND_USER_BY_REQUEST_RELATION = `MATCH(: User {email: {email}})<-[r:REQUEST_FRIEND]-(u: User) return collect(distinct u) as user`;
 export const FIND_USER_BY_NO_RELATION = `MATCH(u: User {email: {email}})-[:FRIEND]-(:User)-[:FRIEND]-(target: User)
 where target.email <> {email} And not (u)-[]-(target)
-return distinct target`;
+return collect(distinct target) as target`;
 
 export const CHANGE_ALL_REQUEST_READ_STATE_BY_EMAIL = `
 MATCH (a: User)-[r: REQUEST_FRIEND]->(b: User {email: {email}})
