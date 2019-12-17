@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import _ from 'lodash';
 import ChatHeader from './ChatHeader';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 import NewChatFooter from './NewChatFooter';
@@ -88,13 +89,19 @@ function NewChatRoom({ idx }: { idx: number }) {
     chatRoomDispatch({ type: 'DELETE_CHATROOM', idx });
   };
 
-  const onChangeNickname = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const getUserDebounce = _.debounce(() => {
+    getUserQuery();
+  }, 500);
+
+  const handleOnChangeNickname = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     const {
       target: { value }
     } = e;
     setNickname(value);
     setUserEmail('');
-    getUserQuery();
+    getUserDebounce();
   };
 
   const onClickUser = ({ email, nickname }: IUserInfo) => {
@@ -112,7 +119,7 @@ function NewChatRoom({ idx }: { idx: number }) {
         />
         <NewFriends>
           <Text>받는 사람 : </Text>
-          <Input onChange={onChangeNickname} value={nickname} />
+          <Input onChange={handleOnChangeNickname} value={nickname} />
         </NewFriends>
         {!userEmail && data && data.searchUser.length > 0 ? (
           <UserWrapper>

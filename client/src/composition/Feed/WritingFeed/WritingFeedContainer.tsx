@@ -1,15 +1,18 @@
 import React, { useState, useRef } from 'react';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import _ from 'lodash';
 import WritingFeedPresenter from './WritingPresenter';
 import { Scalars, useMeQuery, useEnrollFeedMutation } from 'react-components.d';
 import { Maybe } from 'react-components.d';
-import { useQuery, useMutation } from '@apollo/react-hooks';
 import {
   enrollWritingFeedData,
   getWritingFeedData
 } from 'cache/writingFeed.gql';
 import { useEffect } from 'react';
+import { DEFAULT } from 'Constants';
 
 const FEED_MAX_LENGTH = 1500;
+const IMAGE_VALID_EXTENSION = /image\/(jpg|jpeg|png|gif|bmp)$/;
 
 function WritingFeedContainer() {
   const { data: { writingFeedContent = null } = {} } = useQuery(
@@ -42,7 +45,6 @@ function WritingFeedContainer() {
     writingFeedDataMutation({ variables: { content } });
   };
 
-  const IMAGE_VALID_EXTENSION = /image\/(jpg|jpeg|png|gif|bmp)$/;
   const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { target } = e;
     if (target.files && target.files.length) {
@@ -74,42 +76,42 @@ function WritingFeedContainer() {
       );
     }
   };
-  let overlapFlag = false;
-  const onSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ): Promise<void> => {
+
+  const onSubmit = _.debounce(
+    async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+      if (!content) {
+        alert('피드 내용을 입력해주세요.');
+        if (contentCursor.current) contentCursor.current.focus();
+        return;
+      }
+      if (content.length >= FEED_MAX_LENGTH) {
+        alert(`피드 글자수 제한(${FEED_MAX_LENGTH}자)`);
+        return;
+      }
+      const parseFiles = files.map(item => item.file);
+      const { data } = await enrollFeedMutation({
+        variables: { content, files: parseFiles }
+      });
+      if (data && data.enrollFeed) {
+        alert('피드가 등록되었습니다.');
+      }
+      writingFeedDataMutation({ variables: { content: '' } });
+      setFiles([]);
+      setContent('');
+    },
+    1000
+  );
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (overlapFlag) return;
-    if (!content) {
-      alert('피드 내용을 입력해주세요.');
-      if (contentCursor.current) contentCursor.current.focus();
-      return;
-    }
-    if(content.length >= FEED_MAX_LENGTH) {
-      alert(`피드 글자수 제한(${FEED_MAX_LENGTH}자)`);
-      return;
-    }
-    overlapFlag = true;
-    const parseFiles = files.map(item => item.file);
-    const { data } = await enrollFeedMutation({
-      variables: { content, files: parseFiles }
-    });
-    if (data && data.enrollFeed) {
-      alert('피드가 등록되었습니다.');
-    }
-    writingFeedDataMutation({ variables: { content: '' } });
-    setFiles([]);
-    setContent('');
-    overlapFlag = false;
+    onSubmit(e);
   };
 
   return (
     <WritingFeedPresenter
-      thumbnail={
-        (me && me.thumbnail) || process.env.PUBLIC_URL + '/images/profile.jpg'
-      }
+      thumbnail={(me && me.thumbnail) || DEFAULT.PROFILE}
       contentCursor={contentCursor}
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit}
       content={content}
       onChangeTextArea={onChangeTextArea}
       files={files}
