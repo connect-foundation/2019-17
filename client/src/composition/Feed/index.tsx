@@ -12,6 +12,7 @@ import {
 } from 'react-components.d';
 import { getDate, fullDateFormat } from 'utils/dateUtil';
 import { FEEDS_SUBSCRIPTION } from './feed.query';
+import { MAX_DATE } from '../../Constants';
 import Loader from 'components/Loader';
 
 const LoadCheckContainer = styled.div`
@@ -34,15 +35,17 @@ const checkCursor = (newCursor, prevCursor) => {
 
 const OFFSET = 4;
 const ALARM_LIMIT = 0;
-const FeedList = () => {
+
+const FeedList: React.FC = () => {
   const [, setRef] = useIntersect(fetchMoreFeed, () => {}, {});
   const [, setTopRef] = useIntersect(feedAlarmOff, feedAlarmOn, {});
 
   const [feedAlarm, setFeedAlarm] = useState(0);
   const [AlarmMessage, setAlarmMessage] = useState('');
   const { data: myInfo } = useMeQuery();
+
   const { data, fetchMore, subscribeToMore, loading } = useGetfeedsQuery({
-    variables: { first: OFFSET, currentCursor: '9999-12-31T09:29:26.050Z' }
+    variables: { first: OFFSET, currentCursor: MAX_DATE }
   });
 
   const scrollTop = () => {

@@ -10,9 +10,10 @@ export const getDate = (date: Idate): Date => {
     !date.hour ||
     !date.minute ||
     !date.second
-  )
+  ) {
     return new Date();
-  const dateob = new Date(
+  }
+  return new Date(
     date.year,
     date.month - 1,
     date.day,
@@ -21,7 +22,6 @@ export const getDate = (date: Idate): Date => {
     date.second,
     Number(String(date.nanosecond).substr(0, 3))
   );
-  return dateob;
 };
 
 export const fullDateFormat = (date: Date): string => {
@@ -64,24 +64,6 @@ export const objToDate = (date: Idate) => {
     date.hour + 9,
     date.minute,
     date.second,
-    Number(date.nanosecond.substring(0, 3))
+    Number(String(date.nanosecond).substr(0, 3))
   );
 };
-
-/**
- * iso String을 배열로 분리
- * @param isostr
- */
-export const ISOtoDate = (isostr: any) => {
-  const parts = isostr.match(/\d+/g);
-  return new Date(
-    parts[0],
-    parts[1] - 1,
-    parts[2],
-    parts[3],
-    parts[4],
-    parts[5]
-  );
-};
-
-export const reformDate = () => {};

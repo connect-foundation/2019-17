@@ -5,7 +5,7 @@ import React, {
   Dispatch,
   useContext
 } from 'react';
-import { HEADER_TAB } from 'Constants';
+import { HEADER_TAB } from 'Constants'
 
 const initState = {
   [HEADER_TAB.IS_ACTIVE_FRIEND_TAB]: false,

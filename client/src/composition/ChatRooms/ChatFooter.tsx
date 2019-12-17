@@ -24,13 +24,12 @@ const scrollDown = (chatBody: any) => {
   chatBody.current.scrollTop = chatBody.current.scrollHeight;
 };
 
-function ChatFooter({
-  chatRoomId,
-  chatBody
-}: {
+interface IProps {
   chatRoomId: number;
   chatBody: React.MutableRefObject<null>;
-}) {
+}
+
+function ChatFooter({ chatRoomId, chatBody }: IProps) {
   const { value: content, onChange, setValue } = useInput('');
   const contentCursor = useRef<HTMLInputElement>(null);
   const [createChatMutation] = useCreateChatMutation();
@@ -47,9 +46,9 @@ function ChatFooter({
 
   useEffect(() => {
     if (contentCursor.current) {
-      const len = contentCursor.current.value.length;
+      const { length } = contentCursor.current.value;
       contentCursor.current.focus();
-      contentCursor.current.setSelectionRange(len, len);
+      contentCursor.current.setSelectionRange(length, length);
     }
   }, []);
 

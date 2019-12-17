@@ -32,6 +32,8 @@ export const DEFAULT = {
   LOGO_WHITE: process.env.PUBLIC_URL + '/images/boostbook_logo_white.png'
 };
 
+export const MAX_DATE = '9999-12-31T09:29:26.050Z'
+
 export const WRITING_FEED_CONTENT = 'writingFeedContent';
 
 export const HTTP_SERVER_URI = `http://${config.serverHost}/graphql`;

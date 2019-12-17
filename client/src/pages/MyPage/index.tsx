@@ -7,6 +7,7 @@ import Profile from 'components/Profile';
 import UserFeedsContainer from './UserFeedsContainer';
 import FriendsIcon from 'components/Icon/FriendsIcon';
 import FriendsTable from 'composition/FriendList/tables';
+import Helmet from 'components/Helmet';
 import { PAGE_PATHS } from 'Constants';
 import { Link } from 'react-router-dom';
 import ActionButton from 'components/ActionButton';
@@ -308,76 +309,79 @@ const MyPage: React.FC<IProps> = props => {
   const relationWithUserAndMe = relation || '';
 
   return (
-    <ContentArea>
-      <Cover>
-        <CoverImage />
-        <Nickname>{userNickname}</Nickname>
-      </Cover>
-      <TimelineHead>
-        <ProfileImage>
-          <Image imageUrl={userThumbnail}></Image>
-        </ProfileImage>
-        {myEmail !== userEmail && (
-          <StatusWrapper>
-            <Status>
-              <ButtonContainer
-                email={userEmail}
-                initialRelation={relationWithUserAndMe}
-              />
-              <AlarmButton text={ALARM_STATUS_TEXT} />
-            </Status>
-          </StatusWrapper>
-        )}
-        <TimelineNav>
-          <TimelineNavUl>
-            <li>
-              <NavTab to={`${PAGE_PATHS.MY_PAGE}/${userEmail}`}>
-                {FEED_TEXT}
-              </NavTab>
-            </li>
-            <li>
-              <NavTab to={`${PAGE_PATHS.MY_PAGE}/${userEmail}/friends`}>
-                {FRIEND_TEXT}
-              </NavTab>
-            </li>
-          </TimelineNavUl>
-        </TimelineNav>
-      </TimelineHead>
-      <TimelineBody>
-        <LeftDiv>
-          <Sub>
-            <SubHeader>
-              <InfoIcon />
-              <SubTitle>{INTRODUCTION_TEXT}</SubTitle>
-            </SubHeader>
-            <SubBody>
-              <SubBodyUl>
-                <li>
-                  <ResidenceIcon />
-                  {userResidence} {RESIDENCE_TEXT}
-                </li>
-                <li>
-                  <HometownIcon />
-                  {userHometown} {HOMETOWN_TEXT}
-                </li>
-              </SubBodyUl>
-              <ModifyButton />
-            </SubBody>
-          </Sub>
-          <Sub>
-            <SubHeader>
-              <FriendsIcon />
-              <SubTitle>{FRIEND_TEXT}</SubTitle>
-            </SubHeader>
-            <FriendsTable>{friends}</FriendsTable>
-          </Sub>
-        </LeftDiv>
-        <RightDiv>
-          <UserFeedsContainer email={userEmail} />
-        </RightDiv>
-      </TimelineBody>
-      <ChatRooms />
-    </ContentArea>
+    <>
+      <Helmet message={'mypage'} />
+      <ContentArea>
+        <Cover>
+          <CoverImage />
+          <Nickname>{userNickname}</Nickname>
+        </Cover>
+        <TimelineHead>
+          <ProfileImage>
+            <Image imageUrl={userThumbnail}></Image>
+          </ProfileImage>
+          {myEmail !== userEmail && (
+            <StatusWrapper>
+              <Status>
+                <ButtonContainer
+                  email={userEmail}
+                  initialRelation={relationWithUserAndMe}
+                />
+                <AlarmButton text={ALARM_STATUS_TEXT} />
+              </Status>
+            </StatusWrapper>
+          )}
+          <TimelineNav>
+            <TimelineNavUl>
+              <li>
+                <NavTab to={`${PAGE_PATHS.MY_PAGE}/${userEmail}`}>
+                  {FEED_TEXT}
+                </NavTab>
+              </li>
+              <li>
+                <NavTab to={`${PAGE_PATHS.MY_PAGE}/${userEmail}/friends`}>
+                  {FRIEND_TEXT}
+                </NavTab>
+              </li>
+            </TimelineNavUl>
+          </TimelineNav>
+        </TimelineHead>
+        <TimelineBody>
+          <LeftDiv>
+            <Sub>
+              <SubHeader>
+                <InfoIcon />
+                <SubTitle>{INTRODUCTION_TEXT}</SubTitle>
+              </SubHeader>
+              <SubBody>
+                <SubBodyUl>
+                  <li>
+                    <ResidenceIcon />
+                    {userResidence} {RESIDENCE_TEXT}
+                  </li>
+                  <li>
+                    <HometownIcon />
+                    {userHometown} {HOMETOWN_TEXT}
+                  </li>
+                </SubBodyUl>
+                <ModifyButton />
+              </SubBody>
+            </Sub>
+            <Sub>
+              <SubHeader>
+                <FriendsIcon />
+                <SubTitle>{FRIEND_TEXT}</SubTitle>
+              </SubHeader>
+              <FriendsTable>{friends}</FriendsTable>
+            </Sub>
+          </LeftDiv>
+          <RightDiv>
+            <UserFeedsContainer email={userEmail} />
+          </RightDiv>
+        </TimelineBody>
+        <ChatRooms />
+      </ContentArea>
+    </>
   );
 };
 

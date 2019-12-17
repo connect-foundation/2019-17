@@ -48,31 +48,27 @@ function NewChatFooter({ userEmail, onClose }: IProps) {
     }
     if (!userInfo || !userInfo.getUser || overlapFlag) return;
     overlapFlag = true;
-    if (userEmail) {
-      const { data } = await createChatRoomMutation({
-        variables: { userEmail, content: chat }
+    const { data } = await createChatRoomMutation({
+      variables: { userEmail, content: chat }
+    });
+    if (data && data.createChatRoom) {
+      const chat: any = data.createChatRoom[0];
+      const {
+        getUser: { thumbnail, nickname }
+      } = userInfo;
+      chatRoomDispatch({
+        type: 'CREATE_CHATROOM',
+        chatRoom: {
+          chatType: CHAT_ROOM.CHAT,
+          otherUserEmail: userEmail,
+          nickname,
+          thumbnail: thumbnail || DEFAULT.PROFILE,
+          chatRoomId: chat.chatRoomId
+        }
       });
-      if (data && data.createChatRoom) {
-        const chat: any = data.createChatRoom[0];
-        const {
-          getUser: { thumbnail, nickname }
-        } = userInfo;
-        chatRoomDispatch({
-          type: 'CREATE_CHATROOM',
-          chatRoom: {
-            chatType: CHAT_ROOM.CHAT,
-            otherUserEmail: userEmail,
-            nickname,
-            thumbnail: thumbnail || DEFAULT.PROFILE,
-            chatRoomId: chat.chatRoomId
-          }
-        });
-      }
-      setChat('');
-      onClose();
-      overlapFlag = false;
-      return;
     }
+    setChat('');
+    onClose();
     overlapFlag = false;
   };
   return (
