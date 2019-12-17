@@ -69,7 +69,7 @@ function FriendRequestContainer() {
         }
       }
     });
-  }, [subscribeToMore]);
+  }, [subscribeToMore, headerTabCountDispatch]);
 
   return (
     <>

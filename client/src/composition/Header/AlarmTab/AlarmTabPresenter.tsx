@@ -8,6 +8,7 @@ import AlamBox from './AlarmBox';
 import { useGetAlarmsQuery, Alarm, useMeQuery } from 'react-components.d';
 import { SUBSCRIBE_ALARMS } from './alarm.query';
 import { useHeaderTabCountDispatch } from 'stores/HeaderTabCountContext';
+import { useCallback } from 'react';
 
 const Container = styled.div`
   display: flex;
@@ -47,7 +48,7 @@ function AlarmTabPresenter({ selected }: { selected: boolean }) {
   const closeModal = () => {
     setModalState({ isOpen: false, feedId: 0 });
   };
-  const subscribeToNewFeeds = () => {
+  const subscribeToNewFeeds = useCallback(() => {
     return subscribeToMore({
       document: SUBSCRIBE_ALARMS,
       variables: {
@@ -78,11 +79,11 @@ function AlarmTabPresenter({ selected }: { selected: boolean }) {
         });
       }
     });
-  };
+  }, [headerTabCountDispatch, myInfo, selected, subscribeToMore]);
 
   useEffect(() => {
     return subscribeToNewFeeds();
-  }, [selected]);
+  }, [selected, subscribeToNewFeeds]);
 
   return (
     <Container>

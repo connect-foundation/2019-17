@@ -24,7 +24,7 @@ function FriendTab({ selected }: IProps) {
         type: 'RESET_FRIEND_CNT'
       });
     }
-  }, [selected]);
+  }, [selected, changeReadState, headerTabCountDispatch]);
 
   return (
     <Header>

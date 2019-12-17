@@ -78,7 +78,7 @@ function HeaderTab() {
         key: { id: 'alarmCount', value: alarmCount.alarmCount }
       });
     }
-  }, [alarmCount]);
+  }, [alarmCount, headerTabCountDispatch]);
 
   useEffect(() => {
     if (friendCount) {
@@ -87,7 +87,7 @@ function HeaderTab() {
         key: { id: 'friendCount', value: friendCount.friendUnreadAlarmNum }
       });
     }
-  }, [friendCount]);
+  }, [friendCount, headerTabCountDispatch]);
 
   const wrapperRef = useOutsideReset(() => {
     headerTabDispatch({
