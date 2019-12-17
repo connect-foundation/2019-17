@@ -2,7 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import CommonFooter from 'composition/Header/CommonFooter';
 import useInput from 'hooks/useInput';
-import { useCreateChatRoomMutation, useGetUserQuery } from 'react-components.d';
+import {
+  useCreateChatRoomMutation,
+  useGetUserQuery,
+  CreateChatRoomMutation
+} from 'react-components.d';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 import { CHAT_ROOM, DEFAULT } from 'Constants';
 
@@ -35,28 +39,29 @@ function NewChatFooter({ userEmail, onClose }: IProps) {
     ''
   );
   const [createChatRoomMutation] = useCreateChatRoomMutation();
-  const { data: userInfo } = useGetUserQuery({
+  const { data: { getUser = null } = {} } = useGetUserQuery({
     variables: { email: userEmail }
   });
   const chatRoomDispatch = useChatRoomDispatch();
-  let overlapFlag = false;
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!userEmail) {
+
+    if (!getUser) {
       alert('유저를 선택해주세요');
       return;
     }
-    if (!userInfo || !userInfo.getUser || overlapFlag) return;
-    overlapFlag = true;
-    if (userEmail) {
-      const { data } = await createChatRoomMutation({
-        variables: { userEmail, content: chat }
-      });
-      if (data && data.createChatRoom) {
-        const chat: any = data.createChatRoom[0];
-        const {
-          getUser: { thumbnail, nickname }
-        } = userInfo;
+
+    const { data } = await createChatRoomMutation({
+      variables: { userEmail, content: chat }
+    });
+
+    if (data && data.createChatRoom) {
+      const chats: CreateChatRoomMutation['createChatRoom'] =
+        data.createChatRoom;
+      if (chats.length && chats[0]) {
+        const { thumbnail, nickname } = getUser;
+
         chatRoomDispatch({
           type: 'CREATE_CHATROOM',
           chatRoom: {
@@ -64,16 +69,13 @@ function NewChatFooter({ userEmail, onClose }: IProps) {
             otherUserEmail: userEmail,
             nickname,
             thumbnail: thumbnail || DEFAULT.PROFILE,
-            chatRoomId: chat.chatRoomId
+            chatRoomId: (chats[0] && chats[0].chatRoomId) || 0
           }
         });
       }
       setChat('');
       onClose();
-      overlapFlag = false;
-      return;
     }
-    overlapFlag = false;
   };
   return (
     <ChatFooter>

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import LoginBtn from './SignInBtn';
+import Helmet from 'components/Helmet';
 
 const CenterBox = styled.div`
   width: 100%;
@@ -29,14 +30,17 @@ const Title = styled.div`
 
 const SignInContainer: React.FC = () => {
   return (
-    <CenterBox>
-      <Wrapper>
-        <HorizonCenterContainer>
-          <Title>BOOSTBOOK LOGIN</Title>
-          <LoginBtn />
-        </HorizonCenterContainer>
-      </Wrapper>
-    </CenterBox>
+    <>
+      <Helmet message={'Sign In'} />
+      <CenterBox>
+        <Wrapper>
+          <HorizonCenterContainer>
+            <Title>BOOSTBOOK LOGIN</Title>
+            <LoginBtn />
+          </HorizonCenterContainer>
+        </Wrapper>
+      </CenterBox>
+    </>
   );
 };
 

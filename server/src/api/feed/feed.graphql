@@ -1,25 +1,18 @@
-scalar Upload
-
-type PageInfo {
-  endCursor: String
-  hasNextPage: Boolean
-}
-
 type Idate {
-  year: Int
-  month: Int
-  day: Int
-  hour: Int
-  minute: Int
-  second: Int
-  nanosecond: String
+  year: Int!
+  month: Int!
+  day: Int!
+  hour: Int!
+  minute: Int!
+  second: Int!
+  nanosecond: String!
   timeZoneOffsetSeconds: Int
   timeZoneId: String
 }
 
 type Content {
-  createdAt: Idate
-  content: String
+  createdAt: Idate!
+  content: String!
 }
 
 type Comment {
@@ -34,13 +27,13 @@ type Image {
 }
 
 type IFeed {
-  searchUser: User
-  feed: Content
-  feedId: Int
-  totallikes: Int
-  imglist: [Image]
-  hasLiked: Int
-  comments: [Comment]
+  searchUser: User!
+  feed: Content!
+  feedId: Int!
+  totallikes: Int!
+  imglist: [Image!]!
+  hasLiked: Int!
+  comments: [Comment!]!
 }
 type IFeeds {
   cursor: String!
@@ -60,16 +53,15 @@ type Alarm {
 }
 
 type Query {
-  pageInfo: PageInfo
   feeds(first: Int, cursor: String): IFeeds!
-  userFeeds(first: Int, cursor: String, email: String!): IFeeds
+  userFeeds(first: Int, cursor: String, email: String!): IFeeds!
   alarms: [Alarm]
   alarmCount: Int!
   feed(feedId: Int!): IFeed!
 }
 
 type Mutation {
-  updateLike(feedId: Int, count: Int): Boolean
+  updateLike(feedId: Int, count: Int): Boolean!
   enrollFeed(content: String!, files: [Upload]): Boolean!
   writeComment(content: String!, feedId: Int!): Boolean!
   changeFeedAlarmReadState(feedId: Int!, isRead: Boolean): Int!
@@ -78,12 +70,7 @@ type Mutation {
 }
 
 type Subscription {
-  feeds(userEmail: String): ISubsFeeds
-  userFeeds(userEmail: String): ISubsFeeds
+  feeds(userEmail: String): IFeeds!
+  userFeeds(userEmail: String): IFeeds!
   alarms(userEmail: String!): [Alarm]
-}
-
-type ISubsFeeds {
-  cursor: String
-  feedItems: [IFeed]
 }

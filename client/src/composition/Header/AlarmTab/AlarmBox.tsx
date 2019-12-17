@@ -1,5 +1,5 @@
 import React, { useState, Dispatch, SetStateAction } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Profile from 'components/Profile';
 import { Alarm, useChangeFeedAlarmReadStateMutation } from 'react-components.d';
 import CommonBox from '../CommonBox';

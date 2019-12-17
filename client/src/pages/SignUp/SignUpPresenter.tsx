@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { FaPlus } from 'react-icons/fa';
 import { darken } from 'polished';
 import { IUseInput } from 'hooks/useInput';
+import Helmet from 'components/Helmet';
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -165,6 +166,7 @@ function SignUpPresenter({
 }: IProps) {
   return (
     <Wrapper>
+      <Helmet message={'Sign Up'} />
       <Form method="post" onSubmit={onSubmit} encType="multipart/form-data">
         <Title>프로필 입력</Title>
         <InputFile

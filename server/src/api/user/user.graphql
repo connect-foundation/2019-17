@@ -1,24 +1,19 @@
-scalar Upload
-
-type User {
-  email: String!
-  nickname: String!
-  residence: String!
-  hometown: String!
+type Friend {
   thumbnail: String
+  nickname: String!
+  email: String!
+  status: String!
 }
 
 type Query {
   me: User!
   getUser(email: String!): User
+  friends: [Friend!]!
+  userWithEmail(email: String!): User
+  friendsWithUserEmail(email: String!): [User]!
+  findRelation(email: String!): String!
 }
 
-type Mutation {
-  signUp(
-    nickname: String!
-    residence: String!
-    hometown: String!
-    email: String!
-    file: Upload
-  ): User!
+type Subscription {
+  updateUserState: Friend!
 }

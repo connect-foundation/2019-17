@@ -2,13 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import ButtonContainer from 'composition/Search/ButtonContainer';
 import { useParams, Link } from 'react-router-dom';
-
 import { PAGE_PATHS } from 'Constants';
 import Profile from 'components/Profile';
 import ChatRooms from 'composition/ChatRooms';
 import ActionButton from 'components/ActionButton';
 import { useGetUserInfoWithEmailQuery } from 'react-components.d';
-import { FEED_TEXT, FRIEND_TEXT } from './text';
+import { ALARM_STATUS_TEXT, FEED_TEXT, FRIEND_TEXT } from './text';
 import TimelineBody from './body';
 
 const ContentArea = styled.div`
@@ -77,7 +76,7 @@ const Status = styled.div`
   text-align: right;
 `;
 
-const AlarmButton = styled(ActionButton)`
+const Alarm = styled(ActionButton)`
   margin-left: 3px;
 `;
 
@@ -88,7 +87,7 @@ const TimelineNav = styled.div`
   width: 649px;
 `;
 
-const TimelineNavUl = styled.ul`
+const NavList = styled.ul`
   border-left: 1px solid #e9eaed;
   ::after {
     clear: both;
@@ -155,11 +154,12 @@ const MyPage: React.FC<IProps> = props => {
                 email={userEmail}
                 initialRelation={relationWithUserAndMe}
               />
+              <Alarm text={ALARM_STATUS_TEXT} />
             </Status>
           </StatusWrapper>
         )}
         <TimelineNav>
-          <TimelineNavUl>
+          <NavList>
             <li>
               <NavTab to={`${PAGE_PATHS.MY_PAGE}/${userEmail}`}>
                 {FEED_TEXT}
@@ -170,7 +170,7 @@ const MyPage: React.FC<IProps> = props => {
                 {FRIEND_TEXT}
               </NavTab>
             </li>
-          </TimelineNavUl>
+          </NavList>
         </TimelineNav>
       </TimelineHead>
       <TimelineBody

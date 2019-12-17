@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import SearchButtonIcon from 'components/Icon/SearchButtonIcon';
+import React, { useState, MutableRefObject, ReactNode } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import SearchButtonIcon from 'components/Icon/SearchButtonIcon';
 import BoostBookLogo from 'components/Icon/BoostBookLogo';
-import { MutableRefObject } from 'react';
-import { ReactNode } from 'react';
 import { useOutsideReset } from 'hooks/useOutsideReset';
 import { PAGE_PATHS } from 'Constants';
 
@@ -42,6 +40,8 @@ const Logo = styled(BoostBookLogo)`
   margin-right: 10px;
 `;
 
+const Home = styled.a``;
+
 interface IProps {
   children: ReactNode;
 }
@@ -73,9 +73,9 @@ function SearchBox() {
 
   return (
     <Container>
-      <a href={PAGE_PATHS.MAIN}>
+      <Home href={PAGE_PATHS.MAIN}>
         <Logo size={'23px'} />
-      </a>
+      </Home>
       <form onSubmit={checkInput} ref={wrapperRef}>
         <SearchBoxInput
           onSubmit={checkInput}

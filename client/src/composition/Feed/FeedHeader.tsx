@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import Profile from 'components/Profile';
-import { PAGE_PATHS } from 'Constants';
+import { PAGE_PATHS, DEFAULT } from 'Constants';
 import { Link } from 'react-router-dom';
 
-const ProfileDiv = styled.div`
+const ProfileBody = styled.div`
   display: inline-block;
   padding-bottom: 0.5rem;
 `;
@@ -26,7 +26,7 @@ const ProfileName = styled(Link)`
   }
 `;
 
-const ProfileDateDiv = styled.span`
+const ProfileDate = styled.span`
   margin-bottom: 0.25rem;
   font-size: 0.75rem;
 `;
@@ -39,7 +39,7 @@ interface Iprops {
 }
 
 const FeedHeader = ({ createdAt, thumbnail, nickName, email }: Iprops) => {
-  const Thumbnail = thumbnail || process.env.PUBLIC_URL + '/images/profile.jpg';
+  const Thumbnail = thumbnail || DEFAULT.PROFILE;
 
   return (
     <>
@@ -47,12 +47,12 @@ const FeedHeader = ({ createdAt, thumbnail, nickName, email }: Iprops) => {
         <ProfileImgBox to={PAGE_PATHS.MY_PAGE + '/' + email}>
           <Profile imageUrl={Thumbnail} alt={'profile image'} size="40px" />
         </ProfileImgBox>
-        <ProfileDiv>
+        <ProfileBody>
           <ProfileName to={PAGE_PATHS.MY_PAGE + '/' + email}>
             {nickName}
           </ProfileName>
-          <ProfileDateDiv>{createdAt} </ProfileDateDiv>
-        </ProfileDiv>
+          <ProfileDate>{createdAt} </ProfileDate>
+        </ProfileBody>
       </div>
     </>
   );

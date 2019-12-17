@@ -78,7 +78,7 @@ function MessageTabPresenter({
             return (
               other && (
                 <MessageBox
-                  key={other.email + other.nickname}
+                  key={new Date().toISOString() + other.nickname}
                   nickname={other.nickname}
                   otherUserEmail={other.email}
                   lastChatUserEmail={lastChat.email}
