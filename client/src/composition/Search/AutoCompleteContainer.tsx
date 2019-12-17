@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { IUser } from 'react-components.d';
+import { UserInfo } from 'react-components.d';
 import Profile from 'components/Profile';
 
 const UserWrapper = styled.div`
@@ -52,11 +52,11 @@ function AutoCompleteContainer({
     <>
       {visible && data && data.searchUser.length ? (
         <UserWrapper>
-          {data.searchUser.map(({ email, nickname, thumbnail }: IUser) => (
+          {data.searchUser.map(({ email, nickname, thumbnail }: UserInfo) => (
             <UserContainer
-              key={email || ''}
+              key={email}
               onClick={() => {
-                setKeyword(nickname || '');
+                setKeyword(nickname);
                 setVisible(false);
               }}>
               <Profile imageUrl={thumbnail || undefined} size={'25px'} />

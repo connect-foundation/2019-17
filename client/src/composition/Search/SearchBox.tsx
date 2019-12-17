@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
-import SearchButtonIcon from 'components/Icon/SearchButtonIcon';
-import styled from 'styled-components';
+import React, { useState, MutableRefObject, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import { useGetUserNameLazyQuery } from 'react-components.d';
+import SearchButtonIcon from 'components/Icon/SearchButtonIcon';
 import BoostBookLogo from 'components/Icon/BoostBookLogo';
-import { MutableRefObject } from 'react';
-import { ReactNode } from 'react';
 import { useOutsideReset } from 'hooks/useOutsideReset';
 import AutoCompleteContainer from './AutoCompleteContainer';
-import { useGetUserNameLazyQuery } from 'react-components.d';
 
 const Container = styled.div`
   display: flex;
