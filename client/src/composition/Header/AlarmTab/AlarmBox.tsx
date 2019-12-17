@@ -83,7 +83,7 @@ function AlamBox({ alarm, setModalState }: Iprops) {
     alarm && alarm.isRead ? alarm.isRead : false
   );
 
-  const [changeRedState] = useChangeFeedAlarmReadStateMutation({
+  const [changeReadState] = useChangeFeedAlarmReadStateMutation({
     update(cache, { data }) {
       const { alarms }: any = cache.readQuery({
         query: GET_ALARMS
@@ -100,7 +100,7 @@ function AlamBox({ alarm, setModalState }: Iprops) {
 
   const onClickFold = () => {
     setReadState(true);
-    changeRedState({ variables: { feedId: Number(alarm.feedId) } });
+    changeReadState({ variables: { feedId: Number(alarm.feedId) } });
     ModalOn();
   };
 
