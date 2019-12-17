@@ -5,13 +5,10 @@ import {
   ACCEPT_FRIEND_REQUEST_BY_EMAIL,
   CANCEL_FRIEND_REQUEST_BY_EMAIL,
   CANCEL_FRIEND_BY_EMAIL,
-  FIND_USER_BY_REQUEST_RELATION,
-  FIND_USER_BY_NO_RELATION,
   REJECT_FRIEND_REQUEST_BY_EMAIL
 } from '../../schema/friend/query';
 import { FIND_USER_WITH_EMAIL_QUERY } from '../../schema/user/query';
 import isAuthenticated from '../../utils/isAuthenticated';
-import { parseResultRecords } from '../../utils/parseData';
 
 const REQUEST_ALARM_ADDED = 'REQUEST_ALARM_ADDED';
 
@@ -34,31 +31,6 @@ async function getUserInfoByEmail(email: string) {
 }
 
 export default {
-  Query: {
-    requestAlarm: async (_, __, { req }) => {
-      isAuthenticated(req);
-
-      const reqUsers = await requestDB(FIND_USER_BY_REQUEST_RELATION, {
-        email: req.email
-      });
-
-      const parsedReq = parseResultRecords(reqUsers);
-
-      return parsedReq[0].user;
-    },
-    recommendAlarm: async (_, __, { req }) => {
-      isAuthenticated(req);
-
-      const recUsers = await requestDB(FIND_USER_BY_NO_RELATION, {
-        email: req.email
-      });
-
-      const parsedRec = parseResultRecords(recUsers);
-
-      return parsedRec[0].target;
-    }
-  },
-
   Mutation: {
     requestFriend: async (
       _,
