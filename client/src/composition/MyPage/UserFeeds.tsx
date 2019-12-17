@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import Feed from 'composition/Feed/Feed';
-import useIntersect from 'hooks/useIntersectObserver';
 import styled from 'styled-components';
+import { useGetUserFeedsQuery, useMeQuery } from 'react-components.d';
+import useIntersect from 'hooks/useIntersectObserver';
+import Feed from 'composition/Feed/Feed';
 import WritingFeed from 'composition/Feed/WritingFeed';
 import NewFeedAlarm from 'composition/Feed/NewFeedAlarm';
-import { useGetUserFeedsQuery, useMeQuery } from 'react-components.d';
-import { getDate } from 'utils/dateUtil';
 import { FEEDS_SUBSCRIPTION } from 'composition/Feed/feed.query';
+import { getDate } from 'utils/dateUtil';
+
+const OFFSET = 4;
+const ALARM_LIMIT = 0;
 
 const LoadCheckContainer = styled.div`
   height: 50px;
@@ -14,14 +17,7 @@ const LoadCheckContainer = styled.div`
   top: -50px;
 `;
 
-const OFFSET = 4;
-const ALARM_LIMIT = 0;
-
-interface IProps {
-  email: string;
-}
-
-const UserFeedList = ({ email }: IProps) => {
+const UserFeedList = ({ email }: { email: string }) => {
   const [, setRef] = useIntersect(fetchMoreFeed, () => {}, {});
   const [, setTopRef] = useIntersect(feedAlarmOff, feedAlarmOn, {});
 

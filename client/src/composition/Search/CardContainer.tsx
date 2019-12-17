@@ -15,13 +15,6 @@ interface IProps {
   location: ILocation;
 }
 
-interface IUser {
-  nickname: string;
-  email: string;
-  thumbnail: string;
-  relation: string;
-}
-
 function getNotFoundCard(keyword: string) {
   return (
     <UserCard

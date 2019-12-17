@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { User } from 'react-components.d';
 import FriendProfile from 'components/FriendProfile';
 
 const Div = styled.div`
@@ -8,12 +9,6 @@ const Div = styled.div`
 
 interface IProps {
   children?: any;
-}
-
-interface IUser {
-  thumbnail: string | undefined;
-  nickname: string;
-  email: string;
 }
 
 function groupByThree([a, b, c, ...rest]: any[]): any[] {
@@ -31,10 +26,10 @@ const FriendsTable: React.FC<IProps> = ({ children }) => {
           {groups.map((row, index) => (
             <tr key={index}>
               {row.map(
-                ({ thumbnail, nickname, email }: IUser, subIndex: number) => (
+                ({ thumbnail, nickname, email }: User, subIndex: number) => (
                   <td key={subIndex}>
                     <FriendProfile
-                      thumbnail={thumbnail}
+                      thumbnail={thumbnail || undefined}
                       nickname={nickname}
                       email={email}
                     />
