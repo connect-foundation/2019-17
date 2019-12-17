@@ -5,9 +5,7 @@ import useInput from 'hooks/useInput';
 import {
   useCreateChatRoomMutation,
   useGetUserQuery,
-  CreateChatMutation,
-  CreateChatRoomMutation,
-  GetUserQuery
+  CreateChatRoomMutation
 } from 'react-components.d';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 import { CHAT_ROOM, DEFAULT } from 'Constants';

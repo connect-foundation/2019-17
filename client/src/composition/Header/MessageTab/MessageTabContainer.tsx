@@ -4,7 +4,7 @@ import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 import { useHeaderTabDispatch } from 'stores/HeaderTabContext';
 import { CHAT_ROOM } from 'Constants';
 import { useGetChatRoomsQuery, useMeQuery } from 'react-components.d';
-import { GET_CHATROOMS_SUBSCRIPTION } from './MessageTab.query';
+import { GET_CHATROOMS_SUBSCRIPTION } from './message.query';
 
 function MessageTabContainer() {
   const chatRoomDispatch = useChatRoomDispatch();

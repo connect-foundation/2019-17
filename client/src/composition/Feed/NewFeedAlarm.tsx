@@ -8,7 +8,6 @@ interface Props {
 }
 const NewFeedAlarmContainer = styled.div`
   border: 1px solid #dadde1;
-  display: inline-block;
   position: fixed;
   cursor: pointer;
   top: 70px;

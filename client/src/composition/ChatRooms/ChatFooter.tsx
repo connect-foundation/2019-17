@@ -37,6 +37,7 @@ function ChatFooter({ chatRoomId, chatBody }: IProps) {
 
   const handleChatSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    onChatSubmit();
   };
 
   const onChatSubmit = _.debounce(() => {
@@ -55,7 +56,7 @@ function ChatFooter({ chatRoomId, chatBody }: IProps) {
   }, []);
 
   return (
-    <Footer onSubmit={onChatSubmit}>
+    <Footer onSubmit={handleChatSubmit}>
       <Input
         placeholder={'메세지를 입력하세요...'}
         maxLength={500}

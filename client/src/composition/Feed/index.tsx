@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
-import Feed from './Feed';
-import useIntersect from 'hooks/useIntersectObserver';
 import styled from 'styled-components';
-import WritingFeed from './WritingFeed';
-import NewFeedAlarm from './NewFeedAlarm';
-import NoFeed from './NoFeed';
 import {
   useGetfeedsQuery,
   useMeQuery,
   GetfeedsQuery
 } from 'react-components.d';
+import { MAX_DATE } from 'Constants';
+import useIntersect from 'hooks/useIntersectObserver';
+import Feed from './Feed';
+import WritingFeed from './WritingFeed';
+import NewFeedAlarm from './NewFeedAlarm';
+import NoFeed from './NoFeed';
+import Loader from 'components/Loader';
 import { getDate, fullDateFormat } from 'utils/dateUtil';
 import { FEEDS_SUBSCRIPTION } from './feed.query';
-import { MAX_DATE } from '../../Constants';
-import Loader from 'components/Loader';
+import { scrollTop } from 'utils/scroll';
+
+const OFFSET = 4;
+const ALARM_LIMIT = 0;
 
 const LoadCheckContainer = styled.div`
   height: 50px;
@@ -26,15 +30,8 @@ const LoadContainer = styled.div`
   height: 10rem;
 `;
 
-const checkCursor = (newCursor, prevCursor) => {
-  if (newCursor === prevCursor) {
-    return '';
-  }
-  return newCursor;
-};
-
-const OFFSET = 4;
-const ALARM_LIMIT = 0;
+const checkCursor = (newCursor, prevCursor) =>
+  newCursor === prevCursor ? '' : newCursor;
 
 const FeedList: React.FC = () => {
   const [, setRef] = useIntersect(fetchMoreFeed, () => {}, {});
@@ -42,28 +39,26 @@ const FeedList: React.FC = () => {
 
   const [feedAlarm, setFeedAlarm] = useState(0);
   const [AlarmMessage, setAlarmMessage] = useState('');
-  const { data: myInfo } = useMeQuery();
+  const { data: { me = null } = {} } = useMeQuery();
 
-  const { data, fetchMore, subscribeToMore, loading } = useGetfeedsQuery({
+  const {
+    data: { feeds = null } = {},
+    fetchMore,
+    subscribeToMore,
+    loading
+  } = useGetfeedsQuery({
     variables: { first: OFFSET, currentCursor: MAX_DATE }
   });
 
-  const scrollTop = () => {
-    window.scroll({
-      top: 0,
-      left: 0,
-      behavior: 'smooth'
-    });
-  };
-
-  async function feedAlarmOn() {
+  function feedAlarmOn() {
     if (feedAlarm > ALARM_LIMIT) {
-      setAlarmMessage('새 피드 ' + feedAlarm + '개');
+      setAlarmMessage(`새 피드 ${feedAlarm} 개`);
     } else {
       setAlarmMessage('');
     }
   }
-  async function feedAlarmOff() {
+
+  function feedAlarmOff() {
     setFeedAlarm(0);
     setAlarmMessage('');
   }
@@ -72,7 +67,7 @@ const FeedList: React.FC = () => {
     await fetchMore({
       variables: {
         first: OFFSET,
-        currentCursor: data && data.feeds ? data.feeds.cursor : ''
+        currentCursor: feeds ? feeds.cursor : ''
       },
       updateQuery: (
         prev: GetfeedsQuery,
@@ -99,7 +94,7 @@ const FeedList: React.FC = () => {
     return subscribeToMore({
       document: FEEDS_SUBSCRIPTION,
       variables: {
-        userEmail: myInfo && myInfo.me && myInfo.me.email ? myInfo.me.email : ''
+        userEmail: (me && me.email) || ''
       },
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
@@ -130,7 +125,7 @@ const FeedList: React.FC = () => {
     );
   }
 
-  if (!data || !data.feeds || !data.feeds.feedItems) return <>ERROR</>;
+  if (!feeds || !feeds.feedItems) return <>ERROR</>;
 
   return (
     <>
@@ -138,15 +133,13 @@ const FeedList: React.FC = () => {
         <WritingFeed />
       </div>
 
-      <div>
-        <NewFeedAlarm
-          onClick={scrollTop}
-          data={AlarmMessage}
-          onEffect={subscribeToNewFeeds}
-        />
-      </div>
+      <NewFeedAlarm
+        onClick={scrollTop}
+        data={AlarmMessage}
+        onEffect={subscribeToNewFeeds}
+      />
 
-      {data.feeds.feedItems.map((feed, idx) => {
+      {feeds.feedItems.map((feed, idx) => {
         return (
           feed &&
           feed.feed &&
@@ -161,13 +154,13 @@ const FeedList: React.FC = () => {
         );
       })}
 
-      {data.feeds.cursor && (
+      {feeds.cursor ? (
         <LoadCheckContainer
           onClick={fetchMoreFeed}
           ref={setRef as any}></LoadCheckContainer>
+      ) : (
+        <NoFeed />
       )}
-
-      <NoFeed></NoFeed>
     </>
   );
 };

@@ -39,6 +39,7 @@ function ChatRooms() {
                 />
               );
             }
+            return null;
           default:
             return null;
         }
