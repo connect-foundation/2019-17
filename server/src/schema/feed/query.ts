@@ -101,8 +101,9 @@ export const GET_FEED_ARALMS = `
 
 export const GET_NEW_ARALM = `
 MATCH (u:User)-[al:ALARM]-(f)
-WHERE ID(al)={alarmId} AND (f:Comment OR f:Feed )
-optional match (f)<-[:AUTHOR]-(w:User)
+WHERE ID(al) = {alarmId}  AND(f:Comment OR f:Feed)
+optional match (f)<-[:AUTHOR]-(w:User) 
+optional match (f)--(test:Feed)
 return collect(
   distinct {createdAt : f.createdAt , 
     content:f.content,
@@ -111,8 +112,8 @@ return collect(
     thumbnail:w.thumbnail,
     isRead: al.isRead, 
     isChecked: al.isChecked, 
-    feedId:ID(f),
-    type: head(labels(f)) })  as alarms 
+    feedId: case head(labels(f)) when 'Comment' then ID(test) else ID(f) end ,
+    type: head(labels(f)) })  as alarms
 `;
 
 export const CHANGE_ALARM_READSTATE = `
