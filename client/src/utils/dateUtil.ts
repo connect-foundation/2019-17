@@ -24,6 +24,12 @@ export const getDate = (date: Idate): Date => {
   return dateob;
 };
 
+export const fullDateFormat = (date: Date): string => {
+  const momentDate = moment(date);
+
+  return momentDate.format('YYYY년MM월DD일 HH:mm:ss ');
+};
+
 /**
  * string을 db용 datetime string 타입으로 변경
  * @param date
