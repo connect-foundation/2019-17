@@ -4,8 +4,8 @@ import app from './app';
 import './db';
 import { decodeJWT } from './utils/jwt';
 import { emailWithSocket, socketCountWithEmail } from './utils/socketManager';
-import { logoutPublish } from './utils/pubsub';
 import { getUserWithStatus } from './schema/user/user';
+import { logoutPublish } from './api/user/user.pubsub';
 
 const PORT: string | number = config.port;
 const ENDPOINT: string = '/graphql';
@@ -23,7 +23,7 @@ const appOptions: Options = {
   playground: PLAYGROUND,
   subscriptions: {
     path: SUBSCRIPTIONS,
-    onConnect: (connectionParams, webSocket, context) => {
+    onConnect: (_, webSocket, context) => {
       const {
         request: {
           headers: { cookie }
@@ -48,7 +48,7 @@ const appOptions: Options = {
         return webSocket.close();
       }
     },
-    onDisconnect: async (webSocket, context) => {
+    onDisconnect: async (webSocket, _) => {
       const email = emailWithSocket.get(webSocket);
       const currentCount = socketCountWithEmail.get(email);
       if (currentCount === 1) {

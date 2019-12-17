@@ -9,7 +9,7 @@ import { GET_CHAT_SUBSCRIPTION } from '../ChatRooms.query';
 import { getDate } from 'utils/dateUtil';
 import ChatRoomPresenter from './ChatRoomPresenter';
 import useIntersect from 'hooks/useIntersectObserver';
-import { MAX_DATE } from '../../../Constants';
+import { MAX_DATE } from 'Constants';
 
 interface IProps {
   idx: number;
@@ -36,7 +36,7 @@ function ChatRoomContainer({ idx, chatRoomId, nickname, thumbnail }: IProps) {
       getChatsByChatRoomId[getChatsByChatRoomId.length - 1];
     const cursor = lastChat
       ? getDate(lastChat.createAt).toISOString()
-      : '9999-12-31T09:29:26.050Z';
+      : MAX_DATE;
 
     await fetchMore({
       variables: { chatRoomId, cursor },

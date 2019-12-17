@@ -3,7 +3,7 @@ import { useReducer } from 'react';
 import { createContext } from 'react';
 import { useContext } from 'react';
 
-interface IChatRoom {
+export interface IChatRoom {
   chatType: string;
   chatRoomId?: number;
   nickname?: string;

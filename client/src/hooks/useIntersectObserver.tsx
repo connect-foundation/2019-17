@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useCallback } from 'react';
 
 const baseOption = {
   root: null,
@@ -8,24 +9,25 @@ const baseOption = {
 
 const useIntersect = (
   interSectAction: any,
-  outterSectAction: any,
+  outerSectAction: any,
   option: any
 ) => {
   const [ref, setRef] = useState(null);
 
-  const checkIntersect = (
-    entry: IntersectionObserverEntry[],
-    observer: IntersectionObserver
-  ) => {
-    if (entry[0].isIntersecting) {
-      interSectAction();
-    } else {
-      outterSectAction();
-    }
-  };
+  const checkIntersect = useCallback(
+    (entry: IntersectionObserverEntry[]) => {
+      if (entry[0].isIntersecting) {
+        interSectAction();
+      } else {
+        outerSectAction();
+      }
+    },
+    [interSectAction, outerSectAction]
+  );
 
   useEffect(() => {
     let observer: any;
+
     if (ref) {
       observer = new IntersectionObserver(checkIntersect, baseOption);
       observer.observe(ref);

@@ -16,16 +16,13 @@ import {
   MATCH_USER_FEEDS
 } from '../../schema/feed/query';
 import { parseResultRecords } from '../../utils/parseData';
-
 import uploadToObjStorage from '../../middleware/uploadToObjStorage';
 import { requestDB } from '../../utils/requestDB';
 import {
   WRITING_FEED_QUERY,
   createImageNodeAndRelation
 } from '../../schema/feed/query';
-
 import createDBError from '../../errors/createDBError';
-
 import { dateToISO, objToDate } from '../../utils/dateutil';
 import { withFilter } from 'graphql-subscriptions';
 import isAuthenticated from '../../utils/isAuthenticated';
@@ -41,12 +38,16 @@ import {
   IFeed
 } from '../../types';
 
-const getUpdateLikeQuery = count => {
-  if (count > 0) {
-    return UPDATE_LIKE;
-  } else {
-    return DELETE_LIKE;
-  }
+const getUpdateLikeQuery = count => (count > 0 ? UPDATE_LIKE : DELETE_LIKE);
+
+const createImageQuery = fileLocations => {
+  const matchQuery = `MATCH (f:Feed) WHERE ID(f) = $feedId `;
+  let registerImageQuery = fileLocations.reduce((acc, { Location }, idx) => {
+    acc += createImageNodeAndRelation(idx, Location);
+    return acc;
+  }, matchQuery);
+  registerImageQuery += ' RETURN f';
+  return registerImageQuery;
 };
 
 const createImages = async (pubsub, email, feedId, files) => {
@@ -57,20 +58,26 @@ const createImages = async (pubsub, email, feedId, files) => {
       filePromises.push(uploadToObjStorage(createReadStream(), filename));
     }
     const fileLocations = await Promise.all(filePromises);
-    const matchQuery = `MATCH (f:Feed) WHERE ID(f) = $feedId `;
-    let REGISTER_IMAGE = fileLocations.reduce((acc, { Location }, idx) => {
-      acc += createImageNodeAndRelation(idx, Location);
-      return acc;
-    }, matchQuery);
-    REGISTER_IMAGE += ' RETURN f';
-    await requestDB(REGISTER_IMAGE, { feedId });
-    publishingFeed(pubsub, feedId, email);
+    const REGISTER_IMAGE_QUERY = createImageQuery(fileLocations);
+
+    await requestDB(REGISTER_IMAGE_QUERY, { feedId });
+    publishFeed(pubsub, feedId, email);
   } catch (error) {
     console.error(error);
   }
 };
 
-const publishingFeed = async (pubsub, feedId, email) => {
+const checkIsFriend = async (friendEmail, myEmail) => {
+  const result = await requestDB(GET_FRIENDS, {
+    userEmail: myEmail,
+    friendEmail
+  });
+  const [parsedResult] = parseResultRecords(result);
+
+  return parsedResult.isFriend > 0;
+};
+
+const publishFeed = async (pubsub, feedId, email) => {
   const registerdFeed = await requestDB(GET_NEW_FEED, {
     feedId,
     userEmail: email
@@ -83,16 +90,6 @@ const publishingFeed = async (pubsub, feedId, email) => {
       feedItems: parsedRegisterdFeed
     }
   });
-};
-
-const checkIsFriend = async (friendEmail, myEmail) => {
-  const result = await requestDB(GET_FRIENDS, {
-    userEmail: myEmail,
-    friendEmail
-  });
-  const [parsedResult] = parseResultRecords(result);
-
-  return parsedResult.isFriend > 0;
 };
 
 const publishFeedAlarm = async (pubsub, alarmId, userEmail) => {
@@ -125,7 +122,7 @@ const mutationResolvers: MutationResolvers = {
       if (files && files.length < FILE_LIMIT) {
         createImages(pubsub, email, feedId, files);
       } else {
-        publishingFeed(pubsub, feedId, email);
+        publishFeed(pubsub, feedId, email);
       }
 
       const registeredAlarmId = await requestDB(ALARM_NEW_FEED, {

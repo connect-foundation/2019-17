@@ -45,7 +45,7 @@ function Feed({ content, createdAt, feedinfo, feedSize }: Iprops) {
       setLikeCnt(feedinfo.totallikes);
       setHasLiked(feedinfo.hasLiked ? true : false);
     }
-  }, []);
+  }, [feedinfo]);
 
   if (!feedinfo || !feedinfo.searchUser) return <></>;
   return (
