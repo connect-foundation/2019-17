@@ -5,8 +5,12 @@ import styled from 'styled-components';
 import WritingFeed from './WritingFeed';
 import NewFeedAlarm from './NewFeedAlarm';
 import NoFeed from './NoFeed';
-import { useGetfeedsQuery, useMeQuery } from 'react-components.d';
-import { getDate } from 'utils/dateUtil';
+import {
+  useGetfeedsQuery,
+  useMeQuery,
+  GetfeedsQuery
+} from 'react-components.d';
+import { getDate, fullDateFormat } from 'utils/dateUtil';
 import { FEEDS_SUBSCRIPTION } from './feed.query';
 import { MAX_DATE } from '../../Constants';
 import Loader from 'components/Loader';
@@ -21,6 +25,13 @@ const LoadContainer = styled.div`
   width: 100%;
   height: 10rem;
 `;
+
+const checkCursor = (newCursor, prevCursor) => {
+  if (newCursor === prevCursor) {
+    return '';
+  }
+  return newCursor;
+};
 
 const OFFSET = 4;
 const ALARM_LIMIT = 0;
@@ -63,26 +74,16 @@ const FeedList: React.FC = () => {
         first: OFFSET,
         currentCursor: data && data.feeds ? data.feeds.cursor : ''
       },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (
-          !fetchMoreResult ||
-          !fetchMoreResult.feeds ||
-          !fetchMoreResult.feeds.feedItems ||
-          !prev.feeds ||
-          !prev.feeds.feedItems ||
-          !fetchMoreResult.feeds.feedItems.length
-        ) {
-          return prev;
-        }
-
+      updateQuery: (
+        prev: GetfeedsQuery,
+        { fetchMoreResult }: { fetchMoreResult: GetfeedsQuery }
+      ) => {
         const {
           feeds: { feedItems, cursor: newCursor }
         } = fetchMoreResult;
-        let finalCursor = newCursor;
 
-        if (newCursor === prev.feeds.cursor) {
-          finalCursor = '';
-        }
+        let finalCursor = checkCursor(newCursor, prev.feeds.cursor);
+
         return Object.assign({}, prev, {
           feeds: {
             cursor: finalCursor,
@@ -104,20 +105,11 @@ const FeedList: React.FC = () => {
         if (!subscriptionData.data) return prev;
         const { data: newFeeds } = subscriptionData;
 
-        if (
-          !newFeeds ||
-          !newFeeds.feeds ||
-          !newFeeds.feeds.feedItems ||
-          !prev.feeds ||
-          !prev.feeds.feedItems ||
-          !newFeeds.feeds.feedItems.length
-        ) {
-          return prev;
-        }
-
         const {
           feeds: { feedItems }
         } = newFeeds;
+
+        setFeedAlarm(props => props + 1);
 
         return Object.assign({}, prev, {
           feeds: {
@@ -130,11 +122,17 @@ const FeedList: React.FC = () => {
     });
   };
 
-  return loading ? (
-    <LoadContainer>
-      <Loader />
-    </LoadContainer>
-  ) : (
+  if (loading) {
+    return (
+      <LoadContainer>
+        <Loader />
+      </LoadContainer>
+    );
+  }
+
+  if (!data || !data.feeds || !data.feeds.feedItems) return <>ERROR</>;
+
+  return (
     <>
       <div ref={setTopRef as any}>
         <WritingFeed />
@@ -148,27 +146,25 @@ const FeedList: React.FC = () => {
         />
       </div>
 
-      {data && data.feeds && data.feeds.feedItems
-        ? data.feeds.feedItems.map((feed, idx) => {
-            return feed && feed.feed && feed.feed.createdAt ? (
-              <Feed
-                key={getDate(feed.feed.createdAt).toISOString() + idx}
-                content={feed.feed.content}
-                feedinfo={feed}
-                createdAt={getDate(feed.feed.createdAt).toISOString()}
-              />
-            ) : (
-              <></>
-            );
-          })
-        : 'no data'}
+      {data.feeds.feedItems.map((feed, idx) => {
+        return (
+          feed &&
+          feed.feed &&
+          feed.feed.createdAt && (
+            <Feed
+              key={getDate(feed.feed.createdAt).toISOString() + idx}
+              content={feed.feed.content}
+              feedinfo={feed}
+              createdAt={fullDateFormat(getDate(feed.feed.createdAt))}
+            />
+          )
+        );
+      })}
 
-      {data && data.feeds && data.feeds.cursor ? (
+      {data.feeds.cursor && (
         <LoadCheckContainer
           onClick={fetchMoreFeed}
           ref={setRef as any}></LoadCheckContainer>
-      ) : (
-        <></>
       )}
 
       <NoFeed></NoFeed>

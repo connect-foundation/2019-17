@@ -43,6 +43,7 @@ export const UPDATE_USER_STATE = gql`
 
 const FriendList: React.FC = () => {
   const { loading, data, subscribeToMore } = useQuery(GET_FRIENDS_STATUS);
+
   subscribeToMore({
     document: UPDATE_USER_STATE,
     updateQuery: (prev, { subscriptionData }) => {
@@ -58,6 +59,7 @@ const FriendList: React.FC = () => {
       });
     }
   });
+
   return (
     <Wrapper>
       <Top />
