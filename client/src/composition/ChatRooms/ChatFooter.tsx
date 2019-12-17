@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import _ from 'lodash';
 import styled from 'styled-components';
 import useInput from 'hooks/useInput';
 import { useCreateChatMutation } from 'react-components.d';
@@ -33,16 +34,17 @@ function ChatFooter({ chatRoomId, chatBody }: IProps) {
   const { value: content, onChange, setValue } = useInput('');
   const contentCursor = useRef<HTMLInputElement>(null);
   const [createChatMutation] = useCreateChatMutation();
-  let overlapFlag = false;
-  const onChatSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+  const handleChatSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (overlapFlag || !content) return;
-    overlapFlag = true;
+  };
+
+  const onChatSubmit = _.debounce(() => {
+    if (!content) return;
     createChatMutation({ variables: { chatRoomId, content } });
     setValue('');
-    overlapFlag = false;
     scrollDown(chatBody);
-  };
+  }, 500);
 
   useEffect(() => {
     if (contentCursor.current) {

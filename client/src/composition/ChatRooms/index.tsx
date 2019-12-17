@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import ChatRoom from './ChatRoom';
 import NewChatRoom from './NewChatRoom';
-import { useChatRoomState } from 'stores/ChatRoomContext';
+import { useChatRoomState, IChatRoom } from 'stores/ChatRoomContext';
 import { CHAT_ROOM, DEFAULT } from 'Constants';
 
 const Container = styled.div`
@@ -19,22 +19,26 @@ function ChatRooms() {
   const ChatRoomsState = useChatRoomState();
   return (
     <Container>
-      {ChatRoomsState.map((chatRoom, idx) => {
+      {ChatRoomsState.map((chatRoom: IChatRoom, idx) => {
         switch (chatRoom.chatType) {
           case CHAT_ROOM.NEW:
             return <NewChatRoom key={idx} idx={idx} />;
           case CHAT_ROOM.CHAT:
-            return (
-              <ChatRoom
-                key={
-                  chatRoom.otherUserEmail ? chatRoom.otherUserEmail + idx : idx
-                }
-                idx={idx}
-                nickname={chatRoom.nickname || ''}
-                thumbnail={chatRoom.thumbnail || DEFAULT.PROFILE}
-                chatRoomId={chatRoom.chatRoomId || 0}
-              />
-            );
+            if (chatRoom.chatRoomId) {
+              return (
+                <ChatRoom
+                  key={
+                    chatRoom.otherUserEmail
+                      ? chatRoom.otherUserEmail + idx
+                      : idx
+                  }
+                  idx={idx}
+                  nickname={chatRoom.nickname || ''}
+                  thumbnail={chatRoom.thumbnail || DEFAULT.PROFILE}
+                  chatRoomId={chatRoom.chatRoomId}
+                />
+              );
+            }
           default:
             return null;
         }

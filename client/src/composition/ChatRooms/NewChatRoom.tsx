@@ -6,6 +6,10 @@ import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 import NewChatFooter from './NewChatFooter';
 import { useGetUserNameLazyQuery } from 'react-components.d';
 import Profile from 'components/Profile';
+import theme from 'style/theme';
+
+const NEW_MESSAGE_TEXT = '새 메세지';
+const TO_TEXT = '받는 사람';
 
 const Container = styled.div`
   width: 20rem;
@@ -112,16 +116,16 @@ function NewChatRoom({ idx }: { idx: number }) {
     <Container>
       <HeadContainer>
         <ChatHeader
-          nickname="새 메세지"
+          nickname={NEW_MESSAGE_TEXT}
           isProfile={false}
-          btncolor={'#4267B2'}
+          btncolor={theme.colors.facebookBlue}
           onClose={onClose}
         />
         <NewFriends>
-          <Text>받는 사람 : </Text>
+          <Text>{TO_TEXT} : </Text>
           <Input onChange={handleOnChangeNickname} value={nickname} />
         </NewFriends>
-        {!userEmail && data && data.searchUser.length > 0 ? (
+        {!userEmail && data && data.searchUser.length > 0 && (
           <UserWrapper>
             {data.searchUser.map(({ email, nickname, thumbnail }) => (
               <UserContainer
@@ -135,8 +139,6 @@ function NewChatRoom({ idx }: { idx: number }) {
               </UserContainer>
             ))}
           </UserWrapper>
-        ) : (
-          <></>
         )}
       </HeadContainer>
       <NewChatFooter userEmail={userEmail} onClose={onClose} />
