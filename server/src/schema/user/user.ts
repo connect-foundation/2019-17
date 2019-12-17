@@ -32,6 +32,7 @@ export const getUserWithStatus = async (email, status) => {
   const result = await requestDB(FIND_USER_WITH_EMAIL_QUERY, {
     email
   });
+  if (!result) return;
   const user = getNode(result);
   user.status = status;
   return user;

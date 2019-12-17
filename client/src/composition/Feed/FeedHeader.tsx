@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Profile from 'components/Profile';
-import { PAGE_PATHS } from 'constant';
+import { PAGE_PATHS } from 'Constants';
 import { Link } from 'react-router-dom';
 
 const ProfileDiv = styled.div`
@@ -9,18 +9,13 @@ const ProfileDiv = styled.div`
   padding-bottom: 0.5rem;
 `;
 
-const ProfileImgBox = styled.a`
+const ProfileImgBox = styled(Link)`
   display: inline-block;
-  float: left;
   padding-right: 0.5rem;
   cursor: pointer;
 `;
 
-interface ITest {
-  size: string;
-}
-
-const ProfileNameDiv = styled.div`
+const ProfileName = styled(Link)`
   margin-bottom: 0.25rem;
   padding-right: 22px;
   font-weight: bold;
@@ -49,15 +44,13 @@ const FeedHeader = ({ createdAt, thumbnail, nickName, email }: Iprops) => {
   return (
     <>
       <div>
-        <ProfileImgBox>
-          <Link to={PAGE_PATHS.MY_PAGE + '/' + email}>
-            <Profile imageUrl={Thumbnail} alt={'profile image'} size="40px" />
-          </Link>
+        <ProfileImgBox to={PAGE_PATHS.MY_PAGE + '/' + email}>
+          <Profile imageUrl={Thumbnail} alt={'profile image'} size="40px" />
         </ProfileImgBox>
         <ProfileDiv>
-          <Link to={PAGE_PATHS.MY_PAGE + '/' + email}>
-            <ProfileNameDiv>{nickName}</ProfileNameDiv>
-          </Link>
+          <ProfileName to={PAGE_PATHS.MY_PAGE + '/' + email}>
+            {nickName}
+          </ProfileName>
           <ProfileDateDiv>{createdAt} </ProfileDateDiv>
         </ProfileDiv>
       </div>

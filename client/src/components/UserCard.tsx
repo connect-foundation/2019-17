@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import Profile from './Profile';
-import { DEFAULT } from 'constant';
+import { DEFAULT } from 'Constants';
 
 const CardDiv = styled.div`
   ${props => props.theme.borders.feedBorder};

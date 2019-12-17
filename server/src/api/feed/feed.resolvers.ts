@@ -83,6 +83,12 @@ const publishingFeed = async (pubsub, feedId, email) => {
       feedItems: parsedRegisterdFeed
     }
   });
+  pubsub.publish(NEW_USER_FEED, {
+    userFeeds: {
+      cursor: '',
+      feedItems: parsedRegisterdFeed
+    }
+  });
 };
 
 const checkIsFriend = async (friendEmail, myEmail) => {
@@ -328,6 +334,7 @@ const queryResolvers: QueryResolvers = {
 };
 
 const NEW_FEED = 'NEW_FEED_PUBSUB';
+const NEW_USER_FEED = 'NEW_USER_FEED_PUBSUB';
 const NEW_ALARM = 'NEW_ALARM_PUBSUB';
 
 export default {
@@ -349,6 +356,19 @@ export default {
           } else {
             return false;
           }
+        }
+      )
+    },
+    userFeeds: {
+      subscribe: withFilter(
+        (_, __, { pubsub }) => {
+          return pubsub.asyncIterator(NEW_USER_FEED);
+        },
+        (payload, { userEmail }) => {
+          if (payload.userFeeds.feedItems[0].searchUser.email === userEmail) {
+            return true;
+          }
+          return false;
         }
       )
     },

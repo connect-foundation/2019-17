@@ -92,6 +92,7 @@ type Mutation {
 
 type Subscription {
   feeds(userEmail: String): ISubsFeeds
+  userFeeds(userEmail: String): ISubsFeeds
   alarms(userEmail: String!): [Alarm]
 }
 

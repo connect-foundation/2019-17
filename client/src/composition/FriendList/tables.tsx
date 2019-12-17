@@ -1,19 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import FriendProfile from 'components/FriendProfile';
+import { GetUserInfoWithEmailQuery, User } from 'react-components.d';
 
-const Div = styled.div`
+const Wrapper = styled.div`
   padding: 0 5px 4px 5px;
 `;
 
 interface IProps {
-  children?: any;
-}
-
-interface IUser {
-  thumbnail: string | undefined;
-  nickname: string;
-  email: string;
+  children?: GetUserInfoWithEmailQuery['friends'];
 }
 
 function groupByThree([a, b, c, ...rest]: any[]): any[] {
@@ -25,27 +20,21 @@ const FriendsTable: React.FC<IProps> = ({ children }) => {
   if (!children || !children.length) return <></>;
   const groups = groupByThree(children);
   return (
-    <Div>
+    <Wrapper>
       <table>
         <tbody>
           {groups.map((row, index) => (
             <tr key={index}>
-              {row.map(
-                ({ thumbnail, nickname, email }: IUser, subIndex: number) => (
-                  <td key={subIndex}>
-                    <FriendProfile
-                      thumbnail={thumbnail}
-                      nickname={nickname}
-                      email={email}
-                    />
-                  </td>
-                )
-              )}
+              {row.map((user: User, subIndex: number) => (
+                <td key={subIndex}>
+                  <FriendProfile {...user} />
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>
       </table>
-    </Div>
+    </Wrapper>
   );
 };
 

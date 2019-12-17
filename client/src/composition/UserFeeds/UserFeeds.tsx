@@ -6,7 +6,7 @@ import WritingFeed from 'composition/Feed/WritingFeed';
 import NewFeedAlarm from 'composition/Feed/NewFeedAlarm';
 import { useGetUserFeedsQuery, useMeQuery } from 'react-components.d';
 import { getDate } from 'utils/dateUtil';
-import { FEEDS_SUBSCRIPTION } from 'composition/Feed/feed.query';
+import { USER_FEEDS_SUBSCRIPTION } from 'composition/Feed/feed.query';
 
 const LoadCheckContainer = styled.div`
   height: 50px;
@@ -60,7 +60,8 @@ const UserFeedList = ({ email }: IProps) => {
     await fetchMore({
       variables: {
         first: OFFSET,
-        currentCursor: data && data.feeds ? data.feeds.cursor : ''
+        currentCursor: data && data.feeds ? data.feeds.cursor : '',
+        email
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (
@@ -93,11 +94,10 @@ const UserFeedList = ({ email }: IProps) => {
 
   const subscribeToNewFeeds = () => {
     return subscribeToMore({
-      document: FEEDS_SUBSCRIPTION,
-      variables: {
-        userEmail: myEmail
-      },
+      document: USER_FEEDS_SUBSCRIPTION,
+      variables: { userEmail: email },
       updateQuery: (prev, { subscriptionData }) => {
+        console.log(prev, subscriptionData);
         if (!subscriptionData.data) return prev;
         const { data: newFeeds } = subscriptionData;
 
@@ -105,13 +105,10 @@ const UserFeedList = ({ email }: IProps) => {
           !newFeeds ||
           !newFeeds.feeds ||
           !newFeeds.feeds.feedItems ||
+          !newFeeds.feeds.feedItems.length ||
           !prev.feeds ||
           !prev.feeds.feedItems
         ) {
-          return prev;
-        }
-
-        if (!newFeeds.feeds.feedItems.length) {
           return prev;
         }
 
@@ -170,7 +167,7 @@ const UserFeedList = ({ email }: IProps) => {
         <></>
       )}
 
-      <div>is End</div>
+      <></>
     </>
   );
 };

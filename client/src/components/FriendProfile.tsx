@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { User } from 'react-components.d';
+import { DEFAULT } from 'Constants';
 
 const SIZE = '101px';
 
@@ -14,24 +16,15 @@ const Name = styled.div`
   line-height: 16px;
 `;
 
-interface IProps {
-  thumbnail: string | undefined;
-  nickname: string;
-  email: string;
-}
-
-const FriendProfile: React.FC<IProps> = ({ email, thumbnail, nickname }) => {
+const FriendProfile: React.FC<User> = ({
+  email,
+  thumbnail: thumbnailSrc,
+  nickname
+}: User) => {
   return (
     <>
       <Link to={`/myPage/${email}`}>
-        <Image
-          src={
-            thumbnail
-              ? thumbnail
-              : process.env.PUBLIC_URL + '/images/profile.jpg'
-          }
-          alt={email}
-        />
+        <Image src={thumbnailSrc || DEFAULT.PROFILE} alt={email} />
         <Name>{nickname}</Name>
       </Link>
     </>

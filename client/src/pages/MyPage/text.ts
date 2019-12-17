@@ -1,0 +1,13 @@
+const FEED_TEXT = '피드';
+const FRIEND_TEXT = '친구';
+const INTRODUCTION_TEXT = '소개';
+const RESIDENCE_TEXT = '거주';
+const HOMETOWN_TEXT = '출신';
+
+export {
+  FEED_TEXT,
+  FRIEND_TEXT,
+  INTRODUCTION_TEXT,
+  RESIDENCE_TEXT,
+  HOMETOWN_TEXT
+};

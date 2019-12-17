@@ -55,10 +55,11 @@ const appOptions: Options = {
         const user = await getUserWithStatus(email, 'offline');
         logoutPublish(user);
         socketCountWithEmail.delete(email);
-      } else {
+      } else if (email) {
         socketCountWithEmail.set(email, currentCount - 1);
       }
-    }
+    },
+    keepAlive: 10000
   },
   cors: corsOptions
 };
