@@ -45,7 +45,7 @@ function ChatFooter({ chatRoomId, chatBody }: IProps) {
     createChatMutation({ variables: { chatRoomId, content } });
     setValue('');
     scrollDown(chatBody);
-  }, 500);
+  }, 300);
 
   useEffect(() => {
     if (contentCursor.current) {
