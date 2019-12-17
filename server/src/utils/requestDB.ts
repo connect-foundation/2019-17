@@ -1,6 +1,6 @@
 import db from '../db';
 import createDBError from '../errors/createDBError';
-import { FIND_USER_WITH_EMAIL_QUERY } from '../schema/user/query';
+import { FIND_USER_BY_EMAIL_QUERY } from '../schema/user/query';
 
 async function requestDB(query: string, param?) {
   let session;
@@ -18,7 +18,7 @@ async function requestDB(query: string, param?) {
 }
 
 async function getUserInfoByEmail(email: string) {
-  const user = await requestDB(FIND_USER_WITH_EMAIL_QUERY, { email });
+  const user = await requestDB(FIND_USER_BY_EMAIL_QUERY, { email });
   return user[0].get(0).properties;
 }
 
