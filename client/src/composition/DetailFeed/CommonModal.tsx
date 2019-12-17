@@ -53,7 +53,7 @@ interface IProps {
   closeModal: () => void;
 }
 
-function Commonmodal({
+function CommonModal({
   onClick,
   textChildren,
   imageChildren,
@@ -77,4 +77,4 @@ function Commonmodal({
   );
 }
 
-export default Commonmodal;
+export default CommonModal;

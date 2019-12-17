@@ -5,11 +5,8 @@ import { Alarm, useChangeFeedAlarmReadStateMutation } from 'react-components.d';
 import CommonBox from '../CommonBox';
 import { GET_ALARMS } from './alarm.query';
 
-const cursor = css`
-  cursor: pointer;
-`;
 const BoldText = styled.span`
-  ${cursor}
+  cursor: pointer;
   font-weight: 600;
 `;
 
@@ -65,10 +62,9 @@ const ALARM_TYPE: { [key: string]: string } = {
 };
 
 const getAppliedReadAlarms = (alarms: Alarm[], data: any) => {
-  return alarms.map((alarm: any) => {
+  return alarms.map((alarm: Alarm) => {
     if (data && alarm.feedId === data.changeFeedAlarmReadState) {
       alarm.isRead = true;
-      return alarm;
     }
     return alarm;
   });
@@ -93,11 +89,11 @@ function AlamBox({ alarm, setModalState }: Iprops) {
         query: GET_ALARMS
       });
 
-      const newAlarms = getAppliedReadAlarms(alarms, data);
+      const filteredAlarms = getAppliedReadAlarms(alarms, data);
 
       cache.writeQuery({
         query: GET_ALARMS,
-        data: { alarms: newAlarms }
+        data: { alarms: filteredAlarms }
       });
     }
   });
