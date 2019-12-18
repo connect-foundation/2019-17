@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import gql from 'graphql-tag';
-import { IFriend } from './friend.type';
-import User from 'components/User';
 import { useQuery } from '@apollo/react-hooks';
+import { Friend } from 'react-components.d';
+import User from 'components/User';
+import { UPDATE_USER_STATE, GET_FRIENDS_STATUS } from './friendList.query';
 
 const Wrapper = styled.div`
   right: 0;
@@ -17,28 +17,6 @@ const Wrapper = styled.div`
 
 const Top = styled.div`
   height: 43px;
-`;
-
-export const GET_FRIENDS_STATUS = gql`
-  query getFriends {
-    friends {
-      email
-      nickname
-      thumbnail
-      status
-    }
-  }
-`;
-
-export const UPDATE_USER_STATE = gql`
-  subscription updateUserState {
-    updateUserState {
-      email
-      nickname
-      thumbnail
-      status
-    }
-  }
 `;
 
 const FriendList: React.FC = () => {
@@ -65,12 +43,12 @@ const FriendList: React.FC = () => {
       <Top />
       {!loading &&
         data &&
-        data.friends.map(({ email, thumbnail, nickname, status }: IFriend) => {
+        data.friends.map(({ email, thumbnail, nickname, status }: Friend) => {
           return (
             <User
               key={email}
               email={email}
-              thumbnail={thumbnail ? thumbnail : undefined}
+              thumbnail={thumbnail || undefined}
               nickname={nickname}
               status={status}
             />

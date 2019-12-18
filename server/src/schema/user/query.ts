@@ -1,5 +1,4 @@
-export const FIND_USER_WITH_EMAIL_QUERY = `MATCH (user:User {email: {email}}) RETURN user`;
-export const FIND_USER_WITH_NICKNAME_QUERY = `MATCH (user:User) WHERE user.nickname=~{nickname} RETURN user`;
+export const FIND_USER_BY_EMAIL_QUERY = `MATCH (user:User {email: {email}}) RETURN user`;
 export const FIND_FRIENDS_QUERY = `MATCH (user:User {email: {email}})-[:FRIEND]-(friends:User) RETURN friends`;
 export const CHECK_FRIEND_QUERY = `MATCH (user:User {email: {email}})-[:FRIEND]-(friend:User {email: {friendEmail}}) RETURN friend`;
 export const FIND_RELATIONSHIP_WITH_USER = `

@@ -25,5 +25,4 @@ type Query {
 
 type Subscription {
   requestAlarmAdded: FriendAlarmUser
-  friendAlarmNumChanged: FriendAlarmNum
 }

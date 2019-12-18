@@ -16,7 +16,7 @@ function AlarmTabContainer({ selected }: Iprops) {
         type: 'RESET_ALARM_CNT'
       });
     }
-  }, [selected]);
+  }, [selected, changeAllCheckTrue, headerTabCountDispatch]);
   return <MessageTabPresenter selected={selected} />;
 }
 
