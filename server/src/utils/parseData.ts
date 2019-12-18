@@ -42,6 +42,7 @@ export const datetransform = object => {
   }
   return returnobj;
 };
+
 /**
  * 주의사항 : 결과가 여러개이면 result.records 한개이면 result를 record로 받아야 함
  * @param records
@@ -96,3 +97,7 @@ export const parseResultRecords = records => {
 
   return result;
 };
+
+export const getNode = result => result[0].get(0).properties;
+
+export const getFirstKeyValue = result => result[0].get(0);

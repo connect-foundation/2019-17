@@ -102,7 +102,7 @@ const UserFeedList = ({ email }: { email: string }) => {
         const { data: newFeeds } = subscriptionData;
 
         const {
-          feeds: { feedItems, cursor }
+          feeds: { feedItems }
         } = newFeeds;
 
         setFeedAlarm(props => props + 1);

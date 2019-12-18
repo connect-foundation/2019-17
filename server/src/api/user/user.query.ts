@@ -5,9 +5,9 @@ import { requestDB, getUserInfoByEmail } from '../../utils/requestDB';
 import {
   FIND_USER_BY_EMAIL_QUERY,
   FIND_FRIENDS_QUERY,
-  FIND_RELATIONSHIP_WITH_USER
+  FIND_RELATIONSHIP_BY_USER
 } from '../../schema/user/query';
-import { getFirstKeyValue } from '../../utils/parseDB';
+import { getFirstKeyValue } from '../../utils/parseData';
 import { socketCountWithEmail } from '../../utils/socketManager';
 import { parseResultRecords } from '../../utils/parseData';
 
@@ -31,7 +31,7 @@ const queryResolvers: QueryResolvers = {
       throw new DBError();
     }
   },
-  getFriendsWithUserEmail: async (_, { email }, { req }): Promise<User[]> => {
+  getFriendsByUserEmail: async (_, { email }, { req }): Promise<User[]> => {
     isAuthenticated(req);
     try {
       const result = await requestDB(FIND_FRIENDS_QUERY, { email });
@@ -45,7 +45,7 @@ const queryResolvers: QueryResolvers = {
   },
   findRelation: async (_, { email: userEmail }, { req }) => {
     isAuthenticated(req);
-    const result = await requestDB(FIND_RELATIONSHIP_WITH_USER, {
+    const result = await requestDB(FIND_RELATIONSHIP_BY_USER, {
       myEmail: req.email,
       userEmail
     });

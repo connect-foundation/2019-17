@@ -1,7 +1,7 @@
 import db from '../db';
 import createDBError from '../errors/createDBError';
 import { FIND_USER_BY_EMAIL_QUERY } from '../schema/user/query';
-import { getNode } from './parseDB';
+import { getNode } from './parseData';
 
 export const requestDB = async (query: string, param?) => {
   let session;

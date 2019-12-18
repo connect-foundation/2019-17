@@ -2,7 +2,7 @@ import { decodeJWT, encodeJWT } from '../utils/jwt';
 import config from '../utils/config';
 import { getUserInfoByEmail } from '../utils/requestDB';
 
-const signInWithEmail = async (req, res, next) => {
+const signInByEmail = async (req, res, next) => {
   try {
     const {
       user: {
@@ -40,4 +40,4 @@ const checkToken = (req, res, next) => {
   return next();
 };
 
-export { signInWithEmail, checkToken };
+export { signInByEmail, checkToken };

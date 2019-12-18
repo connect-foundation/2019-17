@@ -1,5 +1,3 @@
-scalar Upload
-
 type User {
   email: String!
   nickname: String!

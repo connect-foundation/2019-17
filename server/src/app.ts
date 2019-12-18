@@ -5,7 +5,7 @@ import pubsub from './utils/pubsub';
 import helmet from 'helmet';
 import logger from 'morgan';
 import config from './utils/config';
-import { signInWithEmail, checkToken } from './middleware/authController';
+import { signInByEmail, checkToken } from './middleware/authController';
 import passport from './middleware/passport';
 import schema from './schema';
 import setUserFromJWT from './middleware/setUserFromJWT';
@@ -43,7 +43,7 @@ class App {
       passport.authenticate('google', {
         failureRedirect: config.clientHost
       }),
-      signInWithEmail
+      signInByEmail
     );
     this.app.express.use(setUserFromJWT);
   };

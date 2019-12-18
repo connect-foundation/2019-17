@@ -41,9 +41,7 @@ export const GET_CHAT_SUBSCRIPTION = gql`
 
 export const CREATE_CHAT_ROOM_MUTATION = gql`
   mutation createChatRoom($userEmail: String!, $content: String!) {
-    createChatRoom(userEmail: $userEmail, content: $content) {
-      chatRoomId
-    }
+    createChatRoom(userEmail: $userEmail, content: $content)
   }
 `;
 

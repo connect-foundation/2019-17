@@ -9,7 +9,7 @@ import {
   HOMETOWN_TEXT,
   FRIEND_TEXT
 } from './text';
-import { User, GetUserInfoWithEmailQuery } from 'react-components.d';
+import { GetUserInfoByEmailQuery } from 'react-components.d';
 
 const Wrapper = styled.div`
   margin-top: 12px;
@@ -151,7 +151,7 @@ const ModifyButton = styled.a`
 interface IProps {
   userResidence: string;
   userHometown: string;
-  friends?: GetUserInfoWithEmailQuery['friends'];
+  friends?: GetUserInfoByEmailQuery['friends'];
   userEmail: string;
 }
 

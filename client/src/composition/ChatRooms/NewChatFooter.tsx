@@ -3,11 +3,7 @@ import styled from 'styled-components';
 import _ from 'lodash';
 import CommonFooter from 'composition/Header/CommonFooter';
 import useInput from 'hooks/useInput';
-import {
-  useCreateChatRoomMutation,
-  useGetUserQuery,
-  CreateChatRoomMutation
-} from 'react-components.d';
+import { useCreateChatRoomMutation, useGetUserQuery } from 'react-components.d';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 import { CHAT_ROOM, DEFAULT } from 'Constants';
 
@@ -67,22 +63,22 @@ function NewChatFooter({ userEmail, onClose }: IProps) {
       variables: { userEmail, content: chat }
     });
     if (data && data.createChatRoom) {
-      const chats: CreateChatRoomMutation['createChatRoom'] =
-        data.createChatRoom;
-      if (chats.length && chats[0]) {
+      const { createChatRoom: chatRoomId } = data;
+      if (chatRoomId) {
         const { thumbnail, nickname } = getUser;
         createChatRoom({
           thumbnail,
           nickname,
-          chatRoomId: chats[0] && chats[0].chatRoomId
+          chatRoomId
         });
       }
       setChat('');
       onClose();
     }
-  }, 300);
+  }, 100);
 
-  const handleSubmitDebounce = () => {
+  const handleSubmitDebounce = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     onSubmit();
   };
   return (
