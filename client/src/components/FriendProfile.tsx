@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { User } from 'react-components.d';
 import { DEFAULT, PAGE_PATHS } from 'Constants';
 
 const SIZE = '101px';
@@ -16,15 +17,15 @@ const Name = styled.div`
 `;
 
 interface IProps {
-  thumbnail?: string;
-  nickname: string;
   email: string;
+  thumbnail: string;
+  nickname: string;
 }
 
 function FriendProfile({ email, thumbnail, nickname }: IProps) {
   return (
     <Link to={`${PAGE_PATHS.MY_PAGE}/${email}`}>
-      <Image src={thumbnail} alt={email} />
+      <Image src={thumbnail || undefined} alt={email} />
       <Name>{nickname}</Name>
     </Link>
   );

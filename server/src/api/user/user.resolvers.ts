@@ -2,7 +2,7 @@ import { withFilter } from 'graphql-subscriptions';
 import { LOGIN_CHANNEL, LOGOUT_CHANNEL } from './channels';
 import { requestDB } from '../../utils/requestDB';
 import {
-  FIND_USER_WITH_EMAIL_QUERY,
+  FIND_USER_BY_EMAIL_QUERY,
   FIND_FRIENDS_QUERY,
   CHECK_FRIEND_QUERY,
   FIND_RELATIONSHIP_WITH_USER
@@ -30,7 +30,7 @@ const Query: QueryResolvers = {
     });
   },
   userWithEmail: async (_, { email }) => {
-    const result = await requestDB(FIND_USER_WITH_EMAIL_QUERY, { email });
+    const result = await requestDB(FIND_USER_BY_EMAIL_QUERY, { email });
     const user = await getNode(result);
     return user;
   },
@@ -64,7 +64,7 @@ const Query: QueryResolvers = {
   ): Promise<User | null> => {
     isAuthenticated(req);
     try {
-      const result = await requestDB(FIND_USER_WITH_EMAIL_QUERY, { email });
+      const result = await requestDB(FIND_USER_BY_EMAIL_QUERY, { email });
       const [parsedResults] = parseResultRecords(result);
       return parsedResults ? parsedResults.user : null;
     } catch (error) {
@@ -84,7 +84,6 @@ export default {
           return pubsub.asyncIterator([LOGIN_CHANNEL, LOGOUT_CHANNEL]);
         },
         async (payload, _, { email }) => {
-          
           const result = await requestDB(CHECK_FRIEND_QUERY, {
             email: payload.email,
             friendEmail: email

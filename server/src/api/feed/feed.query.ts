@@ -60,6 +60,14 @@ const queryResolvers: QueryResolvers = {
     });
 
     const feeds = parseResultRecords(result);
+    
+    if (feeds.length === 0) {
+      return {
+        cursor: '',
+        feedItems: feeds
+      };
+    }
+
     const lastFeed = feeds[feeds.length - 1];
     const cursorDate = lastFeed && lastFeed.feed && lastFeed.feed.createdAt;
     const cursorDateType = objToDate(cursorDate);

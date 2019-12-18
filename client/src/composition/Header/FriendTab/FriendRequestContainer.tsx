@@ -1,13 +1,13 @@
 import React from 'react';
-import ButtonContainer from 'composition/Header/FriendTab/ButtonContainer';
 import { useEffect } from 'react';
+import client from 'apollo/ApolloClient';
+import ButtonContainer from 'composition/Header/FriendTab/ButtonContainer';
+import { useRequestAlarmQuery, FriendAlarmUser } from 'react-components.d';
+import { IRequestAlarm, ISubscription } from 'schema/Header/friendTab';
+import { useHeaderTabCountDispatch } from 'stores/HeaderTabCountContext';
 import FriendBox from './FriendBox';
 import { ALARM_SUBSCRIPTION, GET_REC_ALARM } from './friend.query';
-import { useRequestAlarmQuery, FriendAlarmUser } from 'react-components.d';
-import { useHeaderTabCountDispatch } from 'stores/HeaderTabCountContext';
-import client from 'apollo/ApolloClient';
 import { immutableSplice } from 'utils/immutable';
-import { IRequestAlarm, ISubscription } from 'schema/Header/friendTab';
 
 function removeDuplicationFromRecommendList(newAlarmItem: FriendAlarmUser) {
   const recommendAlarm = client.readQuery({ query: GET_REC_ALARM })
@@ -69,14 +69,17 @@ function FriendRequestContainer() {
         }
       }
     });
-  }, [subscribeToMore]);
+  }, [subscribeToMore, headerTabCountDispatch]);
 
   return (
     <>
       {!loading &&
         data.requestAlarm.map(
           ({ nickname, email, thumbnail }: FriendAlarmUser) => (
-            <FriendBox nickname={nickname} key={email} imageUrl={thumbnail}>
+            <FriendBox
+              nickname={nickname}
+              key={email}
+              imageUrl={thumbnail || undefined}>
               <ButtonContainer email={email} />
             </FriendBox>
           )

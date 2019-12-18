@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
 import ActionButton from 'components/ActionButton';
 import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
-
-const REQUEST_FRIEND = gql`
-  mutation sendRequest($email: String!, $relation: String!) {
-    requestFriend(targetEmail: $email, relation: $relation)
-  }
-`;
+import { REQUEST_FRIEND } from './search.query';
 
 interface IProps {
   email: string;

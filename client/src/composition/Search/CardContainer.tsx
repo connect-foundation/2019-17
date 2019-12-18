@@ -1,21 +1,11 @@
 import React from 'react';
-import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
-import UserCard from 'components/UserCard';
 import queryString from 'querystring';
-import ButtonContainer from './ButtonContainer';
+import { UserWithRelation } from 'react-components.d';
 import { DEFAULT } from 'Constants';
-
-const SEARCH_USER = gql`
-  query getUserName($keyword: String!) {
-    searchUser(keyword: $keyword) {
-      nickname
-      email
-      relation
-      thumbnail
-    }
-  }
-`;
+import UserCard from 'components/UserCard';
+import ButtonContainer from './ButtonContainer';
+import { SEARCH_USER } from './search.query';
 
 interface ILocation {
   search: string;
@@ -23,13 +13,6 @@ interface ILocation {
 
 interface IProps {
   location: ILocation;
-}
-
-interface IUser {
-  nickname: string;
-  email: string;
-  thumbnail: string;
-  relation: string;
 }
 
 function getNotFoundCard(keyword: string) {
@@ -70,8 +53,11 @@ function CardContainer({ location }: IProps) {
   return (
     <>
       {data.searchUser.map(
-        ({ nickname, email, thumbnail, relation }: IUser) => (
-          <UserCard nickname={nickname} key={email} imageUrl={thumbnail}>
+        ({ nickname, email, thumbnail, relation }: UserWithRelation) => (
+          <UserCard
+            nickname={nickname}
+            key={email}
+            imageUrl={thumbnail || undefined}>
             <ButtonContainer email={email} initialRelation={relation} />
           </UserCard>
         )

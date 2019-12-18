@@ -1,7 +1,6 @@
 import { withFilter } from 'graphql-subscriptions';
 import { checkIsFriend } from './checkFunction';
-
-const NEW_FEED = 'NEW_FEED_PUBSUB';
+import { NEW_USER_FEED, NEW_FEED } from './constant';
 
 const subscriptionResolvers = {
   feeds: {
@@ -20,6 +19,13 @@ const subscriptionResolvers = {
           return false;
         }
       }
+    )
+  },
+  userFeeds: {
+    subscribe: withFilter(
+      (_, __, { pubsub }) => pubsub.asyncIterator(NEW_USER_FEED),
+      (payload, { userEmail }) =>
+        payload.userFeeds.feedItems[0].searchUser.email === userEmail
     )
   }
 };
