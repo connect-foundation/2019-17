@@ -1,6 +1,6 @@
 import { withFilter } from 'graphql-subscriptions';
 import { MESSAGE_TAB } from './constant';
-import { filterChatRoomUser } from './filterFunction';
+import { filterChatRoomUser } from './common';
 
 const Subscription = {
   getChatRooms: {

@@ -45,8 +45,7 @@ const Query: QueryResolvers = {
   },
   me: async (_, __, { req }): Promise<User> => {
     isAuthenticated(req);
-    const { email } = req;
-    const user = await findUserWithEmail({ email });
+    const user = await findUserWithEmail({ email: req.email });
     if (user) {
       return user;
     }
