@@ -9,7 +9,7 @@ import {
 import useInput, { IUseInput } from 'hooks/useInput';
 import Profile from 'components/Profile';
 import Button from 'components/Button';
-import { DEFAULT } from 'Constants'
+import { DEFAULT } from 'Constants';
 
 const CommentForm = styled.div`
   position: relative;
@@ -80,6 +80,12 @@ const WriteCommentPresentor = ({
     }
   }
 
+  function submitCommentbyEnter(e) {
+    if (e.keyCode === 13) {
+      submitComment();
+    }
+  }
+
   return (
     <CommentForm>
       <Profile
@@ -88,7 +94,12 @@ const WriteCommentPresentor = ({
         size="32px"
       />
       <CommentInputForm>
-        <Input placeholder="댓글을 입력하세요" {...commentText} required />
+        <Input
+          placeholder="댓글을 입력하세요"
+          {...commentText}
+          onKeyDown={submitCommentbyEnter}
+          required
+        />
         <Button size={'medium'} text={'등록'} onClick={submitComment} />
       </CommentInputForm>
     </CommentForm>
