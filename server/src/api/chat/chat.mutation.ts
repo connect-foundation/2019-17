@@ -1,7 +1,8 @@
 import { MutationResolvers, MutationCreateChatArgs } from '../../types';
 import createDBError from '../../errors/createDBError';
 import isAuthenticated from '../../utils/isAuthenticated';
-import { createChatAndPublish } from './chat.pubsub';
+import { publishChat } from './chat.pubsub';
+import { createChat } from './common';
 
 const Mutation: MutationResolvers = {
   createChat: async (
@@ -12,12 +13,12 @@ const Mutation: MutationResolvers = {
     isAuthenticated(req);
     const { email } = req;
     try {
-      await createChatAndPublish({
+      const chat = await createChat({
         email,
-        content,
-        chatRoomId,
-        pubsub
+        chatRoomId: Number(chatRoomId),
+        content
       });
+      await publishChat({ chat, chatRoomId: Number(chatRoomId), pubsub });
       return true;
     } catch (error) {
       const DBError = createDBError(error);

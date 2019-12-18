@@ -1,7 +1,7 @@
 import {
   MutationResolvers,
   MutationCreateChatRoomArgs,
-  Chat,
+  Chat
 } from '../../types';
 import { requestDB } from '../../utils/requestDB';
 import createDBError from '../../errors/createDBError';
@@ -11,7 +11,8 @@ import {
   CREATE_CHAT_ROOM_QUERY
 } from '../../schema/chat/chatQuery';
 import { parseResultRecords } from '../../utils/parseData';
-import { createChatAndPublish, publishToMessageTab } from './chat.pubsub';
+import { publishChat, publishToMessageTab } from './chat.pubsub';
+import { createChat } from './common';
 
 const Mutation: MutationResolvers = {
   createChatRoom: async (
@@ -29,12 +30,12 @@ const Mutation: MutationResolvers = {
 
       if (checkChatRoomResult.length) {
         const [{ chatRoomId }] = parseResultRecords(checkChatRoomResult);
-        await createChatAndPublish({
+        const chat = await createChat({
           email,
-          content,
           chatRoomId: Number(chatRoomId),
-          pubsub
+          content
         });
+        await publishChat({ chat, chatRoomId: Number(chatRoomId), pubsub });
         return chatRoomId;
       }
 
