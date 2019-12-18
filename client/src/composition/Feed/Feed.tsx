@@ -67,13 +67,14 @@ function Feed({ content, createdAt, feedinfo, feedSize }: Iprops) {
             setHasLiked={setHasLiked}
             feedId={feedinfo.feedId}
             commentCount={feedinfo.comments ? feedinfo.comments.length : 0}
+            comments={feedinfo.comments}
           />
         </FeedContentDiv>
 
-        <CommentContainer
+        {/* <CommentContainer
           comments={feedinfo.comments}
           feedId={feedinfo.feedId}
-        />
+        /> */}
       </FeedDiv>
     </>
   );

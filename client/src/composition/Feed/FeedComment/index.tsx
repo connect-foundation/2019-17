@@ -6,15 +6,16 @@ import styled from 'styled-components';
 
 const CommentDiv = styled.div`
   border-top: 1px solid #dadde1;
-  padding: 4px 12px;
+  padding: 4px 0;
 `;
 
 interface Iprops {
   comments: Maybe<Comment>[] | null | undefined;
   feedId: number | null | undefined;
+  commentInputRef: React.MutableRefObject<HTMLInputElement | null>;
 }
-// 역할 :
-const CommentContainer = ({ comments, feedId }: Iprops) => {
+
+const CommentContainer = ({ comments, feedId, commentInputRef }: Iprops) => {
   const [myComments, setMyComments] = useState<Comment[]>();
 
   return (
@@ -40,6 +41,7 @@ const CommentContainer = ({ comments, feedId }: Iprops) => {
           feedId={feedId}
           setComment={setMyComments}
           myComments={myComments ? myComments : []}
+          commentInputRef={commentInputRef}
         />
       }
     </CommentDiv>

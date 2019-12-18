@@ -198,3 +198,9 @@ export const WRITE_COMMENT = gql`
     writeComment(content: $content, feedId: $feedId)
   }
 `;
+
+export const SEND_LIKE = gql`
+  mutation updateLike($feedId: Int, $count: Int) {
+    updateLike(feedId: $feedId, count: $count)
+  }
+`;

@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import ThumbLikeIcon from 'components/Icon/ThumbLikeIcon';
 import RoundThumbIcon from 'components/Icon/RoundThumbIcon';
 import CommentIcon from 'components/Icon/CommentIcon';
 import ShareIcon from 'components/Icon/ShareIcon';
-import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
-
+import { SEND_LIKE } from './feed.query';
+import CommentContainer from './FeedComment';
+import { Comment, Maybe } from 'react-components.d';
 const FeedActionDiv = styled.div`
   border-radius: 0 0 3px 3px;
   color: #1c1e21;
@@ -72,13 +73,8 @@ interface Iprops {
   setHasLiked: any;
   feedId: number | null | undefined;
   commentCount: number;
+  comments: Maybe<Comment>[] | null | undefined;
 }
-
-const SEND_LIKE = gql`
-  mutation updateLike($feedId: Int, $count: Int) {
-    updateLike(feedId: $feedId, count: $count)
-  }
-`;
 
 const FeedFooter = ({
   likeCnt,
@@ -86,9 +82,11 @@ const FeedFooter = ({
   hasLiked,
   setHasLiked,
   feedId,
-  commentCount
+  commentCount,
+  comments
 }: Iprops) => {
   const [updateLike] = useMutation(SEND_LIKE);
+  const commentInputRef = useRef<HTMLInputElement>(null);
 
   const ToggleLike = () => {
     setLikeCnt((props: number) => {
@@ -102,6 +100,11 @@ const FeedFooter = ({
       updateLike({ variables: { feedId, count: Number(!props) } });
       return !props;
     });
+  };
+  const focusCommentInput = () => {
+    if (commentInputRef.current) {
+      commentInputRef.current.focus();
+    }
   };
 
   return (
@@ -121,7 +124,7 @@ const FeedFooter = ({
             <ThumbLikeIcon hasLiked={hasLiked} />
             좋아요
           </FeedActionBtn>
-          <FeedActionBtn>
+          <FeedActionBtn onClick={focusCommentInput}>
             <CommentIcon />
             댓글
           </FeedActionBtn>
@@ -131,6 +134,12 @@ const FeedFooter = ({
           </FeedActionBtn>
         </FullBtnBox>
       </ActionbtnDiv>
+
+      <CommentContainer
+        comments={comments}
+        feedId={feedId}
+        commentInputRef={commentInputRef}
+      />
     </>
   );
 };
