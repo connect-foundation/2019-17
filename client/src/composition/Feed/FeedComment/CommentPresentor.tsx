@@ -4,9 +4,6 @@ import Profile from 'components/Profile';
 import { Comment } from 'react-components.d';
 import { DEFAULT } from 'Constants';
 
-const CustomImg = styled(Profile)`
-  display: block;
-`;
 const CommentLine = styled.div`
   margin: 0.25rem 0;
   display: flex;
@@ -17,12 +14,14 @@ const CommentContent = styled.div`
   font-size: 0.75rem;
   flex: 1;
 `;
+
 const CommentNickname = styled.span`
   font-weight: 600;
   color: ${props => props.theme.colors.fontMainBlue};
   padding: 0 0.25rem;
   cursor: pointer;
 `;
+
 const CommentBubble = styled.div`
   background-color: #f2f3f5;
   display: inline-block;
@@ -40,7 +39,7 @@ const CommentPresentor = ({ comment }: { comment: Comment }) => {
   const thumbnail = (comment && comment.thumbnail) || DEFAULT.PROFILE;
   return (
     <CommentLine>
-      <CustomImg imageUrl={thumbnail} alt={'profile image'} size="32px" />
+      <Profile imageUrl={thumbnail} alt={'profile image'} size="32px" />
       <CommentContent>
         <CommentBubble>
           <CommentText>
