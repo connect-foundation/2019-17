@@ -13,7 +13,7 @@ type ChatRoom {
 }
 
 type Mutation {
-  createChatRoom(userEmail: String!, content: String!): [Chat]
+  createChatRoom(userEmail: String!, content: String!): Int!
   createChat(chatRoomId: Int!, content: String!): Boolean!
 }
 

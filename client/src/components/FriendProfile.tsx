@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { User } from 'react-components.d';
 import { DEFAULT, PAGE_PATHS } from 'Constants';
 
 const SIZE = '101px';

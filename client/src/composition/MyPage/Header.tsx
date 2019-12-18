@@ -1,14 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import ButtonContainer from 'composition/Search/ButtonContainer';
-import { useParams, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { PAGE_PATHS } from 'Constants';
 import Profile from 'components/Profile';
-import ChatRooms from 'composition/ChatRooms';
 import ActionButton from 'components/ActionButton';
-import { useGetUserInfoWithEmailQuery } from 'react-components.d';
 import { ALARM_STATUS_TEXT, FEED_TEXT, FRIEND_TEXT } from './text';
-import TimelineBody from './Body';
 
 const Cover = styled.div`
   display: block;
