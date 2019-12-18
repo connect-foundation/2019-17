@@ -32,11 +32,7 @@ const LoadContainer = styled.div`
 const checkCursor = (newCursor, prevCursor) =>
   newCursor === prevCursor ? '' : newCursor;
 
-interface IProps {
-  email: string;
-}
-
-const UserFeedList: React.FC<IProps> = ({ email }: IProps) => {
+const UserFeedList = ({ email }: { email: string }) => {
   const [, setRef] = useIntersect(fetchMoreFeed, () => {}, {});
   const [, setTopRef] = useIntersect(feedAlarmOff, feedAlarmOn, {});
 
