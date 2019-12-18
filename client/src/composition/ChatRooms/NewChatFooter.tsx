@@ -67,20 +67,19 @@ function NewChatFooter({ userEmail, onClose }: IProps) {
       variables: { userEmail, content: chat }
     });
     if (data && data.createChatRoom) {
-      const chats: CreateChatRoomMutation['createChatRoom'] =
-        data.createChatRoom;
-      if (chats.length && chats[0]) {
+      const { createChatRoom: chatRoomId } = data;
+      if (chatRoomId) {
         const { thumbnail, nickname } = getUser;
         createChatRoom({
           thumbnail,
           nickname,
-          chatRoomId: chats[0] && chats[0].chatRoomId
+          chatRoomId
         });
       }
       setChat('');
       onClose();
     }
-  }, 300);
+  }, 100);
 
   const handleSubmitDebounce = () => {
     onSubmit();

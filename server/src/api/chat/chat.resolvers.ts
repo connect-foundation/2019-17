@@ -1,3 +1,4 @@
+import { withFilter } from 'graphql-subscriptions';
 import {
   MutationResolvers,
   MutationCreateChatRoomArgs,
@@ -21,7 +22,6 @@ import {
   GET_USERS_ON_CHAT_ROOM_QUERY
 } from '../../schema/chat/chatQuery';
 import { parseResultRecords } from '../../utils/parseData';
-import { withFilter } from 'graphql-subscriptions';
 
 const DEFAUT_MAX_DATE = '9999-12-31T09:29:26.050Z';
 const CHAT_LIMIT = 20;
@@ -30,7 +30,7 @@ const MESSAGE_TAB = 'messageTab';
 
 const publishToMessageTab = async ({ pubsub, chatRoomId, chat }) => {
   const userResults = await requestDB(GET_USERS_ON_CHAT_ROOM_QUERY, {
-    chatRoomId: parseInt(chatRoomId, 10)
+    chatRoomId: Number(chatRoomId)
   });
   const { users } = parseResultRecords(userResults)[0];
   pubsub.publish(MESSAGE_TAB, {
@@ -40,11 +40,24 @@ const publishToMessageTab = async ({ pubsub, chatRoomId, chat }) => {
 
 const filterChatRoomUser = async ({ chatRoomId, email }) => {
   const result = await requestDB(GET_USERS_ON_CHAT_ROOM_QUERY, {
-    chatRoomId: parseInt(chatRoomId, 10)
+    chatRoomId: Number(chatRoomId)
   });
   const users = parseResultRecords(result)[0].users;
-
   return users.some(user => user.email === email);
+};
+
+const createChatAndPublish = async ({ email, content, chatRoomId, pubsub }) => {
+  const result = await requestDB(CREATE_CHAT_QUERY, {
+    email,
+    content,
+    chatRoomId
+  });
+  const [chat]: Chat[] = parseResultRecords(result)[0].chat;
+  pubsub.publish(CHAT_PUBSUB + chatRoomId, {
+    getChatsByChatRoomId: chat
+  });
+  publishToMessageTab({ pubsub, chatRoomId, chat });
+  return chat;
 };
 
 const Mutation: MutationResolvers = {
@@ -52,45 +65,39 @@ const Mutation: MutationResolvers = {
     _,
     { userEmail, content }: MutationCreateChatRoomArgs,
     { req, pubsub }
-  ): Promise<Chat[]> => {
+  ): Promise<number> => {
     isAuthenticated(req);
     const { email } = req;
     try {
       const checkChatRoomResult = await requestDB(CHECK_CHAT_ROOM_QUERY, {
-        userEmail1: email,
-        userEmail2: userEmail
+        chatMemberEmail1: email,
+        chatMemberEmail2: userEmail
       });
-      if (checkChatRoomResult.length === 0) {
-        const result = await requestDB(CREATE_CHAT_ROOM_QUERY, {
-          from: email,
-          to: userEmail,
-          content
+
+      if (checkChatRoomResult.length) {
+        const [{ chatRoomId }] = parseResultRecords(checkChatRoomResult);
+        await createChatAndPublish({
+          email,
+          content,
+          chatRoomId: Number(chatRoomId),
+          pubsub
         });
-        const chats: Chat[] = parseResultRecords(result)[0].chats;
-        const chat: Chat = chats[0];
-        publishToMessageTab({
-          pubsub,
-          chatRoomId: chat.chatRoomId,
-          chat
-        });
-        return chats;
+        return chatRoomId;
       }
-      const [{ chatRoomId }] = parseResultRecords(checkChatRoomResult);
-      const result = await requestDB(CREATE_CHAT_QUERY, {
-        email,
-        content,
-        chatRoomId: parseInt(chatRoomId, 10)
+
+      const result = await requestDB(CREATE_CHAT_ROOM_QUERY, {
+        from: email,
+        to: userEmail,
+        content
       });
-      const chats: Chat[] = parseResultRecords(result)[0].chat;
-      pubsub.publish(CHAT_PUBSUB + chatRoomId, {
-        getChatsByChatRoomId: chats[0]
-      });
+      const { chats }: { chats: Chat[] } = parseResultRecords(result)[0];
+      const chat = chats[0];
       publishToMessageTab({
         pubsub,
-        chatRoomId: parseInt(chatRoomId, 10),
-        chat: chats[0]
+        chatRoomId: chat.chatRoomId,
+        chat
       });
-      return chats;
+      return chat.chatRoomId;
     } catch (error) {
       const DBError = createDBError(error);
       throw new DBError();
@@ -104,16 +111,12 @@ const Mutation: MutationResolvers = {
     isAuthenticated(req);
     const { email } = req;
     try {
-      const result = await requestDB(CREATE_CHAT_QUERY, {
+      await createChatAndPublish({
         email,
         content,
-        chatRoomId
+        chatRoomId,
+        pubsub
       });
-      const [chat]: Chat[] = parseResultRecords(result)[0].chat;
-      pubsub.publish(CHAT_PUBSUB + chatRoomId, {
-        getChatsByChatRoomId: chat
-      });
-      publishToMessageTab({ pubsub, chatRoomId, chat });
       return true;
     } catch (error) {
       const DBError = createDBError(error);
@@ -135,7 +138,7 @@ const Query: QueryResolvers = {
         cursor,
         limit: CHAT_LIMIT
       });
-      const chats: Chat[] = parseResultRecords(result)[0].chats;
+      const { chats }: { chats: Chat[] } = parseResultRecords(result)[0];
       return chats;
     } catch (error) {
       const DBError = createDBError(error);
