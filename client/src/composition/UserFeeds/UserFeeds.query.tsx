@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-export const USERINFO_WITH_EMAIL = gql`
+export const USERINFO_With_EMAIL = gql`
   query getUserInfoWithEmail($email: String!) {
     user: userWithEmail(email: $email) {
       email

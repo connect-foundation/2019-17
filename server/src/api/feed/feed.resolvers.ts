@@ -37,6 +37,7 @@ import {
   QueryFeedArgs,
   IFeed
 } from '../../types';
+import ImageUploadError from '../../errors/ImageUploadError';
 
 const getUpdateLikeQuery = count => (count > 0 ? UPDATE_LIKE : DELETE_LIKE);
 
@@ -63,7 +64,7 @@ const createImages = async (pubsub, email, feedId, files) => {
     await requestDB(REGISTER_IMAGE_QUERY, { feedId });
     publishFeed(pubsub, feedId, email);
   } catch (error) {
-    console.error(error);
+    throw new ImageUploadError();
   }
 };
 
@@ -86,6 +87,12 @@ const publishFeed = async (pubsub, feedId, email) => {
   const parsedRegisterdFeed = parseResultRecords(registerdFeed);
   pubsub.publish(NEW_FEED, {
     feeds: {
+      cursor: '',
+      feedItems: parsedRegisterdFeed
+    }
+  });
+  pubsub.publish(NEW_USER_FEED, {
+    userFeeds: {
       cursor: '',
       feedItems: parsedRegisterdFeed
     }
@@ -276,6 +283,12 @@ const queryResolvers: QueryResolvers = {
     });
 
     const feeds = parseResultRecords(result);
+    if (feeds.length === 0) {
+      return {
+        cursor: '',
+        feedItems: feeds
+      };
+    }
     const lastFeed = feeds[feeds.length - 1];
     const cursorDate = lastFeed && lastFeed.feed && lastFeed.feed.createdAt;
     const cursorDateType = objToDate(cursorDate);
@@ -325,6 +338,7 @@ const queryResolvers: QueryResolvers = {
 };
 
 const NEW_FEED = 'NEW_FEED_PUBSUB';
+const NEW_USER_FEED = 'NEW_USER_FEED_PUBSUB';
 const NEW_ALARM = 'NEW_ALARM_PUBSUB';
 
 export default {
@@ -346,6 +360,19 @@ export default {
           } else {
             return false;
           }
+        }
+      )
+    },
+    userFeeds: {
+      subscribe: withFilter(
+        (_, __, { pubsub }) => {
+          return pubsub.asyncIterator(NEW_USER_FEED);
+        },
+        (payload, { userEmail }) => {
+          if (payload.userFeeds.feedItems[0].searchUser.email === userEmail) {
+            return true;
+          }
+          return false;
         }
       )
     },

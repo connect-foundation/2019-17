@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import _ from 'lodash';
 import CommonFooter from 'composition/Header/CommonFooter';
 import useInput from 'hooks/useInput';
 import {
@@ -44,42 +45,49 @@ function NewChatFooter({ userEmail, onClose }: IProps) {
   });
   const chatRoomDispatch = useChatRoomDispatch();
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const createChatRoom = ({ nickname, thumbnail, chatRoomId }) => {
+    chatRoomDispatch({
+      type: 'CREATE_CHATROOM',
+      chatRoom: {
+        chatType: CHAT_ROOM.CHAT,
+        otherUserEmail: userEmail,
+        nickname,
+        thumbnail: thumbnail || DEFAULT.PROFILE,
+        chatRoomId
+      }
+    });
+  };
 
+  const onSubmit = _.debounce(async () => {
     if (!getUser) {
       alert('유저를 선택해주세요');
       return;
     }
-
     const { data } = await createChatRoomMutation({
       variables: { userEmail, content: chat }
     });
-
     if (data && data.createChatRoom) {
       const chats: CreateChatRoomMutation['createChatRoom'] =
         data.createChatRoom;
       if (chats.length && chats[0]) {
         const { thumbnail, nickname } = getUser;
-
-        chatRoomDispatch({
-          type: 'CREATE_CHATROOM',
-          chatRoom: {
-            chatType: CHAT_ROOM.CHAT,
-            otherUserEmail: userEmail,
-            nickname,
-            thumbnail: thumbnail || DEFAULT.PROFILE,
-            chatRoomId: (chats[0] && chats[0].chatRoomId) || 0
-          }
+        createChatRoom({
+          thumbnail,
+          nickname,
+          chatRoomId: chats[0] && chats[0].chatRoomId
         });
       }
       setChat('');
       onClose();
     }
+  }, 300);
+
+  const handleSubmitDebounce = () => {
+    onSubmit();
   };
   return (
     <ChatFooter>
-      <ChatForm onSubmit={onSubmit}>
+      <ChatForm onSubmit={handleSubmitDebounce}>
         <ChatInput
           placeholder="메세지..."
           value={chat}

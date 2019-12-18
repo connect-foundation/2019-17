@@ -7,12 +7,12 @@ const CenterContainer = styled.div`
   float: left;
 `;
 
-const UserFeedsContainer = ({ email }: { email: string }) => {
+function UserFeedsContainer({ email }: { email: string }) {
   return (
     <CenterContainer>
       <UserFeeds email={email} />
     </CenterContainer>
   );
-};
+}
 
 export default UserFeedsContainer;

@@ -54,7 +54,7 @@ type Alarm {
 
 type Query {
   feeds(first: Int, cursor: String): IFeeds!
-  userFeeds(first: Int, cursor: String, email: String!): IFeeds
+  userFeeds(first: Int, cursor: String, email: String!): IFeeds!
   alarms: [Alarm]
   alarmCount: Int!
   feed(feedId: Int!): IFeed!
@@ -71,5 +71,6 @@ type Mutation {
 
 type Subscription {
   feeds(userEmail: String): IFeeds!
+  userFeeds(userEmail: String): IFeeds!
   alarms(userEmail: String!): [Alarm]
 }
