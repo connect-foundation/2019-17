@@ -2,14 +2,14 @@ import gql from 'graphql-tag';
 
 export const USERINFO_WITH_EMAIL = gql`
   query getUserInfoWithEmail($email: String!) {
-    user: userWithEmail(email: $email) {
+    user: getUser(email: $email) {
       email
       nickname
       thumbnail
       residence
       hometown
     }
-    friends: friendsWithUserEmail(email: $email) {
+    friends: getFriendsWithUserEmail(email: $email) {
       email
       nickname
       thumbnail

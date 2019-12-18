@@ -1,6 +1,6 @@
-import { findUserWithEmail } from '../schema/user/user';
 import { decodeJWT, encodeJWT } from '../utils/jwt';
 import config from '../utils/config';
+import { getUserInfoByEmail } from '../utils/requestDB';
 
 const signInWithEmail = async (req, res, next) => {
   try {
@@ -10,7 +10,7 @@ const signInWithEmail = async (req, res, next) => {
       }
     } = req;
 
-    const user = await findUserWithEmail({ email });
+    const user = await getUserInfoByEmail(req.email);
     if (!user) {
       return res.redirect(`${config.clientHost}/signUp?email=${email}`);
     }

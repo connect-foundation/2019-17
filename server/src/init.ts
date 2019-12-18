@@ -4,8 +4,8 @@ import app from './app';
 import './db';
 import { decodeJWT } from './utils/jwt';
 import { emailWithSocket, socketCountWithEmail } from './utils/socketManager';
-import { getUserWithStatus } from './schema/user/user';
-import { logoutPublish } from './api/user/user.pubsub';
+import { getUserWithStatus } from './utils/requestDB';
+import { logoutPublish } from './api/auth/auth.pubsub';
 
 const PORT: string | number = config.port;
 const ENDPOINT: string = '/graphql';
