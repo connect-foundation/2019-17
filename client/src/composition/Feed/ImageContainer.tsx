@@ -1,6 +1,6 @@
 import React from 'react';
-import ImagePreview from './Image';
 import { Image } from 'react-components.d';
+import ImagePreview from './Image';
 
 interface Iprops {
   images: (Image | null)[];

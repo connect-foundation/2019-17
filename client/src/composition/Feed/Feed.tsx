@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { IFeed } from 'react-components.d';
+import { DEFAULT } from 'Constants';
 import styled from 'styled-components';
 import FeedHeader from './FeedHeader';
 import FeedBody from './FeedBody';
 import FeedFooter from './FeedFooter';
-import CommentContainer from './FeedComment';
-import { IFeed } from 'react-components.d';
-import { DEFAULT } from 'Constants';
 
 const FeedDiv = styled.div<{ feedSize: string }>`
   ${props => props.theme.borders.feedBorder};

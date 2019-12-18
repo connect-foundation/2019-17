@@ -1,13 +1,14 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
+import { Comment, Maybe } from 'react-components.d';
+import { useMutation } from '@apollo/react-hooks';
 import ThumbLikeIcon from 'components/Icon/ThumbLikeIcon';
 import RoundThumbIcon from 'components/Icon/RoundThumbIcon';
 import CommentIcon from 'components/Icon/CommentIcon';
 import ShareIcon from 'components/Icon/ShareIcon';
-import { useMutation } from '@apollo/react-hooks';
-import { SEND_LIKE } from './feed.query';
 import CommentContainer from './FeedComment';
-import { Comment, Maybe } from 'react-components.d';
+import { SEND_LIKE } from './feed.query';
+
 const FeedActionDiv = styled.div`
   border-radius: 0 0 3px 3px;
   color: #1c1e21;

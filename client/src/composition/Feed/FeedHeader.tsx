@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Profile from 'components/Profile';
-import { PAGE_PATHS, DEFAULT } from 'Constants';
+import { PAGE_PATHS } from 'Constants';
 import { Link } from 'react-router-dom';
 
 const ProfileBody = styled.div`

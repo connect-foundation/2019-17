@@ -1,9 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
-import ImageContainer from './ImageContainer';
 import { Image } from 'react-components.d';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import ImageContainer from './ImageContainer';
 
 const FeedContents = styled.div`
   margin-top: 6px;

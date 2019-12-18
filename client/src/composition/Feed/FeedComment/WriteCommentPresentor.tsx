@@ -8,8 +8,9 @@ import {
 import useInput, { IUseInput } from 'hooks/useInput';
 import Profile from 'components/Profile';
 import Button from 'components/Button';
-import { DEFAULT } from 'Constants';
 import CommentInput from './CommentInput';
+import { DEFAULT } from 'Constants';
+
 const CommentForm = styled.div`
   position: relative;
 `;

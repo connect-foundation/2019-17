@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import CommentPresentor from './CommentPresentor';
-import { Comment, Maybe } from 'react-components.d';
-import WriteCommentPresentor from './WriteCommentPresentor';
 import styled from 'styled-components';
+import { Comment, Maybe } from 'react-components.d';
+import CommentPresentor from './CommentPresentor';
+import WriteCommentPresentor from './WriteCommentPresentor';
 
 const CommentDiv = styled.div`
   border-top: 1px solid #dadde1;
