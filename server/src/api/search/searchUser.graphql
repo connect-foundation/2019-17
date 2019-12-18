@@ -1,6 +1,4 @@
-scalar Upload
-
-type UserInfo {
+type UserWithRelation {
   nickname: String!
   thumbnail: String
   relation: String!
@@ -8,5 +6,5 @@ type UserInfo {
 }
 
 type Query {
-  searchUser(keyword: String!): [UserInfo!]!
+  searchUser(keyword: String!): [UserWithRelation!]!
 }

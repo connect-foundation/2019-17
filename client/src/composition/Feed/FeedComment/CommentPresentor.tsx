@@ -6,13 +6,12 @@ import { DEFAULT } from 'Constants';
 
 const CommentLine = styled.div`
   margin: 0.25rem 0;
-  display: flex;
 `;
 
 const CommentContent = styled.div`
   margin: 0 0.5rem;
   font-size: 0.75rem;
-
+  position: absolute;
   display: inline-block;
 `;
 const CommentNickname = styled.span`
@@ -27,7 +26,6 @@ const CommentBubble = styled.div`
   box-sizing: border-box;
   color: #1c1e21;
   display: inline-block;
-  width: 430px;
   line-height: 16px;
   margin: 0;
   max-width: 100%;

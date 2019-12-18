@@ -15,7 +15,7 @@ const ProfileImgBox = styled(Link)`
   cursor: pointer;
 `;
 
-const ProfileName = styled(Link)`
+const ProfileName = styled.div`
   margin-bottom: 0.25rem;
   padding-right: 22px;
   font-weight: bold;
@@ -50,9 +50,9 @@ const FeedHeader = ({ createdAt, thumbnail, nickName, email }: Iprops) => {
           />
         </ProfileImgBox>
         <ProfileBody>
-          <ProfileName to={PAGE_PATHS.MY_PAGE + '/' + email}>
-            {nickName}
-          </ProfileName>
+          <Link to={`${PAGE_PATHS.MY_PAGE}/${email}`}>
+            <ProfileName>{nickName}</ProfileName>
+          </Link>
           <ProfileDate>{createdAt} </ProfileDate>
         </ProfileBody>
       </div>

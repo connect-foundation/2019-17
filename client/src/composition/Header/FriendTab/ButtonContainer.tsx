@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
 import ActionButton from 'components/ActionButton';
 import Button from 'components/Button';
-import styled from 'styled-components';
 import {
   useRequestFriendMutation,
   useRejectFriendRequestMutation
@@ -35,7 +35,9 @@ function ButtonContainer({ email }: IProps) {
   function rejectRequest(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
-    rejectFriend({ variables: { email } });
+    if (!isFriend) {
+      rejectFriend({ variables: { email } });
+    }
   }
 
   return (

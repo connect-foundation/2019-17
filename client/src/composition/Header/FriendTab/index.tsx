@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useEffect } from 'react';
+import { useChangeAllRequestReadStateMutation } from 'react-components.d';
+import { useHeaderTabCountDispatch } from 'stores/HeaderTabCountContext';
 import FriendRequestContainer from './FriendRequestContainer';
 import FriendRecommendContainer from './FriendRecommendContainer';
 import FriendTabPresenter from './FriendTabPresenter';
-import { useHeaderTabCountDispatch } from 'stores/HeaderTabCountContext';
-import { useChangeAllRequestReadStateMutation } from 'react-components.d';
-import { useEffect } from 'react';
 
 const Header = styled.div``;
 
@@ -24,7 +24,7 @@ function FriendTab({ selected }: IProps) {
         type: 'RESET_FRIEND_CNT'
       });
     }
-  }, [selected]);
+  }, [selected, changeReadState, headerTabCountDispatch]);
 
   return (
     <Header>

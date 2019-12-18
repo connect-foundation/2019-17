@@ -14,7 +14,7 @@ function groupByThree([a, b, c, ...rest]: Friends): Friends[] {
   return [[a, b, c]].concat(groupByThree(rest));
 }
 
-const FriendsTable: React.FC = ({ children }: { children: Friends }) => {
+function FriendsTable({ children }: { children?: Friends }) {
   if (!children || !children.length) return <></>;
   const groups = groupByThree(children);
   return (
@@ -25,7 +25,11 @@ const FriendsTable: React.FC = ({ children }: { children: Friends }) => {
             <tr key={index}>
               {row.map((user: User, subIndex: number) => (
                 <td key={subIndex}>
-                  <FriendProfile {...user} />
+                  <FriendProfile
+                    email={user.email}
+                    thumbnail={user.thumbnail || undefined}
+                    nickname={user.nickname}
+                  />
                 </td>
               ))}
             </tr>
@@ -34,6 +38,6 @@ const FriendsTable: React.FC = ({ children }: { children: Friends }) => {
       </table>
     </Wrapper>
   );
-};
+}
 
 export default FriendsTable;

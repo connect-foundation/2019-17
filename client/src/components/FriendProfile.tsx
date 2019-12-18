@@ -16,7 +16,13 @@ const Name = styled.div`
   line-height: 16px;
 `;
 
-function FriendProfile({ email, thumbnail, nickname }: User) {
+interface IProps {
+  email: string;
+  thumbnail?: string;
+  nickname: string;
+}
+
+function FriendProfile({ email, thumbnail, nickname }: IProps) {
   return (
     <Link to={`${PAGE_PATHS.MY_PAGE}/${email}`}>
       <Image src={thumbnail || undefined} alt={email} />
