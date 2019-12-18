@@ -9,16 +9,12 @@ const Wrapper = styled.div`
   padding: 0 5px 4px 5px;
 `;
 
-interface IProps {
-  children?: Friends;
-}
-
 function groupByThree([a, b, c, ...rest]: Friends): Friends[] {
   if (!rest.length) return [[a, b, c].filter(x => x)];
   return [[a, b, c]].concat(groupByThree(rest));
 }
 
-const FriendsTable: React.FC<IProps> = ({ children }) => {
+const FriendsTable: React.FC = ({ children }: { children: Friends }) => {
   if (!children || !children.length) return <></>;
   const groups = groupByThree(children);
   return (

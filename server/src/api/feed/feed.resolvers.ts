@@ -39,6 +39,10 @@ import {
 } from '../../types';
 import ImageUploadError from '../../errors/ImageUploadError';
 
+const NEW_FEED = 'NEW_FEED_PUBSUB';
+const NEW_USER_FEED = 'NEW_USER_FEED_PUBSUB';
+const NEW_ALARM = 'NEW_ALARM_PUBSUB';
+
 const getUpdateLikeQuery = count => (count > 0 ? UPDATE_LIKE : DELETE_LIKE);
 
 const createImageQuery = fileLocations => {
@@ -337,19 +341,13 @@ const queryResolvers: QueryResolvers = {
   }
 };
 
-const NEW_FEED = 'NEW_FEED_PUBSUB';
-const NEW_USER_FEED = 'NEW_USER_FEED_PUBSUB';
-const NEW_ALARM = 'NEW_ALARM_PUBSUB';
-
 export default {
   Query: queryResolvers,
   Mutation: mutationResolvers,
   Subscription: {
     feeds: {
       subscribe: withFilter(
-        (_, __, { pubsub }) => {
-          return pubsub.asyncIterator(NEW_FEED);
-        },
+        (_, __, { pubsub }) => pubsub.asyncIterator(NEW_FEED),
         async (payload, _, context) => {
           const myEmail = context.email;
           const friendEmail = payload.feeds.feedItems[0].searchUser.email;
@@ -365,15 +363,9 @@ export default {
     },
     userFeeds: {
       subscribe: withFilter(
-        (_, __, { pubsub }) => {
-          return pubsub.asyncIterator(NEW_USER_FEED);
-        },
-        (payload, { userEmail }) => {
-          if (payload.userFeeds.feedItems[0].searchUser.email === userEmail) {
-            return true;
-          }
-          return false;
-        }
+        (_, __, { pubsub }) => pubsub.asyncIterator(NEW_USER_FEED),
+        (payload, { userEmail }) =>
+          payload.userFeeds.feedItems[0].searchUser.email === userEmail
       )
     },
     alarms: {

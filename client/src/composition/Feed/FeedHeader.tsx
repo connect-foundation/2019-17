@@ -39,13 +39,15 @@ interface Iprops {
 }
 
 const FeedHeader = ({ createdAt, thumbnail, nickName, email }: Iprops) => {
-  const Thumbnail = thumbnail || DEFAULT.PROFILE;
-
   return (
     <>
       <div>
-        <ProfileImgBox to={PAGE_PATHS.MY_PAGE + '/' + email}>
-          <Profile imageUrl={Thumbnail} alt={'profile image'} size="40px" />
+        <ProfileImgBox to={`${PAGE_PATHS.MY_PAGE}/${email}`}>
+          <Profile
+            imageUrl={thumbnail || undefined}
+            alt={'profile image'}
+            size="40px"
+          />
         </ProfileImgBox>
         <ProfileBody>
           <ProfileName to={PAGE_PATHS.MY_PAGE + '/' + email}>
