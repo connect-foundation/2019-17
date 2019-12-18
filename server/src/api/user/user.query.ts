@@ -1,6 +1,6 @@
 import { QueryResolvers, QueryGetUserArgs, User } from '../../types';
 import isAuthenticated from '../../utils/isAuthenticated';
-import createDBError from '../../errors/createDBError';
+import ErrorResolver from '../../errors/ErrorResolver';
 import { requestDB, getUserInfoByEmail } from '../../utils/requestDB';
 import {
   FIND_USER_BY_EMAIL_QUERY,
@@ -18,7 +18,7 @@ const queryResolvers: QueryResolvers = {
       const result = await requestDB(FIND_FRIENDS_QUERY, {
         email: req.email
       });
-      const friends = await parseResultRecords(result);
+      const friends = parseResultRecords(result);
 
       return friends.map(({ friend: user }) => {
         user.status = socketCountWithEmail.has(user.email)
@@ -27,8 +27,7 @@ const queryResolvers: QueryResolvers = {
         return user;
       });
     } catch (error) {
-      const DBError = createDBError(error);
-      throw new DBError();
+      throw ErrorResolver(error);
     }
   },
   getFriendsByUserEmail: async (_, { email }, { req }): Promise<User[]> => {
@@ -39,26 +38,31 @@ const queryResolvers: QueryResolvers = {
 
       return friends.map(({ friend }) => friend);
     } catch (error) {
-      const DBError = createDBError(error);
-      throw new DBError();
+      throw ErrorResolver(error);
     }
   },
-  findRelation: async (_, { email: userEmail }, { req }) => {
+  findRelation: async (_, { email: userEmail }, { req }): Promise<string> => {
     isAuthenticated(req);
-    const result = await requestDB(FIND_RELATIONSHIP_BY_USER, {
-      myEmail: req.email,
-      userEmail
-    });
-    const relation = await getFirstKeyValue(result);
-    return relation;
+    try {
+      const result = await requestDB(FIND_RELATIONSHIP_BY_USER, {
+        myEmail: req.email,
+        userEmail
+      });
+      const relation = getFirstKeyValue(result);
+      return relation;
+    } catch (error) {
+      throw ErrorResolver(error);
+    }
   },
   me: async (_, __, { req }): Promise<User> => {
     isAuthenticated(req);
-    const user = await getUserInfoByEmail(req.email);
-    if (user) {
-      return user;
+    try {
+      const user = await getUserInfoByEmail(req.email);
+      if (user) return user;
+      throw { user: true };
+    } catch (error) {
+      throw ErrorResolver(error);
     }
-    throw Error('유저 정보를 찾을 수 없습니다.');
   },
   getUser: async (
     _,
@@ -71,8 +75,7 @@ const queryResolvers: QueryResolvers = {
       const [parsedResults] = parseResultRecords(result);
       return parsedResults ? parsedResults.user : null;
     } catch (error) {
-      const DBError = createDBError(error);
-      throw new DBError();
+      throw ErrorResolver(error);
     }
   }
 };

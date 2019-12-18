@@ -48,56 +48,71 @@ export const datetransform = object => {
  * @param records
  */
 export const parseResultRecords = records => {
-  let result: any[] = [];
-  for (const item of records) {
-    let arr: any = {};
-    const length = item.length || 0;
-    for (let i = 0; i < length; i++) {
-      if (toString.call(item) === '[object Object]') {
-        let node = item.get(i);
-        let nodeKey = item.keys[i];
-        if (
-          node instanceof neo4j.types.Node ||
-          node instanceof neo4j.types.Relationship
-        ) {
-          let temp = {};
-          temp[nodeKey] = datetransform(node.properties);
-          arr = { ...arr, ...temp };
-        } else if (node instanceof neo4j.types.Integer) {
-          const temp = {};
-          temp[nodeKey] = String(node);
-          arr = { ...arr, ...temp };
-        } else if (toString.call(node) === '[object Array]') {
-          let temp: { [key: string]: any } = {};
-          temp[nodeKey] = [];
+  try {
+    let result: any[] = [];
+    for (const item of records) {
+      let arr: any = {};
+      const length = item.length || 0;
+      for (let i = 0; i < length; i++) {
+        if (toString.call(item) === '[object Object]') {
+          let node = item.get(i);
+          let nodeKey = item.keys[i];
+          if (
+            node instanceof neo4j.types.Node ||
+            node instanceof neo4j.types.Relationship
+          ) {
+            let temp = {};
+            temp[nodeKey] = datetransform(node.properties);
+            arr = { ...arr, ...temp };
+          } else if (node instanceof neo4j.types.Integer) {
+            const temp = {};
+            temp[nodeKey] = String(node);
+            arr = { ...arr, ...temp };
+          } else if (toString.call(node) === '[object Array]') {
+            let temp: { [key: string]: any } = {};
+            temp[nodeKey] = [];
 
-          for (const no of node) {
-            let innerTemp = {};
-            if (no instanceof neo4j.types.Node) {
-              innerTemp = { ...innerTemp, ...datetransform(no.properties) }; // !!
-              temp[nodeKey].push(innerTemp);
-            } else {
-              innerTemp = { ...innerTemp, ...datetransform(no) }; // !!
-              temp[nodeKey].push(innerTemp);
+            for (const no of node) {
+              let innerTemp = {};
+              if (no instanceof neo4j.types.Node) {
+                innerTemp = { ...innerTemp, ...datetransform(no.properties) }; // !!
+                temp[nodeKey].push(innerTemp);
+              } else {
+                innerTemp = { ...innerTemp, ...datetransform(no) }; // !!
+                temp[nodeKey].push(innerTemp);
+              }
             }
+            arr = { ...arr, ...temp };
+          } else if (isString(node)) {
+            //type을 가져올 때
+            arr = { ...arr, type: node };
           }
-          arr = { ...arr, ...temp };
-        } else if (isString(node)) {
-          //type을 가져올 때
-          arr = { ...arr, type: node };
-        }
-        //else if string , else if  neo4j.types.Record
-        else {
-          console.log('???????!! : ', node);
+          //else if string , else if  neo4j.types.Record
+          else {
+            console.log('???????!! : ', node);
+          }
         }
       }
+      result.push(arr);
     }
-    result.push(arr);
+    return result;
+  } catch (err) {
+    throw { where: 'parseResultRecords', err };
   }
-
-  return result;
 };
 
-export const getNode = result => result[0].get(0).properties;
+export const getNode = result => {
+  try {
+    return result[0].get(0).properties;
+  } catch (err) {
+    throw { where: 'getNode', err };
+  }
+};
 
-export const getFirstKeyValue = result => result[0].get(0);
+export const getFirstKeyValue = result => {
+  try {
+    return result[0].get(0);
+  } catch (err) {
+    throw { where: 'getFirstKeyValue', err };
+  }
+};

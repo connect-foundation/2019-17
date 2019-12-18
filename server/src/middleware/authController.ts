@@ -10,7 +10,7 @@ const signInByEmail = async (req, res, next) => {
       }
     } = req;
 
-    const user = await getUserInfoByEmail(req.email);
+    const user = await getUserInfoByEmail(email);
     if (!user) {
       return res.redirect(`${config.clientHost}/signUp?email=${email}`);
     }
