@@ -4,7 +4,7 @@ import {
   IS_REQUEST_EXIST
 } from '../../../schema/friend/query';
 import { getUserInfoByEmail, requestDB } from '../../../utils/requestDB';
-import RequestAlreadyExistError from 'src/errors/RequestAlreadyExistError';
+import RequestAlreadyExistError from '../../../errors/RequestAlreadyExistError';
 
 const REQUEST_ALARM_ADDED = 'REQUEST_ALARM_ADDED';
 
