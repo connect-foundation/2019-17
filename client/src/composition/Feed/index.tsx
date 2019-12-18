@@ -5,17 +5,16 @@ import {
   useMeQuery,
   GetfeedsQuery
 } from 'react-components.d';
-import { MAX_DATE } from 'Constants';
+import { FEEDS_SUBSCRIPTION } from './feed.query';
 import useIntersect from 'hooks/useIntersectObserver';
 import Feed from './Feed';
 import WritingFeed from './WritingFeed';
 import NewFeedAlarm from './NewFeedAlarm';
 import NoFeed from './NoFeed';
 import Loader from 'components/Loader';
+import { MAX_DATE } from 'Constants';
 import { getDate, fullDateFormat } from 'utils/dateUtil';
-import { FEEDS_SUBSCRIPTION } from './feed.query';
 import { scrollTop } from 'utils/scroll';
-
 const OFFSET = 4;
 const ALARM_LIMIT = 0;
 

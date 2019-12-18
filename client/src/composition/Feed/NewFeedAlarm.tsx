@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 interface Props {
   onClick: (event: React.MouseEvent<HTMLElement>) => void;

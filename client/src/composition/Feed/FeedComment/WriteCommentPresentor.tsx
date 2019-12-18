@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { darken } from 'polished';
 import {
   useWriteCommentMutation,
   Comment,
@@ -9,7 +8,8 @@ import {
 import useInput, { IUseInput } from 'hooks/useInput';
 import Profile from 'components/Profile';
 import Button from 'components/Button';
-import { DEFAULT } from 'Constants'
+import CommentInput from './CommentInput';
+import { DEFAULT } from 'Constants';
 
 const CommentForm = styled.div`
   position: relative;
@@ -27,33 +27,18 @@ const CommentInputForm = styled.div`
   }
 `;
 
-const Input = styled.input`
-  all: unset;
-  box-sizing: border-box;
-  width: 83%;
-  height: 20px;
-  border: ${props => props.theme.borders.borderStyle};
-  border-radius: ${props => props.theme.borders.radius};
-  padding: 0.9rem;
-  transition: border-color 0.5s ease-in-out;
-  color: ${props => props.theme.colors.facebookTextColor};
-  &:focus {
-    border-color: ${props => darken(0.4, props.theme.colors.borderColor)};
-  }
-  & + & {
-    margin-top: 1.25rem;
-  }
-`;
-
-const WriteCommentPresentor = ({
-  feedId,
-  setComment,
-  myComments
-}: {
+interface IProps {
   feedId: number | null | undefined;
   setComment: React.Dispatch<React.SetStateAction<Comment[]>>;
   myComments: Comment[];
-}) => {
+  commentInputRef: React.MutableRefObject<HTMLInputElement | null>;
+}
+const WriteCommentPresentor = ({
+  feedId,
+  setComment,
+  myComments,
+  commentInputRef
+}: IProps) => {
   const commentText: IUseInput = useInput('', () => {});
 
   function validateNull(comment: string) {
@@ -80,6 +65,12 @@ const WriteCommentPresentor = ({
     }
   }
 
+  function submitCommentbyEnter(e) {
+    if (e.keyCode === 13) {
+      submitComment();
+    }
+  }
+
   return (
     <CommentForm>
       <Profile
@@ -88,7 +79,11 @@ const WriteCommentPresentor = ({
         size="32px"
       />
       <CommentInputForm>
-        <Input placeholder="댓글을 입력하세요" {...commentText} required />
+        <CommentInput
+          ref={commentInputRef}
+          submitCommentbyEnter={submitCommentbyEnter}
+          commentText={commentText}
+        />
         <Button size={'medium'} text={'등록'} onClick={submitComment} />
       </CommentInputForm>
     </CommentForm>
