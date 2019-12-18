@@ -58,9 +58,18 @@ const FeedActionBtn = styled.span<IStyleprops>`
   height: 32px;
   line-height: 14px;
   cursor: pointer;
+  border-style: border-box;
   font-weight: ${props => {
     return props.hasLiked ? '700' : '600';
   }};
+  &:active {
+    background: #f8f8f7;
+    color: ${props => props.theme.colors.fontMainBlue};
+  }
+  &:hover {
+    background: #f2f3f5;
+    border-radius: 2px;
+  }
 `;
 
 interface IStyleprops {
