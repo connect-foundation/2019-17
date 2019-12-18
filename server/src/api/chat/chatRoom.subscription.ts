@@ -1,18 +1,16 @@
 import { withFilter } from 'graphql-subscriptions';
-import { SubscriptionGetChatsByChatRoomIdArgs } from '../../types';
-import { CHAT_PUBSUB } from './constant';
+import { MESSAGE_TAB } from './constant';
 import { filterChatRoomUser } from './filterFunction';
 
 const Subscription = {
-  getChatsByChatRoomId: {
+  getChatRooms: {
     subscribe: withFilter(
-      (_, { chatRoomId }: SubscriptionGetChatsByChatRoomIdArgs, { pubsub }) =>
-        pubsub.asyncIterator(CHAT_PUBSUB + chatRoomId),
+      (_, __, { pubsub }) => pubsub.asyncIterator(MESSAGE_TAB),
       async (payload, _, context) => {
         const { email } = context;
         const {
-          getChatsByChatRoomId: { chatRoomId }
-        } = payload;
+          lastChat: { chatRoomId }
+        } = payload.getChatRooms;
         return filterChatRoomUser({ chatRoomId, email });
       }
     )

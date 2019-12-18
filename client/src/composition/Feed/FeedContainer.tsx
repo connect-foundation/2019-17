@@ -1,6 +1,6 @@
 import React from 'react';
-import FeedList from './index';
 import styled from 'styled-components';
+import FeedList from './index';
 
 const CenterContainer = styled.div`
   width: 100%;

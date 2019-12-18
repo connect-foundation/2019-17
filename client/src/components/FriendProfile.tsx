@@ -16,15 +16,15 @@ const Name = styled.div`
 `;
 
 interface IProps {
+  email: string;
   thumbnail?: string;
   nickname: string;
-  email: string;
 }
 
 function FriendProfile({ email, thumbnail, nickname }: IProps) {
   return (
     <Link to={`${PAGE_PATHS.MY_PAGE}/${email}`}>
-      <Image src={thumbnail} alt={email} />
+      <Image src={thumbnail || undefined} alt={email} />
       <Name>{nickname}</Name>
     </Link>
   );

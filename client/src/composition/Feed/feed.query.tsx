@@ -193,8 +193,63 @@ export const FEEDS_SUBSCRIPTION = gql`
   }
 `;
 
+export const USER_FEEDS_SUBSCRIPTION = gql`
+  subscription subscribeUserFeeds($userEmail: String!) {
+    feeds: userFeeds(userEmail: $userEmail) {
+      cursor
+      feedItems {
+        searchUser {
+          nickname
+          hometown
+          thumbnail
+          residence
+          email
+        }
+        feed {
+          createdAt {
+            year
+            month
+            day
+            hour
+            minute
+            second
+            nanosecond
+          }
+          content
+        }
+        feedId
+        totallikes
+        hasLiked
+        imglist {
+          url
+        }
+        comments {
+          createdAt {
+            year
+            month
+            day
+            hour
+            minute
+            second
+            nanosecond
+          }
+          content
+          nickname
+          thumbnail
+        }
+      }
+    }
+  }
+`;
+
 export const WRITE_COMMENT = gql`
   mutation writeComment($content: String!, $feedId: Int!) {
     writeComment(content: $content, feedId: $feedId)
+  }
+`;
+
+export const SEND_LIKE = gql`
+  mutation updateLike($feedId: Int, $count: Int) {
+    updateLike(feedId: $feedId, count: $count)
   }
 `;
