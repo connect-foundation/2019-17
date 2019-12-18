@@ -37,6 +37,7 @@ import {
   QueryFeedArgs,
   IFeed
 } from '../../types';
+import ImageUploadError from '../../errors/ImageUploadError';
 
 const getUpdateLikeQuery = count => (count > 0 ? UPDATE_LIKE : DELETE_LIKE);
 
@@ -63,7 +64,7 @@ const createImages = async (pubsub, email, feedId, files) => {
     await requestDB(REGISTER_IMAGE_QUERY, { feedId });
     publishFeed(pubsub, feedId, email);
   } catch (error) {
-    console.error(error);
+    throw new ImageUploadError();
   }
 };
 
