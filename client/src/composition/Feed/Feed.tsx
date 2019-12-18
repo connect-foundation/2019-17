@@ -70,11 +70,6 @@ function Feed({ content, createdAt, feedinfo, feedSize }: Iprops) {
             comments={feedinfo.comments}
           />
         </FeedContentDiv>
-
-        {/* <CommentContainer
-          comments={feedinfo.comments}
-          feedId={feedinfo.feedId}
-        /> */}
       </FeedDiv>
     </>
   );
