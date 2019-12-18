@@ -77,7 +77,8 @@ function NewChatFooter({ userEmail, onClose }: IProps) {
     }
   }, 100);
 
-  const handleSubmitDebounce = () => {
+  const handleSubmitDebounce = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     onSubmit();
   };
   return (
