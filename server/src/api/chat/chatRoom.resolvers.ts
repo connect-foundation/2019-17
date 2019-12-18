@@ -1,8 +1,8 @@
 import { withFilter } from 'graphql-subscriptions';
 import {
   MutationResolvers,
+  MutationCreateChatRoomArgs,
   Chat,
-  MutationCreateChatArgs,
   QueryResolvers,
   QueryGetChatsByChatRoomIdArgs,
   SubscriptionGetChatsByChatRoomIdArgs
@@ -10,28 +10,54 @@ import {
 import { requestDB } from '../../utils/requestDB';
 import createDBError from '../../errors/createDBError';
 import isAuthenticated from '../../utils/isAuthenticated';
-import { GET_CHATS_BY_CHAT_ROOM_ID_QUERY } from '../../schema/chat/chatQuery';
+import {
+  CHECK_CHAT_ROOM_QUERY,
+  CREATE_CHAT_ROOM_QUERY,
+  GET_CHATS_BY_CHAT_ROOM_ID_QUERY
+} from '../../schema/chat/chatQuery';
 import { parseResultRecords } from '../../utils/parseData';
-import { createChatAndPublish } from './chat.pubsub';
-import { DEFAUT_MAX_DATE, CHAT_LIMIT, CHAT_PUBSUB } from './constant';
+import { createChatAndPublish, publishToMessageTab } from './chat.pubsub';
+import { DEFAUT_MAX_DATE, CHAT_PUBSUB, CHAT_LIMIT } from './constant';
 import { filterChatRoomUser } from './chat';
 
 const Mutation: MutationResolvers = {
-  createChat: async (
+  createChatRoom: async (
     _,
-    { chatRoomId, content }: MutationCreateChatArgs,
+    { userEmail, content }: MutationCreateChatRoomArgs,
     { req, pubsub }
-  ): Promise<boolean> => {
+  ): Promise<number> => {
     isAuthenticated(req);
     const { email } = req;
     try {
-      await createChatAndPublish({
-        email,
-        content,
-        chatRoomId,
-        pubsub
+      const checkChatRoomResult = await requestDB(CHECK_CHAT_ROOM_QUERY, {
+        chatMemberEmail1: email,
+        chatMemberEmail2: userEmail
       });
-      return true;
+
+      if (checkChatRoomResult.length) {
+        const [{ chatRoomId }] = parseResultRecords(checkChatRoomResult);
+        await createChatAndPublish({
+          email,
+          content,
+          chatRoomId: Number(chatRoomId),
+          pubsub
+        });
+        return chatRoomId;
+      }
+
+      const result = await requestDB(CREATE_CHAT_ROOM_QUERY, {
+        from: email,
+        to: userEmail,
+        content
+      });
+      const { chats }: { chats: Chat[] } = parseResultRecords(result)[0];
+      const chat = chats[0];
+      publishToMessageTab({
+        pubsub,
+        chatRoomId: chat.chatRoomId,
+        chat
+      });
+      return chat.chatRoomId;
     } catch (error) {
       const DBError = createDBError(error);
       throw new DBError();
