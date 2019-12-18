@@ -1,6 +1,10 @@
 import { Relation } from './Relation';
-import { SEND_FRIEND_REQUEST_BY_EMAIL } from '../../../schema/friend/query';
-import { getUserInfoByEmail } from '../../../utils/requestDB';
+import {
+  SEND_FRIEND_REQUEST_BY_EMAIL,
+  IS_REQUEST_EXIST
+} from '../../../schema/friend/query';
+import { getUserInfoByEmail, requestDB } from '../../../utils/requestDB';
+import RequestAlreadyExistError from 'src/errors/RequestAlreadyExistError';
 
 const REQUEST_ALARM_ADDED = 'REQUEST_ALARM_ADDED';
 
@@ -19,5 +23,14 @@ export class None extends Relation {
         action: 'ADDED'
       }
     });
+  }
+
+  async checkState(email, targetEmail) {
+    const res = await requestDB(IS_REQUEST_EXIST, {
+      email: targetEmail,
+      targetEmail: email
+    });
+
+    if (res[0].get(0) === 'TRUE') throw new RequestAlreadyExistError();
   }
 }

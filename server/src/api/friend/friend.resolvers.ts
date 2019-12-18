@@ -18,7 +18,7 @@ export default {
       const relStore = new RelationStore(relation);
       const nextRelation = relStore.getNextRelation();
 
-      nextRelation.checkState();
+      await nextRelation.checkState(req.email, targetEmail);
 
       await requestDB(nextRelation.getQuery(), {
         email: req.email,
