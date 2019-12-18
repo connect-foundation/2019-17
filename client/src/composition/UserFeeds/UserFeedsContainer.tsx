@@ -7,11 +7,7 @@ const CenterContainer = styled.div`
   float: left;
 `;
 
-interface IProps {
-  email: string;
-}
-
-const UserFeedsContainer = ({ email }: IProps) => {
+const UserFeedsContainer = ({ email }: { email: string }) => {
   return (
     <CenterContainer>
       <UserFeeds email={email} />
