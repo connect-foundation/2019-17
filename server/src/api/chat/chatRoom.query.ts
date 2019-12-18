@@ -1,32 +1,30 @@
-import {
-  Chat,
-  QueryResolvers,
-  QueryGetChatsByChatRoomIdArgs,
-} from '../../types';
+import { QueryResolvers, QueryGetChatRoomsArgs, ChatRoom } from '../../types';
 import { requestDB } from '../../utils/requestDB';
 import createDBError from '../../errors/createDBError';
 import isAuthenticated from '../../utils/isAuthenticated';
-import {
-  GET_CHATS_BY_CHAT_ROOM_ID_QUERY
-} from '../../schema/chat/chatQuery';
+import { GET_CHATROOMS_QUERY } from '../../schema/chat/chatQuery';
 import { parseResultRecords } from '../../utils/parseData';
-import { DEFAUT_MAX_DATE, CHAT_LIMIT } from './constant';
+import { DEFAUT_MAX_DATE } from './constant';
 
 const Query: QueryResolvers = {
-  getChatsByChatRoomId: async (
+  getChatRooms: async (
     _,
-    { chatRoomId, cursor = DEFAUT_MAX_DATE }: QueryGetChatsByChatRoomIdArgs,
+    { cursor = DEFAUT_MAX_DATE }: QueryGetChatRoomsArgs,
     { req }
-  ): Promise<Chat[]> => {
+  ): Promise<ChatRoom[]> => {
     isAuthenticated(req);
+    const { email } = req;
     try {
-      const result = await requestDB(GET_CHATS_BY_CHAT_ROOM_ID_QUERY, {
-        chatRoomId,
-        cursor,
-        limit: CHAT_LIMIT
+      const result = await requestDB(GET_CHATROOMS_QUERY, {
+        email,
+        cursor
       });
-      const { chats }: { chats: Chat[] } = parseResultRecords(result)[0];
-      return chats;
+      const parsedResults = parseResultRecords(result);
+      if (parsedResults.length === 0) return [];
+      const chatRooms: ChatRoom[] = parsedResults.map(
+        ({ users, lastChat }) => ({ otherUser: users, lastChat: lastChat[0] })
+      );
+      return chatRooms;
     } catch (error) {
       const DBError = createDBError(error);
       throw new DBError();
