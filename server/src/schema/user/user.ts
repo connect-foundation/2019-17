@@ -1,5 +1,5 @@
 import db from '../../db';
-import { FIND_USER_WITH_EMAIL_QUERY } from './query';
+import { FIND_USER_BY_EMAIL_QUERY } from './query';
 import { FindUserWithEmailQueryArgs } from './type';
 import { requestDB } from '../../utils/requestDB';
 import { getNode } from '../../utils/parseDB';
@@ -12,7 +12,7 @@ export const findUserWithEmail = async (
   await new Promise(resolve => {
     const session = db.session();
     const { email } = args;
-    session.run(FIND_USER_WITH_EMAIL_QUERY, { email }).subscribe({
+    session.run(FIND_USER_BY_EMAIL_QUERY, { email }).subscribe({
       onNext(record) {
         result = record.get(0).properties;
       },
@@ -29,9 +29,10 @@ export const findUserWithEmail = async (
 };
 
 export const getUserWithStatus = async (email, status) => {
-  const result = await requestDB(FIND_USER_WITH_EMAIL_QUERY, {
+  const result = await requestDB(FIND_USER_BY_EMAIL_QUERY, {
     email
   });
+  if (!result) return;
   const user = getNode(result);
   user.status = status;
   return user;

@@ -91,6 +91,12 @@ const publishFeed = async (pubsub, feedId, email) => {
       feedItems: parsedRegisterdFeed
     }
   });
+  pubsub.publish(NEW_USER_FEED, {
+    userFeeds: {
+      cursor: '',
+      feedItems: parsedRegisterdFeed
+    }
+  });
 };
 
 const publishFeedAlarm = async (pubsub, alarmId, userEmail) => {
@@ -277,6 +283,12 @@ const queryResolvers: QueryResolvers = {
     });
 
     const feeds = parseResultRecords(result);
+    if (feeds.length === 0) {
+      return {
+        cursor: '',
+        feedItems: feeds
+      };
+    }
     const lastFeed = feeds[feeds.length - 1];
     const cursorDate = lastFeed && lastFeed.feed && lastFeed.feed.createdAt;
     const cursorDateType = objToDate(cursorDate);
@@ -326,6 +338,7 @@ const queryResolvers: QueryResolvers = {
 };
 
 const NEW_FEED = 'NEW_FEED_PUBSUB';
+const NEW_USER_FEED = 'NEW_USER_FEED_PUBSUB';
 const NEW_ALARM = 'NEW_ALARM_PUBSUB';
 
 export default {
@@ -347,6 +360,19 @@ export default {
           } else {
             return false;
           }
+        }
+      )
+    },
+    userFeeds: {
+      subscribe: withFilter(
+        (_, __, { pubsub }) => {
+          return pubsub.asyncIterator(NEW_USER_FEED);
+        },
+        (payload, { userEmail }) => {
+          if (payload.userFeeds.feedItems[0].searchUser.email === userEmail) {
+            return true;
+          }
+          return false;
         }
       )
     },

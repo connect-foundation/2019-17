@@ -1,4 +1,4 @@
-import { QuerySearchUserArgs, UserInfo } from '../../types';
+import { QuerySearchUserArgs, UserWithRelation } from '../../types';
 import { requestDB } from '../../utils/requestDB';
 import { FIND_USER_AND_RELATION_BY_NICKNAME_WITHOUT_ME_QUERY } from '../../schema/user/query';
 import { parseResultRecords } from '../../utils/parseData';
@@ -27,7 +27,7 @@ export default {
 
       const parsedAllUser = parseResultRecords(allUser);
 
-      const res: UserInfo[] = [];
+      const res: UserWithRelation[] = [];
 
       parsedAllUser.sort((first, second) =>
         first.target.nickname > second.target.nickname ? 1 : -1
