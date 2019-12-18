@@ -29,11 +29,6 @@ const Query: QueryResolvers = {
       return user;
     });
   },
-  userWithEmail: async (_, { email }) => {
-    const result = await requestDB(FIND_USER_WITH_EMAIL_QUERY, { email });
-    const user = await getNode(result);
-    return user;
-  },
   friendsWithUserEmail: async (_, { email }): Promise<User[]> => {
     const result = await requestDB(FIND_FRIENDS_QUERY, { email });
     const friends = parseResultRecords(result);

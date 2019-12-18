@@ -6,12 +6,8 @@ const parseNodeResult = result => {
   return returnArr;
 };
 
-const getNode = result => {
-  return result[0].get(0).properties;
-};
+const getNode = result => result[0].get(0).properties;
 
-const getFirstKeyValue = result => {
-  return result[0].get(0);
-};
+const getFirstKeyValue = result => result[0].get(0);
 
 export { parseNodeResult, getNode, getFirstKeyValue };

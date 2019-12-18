@@ -17,7 +17,7 @@ import ChatRooms from 'composition/ChatRooms';
 
 export const USERINFO_With_EMAIL = gql`
   query getUserInfoWithEmail($email: String!) {
-    user: userWithEmail(email: $email) {
+    user: getUser(email: $email) {
       email
       nickname
       thumbnail

@@ -3,11 +3,7 @@ import styled from 'styled-components';
 import _ from 'lodash';
 import CommonFooter from 'composition/Header/CommonFooter';
 import useInput from 'hooks/useInput';
-import {
-  useCreateChatRoomMutation,
-  useGetUserQuery,
-  CreateChatRoomMutation
-} from 'react-components.d';
+import { useCreateChatRoomMutation, useGetUserQuery } from 'react-components.d';
 import { useChatRoomDispatch } from 'stores/ChatRoomContext';
 import { CHAT_ROOM, DEFAULT } from 'Constants';
 
