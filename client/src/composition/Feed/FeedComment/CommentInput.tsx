@@ -1,7 +1,7 @@
 import React from 'react';
-import { IUseInput } from 'hooks/useInput';
 import styled from 'styled-components';
 import { darken } from 'polished';
+import { IUseInput } from 'hooks/useInput';
 
 const Input = styled.input`
   all: unset;
