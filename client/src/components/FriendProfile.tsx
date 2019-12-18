@@ -18,7 +18,7 @@ const Name = styled.div`
 
 interface IProps {
   email: string;
-  thumbnail: string;
+  thumbnail?: string;
   nickname: string;
 }
 
