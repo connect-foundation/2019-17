@@ -2,6 +2,7 @@ import { decodeJWT } from '../utils/jwt';
 import { emailWithSocket, socketCountWithEmail } from '../utils/socketManager';
 import { getUserWithStatus } from '../utils/requestDB';
 import { logoutPublish } from '../api/auth/auth.pubsub';
+import HaveNoTokenError from '../errors/HaveNoToken';
 
 export const onConnect = (_, webSocket, context) => {
   const {
@@ -11,7 +12,7 @@ export const onConnect = (_, webSocket, context) => {
   } = context;
   try {
     if (!cookie || cookie.indexOf('token=') === -1) {
-      throw new Error('Have no token');
+      throw new HaveNoTokenError();
     }
     const token = cookie
       .split(';')
