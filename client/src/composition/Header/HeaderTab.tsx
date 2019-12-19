@@ -7,6 +7,7 @@ import MessageTab from './MessageTab';
 import FriendTab from './FriendTab';
 import AlarmTab from './AlarmTab';
 import NewFriendAlarmNum from './FriendTab/NewFriendAlarmNum';
+import NewFeedAlarmNum from './AlarmTab/NewFeedAlarmNum';
 import {
   useHeaderTabState,
   useHeaderTabDispatch
@@ -128,7 +129,9 @@ function HeaderTab() {
         <MessageTab />
       </Tab>
       <AlarmIcon
-        selected={headerTabState.isActiveAlarmTab}
+        selected={
+          headerTabState.isActiveAlarmTab || headerTabCountState.alarmCount > 0
+        }
         onClick={() =>
           headerTabDispatch({
             type: 'CLICK_ALARM_TAB',
@@ -136,7 +139,7 @@ function HeaderTab() {
           })
         }
       />
-      <p>{headerTabCountState.alarmCount}</p>
+      <NewFeedAlarmNum />
       <Tab left={'-160px'} selected={headerTabState.isActiveAlarmTab}>
         <AlarmTab selected={headerTabState.isActiveAlarmTab} />
       </Tab>
