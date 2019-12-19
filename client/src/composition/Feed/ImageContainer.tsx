@@ -3,23 +3,26 @@ import { Image } from 'react-components.d';
 import { Carousel } from 'react-responsive-carousel';
 import 'style/carousel.css';
 
-interface Iprops {
+interface IProps {
   images: (Image | null)[];
+  width: string;
+  height: string;
 }
 
-const ImageContainer = ({ images }: Iprops) => {
+function ImageContainer({ images, width, height }: IProps) {
   if (!images) return <></>;
-  console.log('images ', images);
+
   return (
     <>
-      <Carousel autoPlay dynamicHeight={true} showThumbs={false}>
-        {images.map(image =>
+      <Carousel
+        autoPlay
+        dynamicHeight={true}
+        showThumbs={false}
+        showStatus={false}>
+        {images.map((image, idx) =>
           image && image.url ? (
-            <div>
-              <img
-                style={{ width: '400px', height: '400px' }}
-                src={image.url}
-              />
+            <div key={idx + image.url}>
+              <img style={{ width, height }} src={image.url} alt={image.url} />
             </div>
           ) : (
             <></>
@@ -28,6 +31,10 @@ const ImageContainer = ({ images }: Iprops) => {
       </Carousel>
     </>
   );
-};
+}
 
+ImageContainer.defaultProps = {
+  width: '400px',
+  height: '400px'
+};
 export default ImageContainer;
