@@ -5,40 +5,36 @@ import db from '../../src/db';
 
 const PORT: string | number = config.port || 5000;
 
-export async function requestQuery(query?: string): Promise<any> {
+export function requestQuery(query?: string): Promise<any> {
   const server = app.createHttpServer({ port: PORT });
-  let res;
-  try {
-    res = await request(server)
-      .post('/')
-      .set('Accept', 'application/json')
-      .send({ query });
 
-    res.expect(200).expect('Content-Type', /json/);
-  } catch (e) {
-    if (res.body.errors) console.error(res.body.errors);
-  }
-  return res;
+  return request(server)
+    .post('/')
+    .set('Accept', 'application/json')
+    .send({ query });
 }
 
-export async function requestQueryWithToken(
+export function requestQueryWithToken(
   token: string,
   query?: string
 ): Promise<any> {
   const server = app.createHttpServer({ port: PORT });
-  let res;
-  try {
-    res = await request(server)
-      .post('/')
-      .set('Cookie', [`token=${token}`])
-      .set('Accept', 'application/json')
-      .send({ query });
 
-    res.expect(200).expect('Content-Type', /json/);
+  return request(server)
+    .post('/')
+    .set('Cookie', [`token=${token}`])
+    .set('Accept', 'application/json')
+    .send({ query });
+}
+
+export function checkResTobe(res, statusCode) {
+  try {
+    res.expect(statusCode).expect('Content-Type', /json/);
   } catch (e) {
-    if (res.body.errors) console.error(res.body.errors);
+    if (statusCode === 200 && res.body.errors) {
+      console.error(res.body.errors);
+    }
   }
-  return res;
 }
 
 export async function requestDB(query: string, param?) {
@@ -53,7 +49,7 @@ export const requestQueryWithFile = (
   query: string,
   variables: { [x: string]: any } = {}
 ) => {
-  const server = app.createHttpServer({ port: 5000 });
+  const server = app.createHttpServer({ port: PORT });
 
   return request(server)
     .post('/')
