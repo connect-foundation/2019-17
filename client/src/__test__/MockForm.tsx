@@ -8,16 +8,21 @@ import theme from 'style/theme';
 interface IProps {
   children?: ReactNode;
   mocks: any;
+  resolvers: any;
 }
 
-const MockForm = ({ mocks, children }: IProps) => {
+function MockForm({ mocks, children, resolvers }: IProps) {
   return (
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks} addTypename={false} resolvers={resolvers}>
       <MemoryRouter>
         <ThemeProvider theme={theme}>{children}</ThemeProvider>
       </MemoryRouter>
     </MockedProvider>
   );
+}
+
+MockForm.defaultProps = {
+  resolvers: {}
 };
 
 export default MockForm;

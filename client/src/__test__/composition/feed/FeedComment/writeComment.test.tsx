@@ -11,7 +11,7 @@ import { COMMENT_INPUT_PLACE_HOLDER } from 'composition/Feed/constant';
 afterEach(cleanup);
 
 describe('<Feed /> ', () => {
-  test('Feed Render', () => {
+  test('Feed Render', async () => {
     const feed = render(
       <MockForm mocks={mocks}>
         <Feed
@@ -22,7 +22,7 @@ describe('<Feed /> ', () => {
       </MockForm>
     );
 
-    feed.getByPlaceholderText(COMMENT_INPUT_PLACE_HOLDER);
+    await wait(() => feed.getByPlaceholderText(COMMENT_INPUT_PLACE_HOLDER));
   });
 
   test('<Feed /> 에 add Comment Mutaion 쿼리 동작 확인', async () => {
@@ -47,8 +47,6 @@ describe('<Feed /> ', () => {
 
     fireEvent.click(btn);
 
-    await wait(() => {
-      expect(label.textContent).toBe('');
-    });
+    await wait(() => expect(label.textContent).toBe(''));
   });
 });
