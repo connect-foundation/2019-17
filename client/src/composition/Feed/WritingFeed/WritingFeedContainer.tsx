@@ -25,9 +25,9 @@ function WritingFeedContainer() {
 
   useEffect(() => {
     if (contentCursor.current) {
-      const len = contentCursor.current.value.length;
+      const { length } = contentCursor.current.value;
       contentCursor.current.focus();
-      contentCursor.current.setSelectionRange(len, len);
+      contentCursor.current.setSelectionRange(length, length);
     }
   }, []);
 
@@ -73,17 +73,27 @@ function WritingFeedContainer() {
     }
   };
 
+  const checkFeedContent = () => {
+    if (!content) {
+      alert('피드 내용을 입력해주세요.');
+      if (contentCursor.current) contentCursor.current.focus();
+      return;
+    }
+    if (content.length >= FEED_MAX_LENGTH) {
+      alert(`피드 글자수 제한(${FEED_MAX_LENGTH}자)`);
+      return;
+    }
+  };
+
+  const reset = () => {
+    writingFeedDataMutation({ variables: { content: '' } });
+    setFiles([]);
+    setContent('');
+  };
+
   const onSubmit = _.debounce(
     async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
-      if (!content) {
-        alert('피드 내용을 입력해주세요.');
-        if (contentCursor.current) contentCursor.current.focus();
-        return;
-      }
-      if (content.length >= FEED_MAX_LENGTH) {
-        alert(`피드 글자수 제한(${FEED_MAX_LENGTH}자)`);
-        return;
-      }
+      checkFeedContent();
       const parseFiles = files.map(item => item.file);
       const { data } = await enrollFeedMutation({
         variables: { content, files: parseFiles }
@@ -91,9 +101,7 @@ function WritingFeedContainer() {
       if (data && data.enrollFeed) {
         alert('피드가 등록되었습니다.');
       }
-      writingFeedDataMutation({ variables: { content: '' } });
-      setFiles([]);
-      setContent('');
+      reset();
     },
     1000
   );

@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
+import { Comment, Maybe } from 'react-components.d';
+import { useMutation } from '@apollo/react-hooks';
 import ThumbLikeIcon from 'components/Icon/ThumbLikeIcon';
 import RoundThumbIcon from 'components/Icon/RoundThumbIcon';
 import CommentIcon from 'components/Icon/CommentIcon';
 import ShareIcon from 'components/Icon/ShareIcon';
-import gql from 'graphql-tag';
-import { useMutation } from '@apollo/react-hooks';
+import CommentContainer from './FeedComment';
+import { SEND_LIKE } from './feed.query';
 
 const FeedActionDiv = styled.div`
   border-radius: 0 0 3px 3px;
@@ -57,9 +59,18 @@ const FeedActionBtn = styled.span<IStyleprops>`
   height: 32px;
   line-height: 14px;
   cursor: pointer;
+  border-style: border-box;
   font-weight: ${props => {
     return props.hasLiked ? '700' : '600';
   }};
+  &:active {
+    background: #f8f8f7;
+    color: ${props => props.theme.colors.fontMainBlue};
+  }
+  &:hover {
+    background: #f2f3f5;
+    border-radius: 2px;
+  }
 `;
 
 interface IStyleprops {
@@ -72,13 +83,8 @@ interface Iprops {
   setHasLiked: any;
   feedId: number | null | undefined;
   commentCount: number;
+  comments: Maybe<Comment>[] | null | undefined;
 }
-
-const SEND_LIKE = gql`
-  mutation updateLike($feedId: Int, $count: Int) {
-    updateLike(feedId: $feedId, count: $count)
-  }
-`;
 
 const FeedFooter = ({
   likeCnt,
@@ -86,9 +92,11 @@ const FeedFooter = ({
   hasLiked,
   setHasLiked,
   feedId,
-  commentCount
+  commentCount,
+  comments
 }: Iprops) => {
   const [updateLike] = useMutation(SEND_LIKE);
+  const commentInputRef = useRef<HTMLInputElement>(null);
 
   const ToggleLike = () => {
     setLikeCnt((props: number) => {
@@ -102,6 +110,11 @@ const FeedFooter = ({
       updateLike({ variables: { feedId, count: Number(!props) } });
       return !props;
     });
+  };
+  const focusCommentInput = () => {
+    if (commentInputRef.current) {
+      commentInputRef.current.focus();
+    }
   };
 
   return (
@@ -121,7 +134,7 @@ const FeedFooter = ({
             <ThumbLikeIcon hasLiked={hasLiked} />
             좋아요
           </FeedActionBtn>
-          <FeedActionBtn>
+          <FeedActionBtn onClick={focusCommentInput}>
             <CommentIcon />
             댓글
           </FeedActionBtn>
@@ -131,6 +144,12 @@ const FeedFooter = ({
           </FeedActionBtn>
         </FullBtnBox>
       </ActionbtnDiv>
+
+      <CommentContainer
+        comments={comments}
+        feedId={feedId}
+        commentInputRef={commentInputRef}
+      />
     </>
   );
 };

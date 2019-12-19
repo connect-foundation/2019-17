@@ -19,11 +19,7 @@ const ButtonContainer = styled.label`
   cursor: pointer;
 `;
 
-interface IProps {
-  targetId: string;
-}
-
-function UploadPlusButton({ targetId }: IProps) {
+function UploadPlusButton({ targetId }: { targetId: string }) {
   return (
     <ButtonContainer htmlFor={targetId}>
       <FaPlus />

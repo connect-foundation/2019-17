@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
-import CommentPresentor from './CommentPresentor';
-import { Comment, Maybe } from 'react-components.d';
-import WriteCommentPresentor from './WriteCommentPresentor';
 import styled from 'styled-components';
+import { Comment, Maybe } from 'react-components.d';
+import CommentPresentor from './CommentPresentor';
+import WriteCommentPresentor from './WriteCommentPresentor';
 
 const CommentDiv = styled.div`
   border-top: 1px solid #dadde1;
-  padding: 4px 12px;
+  padding: 4px 0;
 `;
 
 interface Iprops {
   comments: Maybe<Comment>[] | null | undefined;
   feedId: number | null | undefined;
+  commentInputRef: React.MutableRefObject<HTMLInputElement | null>;
 }
-// 역할 :
-const CommentContainer = ({ comments, feedId }: Iprops) => {
+
+const CommentContainer = ({ comments, feedId, commentInputRef }: Iprops) => {
   const [myComments, setMyComments] = useState<Comment[]>();
 
   return (
@@ -40,6 +41,7 @@ const CommentContainer = ({ comments, feedId }: Iprops) => {
           feedId={feedId}
           setComment={setMyComments}
           myComments={myComments ? myComments : []}
+          commentInputRef={commentInputRef}
         />
       }
     </CommentDiv>

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Profile from 'components/Profile';
-import { PAGE_PATHS, DEFAULT } from 'Constants';
+import { PAGE_PATHS } from 'Constants';
 import { Link } from 'react-router-dom';
 
 const ProfileBody = styled.div`
@@ -41,21 +41,19 @@ interface Iprops {
 const FeedHeader = ({ createdAt, thumbnail, nickName, email }: Iprops) => {
   return (
     <>
-      <div>
-        <ProfileImgBox to={`${PAGE_PATHS.MY_PAGE}/${email}`}>
-          <Profile
-            imageUrl={thumbnail || undefined}
-            alt={'profile image'}
-            size="40px"
-          />
-        </ProfileImgBox>
-        <ProfileBody>
-          <Link to={`${PAGE_PATHS.MY_PAGE}/${email}`}>
-            <ProfileName>{nickName}</ProfileName>
-          </Link>
-          <ProfileDate>{createdAt} </ProfileDate>
-        </ProfileBody>
-      </div>
+      <ProfileImgBox to={`${PAGE_PATHS.MY_PAGE}/${email}`}>
+        <Profile
+          imageUrl={thumbnail || undefined}
+          alt={'profile image'}
+          size="40px"
+        />
+      </ProfileImgBox>
+      <ProfileBody>
+        <Link to={`${PAGE_PATHS.MY_PAGE}/${email}`}>
+          <ProfileName>{nickName}</ProfileName>
+        </Link>
+        <ProfileDate>{createdAt} </ProfileDate>
+      </ProfileBody>
     </>
   );
 };

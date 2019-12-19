@@ -9,7 +9,7 @@ import {
   HOMETOWN_TEXT,
   FRIEND_TEXT
 } from './text';
-import { User, GetUserInfoWithEmailQuery } from 'react-components.d';
+import { GetUserInfoWithEmailQuery } from 'react-components.d';
 
 const Wrapper = styled.div`
   margin-top: 12px;
