@@ -45,12 +45,20 @@ function ButtonContainer({ email, initialRelation }: IProps) {
 
     const changedRelation = getNextRelation(relation);
     if (changedRelation) {
-      requestFriend({ variables: { email, relation } });
+      try {
+        await requestFriend({
+          variables: { email, relation }
+        });
+      } catch (e) {
+        return window.location.reload();
+      }
+
       if (
         (relation === 'FRIEND' && changedRelation === 'NONE') ||
         changedRelation === 'FRIEND'
       )
         return window.location.reload();
+
       setRelation(changedRelation);
     }
   }
