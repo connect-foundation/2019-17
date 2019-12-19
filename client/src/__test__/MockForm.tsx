@@ -1,5 +1,6 @@
 import { MemoryRouter } from 'react-router';
 import { MockedProvider } from '@apollo/react-testing';
+import '@testing-library/jest-dom/extend-expect';
 import { ThemeProvider } from 'styled-components';
 import React, { ReactNode } from 'react';
 import theme from 'style/theme';
