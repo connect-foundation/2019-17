@@ -7,6 +7,7 @@ import { mocks } from '__test__/composition/Feed/FeedComment/mock.query';
 import { mockFeedData } from '__test__/composition/Feed/FeedComment/mock.data';
 import Feed from 'composition/Feed/Feed';
 import { COMMENT_INPUT_PLACE_HOLDER } from 'composition/Feed/constant';
+
 afterEach(cleanup);
 
 describe('<Feed /> ', () => {
