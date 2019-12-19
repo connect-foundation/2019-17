@@ -1,5 +1,5 @@
 import db from '../db';
-import createDBError from '../errors/createDBError';
+import DBError from '../errors/DBError';
 import { FIND_USER_BY_EMAIL_QUERY } from '../schema/user/query';
 import { getNode } from './parseData';
 
@@ -9,10 +9,10 @@ export const requestDB = async (query: string, param?) => {
     session = db.session();
     const res = await session.run(query, param);
     return res.records;
-  } catch (err) {
-    console.log('err!!! ', err);
-    const DBError = createDBError(err);
-    throw new DBError();
+  } catch (error) {
+    throw new DBError({
+      internalData: error
+    });
   } finally {
     session.close();
   }
@@ -27,8 +27,7 @@ export const getUserWithStatus = async (email, status) => {
   const result = await requestDB(FIND_USER_BY_EMAIL_QUERY, {
     email
   });
-  if (!result) return;
   const user = getNode(result);
-  user.status = status;
+  if (user) user.status = status;
   return user;
 };

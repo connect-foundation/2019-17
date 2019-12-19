@@ -1,6 +1,7 @@
 import { IKey } from '../schema/commonTypes';
 import neo4j from 'neo4j-driver';
 import { isString } from 'util';
+import DataParsingError from '../errors/DataParsingError';
 
 export const parseResult = (
   result: Array<IKey<any>>
@@ -96,23 +97,29 @@ export const parseResultRecords = records => {
       result.push(arr);
     }
     return result;
-  } catch (err) {
-    throw { where: 'parseResultRecords', err };
+  } catch (error) {
+    throw new DataParsingError({
+      internalData: error
+    });
   }
 };
 
 export const getNode = result => {
   try {
     return result[0] && result[0].get(0).properties;
-  } catch (err) {
-    throw { where: 'getNode', err };
+  } catch (error) {
+    throw new DataParsingError({
+      internalData: error
+    });
   }
 };
 
 export const getFirstKeyValue = result => {
   try {
     return result[0] && result[0].get(0);
-  } catch (err) {
-    throw { where: 'getFirstKeyValue', err };
+  } catch (error) {
+    throw new DataParsingError({
+      internalData: error
+    });
   }
 };

@@ -1,8 +1,7 @@
 import { createError } from 'apollo-errors';
 
-const DataParsingError = where =>
-  createError('DataParsingError', {
-    message: `error occurs in ${where}`
-  });
+const DataParsingError = createError('DataParsingError', {
+  message: 'Error in data parsing'
+});
 
 export default DataParsingError;
