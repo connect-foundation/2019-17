@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { darken } from 'polished';
 import { IUseInput } from 'hooks/useInput';
-
+import { COMMENT_INPUT_PLACE_HOLDER } from 'composition/Feed/constant';
 const Input = styled.input`
   all: unset;
   box-sizing: border-box;
@@ -32,7 +32,7 @@ const CommentInput = React.forwardRef(
     ref: React.MutableRefObject<HTMLInputElement>
   ) => (
     <Input
-      placeholder="댓글을 입력하세요"
+      placeholder={COMMENT_INPUT_PLACE_HOLDER}
       {...commentText}
       onKeyDown={submitCommentbyEnter}
       required
