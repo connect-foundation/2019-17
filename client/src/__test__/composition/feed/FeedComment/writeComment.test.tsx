@@ -1,6 +1,12 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { render, cleanup, fireEvent, wait } from '@testing-library/react';
+import {
+  render,
+  cleanup,
+  fireEvent,
+  wait,
+  waitForElement
+} from '@testing-library/react';
 import MockForm from '__test__/MockForm';
 import { getDate, fullDateFormat } from 'utils/dateUtil';
 import { mocks } from '__test__/composition/Feed/FeedComment/mock.query';
@@ -36,7 +42,9 @@ describe('<Feed /> ', () => {
       </MockForm>
     );
 
-    const label = feed.getByPlaceholderText(COMMENT_INPUT_PLACE_HOLDER);
+    const label = await waitForElement(() =>
+      feed.getByPlaceholderText(COMMENT_INPUT_PLACE_HOLDER)
+    );
 
     fireEvent.change(label, {
       target: {
