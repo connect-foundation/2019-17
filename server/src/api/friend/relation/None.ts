@@ -5,6 +5,7 @@ import {
 } from '../../../schema/friend/query';
 import { getUserInfoByEmail, requestDB } from '../../../utils/requestDB';
 import RequestAlreadyExistError from '../../../errors/RequestAlreadyExistError';
+import { getFirstKeyValue } from '../../../utils/parseDB';
 
 const REQUEST_ALARM_ADDED = 'REQUEST_ALARM_ADDED';
 
@@ -31,6 +32,6 @@ export class None extends Relation {
       targetEmail: email
     });
 
-    if (res[0].get(0) === 'TRUE') throw new RequestAlreadyExistError();
+    if (getFirstKeyValue(res) === 'TRUE') throw new RequestAlreadyExistError();
   }
 }

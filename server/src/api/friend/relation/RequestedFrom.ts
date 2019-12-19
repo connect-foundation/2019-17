@@ -6,6 +6,7 @@ import {
 import { requestDB, getUserInfoByEmail } from '../../../utils/requestDB';
 import NoRequestError from '../../../errors/NoRequestError';
 import { loginPublish } from '../../user/user.pubsub';
+import { getFirstKeyValue } from '../../../utils/parseDB';
 
 export class RequestedFrom extends Relation {
   getQuery() {
@@ -18,7 +19,7 @@ export class RequestedFrom extends Relation {
       targetEmail
     });
 
-    if (res[0].get(0) === 'FALSE') throw new NoRequestError();
+    if (getFirstKeyValue(res) === 'FALSE') throw new NoRequestError();
   }
 
   async publish(pubsub, { email }) {
