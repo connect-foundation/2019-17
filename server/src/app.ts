@@ -5,10 +5,10 @@ import pubsub from './utils/pubsub';
 import helmet from 'helmet';
 import logger from 'morgan';
 import config from './utils/config';
-import { signInByEmail, checkToken } from './middleware/authController';
+import router from './routes/router';
+import setUserFromJWT from './middleware/setUserFromJWT';
 import passport from './middleware/passport';
 import schema from './schema';
-import setUserFromJWT from './middleware/setUserFromJWT';
 
 class App {
   public app: GraphQLServer;
@@ -33,19 +33,8 @@ class App {
     this.app.express.use(helmet());
     this.app.express.use(cookieParser());
     this.app.express.use(passport.initialize());
-    this.app.express.use(checkToken);
-    this.app.express.get(
-      '/auth/google',
-      passport.authenticate('google', { scope: ['email'] })
-    );
-    this.app.express.get(
-      '/auth/google/callback',
-      passport.authenticate('google', {
-        failureRedirect: config.clientHost
-      }),
-      signInByEmail
-    );
     this.app.express.use(setUserFromJWT);
+    this.app.express.use(router);
   };
 }
 

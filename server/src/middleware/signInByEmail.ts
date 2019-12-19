@@ -1,4 +1,4 @@
-import { decodeJWT, encodeJWT } from '../utils/jwt';
+import { encodeJWT } from '../utils/jwt';
 import config from '../utils/config';
 import { getUserInfoByEmail } from '../utils/requestDB';
 
@@ -20,24 +20,9 @@ const signInByEmail = async (req, res, next) => {
     res.cookie('token', token);
     res.redirect(config.clientHost);
   } catch (err) {
+    err = err && (err.where || err.name);
     next(err);
   }
 };
 
-const checkToken = (req, res, next) => {
-  const {
-    cookies: { token }
-  } = req;
-  if (!token) {
-    return next();
-  }
-  try {
-    const decoded: any = decodeJWT(token);
-    req.email = decoded.email;
-  } catch (err) {
-    next(err);
-  }
-  return next();
-};
-
-export { signInByEmail, checkToken };
+export default signInByEmail;

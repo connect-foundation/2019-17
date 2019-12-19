@@ -103,7 +103,7 @@ export const parseResultRecords = records => {
 
 export const getNode = result => {
   try {
-    return result[0].get(0).properties;
+    return result[0] && result[0].get(0).properties;
   } catch (err) {
     throw { where: 'getNode', err };
   }
@@ -111,7 +111,7 @@ export const getNode = result => {
 
 export const getFirstKeyValue = result => {
   try {
-    return result[0].get(0);
+    return result[0] && result[0].get(0);
   } catch (err) {
     throw { where: 'getFirstKeyValue', err };
   }
