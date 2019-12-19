@@ -20,10 +20,10 @@ const CREATE_USER_WITHOUT_THUMBNAIL = userId => `mutation {
 const FIND_USER_BY_NICKNAME = nickname =>
   `MATCH (u: User) WHERE u.nickname= '${nickname}' return u`;
 
-const DELETE_ALL_USERS = `
-MATCH (u1: User) WHERE u1.nickname=~ 'testUser.*' 
-OPTIONAL MATCH (u1)-[r]-(u2)
-DETACH DELETE u1, r, u2`;
+const DELETE_ALL_USERS = userIdArr => {
+  return `MATCH (a) WHERE a.email IN [${userIdArr}] DETACH DELETE a`;
+};
+
 export {
   CREATE_USER,
   CREATE_USER_WITHOUT_THUMBNAIL,
