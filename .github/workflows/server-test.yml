@@ -37,3 +37,8 @@ jobs:
           GOOGLE_CLIENT_ID: ${{secrets.GoogleClientId}}
           GOOGLE_CLIENT_SECRET: ${{secrets.GoogleClientSecret}}
           REACT_APP_SERVER_HOST: ${{secrets.ReactAppServerHost}}
+          JWT_SECRET: ${{secrets.JwtSecret}}
+          PRODUCTION_CLIENT_HOST_ADDRESS: ${{secrets.ProductionClientHostAddress}}
+          LOCAL_CLIENT_HOST_ADDRESS: ${{secrets.LocalClientHostAddress}}
+          PRODUCTION_SERVER_HOST_ADDRESS: ${{secrets.ProductionServerHostAddress}}
+          LOCAL_SERVER_HOST_ADDRESS: ${{secrets.LocalServerHostAddress}}
