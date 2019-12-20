@@ -108,7 +108,7 @@ interface IProps {
   userThumbnail?: string;
   myEmail: string;
   userEmail: string;
-  relationWithUserAndMe: string;
+  relationBetweenUserAndMe: string;
 }
 
 function Header({
@@ -116,7 +116,7 @@ function Header({
   userThumbnail,
   myEmail,
   userEmail,
-  relationWithUserAndMe
+  relationBetweenUserAndMe
 }: IProps) {
   return (
     <>
@@ -133,7 +133,7 @@ function Header({
             <Status>
               <ButtonContainer
                 email={userEmail}
-                initialRelation={relationWithUserAndMe}
+                initialRelation={relationBetweenUserAndMe}
               />
               <Alarm text={ALARM_STATUS_TEXT} />
             </Status>

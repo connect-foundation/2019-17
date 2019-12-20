@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useGetUserInfoWithEmailQuery } from 'react-components.d';
+import { useGetUserInfoByEmailQuery } from 'react-components.d';
 import TimelineBody from './Body';
 import TimelineHeader from './Header';
 import styled from 'styled-components';
@@ -17,7 +17,7 @@ function MyPage() {
   const {
     data: { user = null, friends = [], me = null, relation = null } = {},
     loading
-  } = useGetUserInfoWithEmailQuery({
+  } = useGetUserInfoByEmailQuery({
     variables: { email },
     fetchPolicy: 'cache-and-network'
   });
@@ -30,7 +30,7 @@ function MyPage() {
   const userHometown = (user && user.hometown) || '';
   const userThumbnail = (user && user.thumbnail) || undefined;
   const myEmail = (me && me.email) || '';
-  const relationWithUserAndMe = relation || '';
+  const relationBetweenUserAndMe = relation || '';
 
   return (
     <>
@@ -40,7 +40,7 @@ function MyPage() {
           userThumbnail={userThumbnail}
           userNickname={userNickname}
           myEmail={myEmail}
-          relationWithUserAndMe={relationWithUserAndMe}
+          relationBetweenUserAndMe={relationBetweenUserAndMe}
         />
         <TimelineBody
           userResidence={userResidence}

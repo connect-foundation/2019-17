@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import FriendProfile from 'components/FriendProfile';
-import { GetUserInfoWithEmailQuery, User } from 'react-components.d';
+import { GetUserInfoByEmailQuery, User } from 'react-components.d';
 
-type Friends = GetUserInfoWithEmailQuery['friends'];
+type Friends = GetUserInfoByEmailQuery['friends'];
 
 const Wrapper = styled.div`
   padding: 0 5px 4px 5px;

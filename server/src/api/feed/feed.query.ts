@@ -51,8 +51,10 @@ const queryResolvers: QueryResolvers = {
   },
   userFeeds: async (
     _,
-    { first, cursor, email: useremail }: QueryUserFeedsArgs
+    { first, cursor, email: useremail }: QueryUserFeedsArgs,
+    { req }
   ): Promise<any> => {
+    isAuthenticated(req);
     const result = await requestDB(MATCH_USER_FEEDS, {
       cursor,
       first,
@@ -60,7 +62,7 @@ const queryResolvers: QueryResolvers = {
     });
 
     const feeds = parseResultRecords(result);
-    
+
     if (feeds.length === 0) {
       return {
         cursor: '',

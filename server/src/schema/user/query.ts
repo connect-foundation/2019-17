@@ -1,7 +1,7 @@
 export const FIND_USER_BY_EMAIL_QUERY = `MATCH (user:User {email: {email}}) RETURN user`;
-export const FIND_FRIENDS_QUERY = `MATCH (user:User {email: {email}})-[:FRIEND]-(friends:User) RETURN friends`;
+export const FIND_FRIENDS_QUERY = `MATCH (user:User {email: {email}})-[:FRIEND]-(friend:User) RETURN friend`;
 export const CHECK_FRIEND_QUERY = `MATCH (user:User {email: {email}})-[:FRIEND]-(friend:User {email: {friendEmail}}) RETURN friend`;
-export const FIND_RELATIONSHIP_WITH_USER = `
+export const FIND_RELATIONSHIP_BY_USER = `
 MATCH (user:User {email:{myEmail}})
 OPTIONAL MATCH (target:User {email:{userEmail}})
 OPTIONAL MATCH (user)-[req:REQUEST_FRIEND]->(target)

@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 export const GET_FRIENDS_STATUS = gql`
   query getFriends {
-    friends {
+    friends: getFriends {
       email
       nickname
       thumbnail
