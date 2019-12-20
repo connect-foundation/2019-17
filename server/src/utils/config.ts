@@ -27,6 +27,9 @@ const devConfigs = {
     host: 'bolt://localhost',
     id: 'neo4j',
     password: 'neo4j'
+  },
+  redis: {
+    host: '127.0.0.1'
   }
 };
 
@@ -37,6 +40,9 @@ const prdConfigs = {
     host: `bolt://${process.env.DB_HOST}` || '',
     id: process.env.NEO4J_ID || '',
     password: process.env.NEO4J_PASSWORD || ''
+  },
+  redis: {
+    host: process.env.DB_HOST
   }
 };
 
