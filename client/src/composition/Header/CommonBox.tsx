@@ -27,4 +27,4 @@ function CommonBox({ onClick, children, className }: IProps) {
   );
 }
 
-export default CommonBox;
+export default React.memo(CommonBox);
