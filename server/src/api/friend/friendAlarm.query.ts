@@ -5,8 +5,7 @@ import {
   FIND_USER_BY_NO_RELATION
 } from '../../schema/friend/query';
 import isAuthenticated from '../../utils/isAuthenticated';
-import { parseResultRecords } from '../../utils/parseData';
-import { getFirstKeyValue } from '../../utils/parseDB';
+import { getFirstKeyValue, parseResultRecords } from '../../utils/parseDB';
 
 export const Query = {
   requestAlarm: async (_, __, { req }) => {

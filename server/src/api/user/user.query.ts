@@ -6,9 +6,8 @@ import {
   FIND_FRIENDS_QUERY,
   FIND_RELATIONSHIP_BY_USER
 } from '../../schema/user/query';
-import { getFirstKeyValue } from '../../utils/parseData';
+import { getFirstKeyValue, parseResultRecords } from '../../utils/parseDB';
 import { socketCountWithEmail } from '../../utils/socketManager';
-import { parseResultRecords } from '../../utils/parseData';
 import UserNotFoundError from '../../errors/UserNotFound';
 
 const queryResolvers: QueryResolvers = {

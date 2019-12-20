@@ -1,7 +1,7 @@
 import { CHAT_PUBSUB, MESSAGE_TAB } from './constant';
 import { requestDB } from '../../utils/requestDB';
 import { GET_USERS_ON_CHAT_ROOM_QUERY } from '../../schema/chat/chatQuery';
-import { parseResultRecords } from '../../utils/parseData';
+import { parseResultRecords } from '../../utils/parseDB';
 
 export const publishToMessageTab = async ({ pubsub, chatRoomId, chat }) => {
   const userResults = await requestDB(GET_USERS_ON_CHAT_ROOM_QUERY, {

@@ -5,7 +5,7 @@ import {
 } from '../../../schema/friend/query';
 import { requestDB, getUserInfoByEmail } from '../../../utils/requestDB';
 import NoRequestError from '../../../errors/NoRequestError';
-import { loginPublish } from '../../user/user.pubsub';
+import { loginPublish } from '../../auth/auth.pubsub';
 import { getFirstKeyValue } from '../../../utils/parseDB';
 
 export class RequestedFrom extends Relation {

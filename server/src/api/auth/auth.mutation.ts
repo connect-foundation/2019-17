@@ -4,7 +4,7 @@ import uploadToObjStorage from '../../middleware/uploadToObjStorage';
 import { MutationSignUpArgs, User, MutationResolvers } from 'src/types';
 import SameEmailError from '../../errors/EmailAlreadyExistsError';
 import { FIND_USER_BY_EMAIL_QUERY } from '../../schema/user/query';
-import { parseResultRecords, getNode } from '../../utils/parseData';
+import { parseResultRecords, getNode } from '../../utils/parseDB';
 
 const checkIsEmailExist = async (email): Promise<void> => {
   const sameUsers = await requestDB(FIND_USER_BY_EMAIL_QUERY, { email });

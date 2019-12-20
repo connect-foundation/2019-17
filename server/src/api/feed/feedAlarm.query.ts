@@ -1,6 +1,6 @@
 import { requestDB } from '../../utils/requestDB';
 import isAuthenticated from '../../utils/isAuthenticated';
-import { parseResultRecords } from '../../utils/parseData';
+import { parseResultRecords } from '../../utils/parseDB';
 import { QueryResolvers, Alarm } from '../../types';
 import {
   GET_FEED_ARALMS,
