@@ -73,16 +73,17 @@ function WritingFeedContainer() {
     }
   };
 
-  const checkFeedContent = () => {
+  const isFeedContentValid = () => {
     if (!content) {
       alert('피드 내용을 입력해주세요.');
       if (contentCursor.current) contentCursor.current.focus();
-      return;
+      return false;
     }
     if (content.length >= FEED_MAX_LENGTH) {
       alert(`피드 글자수 제한(${FEED_MAX_LENGTH}자)`);
-      return;
+      return false;
     }
+    return true;
   };
 
   const reset = async () => {
@@ -93,7 +94,7 @@ function WritingFeedContainer() {
 
   const onSubmit = _.debounce(
     async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
-      checkFeedContent();
+      if(!isFeedContentValid()) return;
       const parseFiles = files.map(item => item.file);
       const { data } = await enrollFeedMutation({
         variables: { content, files: parseFiles }
