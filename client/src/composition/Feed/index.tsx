@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import {
   useGetfeedsQuery,
@@ -34,7 +34,6 @@ const checkCursor = (newCursor, prevCursor) =>
 
 const FeedList: React.FC = () => {
   const [, setRef] = useIntersect(fetchMoreFeed, () => {}, {});
-  const [, setTopRef] = useIntersect(feedAlarmOff, feedAlarmOn, {});
 
   const [feedAlarm, setFeedAlarm] = useState(0);
   const [AlarmMessage, setAlarmMessage] = useState('');
@@ -49,18 +48,20 @@ const FeedList: React.FC = () => {
     variables: { first: OFFSET, currentCursor: MAX_DATE }
   });
 
-  function feedAlarmOn() {
+  const feedAlarmOff = useCallback(() => {
+    setFeedAlarm(0);
+    setAlarmMessage('');
+  }, []);
+
+  const feedAlarmOn = useCallback(() => {
     if (feedAlarm > ALARM_LIMIT) {
       setAlarmMessage(`새 피드 ${feedAlarm} 개`);
     } else {
       setAlarmMessage('');
     }
-  }
+  }, [feedAlarm]);
 
-  function feedAlarmOff() {
-    setFeedAlarm(0);
-    setAlarmMessage('');
-  }
+  const [, setTopRef] = useIntersect(feedAlarmOff, feedAlarmOn, {});
 
   async function fetchMoreFeed() {
     await fetchMore({

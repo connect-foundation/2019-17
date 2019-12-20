@@ -9,6 +9,7 @@ import UploadPlusButton from './UploadPlusButton';
 import { Scalars } from 'react-components.d';
 import { Maybe } from 'react-components.d';
 import UploadPreviewImg from './UploadPreviewImg';
+import { PLACEHOEDER_TEXT } from './constant';
 
 const Form = styled.form`
   width: 32rem;
@@ -153,7 +154,7 @@ function WritingFeedPresenter({
           </ProfileColumn>
           <Content
             onChange={onChangeTextArea}
-            placeholder={'게시물 작성'}
+            placeholder={PLACEHOEDER_TEXT}
             value={content}
             inputRef={contentCursor}
             required
@@ -187,7 +188,7 @@ function WritingFeedPresenter({
           <PhotoIcon />
           <PhotoText>사진 업로드</PhotoText>
         </UploadButton>
-        <Button size={'small'} text={'게시'} />
+        <Button size={'small'} text={'게시'} data-testid={"writingFeedSubmitBtn"} />
       </Footer>
     </Form>
   );

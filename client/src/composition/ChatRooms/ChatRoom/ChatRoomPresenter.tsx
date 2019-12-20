@@ -60,7 +60,7 @@ const OtherContent = styled.span`
 
 const LoadContainer = styled.div`
   width: 100%;
-  height: 5px;
+  height: 10px;
 `;
 
 interface IProps {
