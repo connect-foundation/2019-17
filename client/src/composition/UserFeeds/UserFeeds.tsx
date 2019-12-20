@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import Feed from 'composition/Feed/Feed';
-import useIntersect from 'hooks/useIntersectObserver';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import WritingFeed from 'composition/Feed/WritingFeed';
-import NewFeedAlarm from 'composition/Feed/NewFeedAlarm';
 import {
   useGetUserFeedsQuery,
   useMeQuery,
   GetUserFeedsQuery
 } from 'react-components.d';
-import Loader from 'components/Loader';
-import { getDate, fullDateFormat } from 'utils/dateUtil';
 import { USER_FEEDS_SUBSCRIPTION } from 'composition/Feed/feed.query';
+import useIntersect from 'hooks/useIntersectObserver';
+import Feed from 'composition/Feed/Feed';
+import WritingFeed from 'composition/Feed/WritingFeed';
+import NewFeedAlarm from 'composition/Feed/NewFeedAlarm';
+import Loader from 'components/Loader';
 import { MAX_DATE } from 'Constants';
+import { getDate, fullDateFormat } from 'utils/dateUtil';
 import { scrollTop } from 'utils/scroll';
 
 const OFFSET = 4;
@@ -34,11 +34,11 @@ const checkCursor = (newCursor, prevCursor) =>
 
 const UserFeedList = ({ email }: { email: string }) => {
   const [, setRef] = useIntersect(fetchMoreFeed, () => {}, {});
-  const [, setTopRef] = useIntersect(feedAlarmOff, feedAlarmOn, {});
 
   const [feedAlarm, setFeedAlarm] = useState(0);
   const [AlarmMessage, setAlarmMessage] = useState('');
   const { data: { me = null } = {} } = useMeQuery();
+
   const {
     data: { feeds = null } = {},
     fetchMore,
@@ -52,18 +52,20 @@ const UserFeedList = ({ email }: { email: string }) => {
     }
   });
 
-  function feedAlarmOn() {
+  const feedAlarmOff = useCallback(() => {
+    setFeedAlarm(0);
+    setAlarmMessage('');
+  }, []);
+
+  const feedAlarmOn = useCallback(() => {
     if (feedAlarm > ALARM_LIMIT) {
       setAlarmMessage(`새 피드 ${feedAlarm} 개`);
     } else {
       setAlarmMessage('');
     }
-  }
+  }, [feedAlarm]);
 
-  function feedAlarmOff() {
-    setFeedAlarm(0);
-    setAlarmMessage('');
-  }
+  const [, setTopRef] = useIntersect(feedAlarmOff, feedAlarmOn, {});
 
   async function fetchMoreFeed() {
     await fetchMore({
@@ -106,6 +108,7 @@ const UserFeedList = ({ email }: { email: string }) => {
         } = newFeeds;
 
         setFeedAlarm(props => props + 1);
+
         return Object.assign({}, prev, {
           feeds: {
             cursor: prev.feeds.cursor,
@@ -135,13 +138,11 @@ const UserFeedList = ({ email }: { email: string }) => {
         </div>
       )}
 
-      <div>
-        <NewFeedAlarm
-          onClick={scrollTop}
-          data={AlarmMessage}
-          onEffect={subscribeToNewFeeds}
-        />
-      </div>
+      <NewFeedAlarm
+        onClick={scrollTop}
+        data={AlarmMessage}
+        onEffect={subscribeToNewFeeds}
+      />
 
       {feeds.feedItems.map((feed, idx) => {
         return (
