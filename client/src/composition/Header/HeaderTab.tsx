@@ -91,9 +91,15 @@ function HeaderTab() {
   }, [friendCount, headerTabCountDispatch]);
 
   const wrapperRef = useOutsideReset(() => {
-    headerTabDispatch({
-      type: 'INITSTATE'
-    });
+    if (
+      headerTabState.isActiveFriendTab ||
+      headerTabState.isActiveAlarmTab ||
+      headerTabState.isActiveMessageTab
+    ) {
+      headerTabDispatch({
+        type: 'INITSTATE'
+      });
+    }
   });
 
   return (
