@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ActionButton from 'components/ActionButton';
 import { useMutation } from '@apollo/react-hooks';
 import { REQUEST_FRIEND } from './search.query';
+import { NO_RELATION, FRIEND } from './constants';
 
 interface IProps {
   email: string;
@@ -45,12 +46,20 @@ function ButtonContainer({ email, initialRelation }: IProps) {
 
     const changedRelation = getNextRelation(relation);
     if (changedRelation) {
-      requestFriend({ variables: { email, relation } });
+      try {
+        await requestFriend({
+          variables: { email, relation }
+        });
+      } catch (e) {
+        return window.location.reload();
+      }
+
       if (
-        (relation === 'FRIEND' && changedRelation === 'NONE') ||
-        changedRelation === 'FRIEND'
+        (relation === FRIEND && changedRelation === NO_RELATION) ||
+        changedRelation === FRIEND
       )
         return window.location.reload();
+
       setRelation(changedRelation);
     }
   }

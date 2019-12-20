@@ -6,6 +6,7 @@ import { useHeaderTabCountDispatch } from 'stores/HeaderTabCountContext';
 import FriendRequestContainer from './FriendRequestContainer';
 import FriendRecommendContainer from './FriendRecommendContainer';
 import FriendTabPresenter from './FriendTabPresenter';
+import CommonBody from '../CommonBody';
 
 const Header = styled.div``;
 
@@ -28,10 +29,12 @@ function FriendTab({ selected }: IProps) {
 
   return (
     <Header>
-      <FriendTabPresenter text="친구 요청" />
-      <FriendRequestContainer />
-      <FriendTabPresenter text="알 수도 있는 사람" />
-      <FriendRecommendContainer />
+      <CommonBody>
+        <FriendTabPresenter text="친구 요청" />
+        <FriendRequestContainer />
+        <FriendTabPresenter text="알 수도 있는 사람" />
+        <FriendRecommendContainer />
+      </CommonBody>
     </Header>
   );
 }

@@ -74,6 +74,8 @@ function FriendRequestContainer() {
   return (
     <>
       {!loading &&
+        data &&
+        data.requestAlarm &&
         data.requestAlarm.map(
           ({ nickname, email, thumbnail }: FriendAlarmUser) => (
             <FriendBox
