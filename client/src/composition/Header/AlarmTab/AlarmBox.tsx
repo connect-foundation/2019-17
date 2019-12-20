@@ -4,6 +4,7 @@ import Profile from 'components/Profile';
 import { Alarm, useChangeFeedAlarmReadStateMutation } from 'react-components.d';
 import CommonBox from '../CommonBox';
 import { GET_ALARMS } from './alarm.query';
+import { DEFAULT } from 'Constants';
 
 const BoldText = styled.span`
   cursor: pointer;
@@ -110,12 +111,7 @@ function AlamBox({ alarm, setModalState }: Iprops) {
   return (
     <Container isRead={readState} onClick={onClickFold}>
       <Column>
-        <Profile
-          size={'45px'}
-          imageUrl={
-            alarm.thumbnail || process.env.PUBLIC_URL + '/images/profile.jpg'
-          }
-        />
+        <Profile size={'45px'} imageUrl={alarm.thumbnail || DEFAULT.PROFILE} />
         <TextContainer>
           <MessageText>
             <BoldText>{alarm.writer}</BoldText> 님이 새로운{' '}

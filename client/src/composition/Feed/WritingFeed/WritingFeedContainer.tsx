@@ -86,8 +86,8 @@ function WritingFeedContainer() {
     return true;
   };
 
-  const reset = () => {
-    writingFeedDataMutation({ variables: { content: '' } });
+  const reset = async () => {
+    await writingFeedDataMutation({ variables: { content: '' } });
     setFiles([]);
     setContent('');
   };

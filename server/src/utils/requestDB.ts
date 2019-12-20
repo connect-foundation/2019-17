@@ -1,25 +1,33 @@
 import db from '../db';
-import createDBError from '../errors/createDBError';
+import DBError from '../errors/DBError';
 import { FIND_USER_BY_EMAIL_QUERY } from '../schema/user/query';
+import { getNode } from './parseDB';
 
-async function requestDB(query: string, param?) {
+export const requestDB = async (query: string, param?) => {
   let session;
   try {
     session = db.session();
     const res = await session.run(query, param);
     return res.records;
-  } catch (err) {
-    console.log('err!!! ', err);
-    const DBError = createDBError(err);
-    throw new DBError();
+  } catch (error) {
+    throw new DBError({
+      internalData: error
+    });
   } finally {
     session.close();
   }
-}
+};
 
-async function getUserInfoByEmail(email: string) {
+export const getUserInfoByEmail = async (email: string) => {
   const user = await requestDB(FIND_USER_BY_EMAIL_QUERY, { email });
-  return user[0].get(0).properties;
-}
+  return getNode(user);
+};
 
-export { requestDB, getUserInfoByEmail };
+export const getUserWithStatus = async (email, status) => {
+  const result = await requestDB(FIND_USER_BY_EMAIL_QUERY, {
+    email
+  });
+  const user = getNode(result);
+  if (user) user.status = status;
+  return user;
+};

@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {
-  useHeaderTabCountState,
-} from 'stores/HeaderTabCountContext';
+import { useHeaderTabCountState } from 'stores/HeaderTabCountContext';
 
 const NewAlarmNumContainer = styled.span`
   display: flex;

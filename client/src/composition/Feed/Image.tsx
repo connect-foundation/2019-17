@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { Image } from 'react-components.d';
 
 const ImageBox = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  height: auto;
   display: inline-block;
   border: 1px solid gray;
   border-radius: 2px;

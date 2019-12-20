@@ -18,9 +18,8 @@ type Friend {
 type Query {
   me: User!
   getUser(email: String!): User
-  friends: [Friend!]!
-  userWithEmail(email: String!): User
-  friendsWithUserEmail(email: String!): [User]!
+  getFriends: [Friend!]!
+  getFriendsByUserEmail(email: String!): [User]!
   findRelation(email: String!): String!
   loginUser: Boolean
 }

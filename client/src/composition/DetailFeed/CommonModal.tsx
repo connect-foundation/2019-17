@@ -8,14 +8,17 @@ const ModalFrame = styled.div`
   position: absolute;
   z-index: 2000;
   display: flex;
+  overflow: hidden;
 `;
 
 const ImageContent = styled.div`
   flex: 1;
+  max-width: 500px;
+  margin: auto 0;
 `;
 
 const TextContent = styled.div`
-  flex: 0.5;
+  flex: 0.3;
 `;
 const ModalBackgroud = styled.div`
   width: 100%;

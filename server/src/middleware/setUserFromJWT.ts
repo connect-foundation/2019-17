@@ -5,9 +5,13 @@ function setUserFromJWT(req, res, next) {
     cookies: { token }
   } = req;
 
-  if (token) {
-    const { email } = decodeJWT(token);
-    req.email = email;
+  try {
+    if (token) {
+      const { email } = decodeJWT(token);
+      req.email = email;
+    }
+  } catch (err) {
+    next(err);
   }
 
   return next();

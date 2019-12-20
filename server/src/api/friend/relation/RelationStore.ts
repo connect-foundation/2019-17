@@ -1,6 +1,6 @@
 import { None } from './None';
 import { Request } from './Request';
-import { RequestFrom } from './RequestFrom';
+import { RequestedFrom } from './RequestedFrom';
 import { Friend } from './Friend';
 
 export class RelationStore {
@@ -17,7 +17,7 @@ export class RelationStore {
       case 'REQUEST':
         return new Request();
       case 'REQUESTED_FROM':
-        return new RequestFrom();
+        return new RequestedFrom();
       default:
         return new Friend();
     }

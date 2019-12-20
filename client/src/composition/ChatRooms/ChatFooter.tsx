@@ -3,6 +3,7 @@ import _ from 'lodash';
 import styled from 'styled-components';
 import useInput from 'hooks/useInput';
 import { useCreateChatMutation } from 'react-components.d';
+import { PLACEHOLDER_TEXT } from './constant';
 
 const Footer = styled.form`
   height: 3rem;
@@ -56,9 +57,9 @@ function ChatFooter({ chatRoomId, chatBody }: IProps) {
   }, []);
 
   return (
-    <Footer onSubmit={handleChatSubmit}>
+    <Footer onSubmit={handleChatSubmit} data-testid={'chatFooterForm'}>
       <Input
-        placeholder={'메세지를 입력하세요...'}
+        placeholder={PLACEHOLDER_TEXT}
         maxLength={500}
         onChange={onChange}
         value={content}

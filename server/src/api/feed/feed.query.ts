@@ -1,7 +1,7 @@
 import { dateToISO, objToDate } from '../../utils/dateutil';
 import { requestDB } from '../../utils/requestDB';
 import isAuthenticated from '../../utils/isAuthenticated';
-import { parseResultRecords } from '../../utils/parseData';
+import { parseResultRecords } from '../../utils/parseDB';
 import {
   QueryResolvers,
   QueryFeedsArgs,
@@ -51,8 +51,10 @@ const queryResolvers: QueryResolvers = {
   },
   userFeeds: async (
     _,
-    { first, cursor, email: useremail }: QueryUserFeedsArgs
+    { first, cursor, email: useremail }: QueryUserFeedsArgs,
+    { req }
   ): Promise<any> => {
+    isAuthenticated(req);
     const result = await requestDB(MATCH_USER_FEEDS, {
       cursor,
       first,
@@ -60,7 +62,7 @@ const queryResolvers: QueryResolvers = {
     });
 
     const feeds = parseResultRecords(result);
-    
+
     if (feeds.length === 0) {
       return {
         cursor: '',
