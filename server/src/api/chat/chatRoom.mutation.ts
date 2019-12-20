@@ -9,7 +9,7 @@ import {
   CHECK_CHAT_ROOM_QUERY,
   CREATE_CHAT_ROOM_QUERY
 } from '../../schema/chat/chatQuery';
-import { parseResultRecords } from '../../utils/parseData';
+import { parseResultRecords } from '../../utils/parseDB';
 import { publishChat, publishToMessageTab } from './chat.pubsub';
 import { createChat } from './common';
 

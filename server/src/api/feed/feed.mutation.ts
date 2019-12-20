@@ -2,7 +2,7 @@ import ImageUploadError from '../../errors/ImageUploadError';
 import uploadToObjStorage from '../../middleware/uploadToObjStorage';
 import { requestDB } from '../../utils/requestDB';
 import isAuthenticated from '../../utils/isAuthenticated';
-import { parseResultRecords } from '../../utils/parseData';
+import { parseResultRecords } from '../../utils/parseDB';
 import {
   UPDATE_LIKE,
   DELETE_LIKE,

@@ -6,7 +6,7 @@ import {
 import { requestDB } from '../../utils/requestDB';
 import isAuthenticated from '../../utils/isAuthenticated';
 import { GET_CHATS_BY_CHAT_ROOM_ID_QUERY } from '../../schema/chat/chatQuery';
-import { parseResultRecords } from '../../utils/parseData';
+import { parseResultRecords } from '../../utils/parseDB';
 import { DEFAUT_MAX_DATE, CHAT_LIMIT } from './constant';
 
 const Query: QueryResolvers = {

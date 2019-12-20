@@ -1,6 +1,6 @@
 import { GET_NEW_FEED, GET_NEW_ARALM } from '../../schema/feed/query';
 import { requestDB } from '../../utils/requestDB';
-import { parseResultRecords } from '../../utils/parseData';
+import { parseResultRecords } from '../../utils/parseDB';
 import { NEW_FEED, NEW_ALARM, NEW_USER_FEED } from './constant';
 
 export const publishFeed = async (pubsub, feedId, email) => {

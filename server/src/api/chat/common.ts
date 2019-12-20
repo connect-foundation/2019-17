@@ -1,5 +1,5 @@
 import { requestDB } from '../../utils/requestDB';
-import { parseResultRecords } from '../../utils/parseData';
+import { parseResultRecords } from '../../utils/parseDB';
 import {
   GET_USERS_ON_CHAT_ROOM_QUERY,
   CREATE_CHAT_QUERY
