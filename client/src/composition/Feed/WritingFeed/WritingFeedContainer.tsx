@@ -73,7 +73,7 @@ function WritingFeedContainer() {
     }
   };
 
-  const checkFeedContent = () => {
+  const isFeedContentValid = () => {
     if (!content) {
       alert('피드 내용을 입력해주세요.');
       if (contentCursor.current) contentCursor.current.focus();
@@ -94,7 +94,7 @@ function WritingFeedContainer() {
 
   const onSubmit = _.debounce(
     async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
-      if(!checkFeedContent()) return;
+      if(!isFeedContentValid()) return;
       const parseFiles = files.map(item => item.file);
       const { data } = await enrollFeedMutation({
         variables: { content, files: parseFiles }
