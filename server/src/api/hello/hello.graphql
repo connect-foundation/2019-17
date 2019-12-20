@@ -1,7 +1,0 @@
-type Hello {
-  text: String!
-}
-
-type Query {
-  sayHello(name: String!): Hello!
-}
