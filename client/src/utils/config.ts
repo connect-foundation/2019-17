@@ -11,11 +11,13 @@ const configs = {
 };
 
 const devConfigs = {
-  serverHost: 'localhost:4000'
+  serverHost: 'http://localhost:4000',
+  webSocket: `ws://localhost:4000`
 };
 
 const prdConfigs = {
-  serverHost: process.env.REACT_APP_SERVER_HOST || ''
+  serverHost: `https://${process.env.REACT_APP_SERVER_HOST}`,
+  webSocket: `wss://${process.env.REACT_APP_SERVER_HOST}`
 };
 
 const config = Object.assign(
