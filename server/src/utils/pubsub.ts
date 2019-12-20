@@ -1,8 +1,9 @@
 import { RedisPubSub } from 'graphql-redis-subscriptions';
+import config from './config';
 
 export default new RedisPubSub({
   connection: {
-    host: '127.0.0.1',
+    host: config.redis.host,
     port: 6379,
     keepAlive: 10000,
     retry_strategy: options => {

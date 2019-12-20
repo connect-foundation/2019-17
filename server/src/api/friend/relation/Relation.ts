@@ -3,5 +3,5 @@ export abstract class Relation {
 
   publish(pubsub, payload) {}
 
-  checkState() {}
+  checkState(email, targetEmail) {}
 }

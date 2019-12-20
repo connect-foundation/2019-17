@@ -22,13 +22,14 @@ interface IDiv {
 
 function ButtonContainer({ email }: IProps) {
   const [isFriend, setIsFriend] = useState(false);
-  const [acceptFriend] = useRequestFriendMutation();
+  const [acceptFriend, { error: acceptError }] = useRequestFriendMutation();
   const [rejectFriend] = useRejectFriendRequestMutation();
 
-  function sendRequest(e: React.MouseEvent<HTMLButtonElement>) {
+  async function sendRequest(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
-    acceptFriend({ variables: { email, relation: 'REQUESTED_FROM' } });
+    await acceptFriend({ variables: { email, relation: 'REQUESTED_FROM' } });
+    if (acceptError) alert('상대방의 친구 요청이 취소되었습니다.');
     setIsFriend(true);
   }
 
