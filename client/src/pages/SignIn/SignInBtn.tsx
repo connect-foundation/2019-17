@@ -11,7 +11,7 @@ const Link = styled.a``;
 
 const LoginBtn = () => {
   return (
-    <Link href={`http://${config.serverHost}/auth/google`}>
+    <Link href={`${config.serverHost}/auth/google`}>
       <LoginBtnImg
         alt="LOGIN"
         src={process.env.PUBLIC_URL + '/images/btn_google_signin_normal.png'}

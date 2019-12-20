@@ -1,17 +1,14 @@
 import { Options } from 'graphql-yoga';
 import config from './utils/config';
 import app from './app';
+import cors from './utils/cors';
+import https from './utils/https';
 import { onConnect, onDisconnect } from './middleware/subscription';
 
 const PORT: string | number = config.port;
 const ENDPOINT: string = '/graphql';
 const PLAYGROUND: string = '/playground';
 const SUBSCRIPTIONS: string = '/subscriptions';
-
-const corsOptions = {
-  origin: config.clientHost,
-  credentials: true
-};
 
 const appOptions: Options = {
   port: PORT,
@@ -23,7 +20,8 @@ const appOptions: Options = {
     onDisconnect,
     keepAlive: 10000
   },
-  cors: corsOptions
+  cors,
+  https
 };
 
 const handleStart = () => {
