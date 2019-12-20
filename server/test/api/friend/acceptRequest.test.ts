@@ -1,6 +1,6 @@
-import { checkResTobe, requestDB } from '../../util/utils';
+import { checkResStatusCodeTobe, requestDB } from '../../util/utils';
 import { CHECK_FRIEND_EXISTENCE } from './friend.query';
-import {UserFactory} from '../../util/factory/UserFactory';
+import { UserFactory } from '../../util/factory/UserFactory';
 import { getFirstKeyValue } from '../../../src/utils/parseDB';
 import { acceptFriendRequest, sendFriendRequest } from './common';
 
@@ -19,7 +19,7 @@ describe('친구 요청 수락', () => {
 
     const res = await acceptFriendRequest(user2, user1);
 
-    checkResTobe(res, 200);
+    checkResStatusCodeTobe(res, 200);
 
     const dbRes = await requestDB(CHECK_FRIEND_EXISTENCE, {
       fromEmail: user1.email,
@@ -39,7 +39,7 @@ describe('친구 요청 수락', () => {
 
     const res = await acceptFriendRequest(user2, user1);
 
-    checkResTobe(res, 400);
+    checkResStatusCodeTobe(res, 400);
 
     done();
   });

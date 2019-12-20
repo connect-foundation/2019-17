@@ -1,4 +1,4 @@
-import { checkResTobe, requestDB } from '../../util/utils';
+import { checkResStatusCodeTobe, requestDB } from '../../util/utils';
 import { CHECK_REQUEST_EXISTENCE } from './friend.query';
 import { UserFactory } from '../../util/factory/UserFactory';
 import { getFirstKeyValue } from '../../../src/utils/parseDB';
@@ -17,7 +17,7 @@ describe('친구 요청', () => {
 
     const res = await sendFriendRequest(user1, user2);
 
-    checkResTobe(res, 200);
+    checkResStatusCodeTobe(res, 200);
 
     const dbRes = await requestDB(CHECK_REQUEST_EXISTENCE, {
       fromEmail: user1.email,
@@ -38,7 +38,7 @@ describe('친구 요청', () => {
     await sendFriendRequest(user1, user2);
     const res = await sendFriendRequest(user2, user1);
 
-    checkResTobe(res, 400);
+    checkResStatusCodeTobe(res, 400);
 
     done();
   });
@@ -52,7 +52,7 @@ describe('친구 요청', () => {
 
     const res = await sendFriendRequest(user1, user2);
 
-    checkResTobe(res, 400);
+    checkResStatusCodeTobe(res, 400);
 
     done();
   });

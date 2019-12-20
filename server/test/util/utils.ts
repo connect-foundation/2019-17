@@ -27,7 +27,7 @@ export function requestQueryWithToken(
     .send({ query });
 }
 
-export function checkResTobe(res, statusCode) {
+export function checkResStatusCodeTobe(res, statusCode) {
   try {
     res.expect(statusCode).expect('Content-Type', /json/);
   } catch (e) {
@@ -53,7 +53,7 @@ export const requestQueryWithFile = (
 
   return request(server)
     .post('/')
-    .field(`operations`, JSON.stringify({ query }))
-    .field(`map`, JSON.stringify({ 0: [`variables.file`] }))
-    .attach(`0`, variables.file);
+    .field('operations', JSON.stringify({ query }))
+    .field('map', JSON.stringify({ 0: ['variables.file'] }))
+    .attach('0', variables.file);
 };
