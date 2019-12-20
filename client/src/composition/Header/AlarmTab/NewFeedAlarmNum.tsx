@@ -17,16 +17,16 @@ const NewAlarmNumIcon = styled.span`
   font-size: 10px;
 `;
 
-function NewFriendAlarmNum() {
+function NewFeedAlarmNum() {
   const headerTabCountState = useHeaderTabCountState();
 
-  if (headerTabCountState.friendCount <= 0) return <></>;
+  if (headerTabCountState.alarmCount <= 0) return <></>;
 
   return (
     <NewAlarmNumContainer>
-      <NewAlarmNumIcon>{headerTabCountState.friendCount}</NewAlarmNumIcon>
+      <NewAlarmNumIcon>{headerTabCountState.alarmCount}</NewAlarmNumIcon>
     </NewAlarmNumContainer>
   );
 }
 
-export default NewFriendAlarmNum;
+export default NewFeedAlarmNum;
