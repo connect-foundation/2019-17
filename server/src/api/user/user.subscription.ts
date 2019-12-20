@@ -2,7 +2,7 @@ import { withFilter } from 'graphql-subscriptions';
 import { LOGIN_CHANNEL, LOGOUT_CHANNEL } from '../auth/constants';
 import { requestDB } from '../../utils/requestDB';
 import { CHECK_FRIEND_QUERY } from '../../schema/user/query';
-import { getNode } from '../../utils/parseData';
+import { getNode } from '../../utils/parseDB';
 
 const subscriptionResolver = {
   updateUserState: {

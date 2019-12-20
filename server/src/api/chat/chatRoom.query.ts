@@ -2,7 +2,7 @@ import { QueryResolvers, QueryGetChatRoomsArgs, ChatRoom } from '../../types';
 import { requestDB } from '../../utils/requestDB';
 import isAuthenticated from '../../utils/isAuthenticated';
 import { GET_CHATROOMS_QUERY } from '../../schema/chat/chatQuery';
-import { parseResultRecords } from '../../utils/parseData';
+import { parseResultRecords } from '../../utils/parseDB';
 import { DEFAUT_MAX_DATE } from './constant';
 
 const Query: QueryResolvers = {

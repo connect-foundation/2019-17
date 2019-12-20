@@ -1,5 +1,5 @@
 import { GET_FRIENDS } from '../../schema/feed/query';
-import { parseResultRecords } from '../../utils/parseData';
+import { parseResultRecords } from '../../utils/parseDB';
 import { requestDB } from '../../utils/requestDB';
 
 export const checkIsFriend = async (friendEmail, myEmail): Promise<boolean> => {
