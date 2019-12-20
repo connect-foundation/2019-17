@@ -1,0 +1,76 @@
+type Idate {
+  year: Int!
+  month: Int!
+  day: Int!
+  hour: Int!
+  minute: Int!
+  second: Int!
+  nanosecond: String!
+  timeZoneOffsetSeconds: Int
+  timeZoneId: String
+}
+
+type Content {
+  createdAt: Idate!
+  content: String!
+}
+
+type Comment {
+  createdAt: Idate
+  content: String!
+  nickname: String!
+  thumbnail: String
+}
+
+type Image {
+  url: String
+}
+
+type IFeed {
+  searchUser: User!
+  feed: Content!
+  feedId: Int!
+  totallikes: Int!
+  imglist: [Image!]!
+  hasLiked: Int!
+  comments: [Comment!]!
+}
+type IFeeds {
+  cursor: String!
+  feedItems: [IFeed]!
+}
+
+type Alarm {
+  thumbnail: String
+  email: String!
+  content: String
+  writer: String!
+  createdAt: Idate!
+  isRead: Boolean!
+  isChecked: Boolean!
+  feedId: Int!
+  type: String!
+}
+
+type Query {
+  feeds(first: Int, cursor: String): IFeeds!
+  userFeeds(first: Int, cursor: String, email: String!): IFeeds!
+  alarms: [Alarm]
+  alarmCount: Int!
+  feed(feedId: Int!): IFeed!
+}
+
+type Mutation {
+  updateLike(feedId: Int, count: Int): Boolean!
+  enrollFeed(content: String!, files: [Upload]): Boolean!
+  writeComment(content: String!, feedId: Int!): Boolean!
+  changeFeedAlarmReadState(feedId: Int!, isRead: Boolean): Int!
+  changeAllFeedAlarmReadState: Boolean!
+  changeAllFeedAlarmCheckState: Boolean!
+}
+
+type Subscription {
+  feeds(userEmail: String): IFeeds!
+  userFeeds(userEmail: String): IFeeds!
+  alarms(userEmail: String!): [Alarm]
+}

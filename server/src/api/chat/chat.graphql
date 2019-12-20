@@ -1,0 +1,28 @@
+type Chat {
+  content: String!
+  createAt: Idate!
+  email: String!
+  thumbnail: String
+  nickname: String!
+  chatRoomId: Int!
+}
+
+type ChatRoom {
+  otherUser: [User]!
+  lastChat: Chat!
+}
+
+type Mutation {
+  createChatRoom(userEmail: String!, content: String!): Int!
+  createChat(chatRoomId: Int!, content: String!): Boolean!
+}
+
+type Query {
+  getChatsByChatRoomId(chatRoomId: Int!, cursor: String): [Chat]
+  getChatRooms(cursor: String): [ChatRoom]
+}
+
+type Subscription {
+  getChatsByChatRoomId(chatRoomId: Int!): Chat!
+  getChatRooms: ChatRoom
+}
