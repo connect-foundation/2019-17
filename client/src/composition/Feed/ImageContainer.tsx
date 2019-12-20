@@ -1,24 +1,40 @@
 import React from 'react';
 import { Image } from 'react-components.d';
-import ImagePreview from './Image';
+import { Carousel } from 'react-responsive-carousel';
+import 'style/carousel.css';
 
-interface Iprops {
+interface IProps {
   images: (Image | null)[];
+  width: string;
+  height: string;
 }
 
-const ImageContainer = ({ images }: Iprops) => {
+function ImageContainer({ images, width, height }: IProps) {
   if (!images) return <></>;
+
   return (
     <>
-      {images.map(image =>
-        image && image.url ? (
-          <ImagePreview url={image.url} key={image.url} />
-        ) : (
-          <></>
-        )
-      )}
+      <Carousel
+        autoPlay
+        dynamicHeight={true}
+        showThumbs={false}
+        showStatus={false}>
+        {images.map((image, idx) =>
+          image && image.url ? (
+            <div key={idx + image.url}>
+              <img style={{ width, height }} src={image.url} alt={image.url} />
+            </div>
+          ) : (
+            <></>
+          )
+        )}
+      </Carousel>
     </>
   );
-};
+}
 
+ImageContainer.defaultProps = {
+  width: '400px',
+  height: '400px'
+};
 export default ImageContainer;

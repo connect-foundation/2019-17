@@ -7,9 +7,7 @@ import NewChatFooter from './NewChatFooter';
 import { useGetUserNameLazyQuery } from 'react-components.d';
 import SearchedUserCard from './SearchedUserCard';
 import theme from 'style/theme';
-
-const NEW_MESSAGE_TEXT = '새 메세지';
-const TO_TEXT = '받는 사람';
+import { TO_TEXT, NEW_MESSAGE_TEXT } from './constant';
 
 const Container = styled.div`
   width: 20rem;
