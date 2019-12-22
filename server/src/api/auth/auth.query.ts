@@ -7,7 +7,7 @@ const queryResolvers: QueryResolvers = {
   loginUser: async (_, __, { req }): Promise<boolean> => {
     isAuthenticated(req);
     const user = await getUserWithStatus(req.email, 'online');
-    loginPublish(user);
+    await loginPublish(user);
     return true;
   }
 };
