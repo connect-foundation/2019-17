@@ -10,13 +10,13 @@ export const publishFeed = async (pubsub, feedId, email) => {
   });
 
   const parsedRegisterdFeed = parseResultRecords(registerdFeed);
-  pubsub.publish(NEW_FEED, {
+  await pubsub.publish(NEW_FEED, {
     feeds: {
       cursor: '',
       feedItems: parsedRegisterdFeed
     }
   });
-  pubsub.publish(NEW_USER_FEED, {
+  await pubsub.publish(NEW_USER_FEED, {
     userFeeds: {
       cursor: '',
       feedItems: parsedRegisterdFeed
@@ -32,7 +32,7 @@ export const publishFeedAlarm = async (pubsub, alarmId, userEmail) => {
 
   const [parsedRegisterdAlarm] = parseResultRecords(registerdAlarm);
 
-  pubsub.publish(NEW_ALARM, {
+  await pubsub.publish(NEW_ALARM, {
     alarms: parsedRegisterdAlarm.alarms
   });
 };

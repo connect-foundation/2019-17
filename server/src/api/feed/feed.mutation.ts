@@ -49,7 +49,7 @@ const createImages = async (pubsub, email, feedId, files) => {
     const REGISTER_IMAGE_QUERY = createImageQuery(fileLocations);
 
     await requestDB(REGISTER_IMAGE_QUERY, { feedId });
-    publishFeed(pubsub, feedId, email);
+    await publishFeed(pubsub, feedId, email);
   } catch (error) {
     throw new ImageUploadError();
   }
@@ -69,9 +69,9 @@ const mutationResolvers: MutationResolvers = {
     const FILE_LIMIT = 30;
 
     if (files && files.length < FILE_LIMIT) {
-      createImages(pubsub, email, feedId, files);
+      await createImages(pubsub, email, feedId, files);
     } else {
-      publishFeed(pubsub, feedId, email);
+      await publishFeed(pubsub, feedId, email);
     }
 
     const registeredAlarmId = await requestDB(ALARM_NEW_FEED, {
@@ -80,7 +80,7 @@ const mutationResolvers: MutationResolvers = {
     });
     const [parsedRegisteredAlarmId] = parseResultRecords(registeredAlarmId);
     if (parsedRegisteredAlarmId) {
-      publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, email);
+      await publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, email);
     }
 
     return true;
@@ -116,7 +116,11 @@ const mutationResolvers: MutationResolvers = {
     });
     const [parsedRegisteredAlarmId] = parseResultRecords(registeredAlarmId);
     if (parsedRegisteredAlarmId)
-      publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, userEmail);
+      await publishFeedAlarm(
+        pubsub,
+        parsedRegisteredAlarmId.alarmId,
+        userEmail
+      );
 
     return true;
   },

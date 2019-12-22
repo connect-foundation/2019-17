@@ -4,8 +4,7 @@ import ButtonContainer from 'composition/Search/ButtonContainer';
 import { Link } from 'react-router-dom';
 import { PAGE_PATHS } from 'Constants';
 import Profile from 'components/Profile';
-import ActionButton from 'components/ActionButton';
-import { ALARM_STATUS_TEXT, FEED_TEXT, FRIEND_TEXT } from './text';
+import { FEED_TEXT } from './text';
 
 const Cover = styled.div`
   display: block;
@@ -64,10 +63,6 @@ const Status = styled.div`
   float: right;
   max-width: 400px;
   text-align: right;
-`;
-
-const Alarm = styled(ActionButton)`
-  margin-left: 3px;
 `;
 
 const TimelineNav = styled.div`
@@ -135,7 +130,6 @@ function Header({
                 email={userEmail}
                 initialRelation={relationBetweenUserAndMe}
               />
-              <Alarm text={ALARM_STATUS_TEXT} />
             </Status>
           </StatusWrapper>
         )}
@@ -144,11 +138,6 @@ function Header({
             <li>
               <NavTab to={`${PAGE_PATHS.MY_PAGE}/${userEmail}`}>
                 {FEED_TEXT}
-              </NavTab>
-            </li>
-            <li>
-              <NavTab to={`${PAGE_PATHS.MY_PAGE}/${userEmail}/friends`}>
-                {FRIEND_TEXT}
               </NavTab>
             </li>
           </NavList>

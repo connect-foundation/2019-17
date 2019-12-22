@@ -25,6 +25,6 @@ export class RequestedFrom extends Relation {
   async publish(pubsub, { email }) {
     const user = await getUserInfoByEmail(email);
 
-    loginPublish({ ...user, status: 'online' });
+    await loginPublish({ ...user, status: 'online' });
   }
 }

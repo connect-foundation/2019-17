@@ -42,7 +42,7 @@ Connect boost camper
 - [x] 현재 접속자 확인 기능
 - [x] 친구추가
 - [x] 활동알람
-- [ ] 1:1 메신저
+- [x] 1:1 메신저
 
 <div style="width:500px;height:10px"></div>
 
@@ -57,15 +57,15 @@ Connect boost camper
 
 ## 🌏 기술스택
 
-OS: linux  
-DB: neo4j (graph db)  
-Language: TypeScript  
-Server: Node.js  
-Backend: GraphQL, express  
-Frontend: React.js, Apollo  
-Code Convention: prettier , typescript-eslint  
-test: jest  
-infra: actions
+- OS: Linux
+- DB: Neo4j (graph db)
+- Language: TypeScript
+- Server: Node.js
+- Backend: GraphQL, express
+- Frontend: React.js, Apollo
+- Code Convention: Prettier , Typescript-Eslint
+- Test: Jest
+- Infra: CI/CD(Git Actions)
 
 <div style="width:500px;height:10px"></div>
 
