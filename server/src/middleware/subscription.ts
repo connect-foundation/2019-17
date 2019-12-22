@@ -36,7 +36,7 @@ export const onDisconnect = async (webSocket, _) => {
   if (currentCount === 1) {
     try {
       const user = await getUserWithStatus(email, 'offline');
-      logoutPublish(user);
+      await logoutPublish(user);
       socketCountWithEmail.delete(email);
     } catch (error) {
       socketCountWithEmail.delete(email);

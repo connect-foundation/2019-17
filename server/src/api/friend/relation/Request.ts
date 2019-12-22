@@ -12,7 +12,7 @@ export class Request extends Relation {
   async publish(pubsub, { email, targetEmail }) {
     const user = await getUserInfoByEmail(email);
 
-    pubsub.publish(REQUEST_ALARM_ADDED, {
+    await pubsub.publish(REQUEST_ALARM_ADDED, {
       requestAlarmAdded: {
         ...user,
         targetEmail,

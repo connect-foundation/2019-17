@@ -44,7 +44,7 @@ const Mutation: MutationResolvers = {
     });
     const { chats }: { chats: Chat[] } = parseResultRecords(result)[0];
     const chat = chats[0];
-    publishToMessageTab({
+    await publishToMessageTab({
       pubsub,
       chatRoomId: chat.chatRoomId,
       chat

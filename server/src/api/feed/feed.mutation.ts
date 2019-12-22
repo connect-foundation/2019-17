@@ -80,7 +80,7 @@ const mutationResolvers: MutationResolvers = {
     });
     const [parsedRegisteredAlarmId] = parseResultRecords(registeredAlarmId);
     if (parsedRegisteredAlarmId) {
-      publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, email);
+      await publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, email);
     }
 
     return true;
@@ -116,7 +116,11 @@ const mutationResolvers: MutationResolvers = {
     });
     const [parsedRegisteredAlarmId] = parseResultRecords(registeredAlarmId);
     if (parsedRegisteredAlarmId)
-      publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, userEmail);
+      await publishFeedAlarm(
+        pubsub,
+        parsedRegisteredAlarmId.alarmId,
+        userEmail
+      );
 
     return true;
   },

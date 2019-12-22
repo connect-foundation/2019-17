@@ -8,14 +8,14 @@ export const publishToMessageTab = async ({ pubsub, chatRoomId, chat }) => {
     chatRoomId: Number(chatRoomId)
   });
   const { users } = parseResultRecords(userResults)[0];
-  pubsub.publish(MESSAGE_TAB, {
+  await pubsub.publish(MESSAGE_TAB, {
     getChatRooms: { otherUser: users, lastChat: chat }
   });
 };
 
 export const publishChat = async ({ chat, chatRoomId, pubsub }) => {
-  pubsub.publish(CHAT_PUBSUB + chatRoomId, {
+  await pubsub.publish(CHAT_PUBSUB + chatRoomId, {
     getChatsByChatRoomId: chat
   });
-  publishToMessageTab({ pubsub, chatRoomId, chat });
+  await publishToMessageTab({ pubsub, chatRoomId, chat });
 };
