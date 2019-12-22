@@ -1,0 +1,10 @@
+type UserWithRelation {
+  nickname: String!
+  thumbnail: String
+  relation: String!
+  email: String!
+}
+
+type Query {
+  searchUser(keyword: String!): [UserWithRelation!]!
+}
