@@ -10,14 +10,14 @@ const baseOption = {
 const useIntersect = (
   interSectAction: any,
   outerSectAction: any,
-  option: any
+  option: any = baseOption
 ) => {
   const [ref, setRef] = useState(null);
 
   const checkIntersect = useCallback(
-    (entry: IntersectionObserverEntry[]) => {
+    (entry: IntersectionObserverEntry[], observer) => {
       if (entry[0].isIntersecting) {
-        interSectAction();
+        interSectAction(entry[0], observer);
       } else {
         outerSectAction();
       }
@@ -29,7 +29,7 @@ const useIntersect = (
     let observer: any;
 
     if (ref) {
-      observer = new IntersectionObserver(checkIntersect, baseOption);
+      observer = new IntersectionObserver(checkIntersect, option);
       observer.observe(ref);
     }
     return () => observer && observer.disconnect();
