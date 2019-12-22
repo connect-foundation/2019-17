@@ -17,17 +17,6 @@ const FeedContentDiv = styled.div`
   padding: 12px 12px 0;
 `;
 
-const FeedEditDiv = styled.span`
-  float: right;
-  cursor: pointer;
-  background-image: url('/images/buttons.png');
-  background-repeat: no-repeat;
-  background-size: 64px 134px;
-  background-position: 0 -66px;
-  height: 20px;
-  width: 20px;
-`;
-
 interface Iprops {
   content: string | null | undefined;
   createdAt: string;
@@ -51,7 +40,6 @@ function Feed({ content, createdAt, feedinfo, feedSize }: Iprops) {
     <>
       <FeedDiv feedSize={feedSize}>
         <FeedContentDiv className="mainbox">
-          <FeedEditDiv></FeedEditDiv>
           <FeedHeader
             email={feedinfo.searchUser.email}
             thumbnail={feedinfo.searchUser.thumbnail || DEFAULT.PROFILE}

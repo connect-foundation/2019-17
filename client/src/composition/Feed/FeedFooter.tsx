@@ -138,7 +138,7 @@ const FeedFooter = ({
             <CommentIcon />
             댓글
           </FeedActionBtn>
-          <FeedActionBtn>
+          <FeedActionBtn onClick={() => alert('준비중입니다.')}>
             <ShareIcon />
             공유하기
           </FeedActionBtn>

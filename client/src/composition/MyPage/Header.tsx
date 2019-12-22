@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { PAGE_PATHS } from 'Constants';
 import Profile from 'components/Profile';
 import ActionButton from 'components/ActionButton';
-import { ALARM_STATUS_TEXT, FEED_TEXT, FRIEND_TEXT } from './text';
+import { ALARM_STATUS_TEXT, FEED_TEXT } from './text';
 
 const Cover = styled.div`
   display: block;
@@ -144,11 +144,6 @@ function Header({
             <li>
               <NavTab to={`${PAGE_PATHS.MY_PAGE}/${userEmail}`}>
                 {FEED_TEXT}
-              </NavTab>
-            </li>
-            <li>
-              <NavTab to={`${PAGE_PATHS.MY_PAGE}/${userEmail}/friends`}>
-                {FRIEND_TEXT}
               </NavTab>
             </li>
           </NavList>

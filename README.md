@@ -16,7 +16,7 @@
 ## :wave: Links
 ### [📃 WIKI](https://github.com/connect-foundation/2019-17/wiki)
 
-### [🎲 HOMEPAGE](http://106.10.39.105:3000)(준비중)
+### [🎲 HOMEPAGE](http://boostbook.shop)
 
 ### [🧱 Ground Rule](https://github.com/connect-foundation/2019-17/wiki/GROUND-RULE)
 
@@ -34,11 +34,11 @@ Connect boost camper
 
 ## 👍 구현 기능
 - [x] 회원가입/로그인
-- [ ] 피드
-- [ ] 댓글
-- [ ] 현재 접속자 확인 기능 
-- [ ] 친구추가 
-- [ ] 활동알람
+- [x] 피드
+- [x] 댓글
+- [x] 현재 접속자 확인 기능 
+- [x] 친구추가 
+- [x] 활동알람
 - [ ] 1:1 메신저
 
 <div style="width:500px;height:10px"></div>
@@ -50,20 +50,25 @@ Connect boost camper
 - 현재 접속자 확인
 - Graph db(neo4j)
 
-## 🌏 기술스텍 
+## 🌏 기술스택 
 
-OS: linux
-DB: neo4j(graph db)
-Language: TypeScript
-Server: Node.js
-Backend: GraphQL, express
-Frontend: React.js, Apollo
-Code Convention: prettier , typescript-eslint
-test: jest 
-infra: actions 
+OS: linux  
+DB: neo4j (graph db)  
+Language: TypeScript   
+Server: Node.js  
+Backend: GraphQL, express  
+Frontend: React.js, Apollo   
+Code Convention: prettier , typescript-eslint  
+test: jest  
+infra: actions  
 
 
 <div style="width:500px;height:10px"></div>
+
+### DB 스키마
+
+![schema](https://i.imgur.com/CAIsosI.png)
+
 
 ### 📘 Usage for dev
 - client

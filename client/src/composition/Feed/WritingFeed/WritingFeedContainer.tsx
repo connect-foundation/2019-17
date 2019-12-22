@@ -94,7 +94,7 @@ function WritingFeedContainer() {
 
   const onSubmit = _.debounce(
     async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
-      if(!isFeedContentValid()) return;
+      if (!isFeedContentValid()) return;
       const parseFiles = files.map(item => item.file);
       const { data } = await enrollFeedMutation({
         variables: { content, files: parseFiles }
