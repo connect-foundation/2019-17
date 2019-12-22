@@ -146,11 +146,6 @@ function Header({
                 {FEED_TEXT}
               </NavTab>
             </li>
-            <li>
-              <NavTab to={`${PAGE_PATHS.MY_PAGE}/${userEmail}/friends`}>
-                {FRIEND_TEXT}
-              </NavTab>
-            </li>
           </NavList>
         </TimelineNav>
       </TimelineHead>
