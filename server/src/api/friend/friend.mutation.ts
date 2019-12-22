@@ -24,7 +24,7 @@ export const Mutation = {
       targetEmail
     });
 
-    nextRelation.publish(pubsub, { email: req.email, targetEmail });
+    await nextRelation.publish(pubsub, { email: req.email, targetEmail });
 
     return true;
   },
@@ -37,7 +37,7 @@ export const Mutation = {
       targetEmail
     });
 
-    pubsub.publish(REQUEST_ALARM_ADDED, {
+    await pubsub.publish(REQUEST_ALARM_ADDED, {
       requestAlarmAdded: {
         nickname: 'deletedUser',
         email: targetEmail,

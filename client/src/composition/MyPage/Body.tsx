@@ -112,42 +112,6 @@ const HometownIcon = styled.span`
   margin-right: 0.5rem;
 `;
 
-const ModifyButton = styled.a`
-  margin-bottom: 8px;
-  margin-top: 8px;
-  width: 100%;
-  line-height: 26px;
-  font-weight: bold;
-  display: inline-block;
-  justify-content: center;
-  text-align: center;
-  padding: 0 10px;
-  box-sizing: border-box;
-  border: 1px solid;
-  border-radius: 2px;
-  font-size: 12px;
-  text-decoration: none;
-  white-space: nowrap;
-  background-color: #f5f6f7;
-  border-color: #ccd0d5;
-  color: #4b4f56;
-  transition: 200ms cubic-bezier(0.08, 0.52, 0.52, 1) background-color,
-    200ms cubic-bezier(0.08, 0.52, 0.52, 1) box-shadow,
-    200ms cubic-bezier(0.08, 0.52, 0.52, 1) transform;
-  cursor: pointer;
-  :focus,
-  :hover {
-    background-color: #ebedf0;
-  }
-  :active {
-    background-color: #dddfe2;
-    border-color: #bec3c9;
-  }
-  ::before {
-    content: '상세 정보 수정';
-  }
-`;
-
 interface IProps {
   userResidence: string;
   userHometown: string;
@@ -174,7 +138,6 @@ const TimelineBody: React.FC<IProps> = props => (
               {props.userHometown} {HOMETOWN_TEXT}
             </li>
           </SubBodyUl>
-          <ModifyButton />
         </SubBody>
       </Sub>
       <Sub>
