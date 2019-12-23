@@ -10,6 +10,7 @@ import Profile from 'components/Profile';
 import Button from 'components/Button';
 import CommentInput from './CommentInput';
 import { DEFAULT } from 'Constants';
+import { GET_FEEDS } from '../feed.query';
 
 const CommentForm = styled.div`
   position: relative;
@@ -33,6 +34,16 @@ interface IProps {
   myComments: Comment[];
   commentInputRef: React.MutableRefObject<HTMLInputElement | null>;
 }
+
+const addComment = (alarms: Comment[], data: any) => {
+  return alarms.map((alarm: Comment) => {
+    /*  if (data && alarm.feedId === data.changeFeedAlarmReadState) {
+      alarm.isRead = true;
+    } */
+    return alarm;
+  });
+};
+
 const WriteCommentPresentor = ({
   feedId,
   setComment,
@@ -45,7 +56,20 @@ const WriteCommentPresentor = ({
     return Boolean(comment);
   }
 
-  const [writeComment] = useWriteCommentMutation();
+  const [writeComment] = useWriteCommentMutation({
+    update(cache, { data }) {
+      const { feeds }: any = cache.readQuery({
+        query: GET_FEEDS
+      });
+
+      // const filteredAlarms = getAppliedReadAlarms(alarms, data);
+
+      /*  cache.writeQuery({
+        query: GET_FEEDS,
+        data: { alarms: {} }
+      }); */
+    }
+  });
   const { data: { me = null } = {} } = useMeQuery();
   function submitComment() {
     const comment = commentText.value;
@@ -60,6 +84,7 @@ const WriteCommentPresentor = ({
         nickname: (me && me.nickname) || '',
         thumbnail: (me && me.thumbnail) || DEFAULT.PROFILE
       };
+
       const mergedComments = [...myComments, newComment];
       setComment(mergedComments);
     }

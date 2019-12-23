@@ -46,6 +46,7 @@ interface Iprops {
 const FEED_MAX_HEIGHT = 300;
 const FeedBody = ({ content, images }: Iprops) => {
   const [isFold, setIsFold] = useState<boolean>(true);
+
   const contentRef = useRef<HTMLDivElement>(null);
   const spreadFold = () => {
     setIsFold(false);

@@ -32,7 +32,7 @@ function ImageContainer({ images, width, height }: IProps) {
 
   return (
     <>
-      {imageUrl && imageUrl.length === 0 ? (
+      {imageUrl && images.length !== 0 && imageUrl.length === 0 ? (
         <FaceImageContainer ref={setRef as any}></FaceImageContainer>
       ) : (
         <Carousel
