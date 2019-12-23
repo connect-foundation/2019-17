@@ -3,7 +3,7 @@ import { requestDB } from '../../utils/requestDB';
 import { parseResultRecords } from '../../utils/parseDB';
 import { NEW_FEED, NEW_ALARM, NEW_USER_FEED } from './constant';
 
-export const publishFeed = async (pubsub, feedId, email) => {
+export const publishFeed = async ({ pubsub, feedId, email }) => {
   const registerdFeed = await requestDB(GET_NEW_FEED, {
     feedId,
     userEmail: email

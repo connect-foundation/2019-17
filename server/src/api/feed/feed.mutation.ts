@@ -38,18 +38,30 @@ const createImageQuery = fileLocations => {
   return registerImageQuery;
 };
 
-const createImages = async (pubsub, email, feedId, files) => {
+const alarmFeed = async ({ feedId, email, pubsub }) => {
+  const registeredAlarmId = await requestDB(ALARM_NEW_FEED, {
+    feedId,
+    userEmail: email
+  });
+  const [parsedRegisteredAlarmId] = parseResultRecords(registeredAlarmId);
+  if (parsedRegisteredAlarmId) {
+    await publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, email);
+  }
+};
+
+const createImages = async ({ pubsub, email, feedId, files }) => {
   try {
+    const waitingFiles: Array<Promise<any>> = await Promise.all(files);
     const filePromises: Array<Promise<any>> = [];
-    for await (const file of files) {
+    for await (const file of waitingFiles) {
       const { filename, createReadStream } = file;
       filePromises.push(uploadToObjStorage(createReadStream(), filename));
     }
     const fileLocations = await Promise.all(filePromises);
     const REGISTER_IMAGE_QUERY = createImageQuery(fileLocations);
-
     await requestDB(REGISTER_IMAGE_QUERY, { feedId });
-    await publishFeed(pubsub, feedId, email);
+    await publishFeed({ pubsub, feedId, email });
+    await alarmFeed({ feedId, email, pubsub });
   } catch (error) {
     throw new ImageUploadError();
   }
@@ -69,20 +81,11 @@ const mutationResolvers: MutationResolvers = {
     const FILE_LIMIT = 30;
 
     if (files && files.length < FILE_LIMIT) {
-      await createImages(pubsub, email, feedId, files);
-    } else {
-      await publishFeed(pubsub, feedId, email);
+      await createImages({ pubsub, email, feedId, files });
+      return true;
     }
-
-    const registeredAlarmId = await requestDB(ALARM_NEW_FEED, {
-      feedId,
-      userEmail: email
-    });
-    const [parsedRegisteredAlarmId] = parseResultRecords(registeredAlarmId);
-    if (parsedRegisteredAlarmId) {
-      await publishFeedAlarm(pubsub, parsedRegisteredAlarmId.alarmId, email);
-    }
-
+    await publishFeed({ pubsub, feedId, email });
+    await alarmFeed({ feedId, email, pubsub });
     return true;
   },
   updateLike: async (_, { feedId, count }, { req }) => {
