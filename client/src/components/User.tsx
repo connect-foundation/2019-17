@@ -1,6 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Profile from './Profile';
+import { PAGE_PATHS } from 'Constants';
 
 const ProfileDiv = styled.div`
   display: block;
@@ -53,15 +55,17 @@ interface IProps {
 
 const User = ({ email, thumbnail, nickname, status }: IProps) => {
   return (
-    <ProfileDiv>
-      <ProfileImgBox>
-        <Profile imageUrl={thumbnail} alt={email} size="30px" />
-      </ProfileImgBox>
-      <ProfileName>{nickname}</ProfileName>
-      <ProfileStatus>
-        <Status status={status === 'online'} />
-      </ProfileStatus>
-    </ProfileDiv>
+    <Link to={`${PAGE_PATHS.MY_PAGE}/${email}`}>
+      <ProfileDiv>
+        <ProfileImgBox>
+          <Profile imageUrl={thumbnail} alt={email} size="30px" />
+        </ProfileImgBox>
+        <ProfileName>{nickname}</ProfileName>
+        <ProfileStatus>
+          <Status status={status === 'online'} />
+        </ProfileStatus>
+      </ProfileDiv>
+    </Link>
   );
 };
 
