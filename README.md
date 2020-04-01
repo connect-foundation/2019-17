@@ -17,7 +17,7 @@
 
 ### [📃 WIKI](https://github.com/connect-foundation/2019-17/wiki)
 
-### [🎲 HOMEPAGE](http://boostbook.shop)
+### [🎲 HOMEPAGE(서버 반납)](http://boostbook.shop) 
 
 ### [🧱 Ground Rule](https://github.com/connect-foundation/2019-17/wiki/GROUND-RULE)
 
