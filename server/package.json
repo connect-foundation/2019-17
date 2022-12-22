@@ -50,7 +50,7 @@
     "graphql-yoga": "^1.18.3",
     "helmet": "^3.21.2",
     "json-to-pretty-yaml": "^1.2.2",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "listr": "^0.14.3",
     "listr-update-renderer": "^0.5.0",
     "merge-graphql-schemas": "^1.7.3",
